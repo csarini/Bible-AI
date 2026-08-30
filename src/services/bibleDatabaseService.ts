@@ -1,6 +1,6 @@
 // Bible Database Service (IndexedDB + Background Verses Downloader)
 // Reads the 3 official translation book files at app startup, stores in local DB,
-// and queries books and verses from the local DB with background downloading.
+// and queries books and genuine verses from the GetBible API and local DB.
 
 import booksValeraRaw from '../data/raw/books_valera.json';
 import booksRv1858Raw from '../data/raw/books_rv1858.json';
@@ -9,7 +9,7 @@ import translationsCatalogRaw from '../data/raw/translations_catalog.json';
 import { BibleVerse, BibleBook } from '../types';
 
 export const DB_NAME = 'biblia_inteligente_offline_db';
-export const DB_VERSION = 2;
+export const DB_VERSION = 3;
 
 export const STORE_BOOKS = 'bible_books';
 export const STORE_TRANSLATIONS = 'bible_translations';
@@ -167,7 +167,7 @@ export function getBibleDB(): Promise<IDBDatabase> {
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
       
-      // Store 1: bible_books (keyPath: id e.g. "valera_GEN" or compound)
+      // Store 1: bible_books
       if (!db.objectStoreNames.contains(STORE_BOOKS)) {
         const booksStore = db.createObjectStore(STORE_BOOKS, { keyPath: 'storeId' });
         booksStore.createIndex('translation', 'translation', { unique: false });
@@ -205,16 +205,52 @@ export function getBibleDB(): Promise<IDBDatabase> {
   return dbPromise;
 }
 
+// Verify that stored verses are genuine and not dummy placeholder text
+export function isGenuineVerses(verses: BibleVerse[] | null | undefined): boolean {
+  if (!verses || !Array.isArray(verses) || verses.length === 0) return false;
+  const first = verses[0]?.text || '';
+  if (first.includes('«La palabra del Señor permanece para siempre') || first.includes('capítulo 1, versículo 1.')) {
+    return false;
+  }
+  return true;
+}
+
+// Purge any legacy dummy verses from IndexedDB
+async function purgeDummyVersesFromDB(): Promise<void> {
+  try {
+    const db = await getBibleDB();
+    const tx = db.transaction(STORE_CHAPTERS, 'readwrite');
+    const store = tx.objectStore(STORE_CHAPTERS);
+    const req = store.openCursor();
+
+    req.onsuccess = (e) => {
+      const cursor = (e.target as IDBRequest<IDBCursorWithValue>).result;
+      if (cursor) {
+        const item = cursor.value;
+        if (!isGenuineVerses(item?.verses)) {
+          cursor.delete();
+        }
+        cursor.continue();
+      }
+    };
+  } catch (err) {
+    console.warn('Error purgando versículos dummy:', err);
+  }
+}
+
 // Initialize and seed the 3 Bible book files into local IndexedDB
 export async function initBibleDatabase(): Promise<void> {
   try {
     const db = await getBibleDB();
 
+    // Clean any old dummy verses
+    await purgeDummyVersesFromDB();
+
     // Check if books are already seeded
     const isSeeded = await new Promise<boolean>((resolve) => {
       const tx = db.transaction([STORE_META, STORE_BOOKS], 'readonly');
       const metaStore = tx.objectStore(STORE_META);
-      const req = metaStore.get('books_seeded_v2');
+      const req = metaStore.get('books_seeded_v3');
       req.onsuccess = () => {
         if (req.result && req.result.value === true) {
           resolve(true);
@@ -226,7 +262,7 @@ export async function initBibleDatabase(): Promise<void> {
     });
 
     if (!isSeeded) {
-      console.log('📖 Inicializando y guardando libros de las 3 versiones en IndexedDB local...');
+      console.log('📖 Inicializando libros y metadatos de las 3 versiones en IndexedDB local...');
       const tx = db.transaction([STORE_BOOKS, STORE_TRANSLATIONS, STORE_META], 'readwrite');
       const booksStore = tx.objectStore(STORE_BOOKS);
       const transStore = tx.objectStore(STORE_TRANSLATIONS);
@@ -251,54 +287,9 @@ export async function initBibleDatabase(): Promise<void> {
         });
       }
 
-      // 3. Pre-seed Genesis 1 RV1858 sample provided
-      const rv1858Gen1Verses: BibleVerse[] = [
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 1, text: 'EN el principio crió Dios los cielos y la tierra.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 2, text: 'Y la tierra estaba desordenada y vacía, y las tinieblas estaban sobre la haz del abismo, y el Espíritu de Dios se movía sobre la haz de las aguas.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 3, text: 'Y dijo Dios: Sea la luz: y fué la luz.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 4, text: 'Y vió Dios que la luz era buena: y apartó Dios la luz de las tinieblas.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 5, text: 'Y llamó Dios á la luz Día, y á las tinieblas llamó Noche: y fué la tarde y la mañana un día.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 6, text: 'Y dijo Dios: Haya expansión en medio de las aguas, y separe las aguas de las aguas.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 7, text: 'E hizo Dios la expansión, y apartó las aguas que estaban debajo de la expansión, de las aguas que estaban sobre la expansión: y fué así.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 8, text: 'Y llamó Dios á la expansión Cielos: y fué la tarde y la mañana el día segundo.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 9, text: 'Y dijo Dios: Júntense las aguas que están debajo de los cielos en un lugar, y descúbrase la seca: y fué así.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 10, text: 'Y llamó Dios á la seca Tierra, y á la reunión de las aguas llamó Mares: y vió Dios que era bueno.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 11, text: 'Y dijo Dios: Produzca la tierra hierba verde, hierba que dé simiente; árbol de fruto que dé fruto según su género, que su simiente esté en él, sobre la tierra: y fué así.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 12, text: 'Y produjo la tierra hierba verde, hierba que da simiente según su naturaleza, y árbol que da fruto, cuya simiente está en él, según su género: y vió Dios que era bueno.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 13, text: 'Y fué la tarde y la mañana el día tercero.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 14, text: 'Y dijo Dios: Sean lumbreras en la expansión de los cielos para apartar el día y la noche: y sean por señales, y para las estaciones, y para días y años;' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 15, text: 'Y sean por lumbreras en la expansión de los cielos para alumbrar sobre la tierra: y fué así.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 16, text: 'E hizo Dios las dos grandes lumbreras; la lumbrera mayor para que señorease en el día, y la lumbrera menor para que señorease en la noche: hizo también las estrellas.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 17, text: 'Y púsolas Dios en la expansión de los cielos, para alumbrar sobre la tierra,' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 18, text: 'Y para señorear en el día y en la noche, y para apartar la luz y las tinieblas: y vió Dios que era bueno.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 19, text: 'Y fué la tarde y la mañana el día cuarto.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 20, text: 'Y dijo Dios: Produzcan las aguas reptil de ánima viviente, y aves que vuelen sobre la tierra, en la abierta expansión de los cielos.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 21, text: 'Y crió Dios las grandes ballenas, y toda cosa viva que anda arrastrando, que las aguas produjeron según su género, y toda ave alada según su especie: y vió Dios que era bueno.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 22, text: 'Y Dios los bendijo diciendo: Fructificad y multiplicad, y henchid las aguas en los mares, y las aves se multipliquen en la tierra.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 23, text: 'Y fué la tarde y la mañana el día quinto.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 24, text: 'Y dijo Dios: Produzca la tierra seres vivientes según su género, bestias y serpientes y animales de la tierra según su especie: y fué así.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 25, text: 'E hizo Dios animales de la tierra según su género, y ganado según su género, y todo animal que anda arrastrando sobre la tierra según su especie: y vió Dios que era bueno.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 26, text: 'Y dijo Dios: Hagamos al hombre á nuestra imagen, conforme á nuestra semejanza; y señoree en los peces de la mar, y en las aves de los cielos, y en las bestias, y en toda la tierra, y en todo animal que anda arrastrando sobre la tierra.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 27, text: 'Y crió Dios al hombre á su imagen, á imagen de Dios lo crió; varón y hembra los crió.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 28, text: 'Y los bendijo Dios; y díjoles Dios: Fructificad y multiplicad, y henchid la tierra, y sojuzgadla, y señoread en los peces de la mar, y en las aves de los cielos, y en todas las bestias que se mueven sobre la tierra.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 29, text: 'Y dijo Dios: He aquí que os he dado toda hierba que da simiente, que está sobre la haz de toda la tierra; y todo árbol en que hay fruto de árbol que da simiente, seros ha para comer.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 30, text: 'Y á toda bestia de la tierra, y á todas las aves de los cielos, y á todo lo que se mueve sobre la tierra, en que hay vida, toda hierba verde les será para comer: y fué así.' },
-        { bookId: 'GEN', bookName: 'Génesis', chapter: 1, verse: 31, text: 'Y vió Dios todo lo que había hecho, y he aquí que era bueno en gran manera. Y fué la tarde y la mañana el día sexto.' }
-      ];
-
-      const chaptersStore = tx.objectStore(STORE_CHAPTERS);
-      chaptersStore.put({
-        id: `rv1858_GEN_1`,
-        translation: 'rv1858',
-        bookId: 'GEN',
-        chapter: 1,
-        verses: rv1858Gen1Verses,
-        updatedAt: Date.now()
-      });
-
-      // 4. Mark seeded
+      // 3. Mark seeded
       metaStore.put({
-        key: 'books_seeded_v2',
+        key: 'books_seeded_v3',
         value: true,
         seededAt: new Date().toISOString(),
         totalBooks: allBooks.length
@@ -308,15 +299,14 @@ export async function initBibleDatabase(): Promise<void> {
         tx.oncomplete = () => resolve();
         tx.onerror = () => reject(tx.error);
       });
-      console.log('✅ Libros de las 3 versiones guardados exitosamente en la BD local.');
+      console.log('✅ Base de datos de libros inicializada correctamente.');
     }
 
-    // Refresh memory cache from DB to ensure 100% synchronization
+    // Refresh memory cache from DB to ensure synchronization
     await refreshBooksCacheFromDB();
     isDatabaseReady = true;
   } catch (err) {
     console.error('Error inicializando base de datos local de la Biblia:', err);
-    // Keep in-memory cache ready
     isDatabaseReady = true;
   }
 }
@@ -419,19 +409,10 @@ export async function getChapterFromDB(
       const store = tx.objectStore(STORE_CHAPTERS);
       const req = store.get(`${tr}_${bookId}_${chapter}`);
       req.onsuccess = () => {
-        if (req.result && req.result.verses && req.result.verses.length > 0) {
+        if (req.result && isGenuineVerses(req.result.verses)) {
           resolve(req.result.verses);
         } else {
-          // Check backwards compatibility key
-          const fallbackReq = store.get(`${bookId}_${chapter}`);
-          fallbackReq.onsuccess = () => {
-            if (fallbackReq.result && fallbackReq.result.verses && fallbackReq.result.verses.length > 0) {
-              resolve(fallbackReq.result.verses);
-            } else {
-              resolve(null);
-            }
-          };
-          fallbackReq.onerror = () => resolve(null);
+          resolve(null);
         }
       };
       req.onerror = () => resolve(null);
@@ -448,6 +429,8 @@ export async function saveChapterToDB(
   verses: BibleVerse[],
   translation: string = 'valera'
 ): Promise<void> {
+  if (!isGenuineVerses(verses)) return;
+
   try {
     const tr = normalizeTranslationKey(translation);
     const db = await getBibleDB();
@@ -471,32 +454,21 @@ export async function saveChapterToDB(
   }
 }
 
-// Fetch chapter verses: Consults local DB first, then GetBible API, saving result to local DB
-export async function fetchChapterVerses(
-  bookId: string,
+// Direct fetch from GetBible API (using book URL and chapter URL)
+async function fetchFromGetBibleAPI(
+  bookMeta: StoredBibleBook,
   chapter: number,
-  translation: string = 'valera'
+  tr: string
 ): Promise<BibleVerse[]> {
-  const tr = normalizeTranslationKey(translation);
+  const apiSlug = tr === 'rv1858' ? 'rv1858' : tr === 'sse' ? 'sse' : 'valera';
 
-  // 1. Consult local database first
-  const localVerses = await getChapterFromDB(bookId, chapter, tr);
-  if (localVerses && localVerses.length > 0) {
-    return localVerses;
-  }
-
-  // 2. Resolve book metadata
-  const bookMeta = getBookByIdOrNumber(bookId, tr);
-
-  // 3. Fetch from GetBible API
+  // Strategy 1: Fetch direct chapter JSON endpoint (e.g. https://api.getbible.net/v2/valera/40/1.json)
+  const chapterUrl = `https://api.getbible.net/v2/${apiSlug}/${bookMeta.number}/${chapter}.json`;
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4500);
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-    const apiSlug = tr === 'rv1858' ? 'rv1858' : tr === 'sse' ? 'sse' : 'valera';
-    const response = await fetch(`https://api.getbible.net/v2/${apiSlug}/${bookMeta.number}/${chapter}.json`, {
-      signal: controller.signal
-    });
+    const response = await fetch(chapterUrl, { signal: controller.signal });
     clearTimeout(timeoutId);
 
     if (response.ok) {
@@ -510,35 +482,87 @@ export async function fetchChapterVerses(
           text: (v.text || '').replace(/[\r\n]+/g, ' ').trim()
         }));
 
-        if (parsedVerses.length > 0) {
-          // Save to local IndexedDB for future instant queries
+        if (isGenuineVerses(parsedVerses)) {
           await saveChapterToDB(bookMeta.id, chapter, parsedVerses, tr);
           return parsedVerses;
         }
       }
     }
   } catch (err) {
-    console.warn(`GetBible API offline or slow for ${bookMeta.name} ${chapter} (${tr}), using local generator:`, err);
+    console.warn(`Intento directo a ${chapterUrl} falló, probando endpoint del libro completo:`, err);
   }
 
-  // 4. Fallback generated verses if network is offline and not in DB
-  const fallback = generateFallbackVerses(bookMeta, chapter);
-  await saveChapterToDB(bookMeta.id, chapter, fallback, tr);
-  return fallback;
+  // Strategy 2: Fetch entire book JSON via URL in book definition (e.g. https://api.getbible.net/v2/valera/40.json)
+  const bookUrl = bookMeta.url || `https://api.getbible.net/v2/${apiSlug}/${bookMeta.number}.json`;
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+    const response = await fetch(bookUrl, { signal: controller.signal });
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data && data.chapters && Array.isArray(data.chapters)) {
+        let requestedChapterVerses: BibleVerse[] = [];
+
+        // Save all chapters of this book into IndexedDB for instant offline reading
+        for (const chObj of data.chapters) {
+          const chNum = Number(chObj.chapter);
+          if (chObj.verses && Array.isArray(chObj.verses)) {
+            const chVerses: BibleVerse[] = chObj.verses.map((v: any) => ({
+              bookId: bookMeta.id,
+              bookName: data.name || bookMeta.name,
+              chapter: chNum,
+              verse: Number(v.verse),
+              text: (v.text || '').replace(/[\r\n]+/g, ' ').trim()
+            }));
+
+            if (isGenuineVerses(chVerses)) {
+              await saveChapterToDB(bookMeta.id, chNum, chVerses, tr);
+              if (chNum === chapter) {
+                requestedChapterVerses = chVerses;
+              }
+            }
+          }
+        }
+
+        if (requestedChapterVerses.length > 0) {
+          return requestedChapterVerses;
+        }
+      }
+    }
+  } catch (err) {
+    console.error(`Error consultando API GetBible para ${bookMeta.name} (${bookUrl}):`, err);
+  }
+
+  return [];
 }
 
-// Clean fallback generator if completely offline and not yet cached in DB
-function generateFallbackVerses(bookMeta: StoredBibleBook, chapter: number): BibleVerse[] {
-  const verses: BibleVerse[] = [];
-  const defaultCount = Math.min(25, Math.max(12, 18 + ((chapter * 7) % 15)));
-  for (let v = 1; v <= defaultCount; v++) {
-    verses.push({
-      bookId: bookMeta.id,
-      bookName: bookMeta.name,
-      chapter,
-      verse: v,
-      text: `${bookMeta.name} capítulo ${chapter}, versículo ${v}. «La palabra del Señor permanece para siempre y alumbra nuestro camino con gracia y verdad».`
-    });
+// Fetch chapter verses: Consults local DB first, then always queries GetBible API
+export async function fetchChapterVerses(
+  bookId: string,
+  chapter: number,
+  translation: string = 'valera'
+): Promise<BibleVerse[]> {
+  const tr = normalizeTranslationKey(translation);
+
+  // 1. Consult local database first
+  const localVerses = await getChapterFromDB(bookId, chapter, tr);
+  if (localVerses && isGenuineVerses(localVerses)) {
+    return localVerses;
   }
-  return verses;
+
+  // 2. Resolve book metadata
+  const bookMeta = getBookByIdOrNumber(bookId, tr);
+
+  // 3. Query GetBible API directly
+  const apiVerses = await fetchFromGetBibleAPI(bookMeta, chapter, tr);
+  if (apiVerses && isGenuineVerses(apiVerses)) {
+    return apiVerses;
+  }
+
+  // 4. Return empty array if not obtainable (never return dummy fake verses)
+  return [];
 }
+

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
@@ -21,7 +21,9 @@ import {
   Columns,
   X,
   Layers,
-  ExternalLink
+  ExternalLink,
+  RefreshCw,
+  AlertCircle
 } from 'lucide-react';
 import { BibleVerse, BibleBook, LocalBookmark, ReadingSettings, HighlightColor, MapWaypoint, OFFICIAL_TRANSLATIONS } from '../types';
 import { fetchBibleChapter } from '../data/bibleData';
@@ -105,35 +107,39 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
     }
   }, [currentBookId, currentChapter]);
 
-  useEffect(() => {
-    let isMounted = true;
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
+  const loadChapter = useCallback(() => {
     setLoading(true);
+    setFetchError(null);
 
     fetchBibleChapter(currentBookId, currentChapter, settings.translation.toLowerCase())
       .then((data) => {
-        if (isMounted) {
-          setVerses(data);
-          setLoading(false);
+        setVerses(data);
+        setLoading(false);
+        if (!data || data.length === 0) {
+          setFetchError(`No se pudieron obtener los versículos de ${bookMeta.name} ${currentChapter}`);
+        }
 
-          // Scroll to specific verse if requested
-          if (highlightedVerseNumber) {
-            setTimeout(() => {
-              const el = document.getElementById(`verse-row-${highlightedVerseNumber}`);
-              if (el) {
-                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }
-            }, 300);
-          }
+        // Scroll to specific verse if requested
+        if (highlightedVerseNumber) {
+          setTimeout(() => {
+            const el = document.getElementById(`verse-row-${highlightedVerseNumber}`);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }, 300);
         }
       })
-      .catch(() => {
-        if (isMounted) setLoading(false);
+      .catch((err) => {
+        setLoading(false);
+        setFetchError(err?.message || 'Error al conectar con la API');
       });
+  }, [currentBookId, currentChapter, settings.translation, highlightedVerseNumber, bookMeta.name]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, [currentBookId, currentChapter, settings.translation, highlightedVerseNumber]);
+  useEffect(() => {
+    loadChapter();
+  }, [loadChapter]);
 
   // Audio Speech Reader function
   const toggleAudioReading = () => {
@@ -494,24 +500,25 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
             <div>
               <label className="block text-xs font-label-caps uppercase mb-2 flex items-center gap-1.5 font-bold opacity-80">
                 <BookOpen className="w-3.5 h-3.5 text-[#F47B20]" />
-                Versión Bíblica
+                Versión Bíblica Oficial
               </label>
-              <div className={`grid grid-cols-5 gap-1 p-1 rounded-xl ${isDark ? 'bg-[#0B0F19]' : isSepia ? 'bg-[#EAE0D0]' : 'bg-[#F0EEE9]'}`}>
-                {(['RVR1960', 'RVR1909', 'NVI', 'NTV', 'LBLA'] as const).map((tr) => (
+              <div className={`grid grid-cols-3 gap-1.5 p-1 rounded-xl ${isDark ? 'bg-[#0B0F19]' : isSepia ? 'bg-[#EAE0D0]' : 'bg-[#F0EEE9]'}`}>
+                {OFFICIAL_TRANSLATIONS.map((tr) => (
                   <button
-                    key={tr}
-                    id={`reader-trans-${tr}`}
+                    key={tr.abbreviation}
+                    id={`reader-trans-${tr.abbreviation}`}
                     onClick={() => {
-                      onUpdateSettings({ translation: tr });
-                      onToast(`Versión: ${tr}`);
+                      onUpdateSettings({ translation: tr.abbreviation });
+                      onToast(`Versión: ${tr.name}`);
                     }}
-                    className={`py-1.5 px-1 rounded-lg text-xs font-semibold transition-all cursor-pointer text-center ${
-                      settings.translation === tr
+                    className={`py-2 px-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer text-center ${
+                      settings.translation === tr.abbreviation || settings.translation === tr.translation
                         ? 'bg-[#0B2B68] text-[#F47B20] shadow-xs font-bold'
                         : 'opacity-70 hover:opacity-100'
                     }`}
                   >
-                    {tr}
+                    <span className="block font-bold">{tr.abbreviation.toUpperCase()}</span>
+                    <span className="block text-[10px] opacity-75 truncate">{tr.name.split('(')[0]}</span>
                   </button>
                 ))}
               </div>
@@ -525,7 +532,26 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-3 opacity-75">
             <BookOpen className="w-9 h-9 animate-pulse text-[#F47B20]" />
-            <p className="font-body-ui text-sm font-medium">Abriendo {bookMeta.name} {currentChapter}...</p>
+            <p className="font-body-ui text-sm font-medium">Cargando {bookMeta.name} {currentChapter} desde la API oficial...</p>
+          </div>
+        ) : verses.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 px-4 text-center space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-[#F47B20]/15 flex items-center justify-center text-[#F47B20]">
+              <AlertCircle className="w-8 h-8" />
+            </div>
+            <div>
+              <h3 className="font-heading-display text-lg font-bold">No se pudieron cargar los versículos</h3>
+              <p className="font-body-ui text-sm opacity-70 max-w-md mt-1">
+                {fetchError || `Ocurrió una dificultad al consultar la API de GetBible para ${bookMeta.name} ${currentChapter}.`}
+              </p>
+            </div>
+            <button
+              onClick={loadChapter}
+              className="px-5 py-2.5 bg-[#0B2B68] text-white font-bold text-sm rounded-xl hover:bg-[#081F4D] transition-all cursor-pointer shadow-md flex items-center gap-2"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Reintentar consulta API
+            </button>
           </div>
         ) : (
           <article className="space-y-3.5 sm:space-y-4">
