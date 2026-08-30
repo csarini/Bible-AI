@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Wifi, WifiOff, Download, CheckCircle2, AlertCircle, HardDrive, Pause, Play, RefreshCw, Zap } from 'lucide-react';
 import { offlineDownloader, OfflineStatus, countStoredChapters, clearOfflineBible } from '../services/offlineBibleService';
-import { BIBLE_BOOKS } from '../data/bibleData';
 
 interface OfflineDownloadManagerProps {
   onToast: (msg: string, durationMs?: number) => void;

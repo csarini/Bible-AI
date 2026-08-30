@@ -1,11 +1,17 @@
-// IndexedDB storage service for complete offline Bible caching
+// IndexedDB storage service for complete offline Bible caching & Background Downloader
 import { BibleVerse, BibleBook } from '../types';
-import { BIBLE_BOOKS, fetchBibleChapter } from '../data/bibleData';
-
-const DB_NAME = 'biblia_inteligente_offline_db';
-const DB_VERSION = 1;
-const STORE_CHAPTERS = 'bible_chapters';
-const STORE_META = 'offline_metadata';
+import {
+  getBibleDB,
+  STORE_CHAPTERS,
+  STORE_META,
+  getLocalBooksSync,
+  getBooksFromDB,
+  getBookByIdOrNumber,
+  getChapterFromDB,
+  saveChapterToDB,
+  fetchChapterVerses,
+  normalizeTranslationKey
+} from './bibleDatabaseService';
 
 export interface OfflineStatus {
   isDownloading: boolean;
@@ -20,103 +26,29 @@ export interface OfflineStatus {
   activeChapterNum?: number;
 }
 
-let dbInstance: IDBDatabase | null = null;
-
-// Initialize IndexedDB
-export async function getOfflineDB(): Promise<IDBDatabase> {
-  if (dbInstance) return dbInstance;
-
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
-
-    request.onupgradeneeded = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
-      if (!db.objectStoreNames.contains(STORE_CHAPTERS)) {
-        // key is `${bookId}_${chapter}` (e.g. "MAT_4")
-        db.createObjectStore(STORE_CHAPTERS, { keyPath: 'id' });
-      }
-      if (!db.objectStoreNames.contains(STORE_META)) {
-        db.createObjectStore(STORE_META, { keyPath: 'key' });
-      }
-    };
-
-    request.onsuccess = () => {
-      dbInstance = request.result;
-      resolve(dbInstance);
-    };
-
-    request.onerror = () => {
-      reject(request.error);
-    };
-  });
-}
-
 // Store a chapter's verses in IndexedDB separated by translation
 export async function saveChapterOffline(
   bookId: string,
   chapter: number,
   verses: BibleVerse[],
-  translation: string = 'rvr1960'
+  translation: string = 'valera'
 ): Promise<void> {
-  const trCode = (translation || 'rvr1960').toLowerCase().replace(/[^a-z0-9]/g, '');
-  const db = await getOfflineDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_CHAPTERS, 'readwrite');
-    const store = tx.objectStore(STORE_CHAPTERS);
-    const item = {
-      id: `${trCode}_${bookId}_${chapter}`,
-      translation: trCode,
-      bookId,
-      chapter,
-      verses,
-      updatedAt: Date.now()
-    };
-    const req = store.put(item);
-    req.onsuccess = () => resolve();
-    req.onerror = () => reject(req.error);
-  });
+  await saveChapterToDB(bookId, chapter, verses, translation);
 }
 
 // Retrieve a chapter's verses from IndexedDB separated by translation
 export async function getChapterOffline(
   bookId: string,
   chapter: number,
-  translation: string = 'rvr1960'
+  translation: string = 'valera'
 ): Promise<BibleVerse[] | null> {
-  try {
-    const trCode = (translation || 'rvr1960').toLowerCase().replace(/[^a-z0-9]/g, '');
-    const db = await getOfflineDB();
-    return new Promise((resolve) => {
-      const tx = db.transaction(STORE_CHAPTERS, 'readonly');
-      const store = tx.objectStore(STORE_CHAPTERS);
-      const req = store.get(`${trCode}_${bookId}_${chapter}`);
-      req.onsuccess = () => {
-        if (req.result && req.result.verses && req.result.verses.length > 0) {
-          resolve(req.result.verses);
-        } else {
-          // Check backwards-compatible legacy key
-          const legacyReq = store.get(`${bookId}_${chapter}`);
-          legacyReq.onsuccess = () => {
-            if (legacyReq.result && legacyReq.result.verses && legacyReq.result.verses.length > 0) {
-              resolve(legacyReq.result.verses);
-            } else {
-              resolve(null);
-            }
-          };
-          legacyReq.onerror = () => resolve(null);
-        }
-      };
-      req.onerror = () => resolve(null);
-    });
-  } catch {
-    return null;
-  }
+  return await getChapterFromDB(bookId, chapter, translation);
 }
 
-// Count how many chapters have been stored (optionally for a specific translation)
+// Count how many chapters have been stored in the local DB
 export async function countStoredChapters(translation?: string): Promise<number> {
   try {
-    const db = await getOfflineDB();
+    const db = await getBibleDB();
     if (!translation) {
       return new Promise((resolve) => {
         const tx = db.transaction(STORE_CHAPTERS, 'readonly');
@@ -127,7 +59,7 @@ export async function countStoredChapters(translation?: string): Promise<number>
       });
     }
 
-    const trCode = translation.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const trCode = normalizeTranslationKey(translation);
     return new Promise((resolve) => {
       const tx = db.transaction(STORE_CHAPTERS, 'readonly');
       const store = tx.objectStore(STORE_CHAPTERS);
@@ -153,7 +85,7 @@ export async function countStoredChapters(translation?: string): Promise<number>
 
 // Clear all offline stored Bible data if needed
 export async function clearOfflineBible(): Promise<void> {
-  const db = await getOfflineDB();
+  const db = await getBibleDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction([STORE_CHAPTERS, STORE_META], 'readwrite');
     tx.objectStore(STORE_CHAPTERS).clear();
@@ -182,10 +114,10 @@ export function checkNetworkState(): { isOnline: boolean; isWifi: boolean } {
   return { isOnline, isWifi };
 }
 
-// Total chapters across the 66 books of the Bible
-export const TOTAL_BIBLE_CHAPTERS = BIBLE_BOOKS.reduce((acc, b) => acc + b.chaptersCount, 0); // 1,189 chapters
+// Total chapters across 66 books of the Bible
+export const TOTAL_BIBLE_CHAPTERS = 1189;
 
-// Background Downloader Class with queue, rate-limiting, pausing, and persistence
+// Background Downloader Class with queue, non-blocking rate-limiting, pausing, and local DB persistence
 class BackgroundBibleDownloader {
   private isRunning = false;
   private isPaused = false;
@@ -193,6 +125,7 @@ class BackgroundBibleDownloader {
   private downloadedCount = 0;
   private activeBookName = '';
   private activeChapterNum = 0;
+  private activeTranslation = 'valera';
 
   constructor() {
     this.init();
@@ -212,7 +145,7 @@ class BackgroundBibleDownloader {
         this.notify();
       });
 
-      // Auto start if online and on WiFi after 2 seconds idle
+      // Auto start if online and on WiFi after short delay
       setTimeout(() => {
         this.autoStartIfWifi();
       }, 2500);
@@ -256,11 +189,13 @@ class BackgroundBibleDownloader {
   public autoStartIfWifi() {
     const { isOnline, isWifi } = checkNetworkState();
     if (isOnline && isWifi && !this.isRunning && this.downloadedCount < TOTAL_BIBLE_CHAPTERS) {
-      this.startDownload();
+      this.startDownload(this.activeTranslation);
     }
   }
 
-  public async startDownload(translation: string = 'rvr1960') {
+  public async startDownload(translation: string = 'valera') {
+    this.activeTranslation = normalizeTranslationKey(translation);
+
     if (this.isRunning) {
       this.isPaused = false;
       this.notify();
@@ -278,8 +213,10 @@ class BackgroundBibleDownloader {
     this.notify();
 
     try {
-      // Loop through all 66 books and each chapter
-      for (const book of BIBLE_BOOKS) {
+      // Query books directly from local DB
+      const books = await getBooksFromDB(this.activeTranslation);
+
+      for (const book of books) {
         for (let ch = 1; ch <= book.chaptersCount; ch++) {
           if (this.isPaused) {
             this.isRunning = false;
@@ -287,38 +224,37 @@ class BackgroundBibleDownloader {
             return;
           }
 
-          // Check if already in IndexedDB for this translation
-          const existing = await getChapterOffline(book.id, ch, translation);
-          if (!existing) {
+          // Check if already stored in local DB
+          const existing = await getChapterFromDB(book.id, ch, this.activeTranslation);
+          if (!existing || existing.length === 0) {
             this.activeBookName = book.name;
             this.activeChapterNum = ch;
             this.notify();
 
             try {
-              // Fetch and cache with retry
-              const verses = await fetchBibleChapter(book.id, ch, translation);
-              await saveChapterOffline(book.id, ch, verses, translation);
-              this.downloadedCount++;
-              this.notify();
+              // Fetch and store in local DB
+              const verses = await fetchChapterVerses(book.id, ch, this.activeTranslation);
+              if (verses && verses.length > 0) {
+                this.downloadedCount++;
+                this.notify();
+              }
             } catch (err) {
-              console.warn(`Error downloading ${book.id} ${ch} (${translation}) for offline cache:`, err);
+              console.warn(`Descarga en segundo plano para ${book.name} ${ch} (${this.activeTranslation}):`, err);
             }
 
-            // Yield control slightly so UI and other tasks remain super responsive (30ms rate-limiting)
-            await new Promise((r) => setTimeout(r, 30));
-          } else {
-            // Already cached, ensure count matches
+            // Yield control non-blockingly (25ms rate-limiting)
+            await new Promise((r) => setTimeout(r, 25));
           }
         }
       }
 
-      this.downloadedCount = await countStoredChapters();
+      this.downloadedCount = await countStoredChapters(this.activeTranslation);
       this.activeBookName = '';
       this.activeChapterNum = 0;
       this.isRunning = false;
       this.notify();
     } catch (e) {
-      console.error('Offline download failed:', e);
+      console.error('Error en descarga en segundo plano:', e);
       this.isRunning = false;
       this.notify();
     }

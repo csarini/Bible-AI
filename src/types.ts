@@ -118,11 +118,46 @@ export interface BiblicalItinerary {
 }
 
 
+export type BibleTranslationAbbr = 'rv1858' | 'sse' | 'valera';
+
+export interface BibleTranslationOption {
+  translation: string;
+  abbreviation: BibleTranslationAbbr;
+  name: string;
+  subtitle: string;
+  badge?: string;
+}
+
+export const OFFICIAL_TRANSLATIONS: BibleTranslationOption[] = [
+  {
+    translation: 'Reina Valera (1909)',
+    abbreviation: 'valera',
+    name: 'Reina Valera (1909)',
+    subtitle: 'Reina Valera 1909 (Edición Clásica / Valera)',
+    badge: 'Predeterminada'
+  },
+  {
+    translation: 'Sagradas Escrituras (1569)',
+    abbreviation: 'sse',
+    name: 'Sagradas Escrituras (1569)',
+    subtitle: 'Biblia del Oso 1569 (Casiodoro de Reina)',
+    badge: 'Histórica'
+  },
+  {
+    translation: 'Reina Valera NT (1858)',
+    abbreviation: 'rv1858',
+    name: 'Reina Valera NT (1858)',
+    subtitle: 'Nuevo Testamento Revisión 1858',
+    badge: 'NT 1858'
+  }
+];
+
 export interface ReadingSettings {
   fontSize: 'small' | 'medium' | 'large' | 'extra-large';
   fontFamily: 'Literata' | 'Playfair' | 'Inter';
   lineHeight: 'normal' | 'relaxed' | 'spacious';
-  translation: 'RVR1909' | 'RVR1960' | 'NVI' | 'NTV' | 'LBLA';
+  translation: 'valera' | 'sse' | 'rv1858' | string;
   themeMode: 'light' | 'sepia' | 'dark';
   showVerseNumbers: boolean;
 }
+

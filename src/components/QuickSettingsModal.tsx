@@ -13,7 +13,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { ReadingSettings, BibleBook } from '../types';
-import { BIBLE_BOOKS } from '../data/bibleData';
+import { getLocalBooksSync, getBookByIdOrNumber } from '../services/bibleDatabaseService';
 
 interface QuickSettingsModalProps {
   isOpen: boolean;
@@ -38,7 +38,8 @@ export const QuickSettingsModal: React.FC<QuickSettingsModalProps> = ({
 }) => {
   if (!isOpen) return null;
 
-  const currentBook = BIBLE_BOOKS.find((b) => b.id === currentBookId) || BIBLE_BOOKS[0];
+  const currentBooks = getLocalBooksSync(settings.translation);
+  const currentBook = getBookByIdOrNumber(currentBookId, settings.translation);
   const isDark = settings.themeMode === 'dark';
   const isSepia = settings.themeMode === 'sepia';
 
@@ -152,14 +153,14 @@ export const QuickSettingsModal: React.FC<QuickSettingsModalProps> = ({
                     }`}
                   >
                     <optgroup label="Nuevo Testamento">
-                      {BIBLE_BOOKS.filter((b) => b.testament === 'NT').map((b) => (
+                      {currentBooks.filter((b) => b.testament === 'NT').map((b) => (
                         <option key={b.id} value={b.id}>
                           {b.name} ({b.chaptersCount} caps)
                         </option>
                       ))}
                     </optgroup>
                     <optgroup label="Antiguo Testamento">
-                      {BIBLE_BOOKS.filter((b) => b.testament === 'OT').map((b) => (
+                      {currentBooks.filter((b) => b.testament === 'OT').map((b) => (
                         <option key={b.id} value={b.id}>
                           {b.name} ({b.chaptersCount} caps)
                         </option>
@@ -201,29 +202,35 @@ export const QuickSettingsModal: React.FC<QuickSettingsModalProps> = ({
                 Versión / Traducción Bíblica
               </label>
               <span className="text-[10px] font-semibold text-[#F47B20] bg-[#F47B20]/10 px-2 py-0.5 rounded-full">
-                Por Defecto
+                GetBible
               </span>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {[
-                { id: 'RVR1960', title: 'RVR 1960', subtitle: 'Reina-Valera (Principal)' },
-                { id: 'RVR1909', title: 'RVR 1909', subtitle: 'Reina-Valera (Clásica)' }
-              ].map((tr) => (
-                <button
-                  key={tr.id}
-                  id={`quick-trans-${tr.id}`}
-                  type="button"
-                  onClick={() => onUpdateSettings({ translation: tr.id as any })}
-                  className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer ${
-                    settings.translation === tr.id
-                      ? 'bg-[#0B2B68] text-[#FED65B] border-[#F47B20] shadow-sm ring-2 ring-[#F47B20]/40 font-bold'
-                      : `${cardBg} hover:border-[#F47B20]/50`
-                  }`}
-                >
-                  <span className="block font-bold text-xs">{tr.title}</span>
-                  <span className="block text-[10px] opacity-75">{tr.subtitle}</span>
-                </button>
-              ))}
+                { id: 'valera', abbreviation: 'valera', title: 'Valera 1909', subtitle: 'Reina Valera' },
+                { id: 'sse', abbreviation: 'sse', title: 'SSE (1569)', subtitle: 'Sagradas Escr.' },
+                { id: 'rv1858', abbreviation: 'rv1858', title: 'RV 1858', subtitle: 'Nuevo Test.' }
+              ].map((tr) => {
+                const isSelected = settings.translation === tr.id ||
+                  (tr.id === 'valera' && (settings.translation === 'RVR1909' || settings.translation === 'RVR1960')) ||
+                  (tr.id === 'sse' && settings.translation === 'SSE');
+                return (
+                  <button
+                    key={tr.id}
+                    id={`quick-trans-${tr.id}`}
+                    type="button"
+                    onClick={() => onUpdateSettings({ translation: tr.id })}
+                    className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer ${
+                      isSelected
+                        ? 'bg-[#0B2B68] text-[#FED65B] border-[#F47B20] shadow-sm ring-2 ring-[#F47B20]/40 font-bold'
+                        : `${cardBg} hover:border-[#F47B20]/50`
+                    }`}
+                  >
+                    <span className="block font-bold text-xs">{tr.title}</span>
+                    <span className="block text-[10px] opacity-75">{tr.subtitle}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 

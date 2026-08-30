@@ -23,8 +23,9 @@ import {
   Layers,
   ExternalLink
 } from 'lucide-react';
-import { BibleVerse, BibleBook, LocalBookmark, ReadingSettings, HighlightColor, MapWaypoint } from '../types';
-import { fetchBibleChapter, BIBLE_BOOKS } from '../data/bibleData';
+import { BibleVerse, BibleBook, LocalBookmark, ReadingSettings, HighlightColor, MapWaypoint, OFFICIAL_TRANSLATIONS } from '../types';
+import { fetchBibleChapter } from '../data/bibleData';
+import { getLocalBooksSync, getBookByIdOrNumber } from '../services/bibleDatabaseService';
 import { ShareService, ShareContent } from '../services/shareService';
 import { findItineraryForScripture, detectPlacesInChapter, DetectedBiblicalPlace } from '../data/biblicalMapsData';
 import { BiblicalMapsView } from './BiblicalMapsView';
@@ -71,7 +72,8 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
   const [activeMapWaypointId, setActiveMapWaypointId] = useState<string | undefined>(undefined);
   const [activeMapItineraryId, setActiveMapItineraryId] = useState<string | undefined>(undefined);
 
-  const bookMeta = BIBLE_BOOKS.find((b) => b.id === currentBookId) || BIBLE_BOOKS[0];
+  const currentBooks = useMemo(() => getLocalBooksSync(settings.translation), [settings.translation]);
+  const bookMeta = useMemo(() => getBookByIdOrNumber(currentBookId, settings.translation), [currentBookId, settings.translation]);
   const matchingItinerary = findItineraryForScripture(currentBookId, currentChapter);
 
   // Detect places in the current chapter
@@ -178,9 +180,9 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
     if (currentChapter > 1) {
       onNavigateChapter(currentBookId, currentChapter - 1);
     } else {
-      const currentIndex = BIBLE_BOOKS.findIndex((b) => b.id === currentBookId);
+      const currentIndex = currentBooks.findIndex((b) => b.id === currentBookId);
       if (currentIndex > 0) {
-        const prevBook = BIBLE_BOOKS[currentIndex - 1];
+        const prevBook = currentBooks[currentIndex - 1];
         onNavigateChapter(prevBook.id, prevBook.chaptersCount);
       }
     }
@@ -190,9 +192,9 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
     if (currentChapter < bookMeta.chaptersCount) {
       onNavigateChapter(currentBookId, currentChapter + 1);
     } else {
-      const currentIndex = BIBLE_BOOKS.findIndex((b) => b.id === currentBookId);
-      if (currentIndex < BIBLE_BOOKS.length - 1) {
-        const nextBook = BIBLE_BOOKS[currentIndex + 1];
+      const currentIndex = currentBooks.findIndex((b) => b.id === currentBookId);
+      if (currentIndex < currentBooks.length - 1) {
+        const nextBook = currentBooks[currentIndex + 1];
         onNavigateChapter(nextBook.id, 1);
       }
     }
@@ -375,7 +377,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
                   {bookMeta.testament === 'OT' ? 'Antiguo Testamento' : 'Nuevo Testamento'}
                 </span>
                 <span className="text-[11px] font-semibold opacity-75">
-                  {settings.translation}
+                  {OFFICIAL_TRANSLATIONS.find(t => t.abbreviation === settings.translation || t.translation === settings.translation)?.name || (settings.translation === 'valera' ? 'Reina Valera (1909)' : settings.translation === 'sse' ? 'Sagradas Escrituras (1569)' : settings.translation === 'rv1858' ? 'Reina Valera NT (1858)' : settings.translation)}
                 </span>
               </div>
               <h2 className={`font-serif italic font-bold text-2xl sm:text-3xl md:text-4xl tracking-tight mt-0.5 ${headingTextClass}`}>

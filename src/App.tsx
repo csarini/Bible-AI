@@ -20,7 +20,7 @@ import { CoachMarkOverlay, COACHMARK_STORAGE_KEY } from './components/CoachMarkO
 import { StorageService } from './services/storageService';
 import { ShareContent } from './services/shareService';
 import { ActiveTab, BibleVerse, LocalBookmark, ReadingSettings, HighlightColor } from './types';
-import { BIBLE_BOOKS } from './data/bibleData';
+import { initBibleDatabase, getLocalBooksSync, getBookByIdOrNumber } from './services/bibleDatabaseService';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -65,6 +65,9 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    // Initialize and seed the 3 Bible translations into IndexedDB local
+    initBibleDatabase().catch((err) => console.error('Error init DB:', err));
+
     // Load initial stored bookmarks and recent searches
     const bms = StorageService.getBookmarks();
     setBookmarks(bms);
@@ -197,7 +200,8 @@ export default function App() {
     setRecentSearches(updated);
 
     // If query matches a book name, jump to that book
-    const matchedBook = BIBLE_BOOKS.find(
+    const currentBooks = getLocalBooksSync(settings.translation);
+    const matchedBook = currentBooks.find(
       (b) =>
         b.name.toLowerCase().includes(query.toLowerCase()) ||
         b.englishName.toLowerCase().includes(query.toLowerCase())
@@ -254,7 +258,7 @@ export default function App() {
         activeTab={activeTab}
         onNavigateTab={(tab) => setActiveTab(tab)}
         savedCount={bookmarks.length}
-        currentBookName={BIBLE_BOOKS.find((b) => b.id === currentBookId)?.name || 'Mateo'}
+        currentBookName={getBookByIdOrNumber(currentBookId, settings.translation).name}
         currentChapter={currentChapter}
         currentTheme={settings.themeMode}
         onOpenSettings={() => setIsQuickSettingsOpen(true)}
@@ -370,7 +374,8 @@ export default function App() {
             <EventsView
               settings={settings}
               onNavigateToScripture={(bookNameOrId, chapter, verse) => {
-                const matched = BIBLE_BOOKS.find(
+                const currentBooks = getLocalBooksSync(settings.translation);
+                const matched = currentBooks.find(
                   b => b.name.toLowerCase() === bookNameOrId.toLowerCase() || b.id.toLowerCase() === bookNameOrId.toLowerCase()
                 );
                 const effectiveBookId = matched ? matched.id : 'MAT';

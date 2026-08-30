@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Book, Sparkles, BookOpen, ChevronRight, X, ArrowLeft, Check, Compass, Layers } from 'lucide-react';
-import { BIBLE_BOOKS, fetchBibleChapter } from '../data/bibleData';
+import { fetchBibleChapter } from '../data/bibleData';
+import { getLocalBooksSync } from '../services/bibleDatabaseService';
 import { BibleBook, BibleVerse } from '../types';
 
 interface SearchViewProps {
@@ -8,13 +9,15 @@ interface SearchViewProps {
   recentSearches: string[];
   onPerformSearchText: (query: string) => void;
   currentTheme?: 'light' | 'sepia' | 'dark';
+  currentTranslation?: string;
 }
 
 export const SearchView: React.FC<SearchViewProps> = ({
   onSelectBookAndChapter,
   recentSearches,
   onPerformSearchText,
-  currentTheme = 'light'
+  currentTheme = 'light',
+  currentTranslation = 'valera'
 }) => {
   const isDark = currentTheme === 'dark';
   const isSepia = currentTheme === 'sepia';
@@ -54,9 +57,11 @@ export const SearchView: React.FC<SearchViewProps> = ({
   const [searchFilter, setSearchFilter] = useState('');
   const [activeTabFilter, setActiveTabFilter] = useState<'all' | 'OT' | 'NT'>('all');
   
+  const allBooks = getLocalBooksSync(currentTranslation);
+
   // Selected book and chapter for the selector modal / inline viewer
   const [selectedBook, setSelectedBook] = useState<BibleBook>(() => {
-    return BIBLE_BOOKS.find(b => b.id === 'MAT') || BIBLE_BOOKS[39];
+    return allBooks.find(b => b.id === 'MAT') || allBooks[0];
   });
   const [selectedChapter, setSelectedChapter] = useState<number>(1);
   const [selectorStep, setSelectorStep] = useState<'chapters' | 'verses'>('chapters');
@@ -66,8 +71,8 @@ export const SearchView: React.FC<SearchViewProps> = ({
   const [chapterVerses, setChapterVerses] = useState<BibleVerse[]>([]);
   const [loadingVerses, setLoadingVerses] = useState<boolean>(false);
 
-  const oldTestament = BIBLE_BOOKS.filter(b => b.testament === 'OT');
-  const newTestament = BIBLE_BOOKS.filter(b => b.testament === 'NT');
+  const oldTestament = allBooks.filter(b => b.testament === 'OT');
+  const newTestament = allBooks.filter(b => b.testament === 'NT');
 
   const filteredOT = oldTestament.filter(b =>
     b.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
@@ -144,7 +149,7 @@ export const SearchView: React.FC<SearchViewProps> = ({
     onPerformSearchText(term);
 
     // If query matches a book name, open its chapter selector
-    const matched = BIBLE_BOOKS.find(
+    const matched = allBooks.find(
       b => b.name.toLowerCase().includes(term.toLowerCase())
     );
     if (matched) {
@@ -161,7 +166,7 @@ export const SearchView: React.FC<SearchViewProps> = ({
       const bookQuery = match[1].trim().toLowerCase();
       const chapterNum = parseInt(match[2], 10);
       const verseNum = match[3] ? parseInt(match[3], 10) : undefined;
-      const foundBook = BIBLE_BOOKS.find(b =>
+      const foundBook = allBooks.find(b =>
         b.name.toLowerCase() === bookQuery ||
         b.name.toLowerCase().startsWith(bookQuery) ||
         b.abbreviation.toLowerCase() === bookQuery

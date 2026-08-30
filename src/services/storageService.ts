@@ -199,14 +199,22 @@ export const StorageService = {
       fontSize: 'medium',
       fontFamily: 'Literata',
       lineHeight: 'relaxed',
-      translation: 'RVR1960',
+      translation: 'valera',
       themeMode: 'light',
       showVerseNumbers: true
     };
     try {
       const data = localStorage.getItem(SETTINGS_STORAGE_KEY);
       if (!data) return defaultSettings;
-      return { ...defaultSettings, ...JSON.parse(data) };
+      const parsed = JSON.parse(data);
+      // Migrate legacy translation identifiers if needed
+      let trans = parsed.translation;
+      if (trans === 'RVR1960' || trans === 'RVR1909') {
+        trans = 'valera';
+      } else if (trans === 'SSE') {
+        trans = 'sse';
+      }
+      return { ...defaultSettings, ...parsed, translation: trans || 'valera' };
     } catch {
       return defaultSettings;
     }

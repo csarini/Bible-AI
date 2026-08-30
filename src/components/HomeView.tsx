@@ -20,7 +20,8 @@ import {
   Cross,
   Calendar
 } from 'lucide-react';
-import { DAILY_VERSES, BIBLE_BOOKS } from '../data/bibleData';
+import { DAILY_VERSES } from '../data/bibleData';
+import { getBookByIdOrNumber } from '../services/bibleDatabaseService';
 import { DailyVerse, ActiveTab, LocalBookmark, ReadingSettings } from '../types';
 import { ShareContent } from '../services/shareService';
 
@@ -163,7 +164,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
     };
   }, []);
 
-  const lastReadBook = BIBLE_BOOKS.find((b) => b.id === lastReadBookId) || BIBLE_BOOKS[39]; // default Mateo
+  const lastReadBook = getBookByIdOrNumber(lastReadBookId || 'MAT');
 
   // Theme token classes
   const cardBgClass = isDark

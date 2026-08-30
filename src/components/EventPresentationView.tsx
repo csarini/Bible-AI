@@ -17,7 +17,8 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { UserEvent, EventCategory, ReadingSettings, BibleVerse } from '../types';
-import { BIBLE_BOOKS, fetchBibleChapter } from '../data/bibleData';
+import { fetchBibleChapter } from '../data/bibleData';
+import { getLocalBooksSync } from '../services/bibleDatabaseService';
 
 interface EventPresentationViewProps {
   event: UserEvent;
@@ -151,6 +152,7 @@ export const EventPresentationView: React.FC<EventPresentationViewProps> = ({
       return;
     }
 
+    const currentBooks = getLocalBooksSync(settings.translation);
     const items: LoadedVerseItem[] = event.linkedVerses.map((refStr) => {
       const match = refStr.trim().match(/^((?:\d\s+)?[a-záéíóúñA-ZÁÉÍÓÚÑ]+)\s*(\d+)(?:[:\.](\d+))?/i);
       if (match) {
@@ -158,7 +160,7 @@ export const EventPresentationView: React.FC<EventPresentationViewProps> = ({
         const chNum = parseInt(match[2], 10);
         const vNum = match[3] ? parseInt(match[3], 10) : undefined;
 
-        const foundBook = BIBLE_BOOKS.find(
+        const foundBook = currentBooks.find(
           (b) =>
             b.name.toLowerCase() === namePart ||
             b.englishName.toLowerCase() === namePart ||

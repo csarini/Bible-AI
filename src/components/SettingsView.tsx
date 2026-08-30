@@ -179,42 +179,69 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 Versión / Traducción Bíblica
               </span>
               <span className="text-[11px] font-sans font-bold text-[#F47B20] bg-[#F47B20]/10 px-2 py-0.5 rounded-full">
-                Versiones Oficiales por Defecto
+                GetBible Oficiales
               </span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               {[
-                { id: 'RVR1960', title: 'RVR 1960', subtitle: 'Reina-Valera 1960 (Versión Principal por Defecto)', badge: 'Predeterminada' },
-                { id: 'RVR1909', title: 'RVR 1909', subtitle: 'Reina-Valera 1909 (Edición Clásica / GetBible)', badge: 'Por Defecto' }
-              ].map((tr) => (
-                <button
-                  key={tr.id}
-                  id={`settings-trans-${tr.id}`}
-                  onClick={() => {
-                    onUpdateSettings({ translation: tr.id as any });
-                    onToast(`Traducción actualizada a ${tr.title}`);
-                  }}
-                  className={`p-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-left flex flex-col justify-between ${
-                    settings.translation === tr.id
-                      ? 'bg-[#0B2B68] text-[#FED65B] shadow-xs ring-2 ring-[#F47B20]/50 font-black'
-                      : 'bg-[#F0EEE9] text-[#454652] hover:bg-[#EAE8E3]'
-                  }`}
-                >
-                  <div className="flex items-center justify-between w-full">
-                    <span className="text-sm font-bold">{tr.title}</span>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
-                      settings.translation === tr.id
-                        ? 'bg-[#FED65B]/20 text-[#FED65B]'
-                        : 'bg-[#C6C5D4]/40 text-[#454652]'
-                    }`}>
-                      {tr.badge}
+                {
+                  id: 'valera',
+                  abbreviation: 'valera',
+                  translation: 'Reina Valera (1909)',
+                  title: 'Reina Valera (1909)',
+                  subtitle: 'Edición Clásica 1909 / Valera',
+                  badge: 'Predeterminada'
+                },
+                {
+                  id: 'sse',
+                  abbreviation: 'sse',
+                  translation: 'Sagradas Escrituras (1569)',
+                  title: 'Sagradas Escrituras (1569)',
+                  subtitle: 'Biblia del Oso 1569 (Casiodoro de Reina)',
+                  badge: 'sse'
+                },
+                {
+                  id: 'rv1858',
+                  abbreviation: 'rv1858',
+                  translation: 'Reina Valera NT (1858)',
+                  title: 'Reina Valera NT (1858)',
+                  subtitle: 'Nuevo Testamento Revisión 1858',
+                  badge: 'rv1858'
+                }
+              ].map((tr) => {
+                const isSelected = settings.translation === tr.id || 
+                  (tr.id === 'valera' && (settings.translation === 'RVR1909' || settings.translation === 'RVR1960')) ||
+                  (tr.id === 'sse' && settings.translation === 'SSE');
+                return (
+                  <button
+                    key={tr.id}
+                    id={`settings-trans-${tr.id}`}
+                    onClick={() => {
+                      onUpdateSettings({ translation: tr.id });
+                      onToast(`Traducción actualizada a ${tr.translation}`);
+                    }}
+                    className={`p-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-left flex flex-col justify-between ${
+                      isSelected
+                        ? 'bg-[#0B2B68] text-[#FED65B] shadow-xs ring-2 ring-[#F47B20]/50 font-black'
+                        : 'bg-[#F0EEE9] text-[#454652] hover:bg-[#EAE8E3]'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span className="text-sm font-bold leading-tight">{tr.title}</span>
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold ${
+                        isSelected
+                          ? 'bg-[#FED65B]/20 text-[#FED65B]'
+                          : 'bg-[#C6C5D4]/40 text-[#454652]'
+                      }`}>
+                        {tr.abbreviation}
+                      </span>
+                    </div>
+                    <span className="block text-[11px] font-normal opacity-80 mt-1">
+                      {tr.subtitle}
                     </span>
-                  </div>
-                  <span className="block text-[11px] font-normal opacity-80 mt-1">
-                    {tr.subtitle}
-                  </span>
-                </button>
-              ))}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
