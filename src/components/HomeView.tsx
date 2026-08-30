@@ -20,7 +20,7 @@ import {
   Cross,
   Calendar
 } from 'lucide-react';
-import { DAILY_VERSES } from '../data/bibleData';
+import { getRandomDailyVerse, getRandomDailyVerseSync } from '../data/bibleData';
 import { getBookByIdOrNumber } from '../services/bibleDatabaseService';
 import { DailyVerse, ActiveTab, LocalBookmark, ReadingSettings } from '../types';
 import { ShareContent } from '../services/shareService';
@@ -63,33 +63,25 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const isDark = currentTheme === 'dark';
   const isSepia = currentTheme === 'sepia';
 
-  // Rotating verse state: pick a random/different one on mount each time user enters
-  const [currentVerseIndex, setCurrentVerseIndex] = useState<number>(0);
+  // Dynamic random verse state
+  const [currentDailyVerse, setCurrentDailyVerse] = useState<DailyVerse>(() => getRandomDailyVerseSync());
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<string>('all');
   const [activeSubTab, setActiveSubTab] = useState<'verse' | 'reflection' | 'prayer'>('verse');
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
-  // Initialize with a randomly rotated verse on entrance to ensure it changes every time the user enters
+  // Initialize with a fresh random verse on entrance
   useEffect(() => {
-    const total = DAILY_VERSES.length;
-    // Get last shown index from session storage to guarantee a fresh verse on each new session/entry
-    const lastIdxStr = sessionStorage.getItem('elshaddai_last_verse_idx');
-    let nextIdx = Math.floor(Math.random() * total);
-    if (lastIdxStr !== null) {
-      const lastIdx = parseInt(lastIdxStr, 10);
-      if (!isNaN(lastIdx) && total > 1) {
-        // Pick a different index from the previous one
-        while (nextIdx === lastIdx) {
-          nextIdx = Math.floor(Math.random() * total);
+    getRandomDailyVerse('valera', undefined, currentDailyVerse?.id)
+      .then((verse) => {
+        if (verse) {
+          setCurrentDailyVerse(verse);
         }
-      }
-    }
-    sessionStorage.setItem('elshaddai_last_verse_idx', nextIdx.toString());
-    setCurrentVerseIndex(nextIdx);
+      })
+      .catch(() => {
+        // Fallback already set synchronously
+      });
   }, []);
-
-  const currentDailyVerse: DailyVerse = DAILY_VERSES[currentVerseIndex] || DAILY_VERSES[0];
 
   // Manual refresh / change verse handler
   const handleRandomizeVerse = (topic?: string) => {
@@ -100,32 +92,19 @@ export const HomeView: React.FC<HomeViewProps> = ({
       setIsPlayingAudio(false);
     }
 
-    setTimeout(() => {
-      let candidateIndices: number[] = [];
-      const topicToUse = topic || selectedTopic;
-      if (topicToUse && topicToUse !== 'all') {
-        candidateIndices = DAILY_VERSES.map((v, i) =>
-          v.tags?.some((t) => t.toLowerCase().includes(topicToUse.toLowerCase())) ||
-          v.theme.toLowerCase().includes(topicToUse.toLowerCase())
-            ? i
-            : -1
-        ).filter((i) => i !== -1);
-      }
-
-      if (candidateIndices.length === 0) {
-        candidateIndices = DAILY_VERSES.map((_, i) => i);
-      }
-
-      const available = candidateIndices.filter((idx) => idx !== currentVerseIndex);
-      const nextIdx = available.length > 0
-        ? available[Math.floor(Math.random() * available.length)]
-        : candidateIndices[Math.floor(Math.random() * candidateIndices.length)];
-
-      setCurrentVerseIndex(nextIdx);
-      sessionStorage.setItem('elshaddai_last_verse_idx', nextIdx.toString());
-      setIsRefreshing(false);
-      onToast('Nuevo versículo revelado');
-    }, 220);
+    const topicToUse = topic !== undefined ? topic : selectedTopic;
+    getRandomDailyVerse('valera', topicToUse, currentDailyVerse?.id)
+      .then((newVerse) => {
+        setCurrentDailyVerse(newVerse);
+        setIsRefreshing(false);
+        onToast('Nuevo versículo revelado');
+      })
+      .catch(() => {
+        const fallback = getRandomDailyVerseSync(topicToUse, currentDailyVerse?.id);
+        setCurrentDailyVerse(fallback);
+        setIsRefreshing(false);
+        onToast('Nuevo versículo revelado');
+      });
   };
 
   // Audio Speech Synthesis for verse

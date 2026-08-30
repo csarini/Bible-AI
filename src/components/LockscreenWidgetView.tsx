@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Smartphone, Sparkles, Copy, Share2, Check, RefreshCw, Sun, Bookmark, ArrowRight, ShieldCheck } from 'lucide-react';
-import { DAILY_VERSES } from '../data/bibleData';
+import React, { useState, useEffect } from 'react';
+import { Smartphone, Sparkles, Copy, Share2, Check, RefreshCw, Sun, Bookmark, ArrowRight, ShieldCheck, Shuffle } from 'lucide-react';
+import { getRandomDailyVerse, getRandomDailyVerseSync } from '../data/bibleData';
 import { DailyVerse } from '../types';
 import { ShareService, ShareContent } from '../services/shareService';
 
@@ -40,11 +40,25 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
     ? 'bg-[#FAF0E2] text-[#3B2D1F] border-[#F25C05]'
     : 'bg-[#FAF8F5] text-[#1B1C19] border-[#F25C05]';
 
-  const [selectedDayIndex, setSelectedDayIndex] = useState(0);
+  const [currentDailyVerse, setCurrentDailyVerse] = useState<DailyVerse>(() => getRandomDailyVerseSync());
   const [widgetPlatform, setWidgetPlatform] = useState<'ios' | 'android'>('ios');
   const [copied, setCopied] = useState(false);
+  const [isLoadingRandom, setIsLoadingRandom] = useState(false);
 
-  const currentDailyVerse: DailyVerse = DAILY_VERSES[selectedDayIndex] || DAILY_VERSES[0];
+  const handleFetchRandomVerse = async () => {
+    setIsLoadingRandom(true);
+    try {
+      const nextVerse = await getRandomDailyVerse('valera', undefined, currentDailyVerse?.id);
+      setCurrentDailyVerse(nextVerse);
+      onToast('Nuevo versículo revelado');
+    } catch {
+      const fallback = getRandomDailyVerseSync(undefined, currentDailyVerse?.id);
+      setCurrentDailyVerse(fallback);
+      onToast('Nuevo versículo revelado');
+    } finally {
+      setIsLoadingRandom(false);
+    }
+  };
 
   const handleCopy = async () => {
     const text = `"${currentDailyVerse.text}"\n— ${currentDailyVerse.reference} (RVR1909)\n\n🕊️ Versículo del Día • Iglesia El-Shaddai`;
@@ -280,21 +294,16 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
             </div>
           )}
 
-          {/* Switch day buttons */}
+          {/* Random verse button */}
           <div className="flex items-center gap-2 mt-4">
-            {DAILY_VERSES.map((dv, idx) => (
-              <button
-                key={dv.id}
-                onClick={() => setSelectedDayIndex(idx)}
-                className={`px-3 py-1 rounded-full text-xs font-sans font-bold transition-all cursor-pointer ${
-                  selectedDayIndex === idx
-                    ? 'bg-[#0B2B68] text-[#F25C05] shadow-xs'
-                    : 'bg-[#EAE8E3] text-[#454652] hover:bg-[#DEDCD7]'
-                }`}
-              >
-                Día {idx + 1}
-              </button>
-            ))}
+            <button
+              onClick={handleFetchRandomVerse}
+              disabled={isLoadingRandom}
+              className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-sans font-bold bg-[#0B2B68] hover:bg-[#0B2B68]/90 text-white shadow-xs transition-all cursor-pointer disabled:opacity-50"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 text-[#FED65B] ${isLoadingRandom ? 'animate-spin' : ''}`} />
+              <span>Generar versículo aleatorio</span>
+            </button>
           </div>
         </div>
 
