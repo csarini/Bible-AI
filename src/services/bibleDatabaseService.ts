@@ -16,81 +16,53 @@ export const STORE_TRANSLATIONS = 'bible_translations';
 export const STORE_CHAPTERS = 'bible_chapters';
 export const STORE_META = 'offline_metadata';
 
-// Standard Book Metadata Map (ID, English name, Chapters, Category, Short Abbreviation)
-const STANDARD_BOOK_META: Record<number, {
-  id: string;
-  englishName: string;
-  chaptersCount: number;
-  abbrev: string;
-  category: BibleBook['category'];
-}> = {
-  1: { id: 'GEN', englishName: 'Genesis', chaptersCount: 50, abbrev: 'Gén', category: 'Pentateuco' },
-  2: { id: 'EXO', englishName: 'Exodus', chaptersCount: 40, abbrev: 'Éx', category: 'Pentateuco' },
-  3: { id: 'LEV', englishName: 'Leviticus', chaptersCount: 27, abbrev: 'Lev', category: 'Pentateuco' },
-  4: { id: 'NUM', englishName: 'Numbers', chaptersCount: 36, abbrev: 'Núm', category: 'Pentateuco' },
-  5: { id: 'DEU', englishName: 'Deuteronomy', chaptersCount: 34, abbrev: 'Dt', category: 'Pentateuco' },
-  6: { id: 'JOS', englishName: 'Joshua', chaptersCount: 24, abbrev: 'Jos', category: 'Históricos' },
-  7: { id: 'JDG', englishName: 'Judges', chaptersCount: 21, abbrev: 'Jue', category: 'Históricos' },
-  8: { id: 'RUT', englishName: 'Ruth', chaptersCount: 4, abbrev: 'Rut', category: 'Históricos' },
-  9: { id: '1SA', englishName: '1 Samuel', chaptersCount: 31, abbrev: '1S', category: 'Históricos' },
-  10: { id: '2SA', englishName: '2 Samuel', chaptersCount: 24, abbrev: '2S', category: 'Históricos' },
-  11: { id: '1KI', englishName: '1 Kings', chaptersCount: 22, abbrev: '1R', category: 'Históricos' },
-  12: { id: '2KI', englishName: '2 Kings', chaptersCount: 25, abbrev: '2R', category: 'Históricos' },
-  13: { id: '1CH', englishName: '1 Chronicles', chaptersCount: 29, abbrev: '1Cr', category: 'Históricos' },
-  14: { id: '2CH', englishName: '2 Chronicles', chaptersCount: 36, abbrev: '2Cr', category: 'Históricos' },
-  15: { id: 'EZR', englishName: 'Ezra', chaptersCount: 10, abbrev: 'Esd', category: 'Históricos' },
-  16: { id: 'NEH', englishName: 'Nehemiah', chaptersCount: 13, abbrev: 'Neh', category: 'Históricos' },
-  17: { id: 'EST', englishName: 'Esther', chaptersCount: 10, abbrev: 'Est', category: 'Históricos' },
-  18: { id: 'JOB', englishName: 'Job', chaptersCount: 42, abbrev: 'Job', category: 'Poéticos' },
-  19: { id: 'PSA', englishName: 'Psalms', chaptersCount: 150, abbrev: 'Sal', category: 'Poéticos' },
-  20: { id: 'PRO', englishName: 'Proverbs', chaptersCount: 31, abbrev: 'Pr', category: 'Poéticos' },
-  21: { id: 'ECC', englishName: 'Ecclesiastes', chaptersCount: 12, abbrev: 'Ecl', category: 'Poéticos' },
-  22: { id: 'SNG', englishName: 'Song of Songs', chaptersCount: 8, abbrev: 'Cnt', category: 'Poéticos' },
-  23: { id: 'ISA', englishName: 'Isaiah', chaptersCount: 66, abbrev: 'Is', category: 'Profetas Mayores' },
-  24: { id: 'JER', englishName: 'Jeremiah', chaptersCount: 52, abbrev: 'Jer', category: 'Profetas Mayores' },
-  25: { id: 'LAM', englishName: 'Lamentations', chaptersCount: 5, abbrev: 'Lm', category: 'Profetas Mayores' },
-  26: { id: 'EZK', englishName: 'Ezekiel', chaptersCount: 48, abbrev: 'Ez', category: 'Profetas Mayores' },
-  27: { id: 'DAN', englishName: 'Daniel', chaptersCount: 12, abbrev: 'Dn', category: 'Profetas Mayores' },
-  28: { id: 'HOS', englishName: 'Hosea', chaptersCount: 14, abbrev: 'Os', category: 'Profetas Menores' },
-  29: { id: 'JOL', englishName: 'Joel', chaptersCount: 3, abbrev: 'Jl', category: 'Profetas Menores' },
-  30: { id: 'AMO', englishName: 'Amos', chaptersCount: 9, abbrev: 'Am', category: 'Profetas Menores' },
-  31: { id: 'OBA', englishName: 'Obadiah', chaptersCount: 1, abbrev: 'Abd', category: 'Profetas Menores' },
-  32: { id: 'JON', englishName: 'Jonah', chaptersCount: 4, abbrev: 'Jon', category: 'Profetas Menores' },
-  33: { id: 'MIC', englishName: 'Micah', chaptersCount: 7, abbrev: 'Miq', category: 'Profetas Menores' },
-  34: { id: 'NAM', englishName: 'Nahum', chaptersCount: 3, abbrev: 'Nah', category: 'Profetas Menores' },
-  35: { id: 'HAB', englishName: 'Habakkuk', chaptersCount: 3, abbrev: 'Hab', category: 'Profetas Menores' },
-  36: { id: 'ZEP', englishName: 'Zephaniah', chaptersCount: 3, abbrev: 'Sof', category: 'Profetas Menores' },
-  37: { id: 'HAG', englishName: 'Haggai', chaptersCount: 2, abbrev: 'Hag', category: 'Profetas Menores' },
-  38: { id: 'ZEC', englishName: 'Zechariah', chaptersCount: 14, abbrev: 'Zac', category: 'Profetas Menores' },
-  39: { id: 'MAL', englishName: 'Malachi', chaptersCount: 4, abbrev: 'Mal', category: 'Profetas Menores' },
-  40: { id: 'MAT', englishName: 'Matthew', chaptersCount: 28, abbrev: 'Mt', category: 'Evangelios' },
-  41: { id: 'MRK', englishName: 'Mark', chaptersCount: 16, abbrev: 'Mc', category: 'Evangelios' },
-  42: { id: 'LUK', englishName: 'Luke', chaptersCount: 24, abbrev: 'Lc', category: 'Evangelios' },
-  43: { id: 'JHN', englishName: 'John', chaptersCount: 21, abbrev: 'Jn', category: 'Evangelios' },
-  44: { id: 'ACT', englishName: 'Acts', chaptersCount: 28, abbrev: 'Hch', category: 'Historia' },
-  45: { id: 'ROM', englishName: 'Romans', chaptersCount: 16, abbrev: 'Rom', category: 'Epístolas Paulinas' },
-  46: { id: '1CO', englishName: '1 Corinthians', chaptersCount: 16, abbrev: '1Co', category: 'Epístolas Paulinas' },
-  47: { id: '2CO', englishName: '2 Corinthians', chaptersCount: 13, abbrev: '2Co', category: 'Epístolas Paulinas' },
-  48: { id: 'GAL', englishName: 'Galatians', chaptersCount: 6, abbrev: 'Gál', category: 'Epístolas Paulinas' },
-  49: { id: 'EPH', englishName: 'Ephesians', chaptersCount: 6, abbrev: 'Ef', category: 'Epístolas Paulinas' },
-  50: { id: 'PHP', englishName: 'Philippians', chaptersCount: 4, abbrev: 'Fil', category: 'Epístolas Paulinas' },
-  51: { id: 'COL', englishName: 'Colossians', chaptersCount: 4, abbrev: 'Col', category: 'Epístolas Paulinas' },
-  52: { id: '1TH', englishName: '1 Thessalonians', chaptersCount: 5, abbrev: '1Ts', category: 'Epístolas Paulinas' },
-  53: { id: '2TH', englishName: '2 Thessalonians', chaptersCount: 3, abbrev: '2Ts', category: 'Epístolas Paulinas' },
-  54: { id: '1TI', englishName: '1 Timothy', chaptersCount: 6, abbrev: '1Tm', category: 'Epístolas Paulinas' },
-  55: { id: '2TI', englishName: '2 Timothy', chaptersCount: 4, abbrev: '2Tm', category: 'Epístolas Paulinas' },
-  56: { id: 'TIT', englishName: 'Titus', chaptersCount: 3, abbrev: 'Tit', category: 'Epístolas Paulinas' },
-  57: { id: 'PHM', englishName: 'Philemon', chaptersCount: 1, abbrev: 'Flm', category: 'Epístolas Paulinas' },
-  58: { id: 'HEB', englishName: 'Hebrews', chaptersCount: 13, abbrev: 'Heb', category: 'Epístolas Generales' },
-  59: { id: 'JAS', englishName: 'James', chaptersCount: 5, abbrev: 'Stg', category: 'Epístolas Generales' },
-  60: { id: '1PE', englishName: '1 Peter', chaptersCount: 5, abbrev: '1P', category: 'Epístolas Generales' },
-  61: { id: '2PE', englishName: '2 Peter', chaptersCount: 3, abbrev: '2P', category: 'Epístolas Generales' },
-  62: { id: '1JN', englishName: '1 John', chaptersCount: 5, abbrev: '1Jn', category: 'Epístolas Generales' },
-  63: { id: '2JN', englishName: '2 John', chaptersCount: 1, abbrev: '2Jn', category: 'Epístolas Generales' },
-  64: { id: '3JN', englishName: '3 John', chaptersCount: 1, abbrev: '3Jn', category: 'Epístolas Generales' },
-  65: { id: 'JUD', englishName: 'Jude', chaptersCount: 1, abbrev: 'Jd', category: 'Epístolas Generales' },
-  66: { id: 'REV', englishName: 'Revelation', chaptersCount: 22, abbrev: 'Ap', category: 'Profecía' }
-};
+// Raw Book Entry interface matching schema in /src/data/raw/*.json
+export interface RawBookData {
+  translation: string;
+  abbreviation: string;
+  lang: string;
+  language: string;
+  direction: string;
+  encoding: string;
+  nr: number;
+  name: string;
+  url: string;
+  sha: string;
+}
+
+// Canonical chapter counts and IDs for standard 66 Biblical books
+const BOOK_CHAPTERS_COUNT: number[] = [
+  50, 40, 27, 36, 34, 24, 21, 4, 31, 24,
+  22, 25, 29, 36, 10, 13, 10, 42, 150, 31,
+  12, 8, 66, 52, 5, 48, 12, 14, 3, 9,
+  1, 4, 7, 3, 3, 3, 2, 14, 4, 28,
+  16, 24, 21, 28, 16, 16, 13, 6, 6, 4,
+  4, 5, 3, 6, 4, 3, 1, 13, 5, 5,
+  3, 5, 1, 1, 1, 22
+];
+
+const BOOK_USFM_CODES: string[] = [
+  'GEN', 'EXO', 'LEV', 'NUM', 'DEU', 'JOS', 'JDG', 'RUT', '1SA', '2SA',
+  '1KI', '2KI', '1CH', '2CH', 'EZR', 'NEH', 'EST', 'JOB', 'PSA', 'PRO',
+  'ECC', 'SNG', 'ISA', 'JER', 'LAM', 'EZK', 'DAN', 'HOS', 'JOL', 'AMO',
+  'OBA', 'JON', 'MIC', 'NAM', 'HAB', 'ZEP', 'HAG', 'ZEC', 'MAL', 'MAT',
+  'MRK', 'LUK', 'JHN', 'ACT', 'ROM', '1CO', '2CO', 'GAL', 'EPH', 'PHP',
+  'COL', '1TH', '2TH', '1TI', '2TI', 'TIT', 'PHM', 'HEB', 'JAS', '1PE',
+  '2PE', '1JN', '2JN', '3JN', 'JUD', 'REV'
+];
+
+function getCategoryByBookNumber(nr: number): BibleBook['category'] {
+  if (nr <= 5) return 'Pentateuco';
+  if (nr <= 17) return 'Históricos';
+  if (nr <= 22) return 'Poéticos';
+  if (nr <= 27) return 'Profetas Mayores';
+  if (nr <= 39) return 'Profetas Menores';
+  if (nr <= 43) return 'Evangelios';
+  if (nr === 44) return 'Historia';
+  if (nr <= 57) return 'Epístolas Paulinas';
+  if (nr <= 65) return 'Epístolas Generales';
+  return 'Profecía';
+}
 
 export interface StoredBibleBook extends BibleBook {
   translation: string;
@@ -111,26 +83,24 @@ export function normalizeTranslationKey(tr?: string): 'valera' | 'sse' | 'rv1858
   return 'valera';
 }
 
-// Convert raw JSON entry to full StoredBibleBook
-function transformRawBook(raw: any, defaultAbbr: string): StoredBibleBook {
+// Convert raw JSON entry from data/raw/ to full StoredBibleBook
+function transformRawBook(raw: RawBookData | any, defaultAbbr: string): StoredBibleBook {
   const nr = Number(raw.nr);
-  const meta = STANDARD_BOOK_META[nr] || {
-    id: `BK${nr}`,
-    englishName: raw.name,
-    chaptersCount: 1,
-    abbrev: raw.name.slice(0, 3),
-    category: nr <= 39 ? 'Históricos' : 'Epístolas Generales'
-  };
+  const idx = nr - 1;
+  const bookId = BOOK_USFM_CODES[idx] || `BK${nr}`;
+  const chaptersCount = BOOK_CHAPTERS_COUNT[idx] || 1;
+  const abbreviation = raw.name ? raw.name.slice(0, 3) : bookId;
+  const category = getCategoryByBookNumber(nr);
 
   return {
-    id: meta.id,
+    id: bookId,
     number: nr,
     name: raw.name,
-    englishName: meta.englishName,
+    englishName: raw.name,
     testament: nr <= 39 ? 'OT' : 'NT',
-    chaptersCount: meta.chaptersCount,
-    abbreviation: meta.abbrev,
-    category: meta.category,
+    chaptersCount,
+    abbreviation,
+    category,
     translation: raw.abbreviation || defaultAbbr,
     url: raw.url,
     sha: raw.sha
