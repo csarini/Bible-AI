@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Wifi, WifiOff, Download, CheckCircle2, AlertCircle, HardDrive, Pause, Play, RefreshCw, Zap } from 'lucide-react';
-import { offlineDownloader, OfflineStatus, countStoredChapters, clearOfflineBible } from '../services/offlineBibleService';
+import { offlineDownloader, OfflineStatus, countStoredChapters, clearOfflineBible, startFullDownload } from '../services/offlineBibleService';
 
 interface OfflineDownloadManagerProps {
   onToast: (msg: string, durationMs?: number) => void;
@@ -11,8 +11,11 @@ interface OfflineDownloadManagerProps {
 export const OfflineDownloadManager: React.FC<OfflineDownloadManagerProps> = ({
   onToast,
   onCloseToast,
-  currentTranslation = 'RVR1960'
+  currentTranslation = 'valera'
 }) => {
+  const [activeTranslation, setActiveTranslation] = useState<string>(currentTranslation);
+  const [showCellularPrompt, setShowCellularPrompt] = useState(false);
+
   const [status, setStatus] = useState<OfflineStatus>(() => offlineDownloader.getStatus());
   const [showDetailModal, setShowDetailModal] = useState(false);
   const wasDownloadingRef = useRef(false);
@@ -22,17 +25,24 @@ export const OfflineDownloadManager: React.FC<OfflineDownloadManagerProps> = ({
       // If was previously downloading and now finished 100% (complete)
       if (wasDownloadingRef.current && !newStatus.isDownloading && newStatus.isComplete) {
         if (onCloseToast) onCloseToast();
-        onToast(`¡Descarga finalizada! Todos los libros (${currentTranslation}) listos sin conexión.`, 3000);
+        onToast(`¡Descarga finalizada! Todos los libros (${activeTranslation}) listos sin conexión.`, 3000);
+      }
+      // Detect WiFi loss while downloading
+      if (newStatus.isDownloading && !newStatus.isWifi && !showCellularPrompt) {
+        offlineDownloader.pauseDownload();
+        setShowCellularPrompt(true);
       }
       wasDownloadingRef.current = newStatus.isDownloading;
       setStatus(newStatus);
     });
     return () => unsub();
-  }, [onToast, onCloseToast, currentTranslation]);
+  }, [onToast, onCloseToast, activeTranslation, showCellularPrompt]);
 
-  const handleStartDownload = () => {
-    offlineDownloader.startDownload(currentTranslation);
-    onToast(`Descarga en segundo plano iniciada (${currentTranslation})`, 3000);
+  const handleStartDownload = (translation?: string) => {
+    const tr = translation || activeTranslation;
+    setActiveTranslation(tr);
+    offlineDownloader.startDownload(tr);
+    onToast(`Descarga en segundo plano iniciada (${tr})`, 3000);
   };
 
   const handlePauseDownload = () => {
@@ -100,7 +110,7 @@ export const OfflineDownloadManager: React.FC<OfflineDownloadManagerProps> = ({
             </button>
           ) : (
             <button
-              onClick={handleStartDownload}
+              onClick={() => handleStartDownload()}
               className="p-1 rounded-full bg-[#F25C05] hover:bg-[#EA580C] text-white transition-colors"
               title="Iniciar descarga completa en segundo plano"
             >

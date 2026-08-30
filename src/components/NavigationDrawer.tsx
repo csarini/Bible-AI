@@ -58,9 +58,9 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
       badge: null
     },
     {
-      id: 'events' as ActiveTab,
-      label: 'Prédicas & Eventos',
-      icon: Calendar,
+      id: 'library' as ActiveTab,
+      label: 'Buscar',
+      icon: Library,
       badge: null
     },
     {
@@ -70,16 +70,16 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
       badge: null
     },
     {
-      id: 'library' as ActiveTab,
-      label: 'Buscar',
-      icon: Library,
-      badge: null
-    },
-    {
       id: 'saved' as ActiveTab,
       label: 'Guardados',
       icon: Bookmark,
       badge: savedCount > 0 ? savedCount : null
+    },
+    {
+      id: 'events' as ActiveTab,
+      label: 'Prédicas & Eventos',
+      icon: Calendar,
+      badge: null
     },
     {
       id: 'ai-mentor' as ActiveTab,

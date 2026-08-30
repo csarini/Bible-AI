@@ -268,3 +268,17 @@ class BackgroundBibleDownloader {
 }
 
 export const offlineDownloader = new BackgroundBibleDownloader();
+
+// New function to download all translations sequentially
+export async function startFullDownload(): Promise<void> {
+  // Load translation catalog (dynamic import to keep bundle size low)
+  const catalog: Record<string, any> = await import('../data/raw/translations_catalog.json');
+  const translationCodes = Object.keys(catalog);
+  for (const code of translationCodes) {
+    // Start download for each translation; await completion before next
+    await offlineDownloader.startDownload(code);
+    // After each translation, pause briefly to allow UI update
+    await new Promise((r) => setTimeout(r, 500));
+  }
+}
+
