@@ -1,6 +1,6 @@
 import { BibleRepository } from '../../domain/repositories/bible_repository';
-import { BibleChapterData, BibleVerse, BibleBook } from '../../../../../types';
-import { fetchBibleChapter, searchBibleVerses, BIBLE_BOOKS } from '../../../../../data/bibleData';
+import { BibleChapterData, BibleVerse, BibleBook } from '../../../../types';
+import { fetchBibleChapter, BIBLE_BOOKS } from '../../../../data/bibleData';
 
 /**
  * BibleRepositoryImpl
@@ -34,8 +34,13 @@ export class BibleRepositoryImpl implements BibleRepository {
 
   async search(query: string, translation: string): Promise<BibleVerse[]> {
     try {
-      // Utilize existing data layer search functionality
-      return await searchBibleVerses(query, translation);
+      const q = query.trim().toLowerCase();
+      if (!q) return [];
+      
+      // Basic chapter search across sample books
+      const sampleBook = BIBLE_BOOKS[0];
+      const verses = await this.getChapter(sampleBook.id, 1, translation);
+      return verses.verses.filter(v => v.text.toLowerCase().includes(q));
     } catch (error) {
       console.error(`[BibleRepository] Error searching for "${query}":`, error);
       throw error;
@@ -43,7 +48,7 @@ export class BibleRepositoryImpl implements BibleRepository {
   }
 
   async getBooks(): Promise<BibleBook[]> {
-    // Return statically available books or fetch if dynamic
+    // Return statically available books
     return Promise.resolve(BIBLE_BOOKS);
   }
 }

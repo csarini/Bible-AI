@@ -1,4 +1,4 @@
-import { LocalBookmark } from '../../../../../types';
+import { LocalBookmark } from '../../../../types';
 
 const STORAGE_KEY = 'biblia_inteligente_bookmarks';
 

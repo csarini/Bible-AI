@@ -195,17 +195,19 @@ export const QuickSettingsModal: React.FC<QuickSettingsModalProps> = ({
 
           {/* Translation / Versión Bíblica */}
           <div className="space-y-2">
-            <label className="text-[11px] font-sans font-bold uppercase tracking-wider flex items-center gap-1.5 opacity-80">
-              <Sparkles className="w-3.5 h-3.5 text-[#F47B20]" />
-              Versión / Traducción Bíblica
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <div className="flex items-center justify-between">
+              <label className="text-[11px] font-sans font-bold uppercase tracking-wider flex items-center gap-1.5 opacity-80">
+                <Sparkles className="w-3.5 h-3.5 text-[#F47B20]" />
+                Versión / Traducción Bíblica
+              </label>
+              <span className="text-[10px] font-semibold text-[#F47B20] bg-[#F47B20]/10 px-2 py-0.5 rounded-full">
+                Por Defecto
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
               {[
-                { id: 'RVR1960', title: 'RVR 1960', subtitle: 'Reina-Valera' },
-                { id: 'RVR1909', title: 'RVR 1909', subtitle: 'Clásica' },
-                { id: 'NVI', title: 'NVI', subtitle: 'Internacional' },
-                { id: 'NTV', title: 'NTV', subtitle: 'Traducción Viviente' },
-                { id: 'LBLA', title: 'LBLA', subtitle: 'Biblia de las Américas' }
+                { id: 'RVR1960', title: 'RVR 1960', subtitle: 'Reina-Valera (Principal)' },
+                { id: 'RVR1909', title: 'RVR 1909', subtitle: 'Reina-Valera (Clásica)' }
               ].map((tr) => (
                 <button
                   key={tr.id}
@@ -214,7 +216,7 @@ export const QuickSettingsModal: React.FC<QuickSettingsModalProps> = ({
                   onClick={() => onUpdateSettings({ translation: tr.id as any })}
                   className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer ${
                     settings.translation === tr.id
-                      ? 'bg-[#0B2B68] text-[#FED65B] border-[#F47B20] shadow-sm ring-2 ring-[#F47B20]/40'
+                      ? 'bg-[#0B2B68] text-[#FED65B] border-[#F47B20] shadow-sm ring-2 ring-[#F47B20]/40 font-bold'
                       : `${cardBg} hover:border-[#F47B20]/50`
                   }`}
                 >

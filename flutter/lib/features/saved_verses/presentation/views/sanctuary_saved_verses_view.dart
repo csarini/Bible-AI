@@ -17,7 +17,7 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
   String _searchQuery = '';
   String? _selectedColorFilter;
 
-  void _editBookmark(LocalBookmarkData bookmark) {
+  void _editBookmark(LocalBookmarkEntry bookmark) {
     final titleController = TextEditingController(text: bookmark.customTitle ?? '');
     final noteController = TextEditingController(text: bookmark.personalNote ?? '');
     String selectedHex = bookmark.colorHex;
@@ -96,14 +96,17 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
               ),
               onPressed: () async {
                 await widget.database.insertOrUpdateBookmark(
-                  bookId: bookmark.bookId,
-                  bookName: bookmark.bookName,
-                  chapter: bookmark.chapter,
-                  verse: bookmark.verse,
-                  verseText: bookmark.verseText,
-                  colorHex: selectedHex,
-                  customTitle: titleController.text.trim().isEmpty ? null : titleController.text.trim(),
-                  personalNote: noteController.text.trim().isEmpty ? null : noteController.text.trim(),
+                  LocalBookmarksCompanion.insert(
+                    id: bookmark.id,
+                    bookId: bookmark.bookId,
+                    bookName: bookmark.bookName,
+                    chapter: bookmark.chapter,
+                    verse: bookmark.verse,
+                    verseText: bookmark.verseText,
+                    colorHex: selectedHex,
+                    customTitle: titleController.text.trim().isEmpty ? null : titleController.text.trim(),
+                    personalNote: noteController.text.trim().isEmpty ? null : noteController.text.trim(),
+                  ),
                 );
                 Navigator.pop(dialogCtx);
               },
@@ -176,7 +179,7 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
           ),
 
           Expanded(
-            child: StreamBuilder<List<LocalBookmarkData>>(
+            child: StreamBuilder<List<LocalBookmarkEntry>>(
               stream: widget.database.watchAllBookmarks(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -217,7 +220,7 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
     );
   }
 
-  Widget _buildBookmarkCard(LocalBookmarkData item) {
+  Widget _buildBookmarkCard(LocalBookmarkEntry item) {
     final highlightColor = SanctuaryColors.getHighlightColor(item.colorHex);
 
     return Card(

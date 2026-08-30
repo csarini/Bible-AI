@@ -30,7 +30,7 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
   List<VerseEntity> _verses = [];
 
   VerseEntity? _selectedVerse;
-  LocalBookmarkData? _selectedBookmark;
+  LocalBookmarkEntry? _selectedBookmark;
 
   @override
   void initState() {
@@ -53,13 +53,21 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
     });
 
     try {
-      final verses = await _bibleService.fetchChapter(
-        translation: 'rv1909',
+      final response = await _bibleService.fetchChapter(
+        translationKey: 'valera',
         bookNumber: _currentBook.number,
-        chapter: _currentChapter,
-        bookName: _currentBook.name,
-        bookId: _currentBook.id,
+        chapterNumber: _currentChapter,
       );
+
+      final verses = response.verses.map((v) {
+        return VerseEntity(
+          number: v.verse,
+          text: v.text,
+          bookName: response.bookName.isNotEmpty ? response.bookName : _currentBook.name,
+          bookId: _currentBook.id,
+          chapter: v.chapter,
+        );
+      }).toList();
 
       if (mounted) {
         setState(() {
@@ -227,7 +235,7 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
     );
   }
 
-  void _showAddNoteDialog(VerseEntity verse, LocalBookmarkData? existing) {
+  void _showAddNoteDialog(VerseEntity verse, LocalBookmarkEntry? existing) {
     final titleController = TextEditingController(text: existing?.customTitle ?? '');
     final noteController = TextEditingController(text: existing?.personalNote ?? '');
     String selectedHex = existing?.colorHex ?? SanctuaryColors.colorToHex(SanctuaryColors.highlightYellow);
@@ -307,15 +315,19 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
               onPressed: () async {
+                final id = '${verse.bookId}_${verse.chapter}_${verse.number}';
                 await widget.database.insertOrUpdateBookmark(
-                  bookId: verse.bookId,
-                  bookName: verse.bookName,
-                  chapter: verse.chapter,
-                  verse: verse.number,
-                  verseText: verse.text,
-                  colorHex: selectedHex,
-                  customTitle: titleController.text.trim().isEmpty ? null : titleController.text.trim(),
-                  personalNote: noteController.text.trim().isEmpty ? null : noteController.text.trim(),
+                  LocalBookmarksCompanion.insert(
+                    id: id,
+                    bookId: verse.bookId,
+                    bookName: verse.bookName,
+                    chapter: verse.chapter,
+                    verse: verse.number,
+                    verseText: verse.text,
+                    colorHex: selectedHex,
+                    customTitle: titleController.text.trim().isEmpty ? null : titleController.text.trim(),
+                    personalNote: noteController.text.trim().isEmpty ? null : noteController.text.trim(),
+                  ),
                 );
                 Navigator.pop(dialogCtx);
                 setState(() {
@@ -449,7 +461,7 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
   }
 
   Widget _buildVersesList() {
-    return StreamBuilder<List<LocalBookmarkData>>(
+    return StreamBuilder<List<LocalBookmarkEntry>>(
       stream: widget.database.watchAllBookmarks(),
       builder: (context, snapshot) {
         final bookmarks = snapshot.data ?? [];
@@ -553,13 +565,17 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
                   final hex = SanctuaryColors.colorToHex(color);
                   return GestureDetector(
                     onTap: () async {
+                      final id = '${_selectedVerse!.bookId}_${_selectedVerse!.chapter}_${_selectedVerse!.number}';
                       await widget.database.insertOrUpdateBookmark(
-                        bookId: _selectedVerse!.bookId,
-                        bookName: _selectedVerse!.bookName,
-                        chapter: _selectedVerse!.chapter,
-                        verse: _selectedVerse!.number,
-                        verseText: _selectedVerse!.text,
-                        colorHex: hex,
+                        LocalBookmarksCompanion.insert(
+                          id: id,
+                          bookId: _selectedVerse!.bookId,
+                          bookName: _selectedVerse!.bookName,
+                          chapter: _selectedVerse!.chapter,
+                          verse: _selectedVerse!.number,
+                          verseText: _selectedVerse!.text,
+                          colorHex: hex,
+                        ),
                       );
                       setState(() {
                         _selectedVerse = null;

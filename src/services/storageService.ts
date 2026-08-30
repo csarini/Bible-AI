@@ -199,7 +199,7 @@ export const StorageService = {
       fontSize: 'medium',
       fontFamily: 'Literata',
       lineHeight: 'relaxed',
-      translation: 'RVR1909',
+      translation: 'RVR1960',
       themeMode: 'light',
       showVerseNumbers: true
     };

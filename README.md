@@ -1,16 +1,16 @@
-# Biblia Inteligente 📖✨
+# Biblia Inteligente (Digital Sanctuary) 📖✨
 
-Santuario digital para el estudio bíblico integral, mapas e itinerarios geográficos interactivos, notas de prédicas y eventos, mentoría teológica con inteligencia artificial y herramientas devocionales.
+Santuario digital para el estudio bíblico integral, mapas e itinerarios geográficos interactivos, notas de prédicas y eventos eclesiales, mentoría teológica con inteligencia artificial y herramientas devocionales nativas (Web, PWA, Android e iOS con Flutter).
 
 ---
 
 ## 🌟 Características Principales
 
 ### 1. 📖 Lector Bíblico Avanzado
-- **Múltiples Traducciones**: Compatibilidad con Reina-Valera 1960 (RVR1960), Nueva Versión Internacional (NVI), Dios Habla Hoy (DHH) y La Biblia de las Américas (LBLA).
-- **Personalización de Lectura**: Modos Claro, Sepia y Oscuro; ajuste dinámico de tamaño de tipografía e interlineado.
-- **Navegación Intuitiva**: Selector rápido de libros (Antiguo y Nuevo Testamento) y capítulos.
-- **Gestión de Versículos**: Marcadores, colores de resaltado, notas personales y etiquetas temáticas.
+- **Múltiples Traducciones Canónicas**: Compatibilidad con Reina-Valera (RVR1909 / RVR1960 / RV1858 / SSE1569), NVI, DHH y LBLA a través del API de GetBible.net v2.
+- **Personalización de Lectura**: Modos Claro, Sepia y Oscuro; ajuste tipográfico dinámico e interlineado.
+- **Navegación Intuitiva**: Selector rápido de 66 libros canónicos (Antiguo y Nuevo Testamento) y capítulos.
+- **Gestión de Versículos**: Marcadores, resaltados en paleta pastel, títulos personalizados, reflexiones y etiquetas temáticas.
 
 ### 2. 🗺️ Mapas Bíblicos Interactivos
 - Visualización geográfica de eventos y rutas bíblicas con Leaflet:
@@ -20,8 +20,9 @@ Santuario digital para el estudio bíblico integral, mapas e itinerarios geográ
   - Ciudades del Antiguo y Nuevo Testamento con referencias bíblicas asociadas.
 
 ### 3. 🎙️ Prédicas & Eventos (Cuaderno de Apuntes y Modo Presentación)
-- **Gestión de Apuntes**: Registro organizado de prédicas, enseñanzas, reuniones y eventos con categorías y fechas.
-- **Vinculación de Citas**: Enlace directo a versículos bíblicos con carga automática de texto.
+- **Gestión de Apuntes**: Registro organizado de prédicas, devocionales, reuniones de matrimonios y jóvenes con categorías y fechas.
+- **Patio de Comidas & Servicios**: Opciones para registrar turnos de cafetería/comidas, cuidado de niños y venta de libros.
+- **Vinculación de Citas**: Enlace directo a versículos bíblicos con precarga de texto.
 - **Modo Presentación (Púlpito / Lectura Pantalla Completa)**:
   - Vista limpia y de solo lectura optimizada para predicar o enseñar sin distracciones.
   - Cronómetro de tiempo transcurrido para control de duración.
@@ -33,88 +34,83 @@ Santuario digital para el estudio bíblico integral, mapas e itinerarios geográ
 - Consultas teológicas, contextuales, lingüísticas e históricas impulsadas por el SDK `@google/genai` de Gemini.
 - Generación de bosquejos de sermones, reflexiones devocionales y aclaraciones doctrinales con citas bíblicas.
 
-### 5. 💾 Guardado y Modo Offline
-- **Persistencia Local**: Guardado de versículos favoritos, notas, historial de lectura y preferencias en almacenamiento local.
-- **Descargas Offline**: Descargador de datos bíblicos para uso sin conexión a internet.
+### 5. 💾 Persistencia Local & Widgets Nativos
+- **Almacenamiento Local Robusto**: Persistencia en SQLite mediante Drift (Flutter) y LocalStorage / IndexedDB (Web) para funcionamiento 100% offline y modo anónimo/invitado (sin registro forzoso).
+- **Lock Screen Widget**: Sincronización del «Versículo del Día» para pantalla de bloqueo y pantalla de inicio mediante `home_widget`.
+- **Compartición Nativa**: Servicio con formato enriquecido para versículos, reflexiones y bosquejos con `share_plus`.
+
+---
+
+## 🏛️ Arquitectura Limpia (Clean Architecture)
+
+El proyecto sigue una estricta separación por capas y módulos de dominio (*Feature-Sliced Clean Architecture*):
+
+```text
+├── src/ (Web / React Frontend)
+│   ├── core/                        # Tokens globales, tema de santuario, clientes base
+│   ├── shared/                      # Componentes UI reutilizables (AppBars, Drawers, Modals)
+│   └── features/                    # Módulos de funcionalidad independientes
+│       ├── reader/                  # Dominio, repositorios y presentación del lector bíblico
+│       ├── bookmarks/               # Gestión y persistencia de versículos y notas
+│       ├── events/                  # Prédicas, eventos eclesiales y modo presentación
+│       ├── ai_mentor/               # Servicio y chat teológico con Gemini API
+│       └── settings/                # Configuración de temas y preferencias
+│
+├── flutter/ (Mobile Native App - iOS & Android)
+│   └── lib/
+│       ├── core/                    # Base de datos Drift (SQLite), constantes y temas
+│       ├── shared/                  # Servicios de Share (share_plus) y Home Widget
+│       └── features/
+│           ├── reader/              # Servicio GetBible v2, StateNotifiers y lector
+│           ├── bookmarks/           # DAOs reactivos de versículos y notas
+│           └── events/              # Repositorios y estados para eventos y categorías
+```
 
 ---
 
 ## 🛠️ Tecnologías Utilizadas
 
-- **Frontend**: [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Vite](https://vitejs.dev/)
-- **Estilos**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **Animaciones**: [Motion](https://motion.dev/)
-- **Iconografía**: [Lucide React](https://lucide.dev/)
-- **Mapas**: [Leaflet](https://leafletjs.com/)
-- **Backend / API Proxy**: [Express](https://expressjs.com/), [Node.js](https://nodejs.org/)
-- **Inteligencia Artificial**: [@google/genai](https://github.com/googleapis/google-genai-js) (Gemini API)
-- **Móvil / PWA**: [Capacitor](https://capacitorjs.com/) (Soporte Android/iOS)
+- **Frontend Web**: React 19, TypeScript, Vite, Tailwind CSS 4, Motion, Lucide Icons, Leaflet.
+- **Mobile Nativo**: Flutter (Dart), Drift (SQLite), Riverpod, `home_widget`, `share_plus`, Google Fonts.
+- **Backend / Proxy**: Express, Node.js, `@google/genai` (Gemini API).
+- **PWA / Envoltura**: Capacitor.
 
 ---
 
 ## 🚀 Instalación y Puesta en Marcha
 
-### Prerrequisitos
-- Node.js (v18 o superior)
-- Gestor de paquetes `npm` o `bun`
-
-### Pasos
-
+### Web & Servidor Proxy
 1. **Instalar dependencias:**
    ```bash
    npm install
    ```
-
 2. **Configurar variables de entorno:**
-   Crea un archivo `.env` tomando como referencia `.env.example`:
+   Crea un archivo `.env` con tu clave de Gemini API:
    ```env
    GEMINI_API_KEY=tu_api_key_de_gemini
    ```
-
-3. **Iniciar el servidor de desarrollo:**
+3. **Iniciar desarrollo:**
    ```bash
    npm run dev
    ```
-   La aplicación estará disponible en `http://localhost:3000`.
 
-4. **Compilar para producción:**
+### App Móvil (Flutter)
+1. **Acceder al directorio de Flutter e instalar paquetes:**
    ```bash
-   npm run build
+   cd flutter
+   flutter pub get
    ```
-
-5. **Iniciar en modo producción:**
+2. **Generar código de Drift (SQLite):**
    ```bash
-   npm run start
+   dart run build_runner build --delete-conflicting-outputs
    ```
-
----
-
-## 📁 Estructura del Proyecto
-
-```
-├── public/                 # Recursos estáticos (iconos, imágenes, fuentes)
-├── src/
-│   ├── components/         # Componentes modulares de la interfaz
-│   │   ├── AIMentorView.tsx            # Asistente de IA teológico
-│   │   ├── BiblicalMapsView.tsx        # Mapas interactivos bíblicos
-│   │   ├── EventPresentationView.tsx   # Modo pantalla completa para prédicas
-│   │   ├── EventsView.tsx              # Gestión de notas de prédicas y eventos
-│   │   ├── ReaderView.tsx              # Lector bíblico principal
-│   │   ├── SavedVersesView.tsx         # Versículos guardados y notas
-│   │   ├── SearchView.tsx              # Buscador bíblico
-│   │   └── SettingsView.tsx            # Ajustes y temas
-│   ├── data/               # Textos bíblicos, rutas geográficas e himnario
-│   ├── services/           # Servicios de almacenamiento y llamadas API
-│   ├── types.ts            # Definición de interfaces y tipos TypeScript
-│   ├── App.tsx             # Componente raíz de navegación
-│   └── main.tsx            # Punto de entrada de React
-├── server.ts               # Servidor Express y proxy seguro para Gemini API
-├── capacitor.config.ts     # Configuración para compilación móvil
-└── package.json            # Dependencias y scripts de ejecución
-```
+3. **Ejecutar en emulador o dispositivo:**
+   ```bash
+   flutter run
+   ```
 
 ---
 
 ## 📄 Licencia
 
-Este proyecto es privado y de uso comunitario / educativo.
+Proyecto privado de libre distribución para uso comunitario y de estudio bíblico.

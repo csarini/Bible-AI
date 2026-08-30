@@ -174,35 +174,44 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           {/* Translation Preference */}
           <div className="space-y-1.5 sm:col-span-2">
-            <span className="block text-xs font-label-caps text-[#454652] uppercase font-semibold">
-              Versión / Traducción Bíblica
-            </span>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
-              {(['RVR1960', 'RVR1909', 'NVI', 'NTV', 'LBLA'] as const).map((tr) => (
+            <div className="flex items-center justify-between">
+              <span className="block text-xs font-label-caps text-[#454652] uppercase font-semibold">
+                Versión / Traducción Bíblica
+              </span>
+              <span className="text-[11px] font-sans font-bold text-[#F47B20] bg-[#F47B20]/10 px-2 py-0.5 rounded-full">
+                Versiones Oficiales por Defecto
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {[
+                { id: 'RVR1960', title: 'RVR 1960', subtitle: 'Reina-Valera 1960 (Versión Principal por Defecto)', badge: 'Predeterminada' },
+                { id: 'RVR1909', title: 'RVR 1909', subtitle: 'Reina-Valera 1909 (Edición Clásica / GetBible)', badge: 'Por Defecto' }
+              ].map((tr) => (
                 <button
-                  key={tr}
-                  id={`settings-trans-${tr}`}
+                  key={tr.id}
+                  id={`settings-trans-${tr.id}`}
                   onClick={() => {
-                    onUpdateSettings({ translation: tr });
-                    onToast(`Traducción actualizada a ${tr}`);
+                    onUpdateSettings({ translation: tr.id as any });
+                    onToast(`Traducción actualizada a ${tr.title}`);
                   }}
-                  className={`py-2 px-2 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${
-                    settings.translation === tr
+                  className={`p-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-left flex flex-col justify-between ${
+                    settings.translation === tr.id
                       ? 'bg-[#0B2B68] text-[#FED65B] shadow-xs ring-2 ring-[#F47B20]/50 font-black'
                       : 'bg-[#F0EEE9] text-[#454652] hover:bg-[#EAE8E3]'
                   }`}
                 >
-                  <span className="block">{tr}</span>
-                  <span className="block text-[9px] font-normal opacity-70">
-                    {tr === 'RVR1960'
-                      ? 'Reina-Valera'
-                      : tr === 'RVR1909'
-                      ? 'Clásica'
-                      : tr === 'NVI'
-                      ? 'Internacional'
-                      : tr === 'NTV'
-                      ? 'Viviente'
-                      : 'Américas'}
+                  <div className="flex items-center justify-between w-full">
+                    <span className="text-sm font-bold">{tr.title}</span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
+                      settings.translation === tr.id
+                        ? 'bg-[#FED65B]/20 text-[#FED65B]'
+                        : 'bg-[#C6C5D4]/40 text-[#454652]'
+                    }`}>
+                      {tr.badge}
+                    </span>
+                  </div>
+                  <span className="block text-[11px] font-normal opacity-80 mt-1">
+                    {tr.subtitle}
                   </span>
                 </button>
               ))}

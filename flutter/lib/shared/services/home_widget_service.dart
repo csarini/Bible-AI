@@ -6,20 +6,34 @@ class HomeWidgetService {
 
   static const String appGroupId = 'group.com.santuario.biblia';
   static const String androidWidgetName = 'VerseOfTheDayWidgetProvider';
+  static const String iOSWidgetName = 'VerseOfTheDayWidget';
 
   static Future<void> initialize() async {
-    await HomeWidget.setAppGroupId(appGroupId);
+    try {
+      await HomeWidget.setAppGroupId(appGroupId);
+    } catch (e) {
+      // Gracefully continue on unsupported environments
+    }
+  }
+
+  static Future<void> updateVerseOfTheDay({
+    required String reference,
+    required String verseText,
+  }) async {
+    try {
+      await HomeWidget.saveWidgetData<String>('votd_reference', reference);
+      await HomeWidget.saveWidgetData<String>('votd_text', verseText);
+      await HomeWidget.updateWidget(
+        name: androidWidgetName,
+        iOSName: iOSWidgetName,
+      );
+    } catch (e) {
+      // Gracefully continue on unsupported environments
+    }
   }
 
   static Future<void> updateVerseOfTheDayWidget({
     required String reference,
     required String text,
-  }) async {
-    await HomeWidget.saveWidgetData<String>('votd_reference', reference);
-    await HomeWidget.saveWidgetData<String>('votd_text', text);
-    await HomeWidget.updateWidget(
-      name: androidWidgetName,
-      iOSName: 'VerseOfTheDayWidget',
-    );
-  }
+  }) => updateVerseOfTheDay(reference: reference, verseText: text);
 }
