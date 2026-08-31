@@ -1,5 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Shield, Server, Key, Eye, EyeOff, Save, CheckCircle, Info } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  Shield,
+  Server,
+  Key,
+  Eye,
+  EyeOff,
+  Save,
+  CheckCircle,
+  Info,
+  Download,
+  Upload,
+  HardDrive,
+  FileJson,
+  RefreshCw
+} from 'lucide-react';
 import { StorageService } from '../services/storageService';
 import { ReadingSettings } from '../types';
 
@@ -18,6 +32,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [geminiKey, setGeminiKey] = useState('');
   const [showKey, setShowKey] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [importStatus, setImportStatus] = useState<{ success?: boolean; message?: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     setApiUrl(StorageService.getApiUrl());
@@ -31,6 +47,57 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     setSaveSuccess(true);
     onToast('Configuración de conexión guardada');
     setTimeout(() => setSaveSuccess(false), 3000);
+  };
+
+  const handleExportBackup = () => {
+    try {
+      const dataStr = StorageService.exportBackupData();
+      const blob = new Blob([dataStr], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const dateStr = new Date().toISOString().split('T')[0];
+      link.href = url;
+      link.download = `santuario-digital-backup-${dateStr}.json`;
+      document.body.appendChild(link);
+      link.click();
+      setTimeout(() => {
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }, 100);
+      onToast('Copia de seguridad descargada exitosamente (.json)');
+    } catch (err: any) {
+      console.error('Error exporting backup:', err);
+      onToast('Error al descargar copia de seguridad');
+    }
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const text = event.target?.result as string;
+        const result = StorageService.importBackupData(text);
+        if (result.success) {
+          setImportStatus({ success: true, message: result.message });
+          onToast('Copia de seguridad restaurada correctamente');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1200);
+        } else {
+          setImportStatus({ success: false, message: result.message });
+          onToast(result.message);
+        }
+      } catch (err: any) {
+        setImportStatus({ success: false, message: 'Error al leer el archivo JSON.' });
+        onToast('Error al leer el archivo JSON.');
+      }
+    };
+    reader.readAsText(file);
+    // Reset file input so user can re-upload same file if needed
+    e.target.value = '';
   };
 
   return (
@@ -269,6 +336,89 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Data Backup & File Transfer (Download & Upload) Card */}
+      <div className="bg-[#FBF9F4] border border-[#C6C5D4] rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="flex items-center justify-between border-b border-[#C6C5D4]/50 pb-3">
+          <div className="flex items-center gap-2.5 text-[#000666]">
+            <HardDrive className="w-5 h-5 text-[#735C00]" />
+            <h3 className="font-display-scripture text-lg font-bold">
+              Respaldo y Transferencia de Datos
+            </h3>
+          </div>
+          <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-[#059669] bg-[#059669]/10 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+            <FileJson className="w-3 h-3" />
+            <span>Formato JSON</span>
+          </span>
+        </div>
+
+        <p className="text-xs sm:text-[13px] text-[#454652] leading-relaxed">
+          Descarga o sube tus versículos guardados, notas de prédicas, categorías personalizadas y preferencias de lectura para transferirlos entre dispositivos o mantener una copia de seguridad segura.
+        </p>
+
+        {/* Hidden File Input */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".json,application/json"
+          onChange={handleFileUpload}
+          className="hidden"
+          id="backup-file-upload-input"
+        />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+          {/* Download / Export Button */}
+          <button
+            type="button"
+            id="download-backup-btn"
+            onClick={handleExportBackup}
+            className="p-4 rounded-xl border border-[#0B2B68]/20 bg-white hover:bg-[#F0EEE9] text-[#0B2B68] transition-all cursor-pointer flex flex-col items-start gap-2 text-left shadow-2xs group active:scale-[0.98]"
+          >
+            <div className="p-2 rounded-lg bg-[#0B2B68]/10 text-[#0B2B68] group-hover:bg-[#0B2B68] group-hover:text-[#FED65B] transition-colors">
+              <Download className="w-4 h-4" />
+            </div>
+            <div>
+              <span className="text-xs sm:text-sm font-bold block">Descargar Copia de Seguridad</span>
+              <span className="text-[11px] text-[#767683] block mt-0.5">
+                Genera y guarda un archivo .json con tus datos actuales
+              </span>
+            </div>
+          </button>
+
+          {/* Upload / Import Button */}
+          <button
+            type="button"
+            id="upload-backup-btn"
+            onClick={() => fileInputRef.current?.click()}
+            className="p-4 rounded-xl border border-[#F47B20]/30 bg-white hover:bg-[#FFF7ED] text-[#1B1C19] transition-all cursor-pointer flex flex-col items-start gap-2 text-left shadow-2xs group active:scale-[0.98]"
+          >
+            <div className="p-2 rounded-lg bg-[#F47B20]/15 text-[#F47B20] group-hover:bg-[#F47B20] group-hover:text-white transition-colors">
+              <Upload className="w-4 h-4" />
+            </div>
+            <div>
+              <span className="text-xs sm:text-sm font-bold block text-[#1B1C19] group-hover:text-[#F47B20] transition-colors">
+                Subir y Restaurar Archivo
+              </span>
+              <span className="text-[11px] text-[#767683] block mt-0.5">
+                Selecciona un archivo .json para recuperar tus datos
+              </span>
+            </div>
+          </button>
+        </div>
+
+        {importStatus && (
+          <div
+            className={`p-3 rounded-xl text-xs flex items-center gap-2 ${
+              importStatus.success
+                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                : 'bg-rose-50 text-rose-800 border border-rose-200'
+            }`}
+          >
+            <CheckCircle className="w-4 h-4 shrink-0" />
+            <span>{importStatus.message}</span>
+          </div>
+        )}
       </div>
 
       {/* Official El-Shaddai Church Branding Card */}

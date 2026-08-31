@@ -1,43 +1,52 @@
 # Biblia Inteligente (Digital Sanctuary) 📖✨
 
-Santuario digital para el estudio bíblico integral, mapas e itinerarios geográficos interactivos, notas de prédicas y eventos eclesiales, mentoría teológica con inteligencia artificial y herramientas devocionales nativas (Web, PWA, Android e iOS con Flutter).
+Santuario digital para el estudio bíblico integral, mapas e itinerarios geográficos interactivos, notas de prédicas y eventos eclesiales, mentoría teológica con inteligencia artificial, generador de afiches HD y herramientas devocionales nativas (Web, PWA, Android e iOS con Flutter).
 
 ---
 
 ## 🌟 Características Principales
 
-### 1. 📖 Lector Bíblico Avanzado
-- **Múltiples Traducciones Canónicas**: Compatibilidad con Reina-Valera (RVR1909 / RVR1960 / RV1858 / SSE1569), NVI, DHH y LBLA a través del API de GetBible.net v2.
-- **Personalización de Lectura**: Modos Claro, Sepia y Oscuro; ajuste tipográfico dinámico e interlineado.
-- **Navegación Intuitiva**: Selector rápido de 66 libros canónicos (Antiguo y Nuevo Testamento) y capítulos.
-- **Gestión de Versículos**: Marcadores, resaltados en paleta pastel, títulos personalizados, reflexiones y etiquetas temáticas.
+### 1. 📖 Lector Bíblico Avanzado (66 Libros & 1.189 Capítulos)
+- **Múltiples Traducciones Canónicas**: Compatibilidad con Reina-Valera (RVR1909 / RVR1960), Sagradas Escrituras 1569 (*Biblia del Oso*, Casiodoro de Reina) y Reina Valera NT 1858 a través de GetBible.net v2.
+- **Personalización de Lectura**: Modos **Claro**, **Sepia** y **Oscuro**; ajuste de tamaño de fuente (`A-`, `A`, `A+`, `A++`) e interlineado relajado.
+- **Síntesis de Voz (Audio TTS)**: Reproducción hablada versículo por versículo con control de pausa y reanudación.
+- **Gestión de Versículos**: Marcadores con paleta pastel (Amarillo, Verde, Azul), títulos personalizados, notas reflexivas personales y etiquetas temáticas.
 
-### 2. 🗺️ Mapas Bíblicos Interactivos
-- Visualización geográfica de eventos y rutas bíblicas con Leaflet:
-  - Los viajes misioneros del Apóstol Pablo (1º, 2º, 3º viaje y rumbo a Roma).
-  - La ruta del Éxodo y travesía en el desierto.
-  - El ministerio de Jesús en Galilea, Judea y Samaria.
-  - Ciudades del Antiguo y Nuevo Testamento con referencias bíblicas asociadas.
+### 2. 🗺️ Mapas Bíblicos e Itinerarios Interactivos
+- Visualización geográfica de eventos y rutas bíblicas con **Leaflet**:
+  - **Los 4 Viajes del Apóstol Pablo**: 1º, 2º, 3º viaje misionero y la travesía marítima rumbo a Roma.
+  - **Ruta del Éxodo**: Salida de Egipto, cruce del Mar Rojo y travesía por el desierto de Sinaí.
+  - **Ministerio de Jesús**: Recorridos en Galilea, Judea, Samaria y Jerusalén.
+  - Puntos geográficos detallados con citas bíblicas asociadas y coordenadas históricas.
 
-### 3. 🎙️ Prédicas & Eventos (Cuaderno de Apuntes y Modo Presentación)
-- **Gestión de Apuntes**: Registro organizado de prédicas, devocionales, reuniones de matrimonios y jóvenes con categorías y fechas.
-- **Patio de Comidas & Servicios**: Opciones para registrar turnos de cafetería/comidas, cuidado de niños y venta de libros.
-- **Vinculación de Citas**: Enlace directo a versículos bíblicos con precarga de texto.
+### 3. 🎙️ Prédicas, Eventos & Cuaderno de Apuntes
+- **Gestión Eclesial y Devocional**: Registro estructurado de sermones dominicales, reuniones de matrimonios, jóvenes, vigilias de oración y grupos pequeños.
+- **Servicios Integrados**: Registro de turnos de cafetería/patio de comidas, cuidado de niños y librería eclesial.
+- **Vinculación Bíblica**: Enlace directo a versículos de la Escritura con precarga instantánea.
 - **Modo Presentación (Púlpito / Lectura Pantalla Completa)**:
   - Vista limpia y de solo lectura optimizada para predicar o enseñar sin distracciones.
-  - Cronómetro de tiempo transcurrido para control de duración.
+  - Cronómetro de tiempo transcurrido en vivo.
   - Controles de escala de texto para lectura cómoda a distancia.
-  - Prevención de apagado de pantalla automático (*Wake Lock API*).
-  - Exportación y opciones para compartir.
+  - Prevención de apagado de pantalla automático (*Screen Wake Lock API*).
+- **Generador de Posters & Afiches HD**:
+  - Motor de renderizado en Canvas para generar y descargar invitaciones visuales en alta resolución (PNG) listas para WhatsApp, correo y redes sociales.
 
-### 4. 🤖 Mentor Teológico & Estudio Asistido por IA (Gemini)
-- Consultas teológicas, contextuales, lingüísticas e históricas impulsadas por el SDK `@google/genai` de Gemini.
-- Generación de bosquejos de sermones, reflexiones devocionales y aclaraciones doctrinales con citas bíblicas.
+### 4. 🤖 Mentor Teológico IA (Modo Prueba — 2 consultas/día)
+- **Exégesis & Análisis Lingüístico**: Respuestas contextuales, históricas y doctrinales impulsadas por Google Gemini (`@google/genai`).
+- **Raíces en Hebreo y Griego Bíblico**: Exploración de términos originales como *Shālôm* (שָׁלוֹם), *El-Shaddai* (אֵל שַׁדַּי), *Qavah* (קָוָה), *Agapē* (ἀγάπη), *Eirēnē* (εἰρήνη) y *Monogenēs* (μονογενής).
+- **Control de Cupo Diario (Modo Prueba)**:
+  - Límite de **2 consultas por día** para controlar el consumo computacional durante la fase de prueba.
+  - **Reinicio Automático**: El cupo se restablece de forma automática cada medianoche (`00:00 hs`).
+  - Distintivos visuales de *Modo Prueba* en el menú lateral, inicio y cabecera del chat.
 
-### 5. 💾 Persistencia Local & Widgets Nativos
-- **Almacenamiento Local Robusto**: Persistencia en SQLite mediante Drift (Flutter) y LocalStorage / IndexedDB (Web) para funcionamiento 100% offline y modo anónimo/invitado (sin registro forzoso).
-- **Lock Screen Widget**: Sincronización del «Versículo del Día» para pantalla de bloqueo y pantalla de inicio mediante `home_widget`.
-- **Compartición Nativa**: Servicio con formato enriquecido para versículos, reflexiones y bosquejos con `share_plus`.
+### 5. 💾 Respaldo y Transferencia de Datos (Descargar y Subir JSON)
+- **Exportación & Descarga**: Descarga un archivo `.json` completo con todos tus versículos guardados, notas de reflexión, categorías personalizadas, sermones y preferencias.
+- **Importación & Carga**: Sube y restaura copias de seguridad de forma instantánea mediante selector de archivos o arrastrar y soltar, garantizando permisos de lectura y escritura locales.
+- **Privacidad Total**: Tus datos permanecen en tu dispositivo (LocalStorage / SQLite) sin requerir cuentas obligatorias en la nube.
+
+### 6. 🧭 Guía Interactiva (CoachMark) & Buzón de Sugerencias
+- **Tour Paso a Paso**: Recorrido de inducción interactivo con adaptación visual perfecta a temas Claro, Sepia y Oscuro.
+- **Buzón de Sugerencias y Reportes**: Formulario modal seguro para enviar comentarios y reportes de errores técnicos al endpoint `/api/feedback` sin exponer correos personales en la interfaz.
 
 ---
 
@@ -47,14 +56,10 @@ El proyecto sigue una estricta separación por capas y módulos de dominio (*Fea
 
 ```text
 ├── src/ (Web / React Frontend)
-│   ├── core/                        # Tokens globales, tema de santuario, clientes base
-│   ├── shared/                      # Componentes UI reutilizables (AppBars, Drawers, Modals)
-│   └── features/                    # Módulos de funcionalidad independientes
-│       ├── reader/                  # Dominio, repositorios y presentación del lector bíblico
-│       ├── bookmarks/               # Gestión y persistencia de versículos y notas
-│       ├── events/                  # Prédicas, eventos eclesiales y modo presentación
-│       ├── ai_mentor/               # Servicio y chat teológico con Gemini API
-│       └── settings/                # Configuración de temas y preferencias
+│   ├── components/                  # Vistas principales (Lector, Mapas, Prédicas, Mentor IA, Ajustes)
+│   ├── services/                    # Servicios de almacenamiento, cuota IA, TTS y GetBible API
+│   ├── types.ts                     # Interfaces de dominio TypeScript
+│   └── data/                        # Datos canónicos de libros y rutas bíblicas
 │
 ├── flutter/ (Mobile Native App - iOS & Android)
 │   └── lib/
@@ -113,4 +118,4 @@ El proyecto sigue una estricta separación por capas y módulos de dominio (*Fea
 
 ## 📄 Licencia
 
-Proyecto privado de libre distribución para uso comunitario y de estudio bíblico.
+Proyecto privado de libre distribución para la comunidad de fe y el estudio riguroso de las Sagradas Escrituras.

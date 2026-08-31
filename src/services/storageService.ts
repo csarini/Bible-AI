@@ -407,5 +407,71 @@ export const StorageService = {
     const filtered = current.filter(e => e.id !== id);
     localStorage.setItem(USER_EVENTS_KEY, JSON.stringify(filtered));
     return true;
+  },
+
+  // ==========================================
+  // BACKUP & DATA MIGRATION (EXPORT / IMPORT)
+  // ==========================================
+  exportBackupData(): string {
+    const backup = {
+      app: 'Biblia Inteligente (Digital Sanctuary)',
+      version: '1.2.0',
+      exportedAt: new Date().toISOString(),
+      bookmarks: this.getBookmarks(),
+      categories: this.getCategories(),
+      events: this.getEvents(),
+      settings: this.getSettings(),
+      recentSearches: this.getRecentSearches()
+    };
+    return JSON.stringify(backup, null, 2);
+  },
+
+  importBackupData(jsonString: string): { success: boolean; message: string; count?: { bookmarks: number; events: number; categories: number } } {
+    try {
+      const data = JSON.parse(jsonString);
+      if (!data || typeof data !== 'object') {
+        return { success: false, message: 'El archivo no contiene un formato JSON válido.' };
+      }
+
+      let bookmarksImported = 0;
+      let eventsImported = 0;
+      let categoriesImported = 0;
+
+      if (Array.isArray(data.bookmarks)) {
+        localStorage.setItem(BOOKMARKS_STORAGE_KEY, JSON.stringify(data.bookmarks));
+        bookmarksImported = data.bookmarks.length;
+      }
+
+      if (Array.isArray(data.categories)) {
+        localStorage.setItem(EVENT_CATEGORIES_KEY, JSON.stringify(data.categories));
+        categoriesImported = data.categories.length;
+      }
+
+      if (Array.isArray(data.events)) {
+        localStorage.setItem(USER_EVENTS_KEY, JSON.stringify(data.events));
+        eventsImported = data.events.length;
+      }
+
+      if (data.settings && typeof data.settings === 'object') {
+        this.saveSettings(data.settings);
+      }
+
+      if (Array.isArray(data.recentSearches)) {
+        localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(data.recentSearches));
+      }
+
+      return {
+        success: true,
+        message: 'Copia de seguridad restaurada correctamente.',
+        count: {
+          bookmarks: bookmarksImported,
+          events: eventsImported,
+          categories: categoriesImported
+        }
+      };
+    } catch (err: any) {
+      console.error('Error importing backup:', err);
+      return { success: false, message: err?.message || 'Error al procesar el archivo de respaldo.' };
+    }
   }
 };
