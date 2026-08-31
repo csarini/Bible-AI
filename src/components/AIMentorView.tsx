@@ -148,9 +148,9 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
           prompt: textToSend,
           selectedVerse: initialVerse
             ? {
-                reference: `${initialVerse.bookName} ${initialVerse.chapter}:${initialVerse.verse}`,
-                text: initialVerse.text
-              }
+              reference: `${initialVerse.bookName} ${initialVerse.chapter}:${initialVerse.verse}`,
+              text: initialVerse.text
+            }
             : undefined
         })
       });
@@ -239,28 +239,28 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
   const badgeBg = isDark
     ? 'bg-[#131722] text-white border-white/15'
     : isSepia
-    ? 'bg-[#FAF6EF] text-[#3B2D1F] border-[#705335]/30'
-    : 'bg-white text-[#0B2B68] border-[#0B2B68]/15';
+      ? 'bg-[#FAF6EF] text-[#3B2D1F] border-[#705335]/30'
+      : 'bg-white text-[#0B2B68] border-[#0B2B68]/15';
   const chipBg = isDark
     ? 'bg-[#131722] text-white/90 border-white/15 hover:bg-[#F25C05] hover:text-white'
     : isSepia
-    ? 'bg-[#FAF6EF] text-[#3B2D1F] border-[#705335]/30 hover:bg-[#F25C05] hover:text-white'
-    : 'bg-white text-[#0B2B68] border-[#0B2B68]/20 hover:bg-[#F25C05] hover:text-white';
+      ? 'bg-[#FAF6EF] text-[#3B2D1F] border-[#705335]/30 hover:bg-[#F25C05] hover:text-white'
+      : 'bg-white text-[#0B2B68] border-[#0B2B68]/20 hover:bg-[#F25C05] hover:text-white';
   const mentorCardBg = isDark
     ? 'bg-[#131722] border-white/10 text-white'
     : isSepia
-    ? 'bg-[#FAF6EF] border-[#705335]/20 text-[#3B2D1F]'
-    : 'bg-white border-[#0B2B68]/15 text-[#1B1C19]';
+      ? 'bg-[#FAF6EF] border-[#705335]/20 text-[#3B2D1F]'
+      : 'bg-white border-[#0B2B68]/15 text-[#1B1C19]';
   const rootBoxBg = isDark
     ? 'bg-[#1C2337] border-white/15 text-white/90'
     : isSepia
-    ? 'bg-[#FAF0E2] border-[#705335]/20 text-[#3B2D1F]'
-    : 'bg-[#FAF8F5] border-[#0B2B68]/15 text-[#0B2B68]';
+      ? 'bg-[#FAF0E2] border-[#705335]/20 text-[#3B2D1F]'
+      : 'bg-[#FAF8F5] border-[#0B2B68]/15 text-[#0B2B68]';
   const saveBtnBg = isDark
     ? 'bg-white/10 hover:bg-white/15 text-white border-white/15'
     : isSepia
-    ? 'bg-[#EAE0D0] hover:bg-[#DFD3C0] text-[#3B2D1F] border-[#705335]/20'
-    : 'bg-[#0B2B68]/5 hover:bg-[#0B2B68]/10 text-[#0B2B68] border-[#0B2B68]/10';
+      ? 'bg-[#EAE0D0] hover:bg-[#DFD3C0] text-[#3B2D1F] border-[#705335]/20'
+      : 'bg-[#0B2B68]/5 hover:bg-[#0B2B68]/10 text-[#0B2B68] border-[#0B2B68]/10';
 
   return (
     <div id="ai-mentor-view" className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col gap-6">
@@ -290,13 +290,12 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
         <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
           {/* Daily Quota Indicator Badge */}
           <div
-            className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border shadow-2xs ${
-              quota.remaining === 2
+            className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border shadow-2xs ${quota.remaining === 2
                 ? isDark ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/30' : 'bg-emerald-50 text-emerald-700 border-emerald-200'
                 : quota.remaining === 1
-                ? isDark ? 'bg-amber-950/40 text-amber-300 border-amber-500/30' : 'bg-amber-50 text-amber-700 border-amber-200'
-                : isDark ? 'bg-rose-950/40 text-rose-300 border-rose-500/30' : 'bg-rose-50 text-rose-700 border-rose-200'
-            }`}
+                  ? isDark ? 'bg-amber-950/40 text-amber-300 border-amber-500/30' : 'bg-amber-50 text-amber-700 border-amber-200'
+                  : isDark ? 'bg-rose-950/40 text-rose-300 border-rose-500/30' : 'bg-rose-50 text-rose-700 border-rose-200'
+              }`}
             title={`Límite de ${MENTOR_DAILY_LIMIT} consultas diarias para evitar gastos excesivos. Se reinicia a las 00:00 hs.`}
           >
             <Clock className="w-3.5 h-3.5" />
@@ -316,13 +315,12 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
 
       {/* Trial Quota Notice Banner when limit reached */}
       {!quota.canQuery && (
-        <div className={`p-4 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs animate-in fade-in duration-200 ${
-          isDark
+        <div className={`p-4 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs animate-in fade-in duration-200 ${isDark
             ? 'bg-rose-950/30 border-rose-500/30 text-rose-200'
             : isSepia
-            ? 'bg-[#EAE0D0] border-[#DECDB8] text-[#5C4228]'
-            : 'bg-amber-50 border-amber-200 text-amber-900'
-        }`}>
+              ? 'bg-[#EAE0D0] border-[#DECDB8] text-[#5C4228]'
+              : 'bg-amber-50 border-amber-200 text-amber-900'
+          }`}>
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-amber-600 dark:text-rose-400 shrink-0 mt-0.5" />
             <div>
@@ -373,16 +371,14 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
             className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-in fade-in duration-200`}
           >
             <div
-              className={`max-w-2xl rounded-3xl p-4 sm:p-5 shadow-xs border ${
-                msg.role === 'user'
+              className={`max-w-2xl rounded-3xl p-4 sm:p-5 shadow-xs border ${msg.role === 'user'
                   ? 'bg-[#0B2B68] text-white border-transparent rounded-br-xs'
                   : `${mentorCardBg} rounded-bl-xs`
-              }`}
+                }`}
             >
               {msg.role === 'mentor' && (
-                <div className={`flex items-center justify-between gap-2 mb-2.5 pb-2 border-b ${
-                  isDark ? 'border-white/10' : isSepia ? 'border-[#705335]/15' : 'border-[#0B2B68]/10'
-                }`}>
+                <div className={`flex items-center justify-between gap-2 mb-2.5 pb-2 border-b ${isDark ? 'border-white/10' : isSepia ? 'border-[#705335]/15' : 'border-[#0B2B68]/10'
+                  }`}>
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-[#F25C05]" />
                     <span className={`font-sans text-xs font-bold uppercase tracking-wide ${isDark ? 'text-[#FED65B]' : isSepia ? 'text-[#705335]' : 'text-[#0B2B68]'}`}>
@@ -392,9 +388,8 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
                   {!msg.isLimitWarning && (
                     <button
                       onClick={() => handleCopy(msg.id, msg.text)}
-                      className={`p-1 rounded-lg transition-colors cursor-pointer ${
-                        isDark ? 'hover:bg-white/10 text-white/60 hover:text-white' : isSepia ? 'hover:bg-[#EAE0D0] text-[#705335]' : 'hover:bg-[#FAF8F5] text-[#767683] hover:text-[#0B2B68]'
-                      }`}
+                      className={`p-1 rounded-lg transition-colors cursor-pointer ${isDark ? 'hover:bg-white/10 text-white/60 hover:text-white' : isSepia ? 'hover:bg-[#EAE0D0] text-[#705335]' : 'hover:bg-[#FAF8F5] text-[#767683] hover:text-[#0B2B68]'
+                        }`}
                       title="Copiar respuesta"
                     >
                       {copiedId === msg.id ? (
@@ -407,9 +402,8 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
                 </div>
               )}
 
-              <p className={`font-body-reading text-[15px] sm:text-[16px] leading-relaxed whitespace-pre-line ${
-                msg.role === 'user' ? 'text-white' : isDark ? 'text-white/90' : isSepia ? 'text-[#3B2D1F]' : 'text-[#1B1C19]'
-              }`}>
+              <p className={`font-body-reading text-[15px] sm:text-[16px] leading-relaxed whitespace-pre-line ${msg.role === 'user' ? 'text-white' : isDark ? 'text-white/90' : isSepia ? 'text-[#3B2D1F]' : 'text-[#1B1C19]'
+                }`}>
                 {msg.text}
               </p>
 
@@ -425,15 +419,13 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
 
               {/* Key Insights List */}
               {msg.insights && msg.insights.length > 0 && (
-                <div className={`mt-3.5 space-y-1.5 pt-2.5 border-t ${
-                  isDark ? 'border-white/10' : isSepia ? 'border-[#705335]/15' : 'border-[#0B2B68]/10'
-                }`}>
+                <div className={`mt-3.5 space-y-1.5 pt-2.5 border-t ${isDark ? 'border-white/10' : isSepia ? 'border-[#705335]/15' : 'border-[#0B2B68]/10'
+                  }`}>
                   <strong className="text-[11px] font-sans font-bold text-[#F25C05] uppercase tracking-wide block">
                     Puntos Clave para Edificar la Fe:
                   </strong>
-                  <ul className={`list-disc list-inside space-y-1 text-xs sm:text-[13px] font-body-ui ${
-                    isDark ? 'text-white/70' : isSepia ? 'text-[#5C452D]' : 'text-[#454652]'
-                  }`}>
+                  <ul className={`list-disc list-inside space-y-1 text-xs sm:text-[13px] font-body-ui ${isDark ? 'text-white/70' : isSepia ? 'text-[#5C452D]' : 'text-[#454652]'
+                    }`}>
                     {msg.insights.map((ins, iIndex) => (
                       <li key={iIndex}>{ins}</li>
                     ))}
@@ -461,9 +453,8 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
         ))}
 
         {loading && (
-          <div className={`flex items-center gap-2.5 text-xs font-semibold p-3.5 rounded-2xl border w-fit shadow-xs animate-pulse ${
-            isDark ? 'bg-[#131722] text-white border-white/15' : isSepia ? 'bg-[#FAF6EF] text-[#3B2D1F] border-[#705335]/20' : 'bg-white text-[#0B2B68] border-[#0B2B68]/15'
-          }`}>
+          <div className={`flex items-center gap-2.5 text-xs font-semibold p-3.5 rounded-2xl border w-fit shadow-xs animate-pulse ${isDark ? 'bg-[#131722] text-white border-white/15' : isSepia ? 'bg-[#FAF6EF] text-[#3B2D1F] border-[#705335]/20' : 'bg-white text-[#0B2B68] border-[#0B2B68]/15'
+            }`}>
             <RefreshCw className="w-4 h-4 animate-spin text-[#F25C05]" />
             <span>Consultando exégesis, raíces bíblicas y registros históricos...</span>
           </div>
@@ -491,13 +482,12 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
                 ? `Pregunta sobre pasajes, raíces griego/hebreo o teología (${quota.remaining} consultas restantes hoy)...`
                 : 'Límite de 2 consultas diarias alcanzado. Se renovará mañana a las 00:00 hs.'
             }
-            className={`w-full border rounded-2xl pl-5 pr-14 py-3.5 text-sm sm:text-base font-body-ui shadow-sm transition-all outline-none disabled:opacity-60 disabled:cursor-not-allowed ${
-              isDark
+            className={`w-full border rounded-2xl pl-5 pr-14 py-3.5 text-sm sm:text-base font-body-ui shadow-sm transition-all outline-none disabled:opacity-60 disabled:cursor-not-allowed ${isDark
                 ? 'bg-[#131722] border-white/20 text-white placeholder:text-white/40 focus:border-[#FED65B] focus:ring-2 focus:ring-[#FED65B]/20'
                 : isSepia
-                ? 'bg-[#FAF6EF] border-[#705335]/30 text-[#3B2D1F] placeholder:text-[#705335]/60 focus:border-[#705335] focus:ring-2 focus:ring-[#705335]/20'
-                : 'bg-white border-[#0B2B68]/20 text-[#1B1C19] placeholder:text-[#9E9EA7] focus:border-[#F25C05] focus:ring-2 focus:ring-[#F25C05]/30'
-            }`}
+                  ? 'bg-[#FAF6EF] border-[#705335]/30 text-[#3B2D1F] placeholder:text-[#705335]/60 focus:border-[#705335] focus:ring-2 focus:ring-[#705335]/20'
+                  : 'bg-white border-[#0B2B68]/20 text-[#1B1C19] placeholder:text-[#9E9EA7] focus:border-[#F25C05] focus:ring-2 focus:ring-[#F25C05]/30'
+              }`}
           />
           <button
             type="submit"
@@ -512,7 +502,7 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
 
         {/* Small trial disclaimer below input */}
         <div className="flex items-center justify-between text-[11px] opacity-70 px-2">
-          <span>Modo Prueba: Limitado a 2 consultas por día para controlar costos</span>
+          <span>Modo Prueba: Limitado a 2 consultas por día</span>
           <span className="font-semibold">{quota.remaining} / {quota.limit} hoy</span>
         </div>
       </form>

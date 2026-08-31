@@ -94,7 +94,7 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
       badge: 'Modo Prueba (2/día)',
       description:
         'Resuelve dudas teológicas, explora el contexto histórico del siglo I y descubre el significado en hebreo y griego de palabras como Shalom, Ágape, Qavah y El-Shaddai.',
-      tip: 'Disponible en Modo Prueba con un límite de 2 consultas diarias que se reinicia automáticamente cada medianoche para evitar gastos excesivos.',
+      tip: 'Disponible en Modo Prueba con un límite de 2 consultas diarias que se reinicia automáticamente cada medianoche.',
       targetTab: 'ai-mentor' as ActiveTab,
       highlightColor: '#F59E0B'
     },
@@ -150,7 +150,7 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
   const handleComplete = () => {
     try {
       localStorage.setItem(COACHMARK_STORAGE_KEY, 'true');
-    } catch {}
+    } catch { }
     if (onNavigateTab) {
       onNavigateTab('home');
     }
@@ -161,32 +161,32 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
   const cardBgClass = isDark
     ? 'bg-[#182033] border-[#252D43] text-[#F1F3F9]'
     : isSepia
-    ? 'bg-[#F4ECE1] border-[#DECDB8] text-[#2D2319]'
-    : 'bg-[#FAF8F5] border-[#0B2B68]/20 text-[#1B1C19]';
+      ? 'bg-[#F4ECE1] border-[#DECDB8] text-[#2D2319]'
+      : 'bg-[#FAF8F5] border-[#0B2B68]/20 text-[#1B1C19]';
 
   const showcaseBgClass = isDark
     ? 'bg-[#101524] border-[#252D43]'
     : isSepia
-    ? 'bg-[#EAE0D0] border-[#DECDB8]'
-    : 'bg-white border-[#0B2B68]/15';
+      ? 'bg-[#EAE0D0] border-[#DECDB8]'
+      : 'bg-white border-[#0B2B68]/15';
 
   const titleColor = isDark
     ? 'text-white'
     : isSepia
-    ? 'text-[#2D2319]'
-    : 'text-[#0B2B68]';
+      ? 'text-[#2D2319]'
+      : 'text-[#0B2B68]';
 
   const bodyTextColor = isDark
     ? 'text-[#CBD5E1]'
     : isSepia
-    ? 'text-[#4A3828]'
-    : 'text-[#334155]';
+      ? 'text-[#4A3828]'
+      : 'text-[#334155]';
 
   const tipBoxClass = isDark
     ? 'bg-[#00A3E0]/10 border-[#00A3E0]/25 text-[#93C5FD]'
     : isSepia
-    ? 'bg-[#705335]/10 border-[#705335]/25 text-[#5C4228]'
-    : 'bg-[#00A3E0]/10 border-[#00A3E0]/25 text-[#0B2B68]';
+      ? 'bg-[#705335]/10 border-[#705335]/25 text-[#5C4228]'
+      : 'bg-[#00A3E0]/10 border-[#00A3E0]/25 text-[#0B2B68]';
 
   return (
     <div
@@ -222,13 +222,12 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
 
             <button
               onClick={handleComplete}
-              className={`p-1.5 rounded-full transition-colors cursor-pointer ${
-                isDark
+              className={`p-1.5 rounded-full transition-colors cursor-pointer ${isDark
                   ? 'text-slate-400 hover:text-white hover:bg-white/10'
                   : isSepia
-                  ? 'text-[#705335] hover:text-[#2D2319] hover:bg-[#EAE0D0]'
-                  : 'text-slate-500 hover:text-[#0B2B68] hover:bg-slate-200'
-              }`}
+                    ? 'text-[#705335] hover:text-[#2D2319] hover:bg-[#EAE0D0]'
+                    : 'text-slate-500 hover:text-[#0B2B68] hover:bg-slate-200'
+                }`}
               title="Saltar guía"
               aria-label="Cerrar guía"
             >
@@ -239,9 +238,8 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
           {/* Visual Showcase Box */}
           <div className={`flex items-center gap-3.5 sm:gap-4 p-3.5 sm:p-4 rounded-2xl border shadow-xs ${showcaseBgClass}`}>
             <div
-              className={`p-3 rounded-2xl border shadow-2xs shrink-0 flex items-center justify-center ${
-                isDark ? 'bg-[#182033] border-[#252D43]' : isSepia ? 'bg-[#FAF6EF] border-[#DECDB8]' : 'bg-[#FAF8F5] border-[#0B2B68]/10'
-              }`}
+              className={`p-3 rounded-2xl border shadow-2xs shrink-0 flex items-center justify-center ${isDark ? 'bg-[#182033] border-[#252D43]' : isSepia ? 'bg-[#FAF6EF] border-[#DECDB8]' : 'bg-[#FAF8F5] border-[#0B2B68]/10'
+                }`}
             >
               {Icon ? (
                 <Icon
@@ -295,15 +293,14 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
                   }
                 }}
                 aria-label={`Ir al paso ${idx + 1}`}
-                className={`h-2 rounded-full transition-all cursor-pointer ${
-                  idx === currentStep
+                className={`h-2 rounded-full transition-all cursor-pointer ${idx === currentStep
                     ? 'w-6 sm:w-7 bg-[#F47B20]'
                     : isDark
-                    ? 'w-2 bg-white/20 hover:bg-white/40'
-                    : isSepia
-                    ? 'w-2 bg-[#705335]/30 hover:bg-[#705335]/50'
-                    : 'w-2 bg-[#0B2B68]/20 hover:bg-[#0B2B68]/40'
-                }`}
+                      ? 'w-2 bg-white/20 hover:bg-white/40'
+                      : isSepia
+                        ? 'w-2 bg-[#705335]/30 hover:bg-[#705335]/50'
+                        : 'w-2 bg-[#0B2B68]/20 hover:bg-[#0B2B68]/40'
+                  }`}
               />
             ))}
           </div>
@@ -314,13 +311,12 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
               <button
                 type="button"
                 onClick={handlePrev}
-                className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl font-body-ui text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 cursor-pointer ${
-                  isDark
+                className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl font-body-ui text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 cursor-pointer ${isDark
                     ? 'text-slate-300 hover:bg-white/10'
                     : isSepia
-                    ? 'text-[#5C452D] hover:bg-[#EAE0D0]'
-                    : 'text-[#0B2B68] hover:bg-slate-100'
-                }`}
+                      ? 'text-[#5C452D] hover:bg-[#EAE0D0]'
+                      : 'text-[#0B2B68] hover:bg-slate-100'
+                  }`}
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Anterior</span>
@@ -329,13 +325,12 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
               <button
                 type="button"
                 onClick={handleComplete}
-                className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl font-body-ui text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
-                  isDark
+                className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl font-body-ui text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${isDark
                     ? 'text-slate-400 hover:text-white hover:bg-white/10'
                     : isSepia
-                    ? 'text-[#705335] hover:text-[#2D2319] hover:bg-[#EAE0D0]'
-                    : 'text-slate-500 hover:text-[#0B2B68] hover:bg-slate-100'
-                }`}
+                      ? 'text-[#705335] hover:text-[#2D2319] hover:bg-[#EAE0D0]'
+                      : 'text-slate-500 hover:text-[#0B2B68] hover:bg-slate-100'
+                  }`}
               >
                 Saltar guía
               </button>
