@@ -88,13 +88,13 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
       highlightColor: '#8B5CF6'
     },
     {
-      title: 'Mentor Teológico e Histórico IA',
-      subtitle: 'Exégesis profunda & Raíces Bíblicas',
+      title: 'Mentor Teológico e Histórico IA (Modo Prueba)',
+      subtitle: 'Exégesis profunda & Raíces Bíblicas (2 consultas/día)',
       icon: Sparkles,
-      badge: 'Mentor IA',
+      badge: 'Modo Prueba (2/día)',
       description:
         'Resuelve dudas teológicas, explora el contexto histórico del siglo I y descubre el significado en hebreo y griego de palabras como Shalom, Ágape, Qavah y El-Shaddai.',
-      tip: 'Disponible desde la pestaña "Mentor IA" o al tocar cualquier versículo mientras realizas tu lectura diaria.',
+      tip: 'Disponible en Modo Prueba con un límite de 2 consultas diarias que se reinicia automáticamente cada medianoche para evitar gastos excesivos.',
       targetTab: 'ai-mentor' as ActiveTab,
       highlightColor: '#F59E0B'
     },

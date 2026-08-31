@@ -87,7 +87,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
       id: 'ai-mentor' as ActiveTab,
       label: 'Mentor IA',
       icon: Sparkles,
-      badge: 'IA'
+      badge: 'Modo Prueba'
     }
   ];
 

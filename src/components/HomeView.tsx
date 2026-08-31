@@ -482,9 +482,14 @@ export const HomeView: React.FC<HomeViewProps> = ({
         >
           <div className="flex items-start justify-between gap-3">
             <div>
-              <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-[#F47B20] block mb-1">
-                Exégesis & Contexto
-              </span>
+              <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-[#F47B20]">
+                  Exégesis & Contexto
+                </span>
+                <span className="text-[9px] font-sans font-bold uppercase tracking-wider bg-[#F47B20]/15 text-[#F47B20] px-2 py-0.5 rounded-full">
+                  Modo Prueba (2/día)
+                </span>
+              </div>
               <h3 className="font-serif font-bold text-lg text-inherit group-hover:text-[#F47B20] transition-colors">
                 Mentor Teológico IA
               </h3>
@@ -498,7 +503,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
 
           <div className="mt-4 pt-3 border-t border-inherit/20 flex items-center justify-between text-xs font-bold text-[#F47B20]">
-            <span>Consultar al mentor</span>
+            <span>Consultar al mentor (2/día)</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
