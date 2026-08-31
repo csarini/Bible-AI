@@ -58,7 +58,12 @@ export const INITIAL_USER_EVENTS: UserEvent[] = [
     linkedVerses: ['Mateo 14:28-31', 'Pedro 1:7'],
     eventDate: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString().split('T')[0],
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
-    tags: ['Fe', 'Confianza', 'Sermón']
+    tags: ['Fe', 'Confianza', 'Sermón'],
+    location: 'Santuario Principal El-Shaddai',
+    startTime: '10:00',
+    endTime: '12:30',
+    imageUrl: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=800&auto=format&fit=crop&q=80',
+    price: 'Entrada Libre'
   },
   {
     id: 'evt_2',
@@ -68,7 +73,12 @@ export const INITIAL_USER_EVENTS: UserEvent[] = [
     linkedVerses: ['Eclesiastés 4:12', '1 Corintios 13:4-7', 'Efesios 5:21'],
     eventDate: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString().split('T')[0],
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
-    tags: ['Matrimonio', 'Familia', 'Pacto']
+    tags: ['Matrimonio', 'Familia', 'Pacto'],
+    location: 'Salón Comunitario / Auditorio B',
+    startTime: '18:30',
+    endTime: '20:30',
+    imageUrl: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&auto=format&fit=crop&q=80',
+    price: 'Gratuito'
   },
   {
     id: 'evt_3',
@@ -78,7 +88,10 @@ export const INITIAL_USER_EVENTS: UserEvent[] = [
     linkedVerses: ['Isaías 40:29-31', 'Salmos 23:1-3'],
     eventDate: new Date().toISOString().split('T')[0],
     createdAt: new Date().toISOString(),
-    tags: ['Devocional', 'Renovación', 'Paz']
+    tags: ['Devocional', 'Renovación', 'Paz'],
+    location: 'Aposento Personal / Online',
+    startTime: '06:00',
+    endTime: '07:00'
   }
 ];
 
@@ -344,7 +357,12 @@ export const StorageService = {
       linkedVerses: event.linkedVerses || [],
       eventDate: event.eventDate || new Date().toISOString().split('T')[0],
       createdAt: new Date().toISOString(),
-      tags: event.tags || []
+      tags: event.tags || [],
+      location: event.location?.trim() || undefined,
+      startTime: event.startTime?.trim() || undefined,
+      endTime: event.endTime?.trim() || undefined,
+      imageUrl: event.imageUrl?.trim() || undefined,
+      price: event.price?.trim() || undefined
     };
 
     const existingIndex = current.findIndex(e => e.id === newEvent.id);

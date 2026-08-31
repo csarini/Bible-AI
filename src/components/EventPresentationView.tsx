@@ -14,11 +14,16 @@ import {
   Calendar,
   ExternalLink,
   Sparkles,
-  CheckCircle2
+  CheckCircle2,
+  MapPin,
+  Ticket,
+  Image as ImageIcon,
+  Globe
 } from 'lucide-react';
 import { UserEvent, EventCategory, ReadingSettings, BibleVerse } from '../types';
 import { fetchBibleChapter } from '../data/bibleData';
 import { getLocalBooksSync } from '../services/bibleDatabaseService';
+import { EventShareModal } from './EventShareModal';
 
 interface EventPresentationViewProps {
   event: UserEvent;
@@ -54,6 +59,9 @@ export const EventPresentationView: React.FC<EventPresentationViewProps> = ({
 
   // Fullscreen state
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+
+  // Flyer share modal state
+  const [isShareFlyerOpen, setIsShareFlyerOpen] = useState<boolean>(false);
 
   // Preaching timer (simple and unobtrusive)
   const [showTimer, setShowTimer] = useState<boolean>(true);
@@ -234,22 +242,25 @@ export const EventPresentationView: React.FC<EventPresentationViewProps> = ({
 
   // Copy or Share notes
   const handleCopy = () => {
-    const shareText = `📖 ${event.title}\n📅 ${event.eventDate}\n\n📝 APUNTES:\n${event.description}\n\n📜 Pasajes Bíblicos: ${event.linkedVerses?.join(', ') || 'N/A'}`;
+    let shareText = `📖 ${event.title}\n📅 ${event.eventDate}\n`;
+    if (event.startTime) {
+      shareText += `⏰ Horario: ${event.startTime}${event.endTime ? ` - ${event.endTime}` : ''}\n`;
+    }
+    if (event.location) {
+      shareText += `📍 Ubicación: ${event.location}\n`;
+    }
+    if (event.price) {
+      shareText += `🎟️ Inversión / Entrada: ${event.price}\n`;
+    }
+    shareText += `\n📝 APUNTES:\n${event.description}\n\n📜 Pasajes Bíblicos: ${event.linkedVerses?.join(', ') || 'N/A'}`;
+
     navigator.clipboard.writeText(shareText).then(() => {
-      if (onToast) onToast('¡Información de la prédica copiada!');
+      if (onToast) onToast('¡Información del evento copiada!');
     });
   };
 
   const handleShare = () => {
-    if (onShareContent) {
-      onShareContent(
-        event.title,
-        `${event.description}\n\nPasajes: ${event.linkedVerses?.join(', ')}`,
-        `Prédica: ${event.title}`
-      );
-    } else {
-      handleCopy();
-    }
+    setIsShareFlyerOpen(true);
   };
 
   // Format date nicely: "Domingo, 29 de Agosto de 2026"
@@ -441,56 +452,131 @@ export const EventPresentationView: React.FC<EventPresentationViewProps> = ({
           {/* A. TITLE & METADATA CARD                             */}
           {/* ==================================================== */}
           <section
-            className={`p-5 sm:p-8 rounded-2xl sm:rounded-3xl border shadow-sm transition-all ${cardBg}`}
+            className={`rounded-2xl sm:rounded-3xl border shadow-sm transition-all overflow-hidden ${cardBg}`}
           >
-            {/* Category & Date badges */}
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold"
-                style={{
-                  backgroundColor: `${catColor}15`,
-                  color: catColor,
-                  border: `1px solid ${catColor}30`
-                }}
-              >
-                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: catColor }} />
-                <span>{category?.name || 'Evento / Prédica'}</span>
-              </div>
-
-              <div className={`flex items-center gap-1.5 text-xs sm:text-sm font-medium ${subtextColor}`}>
-                <Calendar className="w-4 h-4 text-[#F47B20]" />
-                <span className="capitalize">{formattedDate}</span>
-              </div>
-            </div>
-
-            {/* Main Sermon Title */}
-            <h1
-              className="font-serif font-black tracking-tight text-inherit leading-tight"
-              style={{ fontSize: `${2.0 * fontScale}rem` }}
-            >
-              {event.title}
-            </h1>
-
-            {/* Tags list */}
-            {event.tags && event.tags.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-inherit/20">
-                {event.tags.map((tag, idx) => (
-                  <span
-                    key={idx}
-                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold ${
-                      isDark
-                        ? 'bg-[#1E293B] text-slate-300 border border-slate-700'
-                        : isSepia
-                        ? 'bg-[#E5D7C3] text-[#4A3B2C] border border-[#DECDB8]'
-                        : 'bg-slate-100 text-slate-700 border border-slate-200'
-                    }`}
-                  >
-                    <TagIcon className="w-3 h-3 text-[#F47B20]" />
-                    <span>#{tag}</span>
-                  </span>
-                ))}
+            {/* Optional Event Image Banner */}
+            {event.imageUrl && (
+              <div className="relative w-full h-48 sm:h-64 lg:h-72 bg-slate-900 overflow-hidden">
+                <img
+                  src={event.imageUrl}
+                  alt={event.title}
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    // Hide if broken
+                    (e.target as HTMLElement).style.display = 'none';
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white text-xs font-semibold">
+                  {event.location && (
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md hover:bg-black/80 transition-colors"
+                      title="Ver en Google Maps"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <MapPin className="w-3.5 h-3.5 text-[#F47B20]" />
+                      <span>{event.location}</span>
+                      <ExternalLink className="w-3 h-3 opacity-60 ml-0.5" />
+                    </a>
+                  )}
+                  {event.price && (
+                    <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-700/80 backdrop-blur-md">
+                      <Ticket className="w-3.5 h-3.5 text-[#FED65B]" />
+                      <span>{event.price}</span>
+                    </span>
+                  )}
+                </div>
               </div>
             )}
+
+            <div className="p-5 sm:p-8">
+              {/* Category & Date & Schedule badges */}
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold"
+                  style={{
+                    backgroundColor: `${catColor}15`,
+                    color: catColor,
+                    border: `1px solid ${catColor}30`
+                  }}
+                >
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: catColor }} />
+                  <span>{category?.name || 'Evento / Prédica'}</span>
+                </div>
+
+                <div className={`flex flex-wrap items-center gap-3 text-xs sm:text-sm font-medium ${subtextColor}`}>
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="w-4 h-4 text-[#F47B20]" />
+                    <span className="capitalize">{formattedDate}</span>
+                  </div>
+
+                  {event.startTime && (
+                    <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#00A3E0]/10 text-[#00A3E0] font-semibold">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>{event.startTime}{event.endTime ? ` - ${event.endTime}` : ''}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Main Sermon Title */}
+              <h1
+                className="font-serif font-black tracking-tight text-inherit leading-tight"
+                style={{ fontSize: `${2.0 * fontScale}rem` }}
+              >
+                {event.title}
+              </h1>
+
+              {/* Extra Metadata (Location & Price if without image) */}
+              {(event.location || event.price) && !event.imageUrl && (
+                <div className="flex flex-wrap items-center gap-3 mt-3 pt-3 border-t border-inherit/15 text-xs sm:text-sm">
+                  {event.location && (
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-inherit/80 hover:text-[#00A3E0] font-medium transition-colors"
+                      title="Ver en Google Maps"
+                    >
+                      <MapPin className="w-4 h-4 text-[#F47B20] shrink-0" />
+                      <span>{event.location}</span>
+                      <ExternalLink className="w-3 h-3 opacity-60 ml-0.5" />
+                    </a>
+                  )}
+                  {event.price && (
+                    <div className="flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400">
+                      <Ticket className="w-4 h-4 text-emerald-500 shrink-0" />
+                      <span>Inversión: {event.price}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Tags list */}
+              {event.tags && event.tags.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-inherit/20">
+                  {event.tags.map((tag, idx) => (
+                    <span
+                      key={idx}
+                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold ${
+                        isDark
+                          ? 'bg-[#1E293B] text-slate-300 border border-slate-700'
+                          : isSepia
+                          ? 'bg-[#E5D7C3] text-[#4A3B2C] border border-[#DECDB8]'
+                          : 'bg-slate-100 text-slate-700 border border-slate-200'
+                      }`}
+                    >
+                      <TagIcon className="w-3 h-3 text-[#F47B20]" />
+                      <span>#{tag}</span>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </section>
 
           {/* ==================================================== */}
@@ -632,11 +718,21 @@ export const EventPresentationView: React.FC<EventPresentationViewProps> = ({
               className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-[#0B2B68] text-[#FED65B] hover:bg-[#081F4B] text-sm font-black flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all"
             >
               <Share2 className="w-4 h-4" />
-              <span>Compartir Prédica Completa</span>
+              <span>Compartir Afiche / Evento</span>
             </button>
           </div>
         </div>
       </main>
+
+      {/* Event Flyer Share Modal */}
+      <EventShareModal
+        isOpen={isShareFlyerOpen}
+        event={event}
+        category={category}
+        onClose={() => setIsShareFlyerOpen(false)}
+        onToast={onToast}
+        currentTheme={settings.themeMode}
+      />
     </div>
   );
 };

@@ -77,6 +77,11 @@ export interface UserEvent {
   eventDate: string; // ISO date or YYYY-MM-DD
   createdAt: string;
   tags?: string[];
+  location?: string;
+  startTime?: string;
+  endTime?: string;
+  imageUrl?: string;
+  price?: string;
 }
 
 export type ActiveTab = 'home' | 'scripture' | 'library' | 'maps' | 'ai-mentor' | 'saved' | 'widgets' | 'devotional' | 'events';

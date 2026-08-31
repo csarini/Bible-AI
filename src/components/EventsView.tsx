@@ -22,11 +22,20 @@ import {
   ChevronDown,
   ChevronUp,
   Play,
-  Tag as TagIcon
+  Tag as TagIcon,
+  MapPin,
+  Clock,
+  Ticket,
+  Image as ImageIcon,
+  Upload,
+  AlertTriangle,
+  Navigation,
+  Globe
 } from 'lucide-react';
 import { EventCategory, UserEvent, ReadingSettings } from '../types';
 import { StorageService } from '../services/storageService';
 import { EventPresentationView } from './EventPresentationView';
+import { EventShareModal } from './EventShareModal';
 
 interface EventsViewProps {
   settings: ReadingSettings;
@@ -57,6 +66,33 @@ const PALETTE_COLORS = [
   '#DB2777'  // Rose
 ];
 
+export const EVENT_IMAGE_PRESETS = [
+  {
+    label: 'Culto Dominical',
+    url: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=800&auto=format&fit=crop&q=80'
+  },
+  {
+    label: 'Conferencia & Prédica',
+    url: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&auto=format&fit=crop&q=80'
+  },
+  {
+    label: 'Matrimonios & Familia',
+    url: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&auto=format&fit=crop&q=80'
+  },
+  {
+    label: 'Alabanza & Adoración',
+    url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop&q=80'
+  },
+  {
+    label: 'Jóvenes & Campamento',
+    url: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&auto=format&fit=crop&q=80'
+  },
+  {
+    label: 'Vigilia & Oración',
+    url: 'https://images.unsplash.com/photo-1507692049790-de58290a4334?w=800&auto=format&fit=crop&q=80'
+  }
+];
+
 export const EventsView: React.FC<EventsViewProps> = ({
   settings,
   onNavigateToScripture,
@@ -74,6 +110,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<UserEvent | null>(null);
   const [presentingEvent, setPresentingEvent] = useState<UserEvent | null>(null);
+  const [sharingEvent, setSharingEvent] = useState<UserEvent | null>(null);
+  const [isLocating, setIsLocating] = useState(false);
 
   // Event Form State
   const [formCategoryId, setFormCategoryId] = useState<string>(categories[0]?.id || 'cat_predica');
@@ -84,11 +122,75 @@ export const EventsView: React.FC<EventsViewProps> = ({
   const [formLinkedVerses, setFormLinkedVerses] = useState<string[]>([]);
   const [formTagInput, setFormTagInput] = useState<string>('');
   const [formTags, setFormTags] = useState<string[]>([]);
+  
+  // Optional Event Details State
+  const [formLocation, setFormLocation] = useState<string>('');
+  const [formStartTime, setFormStartTime] = useState<string>('');
+  const [formEndTime, setFormEndTime] = useState<string>('');
+  const [formImageUrl, setFormImageUrl] = useState<string>('');
+  const [formPrice, setFormPrice] = useState<string>('');
 
   // Category Form State
   const [catName, setCatName] = useState('');
   const [catIcon, setCatIcon] = useState('BookOpen');
   const [catColor, setCatColor] = useState('#0B2B68');
+
+  // Time Validation: End Time must be greater than Start Time
+  const timeValidationError = useMemo(() => {
+    if (formStartTime && formEndTime) {
+      if (formEndTime <= formStartTime) {
+        return `La hora de fin (${formEndTime}) debe ser posterior a la hora de inicio (${formStartTime}).`;
+      }
+    }
+    return null;
+  }, [formStartTime, formEndTime]);
+
+  // Helper to calculate end time given a duration in hours
+  const handleAutoSetEndTime = (durationHours: number) => {
+    if (!formStartTime) {
+      if (onToast) onToast('Primero define la hora de inicio');
+      return;
+    }
+    const [hStr, mStr] = formStartTime.split(':');
+    let totalMinutes = parseInt(hStr, 10) * 60 + parseInt(mStr, 10) + Math.round(durationHours * 60);
+    // Wrap around 24 hours
+    totalMinutes = totalMinutes % (24 * 60);
+    const newH = Math.floor(totalMinutes / 60);
+    const newM = totalMinutes % 60;
+    const formatted = `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`;
+    setFormEndTime(formatted);
+  };
+
+  // Google Maps / GPS Geolocation helper
+  const handleGetGpsLocation = () => {
+    if (!navigator.geolocation) {
+      if (onToast) onToast('Tu navegador no soporta geolocalización');
+      return;
+    }
+
+    setIsLocating(true);
+    if (onToast) onToast('Obteniendo ubicación GPS...');
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setIsLocating(false);
+        const lat = pos.coords.latitude.toFixed(4);
+        const lng = pos.coords.longitude.toFixed(4);
+        setFormLocation(`Santuario (GPS: ${lat}, ${lng})`);
+        if (onToast) onToast('¡Ubicación GPS obtenida con éxito!');
+      },
+      (err) => {
+        setIsLocating(false);
+        if (onToast) onToast('No se pudo acceder al GPS. Puedes escribir la dirección o buscarla en Google Maps.');
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  };
+
+  const handleOpenMapsSearch = () => {
+    const query = formLocation.trim() || 'Iglesia El-Shaddai';
+    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
+  };
 
   const isDark = settings.themeMode === 'dark';
   const isSepia = settings.themeMode === 'sepia';
@@ -107,7 +209,9 @@ export const EventsView: React.FC<EventsViewProps> = ({
         evt.title.toLowerCase().includes(q) ||
         evt.description.toLowerCase().includes(q) ||
         evt.linkedVerses.some(v => v.toLowerCase().includes(q)) ||
-        (evt.tags && evt.tags.some(t => t.toLowerCase().includes(q)));
+        (evt.tags && evt.tags.some(t => t.toLowerCase().includes(q))) ||
+        (evt.location && evt.location.toLowerCase().includes(q)) ||
+        (evt.price && evt.price.toLowerCase().includes(q));
 
       return matchesCategory && matchesSearch;
     });
@@ -135,6 +239,11 @@ export const EventsView: React.FC<EventsViewProps> = ({
     setFormTags([]);
     setFormVerseInput('');
     setFormTagInput('');
+    setFormLocation('');
+    setFormStartTime('');
+    setFormEndTime('');
+    setFormImageUrl('');
+    setFormPrice('');
     setIsEventModalOpen(true);
   };
 
@@ -148,6 +257,11 @@ export const EventsView: React.FC<EventsViewProps> = ({
     setFormTags(evt.tags || []);
     setFormVerseInput('');
     setFormTagInput('');
+    setFormLocation(evt.location || '');
+    setFormStartTime(evt.startTime || '');
+    setFormEndTime(evt.endTime || '');
+    setFormImageUrl(evt.imageUrl || '');
+    setFormPrice(evt.price || '');
     setIsEventModalOpen(true);
   };
 
@@ -158,6 +272,11 @@ export const EventsView: React.FC<EventsViewProps> = ({
       return;
     }
 
+    if (formStartTime && formEndTime && formEndTime <= formStartTime) {
+      if (onToast) onToast(`⚠️ La hora de fin (${formEndTime}) debe ser posterior a la hora de inicio (${formStartTime})`);
+      return;
+    }
+
     StorageService.saveEvent({
       id: editingEvent?.id,
       categoryId: formCategoryId,
@@ -165,7 +284,12 @@ export const EventsView: React.FC<EventsViewProps> = ({
       description: formDescription.trim(),
       linkedVerses: formLinkedVerses,
       eventDate: formDate,
-      tags: formTags
+      tags: formTags,
+      location: formLocation.trim() || undefined,
+      startTime: formStartTime.trim() || undefined,
+      endTime: formEndTime.trim() || undefined,
+      imageUrl: formImageUrl.trim() || undefined,
+      price: formPrice.trim() || undefined
     });
 
     setEvents(StorageService.getEvents());
@@ -224,27 +348,27 @@ export const EventsView: React.FC<EventsViewProps> = ({
     setFormTags(formTags.filter((_, i) => i !== index));
   };
 
+  const handleImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      if (onToast) onToast('La imagen es mayor a 2MB. Te sugerimos usar una imagen más liviana.');
+    }
+
+    const reader = new FileReader();
+    reader.onload = (loadEvt) => {
+      const result = loadEvt.target?.result as string;
+      if (result) {
+        setFormImageUrl(result);
+        if (onToast) onToast('Imagen cargada correctamente');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleShareEvent = (evt: UserEvent) => {
-    const cat = categories.find(c => c.id === evt.categoryId);
-    const categoryLabel = cat ? cat.name : 'Bitácora Espiritual';
-
-    let text = `📅 [${categoryLabel}] ${evt.title}\nFecha: ${evt.eventDate}\n\n`;
-    if (evt.description) {
-      text += `${evt.description}\n\n`;
-    }
-    if (evt.linkedVerses && evt.linkedVerses.length > 0) {
-      text += `📖 Pasajes Bíblicos:\n${evt.linkedVerses.map(v => `• ${v}`).join('\n')}\n\n`;
-    }
-    text += `Compartido desde Biblia Inteligente (Digital Sanctuary)`;
-
-    if (onShareContent) {
-      onShareContent(evt.title, text, evt.linkedVerses?.[0]);
-    } else if (navigator.share) {
-      navigator.share({ title: evt.title, text }).catch(() => {});
-    } else {
-      navigator.clipboard.writeText(text);
-      if (onToast) onToast('Notas copiadas al portapapeles');
-    }
+    setSharingEvent(evt);
   };
 
   const handleParseVerseAndNavigate = (verseStr: string) => {
@@ -428,6 +552,291 @@ export const EventsView: React.FC<EventsViewProps> = ({
                   }`}
                 />
               </div>
+            </div>
+
+            {/* Optional Details: Schedule & Location */}
+            <div className={`p-4 rounded-2xl border ${cardBg} space-y-3.5`}>
+              <div className="flex items-center justify-between">
+                <label className="text-xs sm:text-sm font-bold uppercase tracking-wider opacity-80 flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-[#F47B20]" />
+                  Horario & Ubicación <span className="text-[11px] font-normal lowercase opacity-70">(opcionales)</span>
+                </label>
+              </div>
+
+              {/* Start & End Time with Validation */}
+              <div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className={`block text-[11px] font-bold uppercase tracking-wider mb-1 ${subtextColor} flex items-center gap-1`}>
+                      <Clock className="w-3 h-3 text-[#00A3E0]" />
+                      Hora de Inicio
+                    </label>
+                    <input
+                      type="time"
+                      value={formStartTime}
+                      onChange={e => setFormStartTime(e.target.value)}
+                      className={`w-full px-3.5 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] font-medium ${
+                        isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
+                      }`}
+                    />
+                  </div>
+
+                  <div>
+                    <label className={`block text-[11px] font-bold uppercase tracking-wider mb-1 ${subtextColor} flex items-center gap-1`}>
+                      <Clock className="w-3 h-3 text-[#00A3E0]" />
+                      Hora de Fin
+                    </label>
+                    <input
+                      type="time"
+                      value={formEndTime}
+                      onChange={e => setFormEndTime(e.target.value)}
+                      className={`w-full px-3.5 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 ${
+                        timeValidationError ? 'ring-2 ring-amber-500 border-amber-500' : 'focus:ring-[#0B2B68]'
+                      } font-medium ${
+                        isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                {/* Inline Time Validation Warning */}
+                {timeValidationError && (
+                  <div className="mt-2 p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-semibold flex items-center gap-1.5 animate-in fade-in duration-200">
+                    <AlertTriangle className="w-4 h-4 shrink-0 text-amber-500" />
+                    <span>{timeValidationError}</span>
+                  </div>
+                )}
+
+                {/* Quick Duration Suggestions */}
+                {formStartTime && (
+                  <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                    <span className={`text-[10px] font-semibold ${subtextColor}`}>Duración sugerida:</span>
+                    {[
+                      { label: '+1 hora', hours: 1 },
+                      { label: '+1h 30m', hours: 1.5 },
+                      { label: '+2 horas', hours: 2 },
+                      { label: '+3 horas', hours: 3 }
+                    ].map(dur => (
+                      <button
+                        key={dur.label}
+                        type="button"
+                        onClick={() => handleAutoSetEndTime(dur.hours)}
+                        className={`text-[10px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
+                          isDark ? 'bg-white/5 border-white/10 hover:bg-white/15 text-slate-300' : 'bg-slate-100 border-slate-200 hover:bg-slate-200 text-slate-700'
+                        }`}
+                      >
+                        {dur.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Location Input with Google Maps & GPS Integrations */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className={`text-[11px] font-bold uppercase tracking-wider ${subtextColor} flex items-center gap-1`}>
+                    <MapPin className="w-3 h-3 text-[#F47B20]" />
+                    Lugar o Ubicación <span className="lowercase font-normal opacity-70">(opcional)</span>
+                  </label>
+
+                  {/* Google Maps Actions */}
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={handleGetGpsLocation}
+                      disabled={isLocating}
+                      className="text-[10px] font-bold text-[#00A3E0] hover:text-[#0B2B68] dark:hover:text-white flex items-center gap-1 px-2 py-0.5 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      title="Obtener coordenadas GPS actuales"
+                    >
+                      <Navigation className={`w-3 h-3 ${isLocating ? 'animate-spin' : ''}`} />
+                      <span>{isLocating ? 'Localizando...' : 'GPS Actual'}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleOpenMapsSearch}
+                      className="text-[10px] font-bold text-[#F47B20] hover:text-[#F25C05] flex items-center gap-1 px-2 py-0.5 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      title="Buscar o ver en Google Maps"
+                    >
+                      <Globe className="w-3 h-3" />
+                      <span>Google Maps</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={formLocation}
+                    onChange={e => setFormLocation(e.target.value)}
+                    placeholder="Ej: Santuario Principal El-Shaddai, Carrera 15 # 45-20, Zoom..."
+                    className={`w-full pl-3.5 pr-9 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${
+                      isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
+                    }`}
+                  />
+                  {formLocation && (
+                    <button
+                      type="button"
+                      onClick={handleOpenMapsSearch}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#00A3E0] transition-colors p-1"
+                      title="Abrir este lugar en Google Maps"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                  <span className={`text-[10px] font-semibold ${subtextColor}`}>Sugerencias:</span>
+                  {['Santuario Principal', 'Auditorio Central', 'Online / Transmisión', 'Salón de Jóvenes', 'Salón de Matrimonios'].map(loc => (
+                    <button
+                      key={loc}
+                      type="button"
+                      onClick={() => setFormLocation(loc)}
+                      className={`text-[10px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
+                        formLocation === loc
+                          ? 'bg-[#0B2B68] text-white border-[#0B2B68]'
+                          : isDark
+                          ? 'bg-white/5 border-white/10 hover:bg-white/10'
+                          : 'bg-slate-100 border-slate-200 hover:bg-slate-200'
+                      }`}
+                    >
+                      {loc}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Optional Details: Inversión / Precio de Inscripción */}
+            <div className={`p-4 rounded-2xl border ${cardBg} space-y-2.5`}>
+              <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider opacity-80 flex items-center gap-1.5">
+                <Ticket className="w-3.5 h-3.5 text-emerald-500" />
+                Precio de Inscripción / Inversión <span className="text-[11px] font-normal lowercase opacity-70">(opcional)</span>
+              </label>
+              <input
+                type="text"
+                value={formPrice}
+                onChange={e => setFormPrice(e.target.value)}
+                placeholder="Ej: Entrada Libre, Gratuito, Donación Voluntaria, $15 USD, $50.000 COP..."
+                className={`w-full px-3.5 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${
+                  isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
+                }`}
+              />
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className={`text-[10px] font-semibold ${subtextColor}`}>Opciones rápidas:</span>
+                {['Entrada Libre', 'Gratuito', 'Donación Voluntaria', '$10 USD', '$25 USD'].map(p => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setFormPrice(p)}
+                    className={`text-[10px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
+                      formPrice === p
+                        ? 'bg-emerald-600 text-white border-emerald-600'
+                        : isDark
+                        ? 'bg-white/5 border-white/10 hover:bg-white/10'
+                        : 'bg-slate-100 border-slate-200 hover:bg-slate-200'
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Optional Event Image (URL, File Upload, or Preset Gallery) */}
+            <div className={`p-4 rounded-2xl border ${cardBg} space-y-3`}>
+              <div className="flex items-center justify-between">
+                <label className="text-xs sm:text-sm font-bold uppercase tracking-wider opacity-80 flex items-center gap-1.5">
+                  <ImageIcon className="w-3.5 h-3.5 text-[#00A3E0]" />
+                  Imagen / Afiche del Evento <span className="text-[11px] font-normal lowercase opacity-70">(opcional)</span>
+                </label>
+                {formImageUrl && (
+                  <button
+                    type="button"
+                    onClick={() => setFormImageUrl('')}
+                    className="text-xs text-red-500 hover:underline font-bold cursor-pointer"
+                  >
+                    Remover imagen
+                  </button>
+                )}
+              </div>
+
+              {/* Image Input & Upload Row with Institutional Branding */}
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="url"
+                  value={formImageUrl}
+                  onChange={e => setFormImageUrl(e.target.value)}
+                  placeholder="Pega un enlace de imagen (https://...)"
+                  className={`flex-1 px-3.5 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${
+                    isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
+                  }`}
+                />
+                <label className="px-4 py-2.5 rounded-xl bg-[#0B2B68] hover:bg-[#081E48] text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 cursor-pointer shrink-0 transition-all shadow-xs active:scale-95 border border-[#00A3E0]/30 hover:border-[#00A3E0] group">
+                  <Upload className="w-4 h-4 text-[#FED65B] group-hover:scale-110 transition-transform" />
+                  <span>Subir Foto</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageFileUpload}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+
+              {/* Preset Gallery */}
+              <div>
+                <span className={`block text-[11px] font-bold uppercase tracking-wider mb-2 ${subtextColor}`}>
+                  O elige una plantilla ilustrativa:
+                </span>
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                  {EVENT_IMAGE_PRESETS.map((preset, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setFormImageUrl(preset.url)}
+                      className={`relative rounded-xl overflow-hidden aspect-video border transition-all cursor-pointer group ${
+                        formImageUrl === preset.url
+                          ? 'ring-2 ring-[#00A3E0] border-[#00A3E0] scale-95 shadow-md'
+                          : 'border-transparent hover:opacity-90'
+                      }`}
+                      title={preset.label}
+                    >
+                      <img
+                        src={preset.url}
+                        alt={preset.label}
+                        className="w-full h-full object-cover"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 flex items-end p-1 transition-all">
+                        <span className="text-[9px] font-bold text-white leading-tight line-clamp-1">
+                          {preset.label}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Live Preview If Image Selected */}
+              {formImageUrl && (
+                <div className="relative rounded-xl overflow-hidden h-36 sm:h-44 border border-slate-300 dark:border-slate-700 bg-slate-900">
+                  <img
+                    src={formImageUrl}
+                    alt="Vista previa del afiche"
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                  <div className="absolute top-2 right-2 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md text-white text-[10px] font-bold">
+                    Vista previa de portada
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Notes / Sermonic Outline Textarea */}
@@ -950,15 +1359,37 @@ export const EventsView: React.FC<EventsViewProps> = ({
               return (
                 <div
                   key={evt.id}
-                  className={`w-full max-w-full rounded-2xl sm:rounded-3xl border ${cardBg} p-3.5 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-md relative overflow-hidden`}
+                  className={`w-full max-w-full rounded-2xl sm:rounded-3xl border ${cardBg} flex flex-col justify-between transition-all duration-200 hover:shadow-md relative overflow-hidden`}
                 >
                   {/* Top Accent Strip */}
                   <div
-                    className="absolute top-0 left-0 right-0 h-1 sm:h-1.5"
+                    className="absolute top-0 left-0 right-0 h-1 sm:h-1.5 z-10"
                     style={{ backgroundColor: catColor }}
                   />
 
-                  <div className="w-full min-w-0">
+                  {/* Optional Event Banner Image */}
+                  {evt.imageUrl && (
+                    <div className="w-full h-32 sm:h-40 relative bg-slate-900 overflow-hidden shrink-0">
+                      <img
+                        src={evt.imageUrl}
+                        alt={evt.title}
+                        className="w-full h-full object-cover"
+                        referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = 'none';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                      {evt.price && (
+                        <div className="absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-emerald-600/90 backdrop-blur-md text-white text-[10px] sm:text-xs font-bold flex items-center gap-1 shadow-xs">
+                          <Ticket className="w-3 h-3" />
+                          <span>{evt.price}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="w-full min-w-0 p-3.5 sm:p-5 pb-0 flex-1">
                     {/* Header: Category Badge & Date */}
                     <div className="flex items-center justify-between gap-2 mb-2">
                       <span
@@ -976,9 +1407,43 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-sm sm:text-lg font-bold font-display leading-snug mb-2 break-words">
+                    <h3 className="text-sm sm:text-lg font-bold font-display leading-snug mb-1.5 break-words">
                       {evt.title}
                     </h3>
+
+                    {/* Optional Location, Schedule & Price Info Bar */}
+                    {(evt.location || evt.startTime || (evt.price && !evt.imageUrl)) && (
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] sm:text-xs font-medium mb-2.5 opacity-90">
+                        {evt.startTime && (
+                          <div className={`flex items-center gap-1 px-2 py-0.5 rounded-md ${isDark ? 'bg-white/5' : 'bg-slate-100'} ${subtextColor}`}>
+                            <Clock className="w-3 h-3 text-[#00A3E0] shrink-0" />
+                            <span>{evt.startTime}{evt.endTime ? ` - ${evt.endTime}` : ''}</span>
+                          </div>
+                        )}
+                        {evt.location && (
+                          <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(evt.location)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md max-w-full truncate hover:text-[#00A3E0] transition-colors ${
+                              isDark ? 'bg-white/5' : 'bg-slate-100'
+                            } ${subtextColor}`}
+                            title="Abrir ubicación en Google Maps"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <MapPin className="w-3 h-3 text-[#F47B20] shrink-0" />
+                            <span className="truncate">{evt.location}</span>
+                            <ExternalLink className="w-2.5 h-2.5 opacity-60 shrink-0 ml-0.5" />
+                          </a>
+                        )}
+                        {evt.price && !evt.imageUrl && (
+                          <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">
+                            <Ticket className="w-3 h-3 shrink-0" />
+                            <span>{evt.price}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     {/* Description / Sermon Notes with Read More Toggle */}
                     {evt.description && (
@@ -1064,7 +1529,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
                   {/* Actions Footer - Responsive Icons on Mobile, Labels on Tablet/Desktop */}
                   <div
-                    className={`pt-2.5 mt-1 sm:pt-3 sm:mt-2 border-t flex items-center justify-between ${
+                    className={`p-3.5 sm:p-5 pt-2.5 sm:pt-3 border-t flex items-center justify-between ${
                       isDark ? 'border-white/10' : 'border-slate-100'
                     }`}
                   >
@@ -1243,6 +1708,18 @@ export const EventsView: React.FC<EventsViewProps> = ({
           </div>
         </div>
       )}
+
+      {/* ========================================== */}
+      {/* MODAL: EVENT FLYER SHARE (IMAGE AS BACKGROUND & ESSENTIAL DATA) */}
+      {/* ========================================== */}
+      <EventShareModal
+        isOpen={!!sharingEvent}
+        event={sharingEvent}
+        category={categories.find(c => c.id === sharingEvent?.categoryId)}
+        onClose={() => setSharingEvent(null)}
+        onToast={onToast}
+        currentTheme={settings.themeMode}
+      />
     </div>
   );
 };
