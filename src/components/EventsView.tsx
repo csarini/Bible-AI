@@ -123,7 +123,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
   const [formLinkedVerses, setFormLinkedVerses] = useState<string[]>([]);
   const [formTagInput, setFormTagInput] = useState<string>('');
   const [formTags, setFormTags] = useState<string[]>([]);
-  
+
   // Optional Event Details State
   const [formLocation, setFormLocation] = useState<string>(DEFAULT_CHURCH_LOCATION);
   const [formStartTime, setFormStartTime] = useState<string>('');
@@ -436,25 +436,23 @@ export const EventsView: React.FC<EventsViewProps> = ({
       <div className={`min-h-screen ${containerBg} w-full max-w-full pb-28 md:pb-24 animate-in fade-in duration-200`}>
         {/* Full Screen Top Sticky Header */}
         <div
-          className={`sticky top-0 z-30 px-3.5 sm:px-6 py-3 border-b backdrop-blur-md flex items-center justify-between gap-2.5 ${
-            isDark
+          className={`sticky top-0 z-30 px-3.5 sm:px-6 py-3 border-b backdrop-blur-md flex items-center justify-between gap-2.5 ${isDark
               ? 'bg-[#0E131F]/90 border-[#252D43]'
               : isSepia
-              ? 'bg-[#F4ECE1]/90 border-[#DECDB8]'
-              : 'bg-[#FAF8F5]/90 border-[#EAE8E3]'
-          }`}
+                ? 'bg-[#F4ECE1]/90 border-[#DECDB8]'
+                : 'bg-[#FAF8F5]/90 border-[#EAE8E3]'
+            }`}
         >
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <button
               type="button"
               onClick={() => setIsEventModalOpen(false)}
-              className={`p-2 sm:px-3 sm:py-2 rounded-xl border flex items-center gap-1.5 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 ${
-                isDark
+              className={`p-2 sm:px-3 sm:py-2 rounded-xl border flex items-center gap-1.5 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 ${isDark
                   ? 'bg-[#182033] border-[#252D43] text-[#E2E8F0] hover:bg-[#252D43]'
                   : isSepia
-                  ? 'bg-[#EFE7D8] border-[#DECDB8] text-[#5C452D] hover:bg-[#E2D5C1]'
-                  : 'bg-white border-[#E5E7EB] text-[#0B2B68] hover:bg-slate-50'
-              }`}
+                    ? 'bg-[#EFE7D8] border-[#DECDB8] text-[#5C452D] hover:bg-[#E2D5C1]'
+                    : 'bg-white border-[#E5E7EB] text-[#0B2B68] hover:bg-slate-50'
+                }`}
               title="Volver a la lista de apuntes"
               aria-label="Volver"
             >
@@ -519,15 +517,14 @@ export const EventsView: React.FC<EventsViewProps> = ({
                       type="button"
                       key={c.id}
                       onClick={() => setFormCategoryId(c.id)}
-                      className={`p-2.5 sm:p-3 rounded-xl border flex items-center gap-2 text-left transition-all cursor-pointer ${
-                        isSelected
+                      className={`p-2.5 sm:p-3 rounded-xl border flex items-center gap-2 text-left transition-all cursor-pointer ${isSelected
                           ? 'bg-[#0B2B68] text-[#FED65B] border-[#0B2B68] shadow-2xs ring-2 ring-[#0B2B68]/30'
                           : isDark
-                          ? 'bg-[#182033] border-[#252D43] text-slate-300 hover:bg-[#20293F]'
-                          : isSepia
-                          ? 'bg-[#EFE7D8] border-[#DECDB8] text-[#5C452D] hover:bg-[#E5DAC6]'
-                          : 'bg-white border-[#E5E7EB] text-slate-700 hover:bg-slate-50'
-                      }`}
+                            ? 'bg-[#182033] border-[#252D43] text-slate-300 hover:bg-[#20293F]'
+                            : isSepia
+                              ? 'bg-[#EFE7D8] border-[#DECDB8] text-[#5C452D] hover:bg-[#E5DAC6]'
+                              : 'bg-white border-[#E5E7EB] text-slate-700 hover:bg-slate-50'
+                        }`}
                     >
                       <span
                         className="w-2.5 h-2.5 rounded-full shrink-0"
@@ -552,9 +549,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                   type="date"
                   value={formDate}
                   onChange={e => setFormDate(e.target.value)}
-                  className={`w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] font-medium ${
-                    isDark ? 'bg-[#182033] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
-                  }`}
+                  className={`w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] font-medium ${isDark ? 'bg-[#182033] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
+                    }`}
                 />
               </div>
 
@@ -569,9 +565,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                   onChange={e => setFormTitle(e.target.value)}
                   placeholder="Ej: La Gracia Redentora / Caminando en Fe"
                   required
-                  className={`w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${
-                    isDark ? 'bg-[#182033] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
-                  }`}
+                  className={`w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${isDark ? 'bg-[#182033] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
+                    }`}
                 />
               </div>
             </div>
@@ -597,9 +592,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                       type="time"
                       value={formStartTime}
                       onChange={e => setFormStartTime(e.target.value)}
-                      className={`w-full px-3.5 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] font-medium ${
-                        isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
-                      }`}
+                      className={`w-full px-3.5 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] font-medium ${isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
+                        }`}
                     />
                   </div>
 
@@ -612,11 +606,9 @@ export const EventsView: React.FC<EventsViewProps> = ({
                       type="time"
                       value={formEndTime}
                       onChange={e => setFormEndTime(e.target.value)}
-                      className={`w-full px-3.5 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 ${
-                        timeValidationError ? 'ring-2 ring-amber-500 border-amber-500' : 'focus:ring-[#0B2B68]'
-                      } font-medium ${
-                        isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
-                      }`}
+                      className={`w-full px-3.5 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 ${timeValidationError ? 'ring-2 ring-amber-500 border-amber-500' : 'focus:ring-[#0B2B68]'
+                        } font-medium ${isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
+                        }`}
                     />
                   </div>
                 </div>
@@ -643,9 +635,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                         key={dur.label}
                         type="button"
                         onClick={() => handleAutoSetEndTime(dur.hours)}
-                        className={`text-[10px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
-                          isDark ? 'bg-white/5 border-white/10 hover:bg-white/15 text-slate-300' : 'bg-slate-100 border-slate-200 hover:bg-slate-200 text-slate-700'
-                        }`}
+                        className={`text-[10px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${isDark ? 'bg-white/5 border-white/10 hover:bg-white/15 text-slate-300' : 'bg-slate-100 border-slate-200 hover:bg-slate-200 text-slate-700'
+                          }`}
                       >
                         {dur.label}
                       </button>
@@ -693,9 +684,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     value={formLocation}
                     onChange={e => setFormLocation(e.target.value)}
                     placeholder="Ej: Santuario Principal El-Shaddai, Carrera 15 # 45-20, Zoom..."
-                    className={`w-full pl-3.5 pr-9 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${
-                      isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
-                    }`}
+                    className={`w-full pl-3.5 pr-9 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
+                      }`}
                   />
                   {formLocation && (
                     <button
@@ -722,13 +712,12 @@ export const EventsView: React.FC<EventsViewProps> = ({
                       key={sug.label}
                       type="button"
                       onClick={() => setFormLocation(sug.value)}
-                      className={`text-[10px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
-                        formLocation === sug.value
+                      className={`text-[10px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${formLocation === sug.value
                           ? 'bg-[#0B2B68] text-white border-[#0B2B68]'
                           : isDark
-                          ? 'bg-white/5 border-white/10 hover:bg-white/10'
-                          : 'bg-slate-100 border-slate-200 hover:bg-slate-200'
-                      }`}
+                            ? 'bg-white/5 border-white/10 hover:bg-white/10'
+                            : 'bg-slate-100 border-slate-200 hover:bg-slate-200'
+                        }`}
                     >
                       {sug.label}
                     </button>
@@ -748,9 +737,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                 value={formPrice}
                 onChange={e => setFormPrice(e.target.value)}
                 placeholder="Ej: Entrada Libre, Gratuito, Donación Voluntaria, $15 USD, $50.000 COP..."
-                className={`w-full px-3.5 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${
-                  isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
-                }`}
+                className={`w-full px-3.5 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
+                  }`}
               />
               <div className="flex flex-wrap items-center gap-1.5">
                 <span className={`text-[10px] font-semibold ${subtextColor}`}>Opciones rápidas:</span>
@@ -759,13 +747,12 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     key={p}
                     type="button"
                     onClick={() => setFormPrice(p)}
-                    className={`text-[10px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
-                      formPrice === p
+                    className={`text-[10px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${formPrice === p
                         ? 'bg-emerald-600 text-white border-emerald-600'
                         : isDark
-                        ? 'bg-white/5 border-white/10 hover:bg-white/10'
-                        : 'bg-slate-100 border-slate-200 hover:bg-slate-200'
-                    }`}
+                          ? 'bg-white/5 border-white/10 hover:bg-white/10'
+                          : 'bg-slate-100 border-slate-200 hover:bg-slate-200'
+                      }`}
                   >
                     {p}
                   </button>
@@ -798,9 +785,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                   value={formImageUrl}
                   onChange={e => setFormImageUrl(e.target.value)}
                   placeholder="Pega un enlace de imagen (https://...)"
-                  className={`flex-1 px-3.5 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${
-                    isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
-                  }`}
+                  className={`flex-1 px-3.5 py-2 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-white border-[#E5E7EB] text-slate-800'
+                    }`}
                 />
                 <label className="px-4 py-2.5 rounded-xl bg-[#0B2B68] hover:bg-[#081E48] text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 cursor-pointer shrink-0 transition-all shadow-xs active:scale-95 border border-[#00A3E0]/30 hover:border-[#00A3E0] group">
                   <Upload className="w-4 h-4 text-[#FED65B] group-hover:scale-110 transition-transform" />
@@ -825,11 +811,10 @@ export const EventsView: React.FC<EventsViewProps> = ({
                       key={idx}
                       type="button"
                       onClick={() => setFormImageUrl(preset.url)}
-                      className={`relative rounded-xl overflow-hidden aspect-video border transition-all cursor-pointer group ${
-                        formImageUrl === preset.url
+                      className={`relative rounded-xl overflow-hidden aspect-video border transition-all cursor-pointer group ${formImageUrl === preset.url
                           ? 'ring-2 ring-[#00A3E0] border-[#00A3E0] scale-95 shadow-md'
                           : 'border-transparent hover:opacity-90'
-                      }`}
+                        }`}
                       title={preset.label}
                     >
                       <img
@@ -881,9 +866,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                 value={formDescription}
                 onChange={e => setFormDescription(e.target.value)}
                 placeholder="Escribe aquí los puntos principales del sermón, versículos de apoyo, aplicaciones prácticas para la semana o notas del predicador..."
-                className={`w-full px-4 py-3.5 rounded-2xl border text-xs sm:text-sm font-sans leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${
-                  isDark ? 'bg-[#182033] border-[#252D43] text-[#E2E8F0]' : 'bg-white border-[#E5E7EB] text-slate-800'
-                }`}
+                className={`w-full px-4 py-3.5 rounded-2xl border text-xs sm:text-sm font-sans leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${isDark ? 'bg-[#182033] border-[#252D43] text-[#E2E8F0]' : 'bg-white border-[#E5E7EB] text-slate-800'
+                  }`}
               />
             </div>
 
@@ -909,9 +893,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     }
                   }}
                   placeholder="Ej: Juan 3:16, Salmos 23:1 o Mateo 14:22-33"
-                  className={`flex-1 px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${
-                    isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-slate-50 border-[#E5E7EB] text-slate-800'
-                  }`}
+                  className={`flex-1 px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-slate-50 border-[#E5E7EB] text-slate-800'
+                    }`}
                 />
                 <button
                   type="button"
@@ -935,9 +918,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                         setFormLinkedVerses([...formLinkedVerses, sug]);
                       }
                     }}
-                    className={`text-[11px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
-                      isDark ? 'bg-white/5 border-white/10 hover:bg-white/15' : 'bg-slate-100 border-slate-200 hover:bg-slate-200'
-                    }`}
+                    className={`text-[11px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${isDark ? 'bg-white/5 border-white/10 hover:bg-white/15' : 'bg-slate-100 border-slate-200 hover:bg-slate-200'
+                      }`}
                   >
                     + {sug}
                   </button>
@@ -985,9 +967,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     }
                   }}
                   placeholder="Ej: Fe, Familia, Santidad, Oración..."
-                  className={`flex-1 px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${
-                    isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-slate-50 border-[#E5E7EB] text-slate-800'
-                  }`}
+                  className={`flex-1 px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${isDark ? 'bg-[#121826] border-[#252D43] text-white' : 'bg-slate-50 border-[#E5E7EB] text-slate-800'
+                    }`}
                 />
                 <button
                   type="button"
@@ -1064,9 +1045,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     onChange={e => setCatName(e.target.value)}
                     placeholder="Ej: Confraternidad Juvenil, Campamento..."
                     required
-                    className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${
-                      isDark ? 'bg-[#121826] border-[#252D43]' : 'bg-white border-[#E5E7EB]'
-                    }`}
+                    className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${isDark ? 'bg-[#121826] border-[#252D43]' : 'bg-white border-[#E5E7EB]'
+                      }`}
                   />
                 </div>
 
@@ -1083,13 +1063,12 @@ export const EventsView: React.FC<EventsViewProps> = ({
                           type="button"
                           key={iconKey}
                           onClick={() => setCatIcon(iconKey)}
-                          className={`p-2.5 rounded-xl border flex flex-col items-center gap-1 transition-all cursor-pointer ${
-                            isSelected
+                          className={`p-2.5 rounded-xl border flex flex-col items-center gap-1 transition-all cursor-pointer ${isSelected
                               ? 'bg-[#0B2B68] text-[#FED65B] border-[#0B2B68] ring-2 ring-[#0B2B68]/40'
                               : isDark
-                              ? 'bg-[#121826] border-[#252D43] text-slate-300 hover:bg-[#1A2234]'
-                              : 'bg-white border-[#E5E7EB] text-slate-700 hover:bg-slate-50'
-                          }`}
+                                ? 'bg-[#121826] border-[#252D43] text-slate-300 hover:bg-[#1A2234]'
+                                : 'bg-white border-[#E5E7EB] text-slate-700 hover:bg-slate-50'
+                            }`}
                         >
                           <IconC className="w-5 h-5" />
                           <span className="text-[10px] truncate max-w-full">{iconKey}</span>
@@ -1109,9 +1088,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                         type="button"
                         key={color}
                         onClick={() => setCatColor(color)}
-                        className={`w-9 h-9 sm:w-8 sm:h-8 rounded-full transition-transform cursor-pointer flex items-center justify-center ${
-                          catColor === color ? 'scale-110 ring-2 ring-offset-2 ring-[#0B2B68]' : 'hover:scale-105'
-                        }`}
+                        className={`w-9 h-9 sm:w-8 sm:h-8 rounded-full transition-transform cursor-pointer flex items-center justify-center ${catColor === color ? 'scale-110 ring-2 ring-offset-2 ring-[#0B2B68]' : 'hover:scale-105'
+                          }`}
                         style={{ backgroundColor: color }}
                       >
                         {catColor === color && <CheckCircle2 className="w-4 h-4 text-white" />}
@@ -1224,13 +1202,12 @@ export const EventsView: React.FC<EventsViewProps> = ({
     <div className={`w-full max-w-full overflow-x-hidden min-h-screen ${containerBg} pb-28 md:pb-24 transition-colors duration-200`}>
       {/* Header Banner - Compact & Responsive */}
       <div
-        className={`pt-3 sm:pt-6 pb-3 sm:pb-6 px-3 sm:px-6 border-b ${
-          isDark
+        className={`pt-3 sm:pt-6 pb-3 sm:pb-6 px-3 sm:px-6 border-b ${isDark
             ? 'border-[#252D43] bg-[#121826]'
             : isSepia
-            ? 'border-[#DECDB8] bg-[#EBE1D0]'
-            : 'border-[#EAE8E3] bg-[#F7F5F0]'
-        }`}
+              ? 'border-[#DECDB8] bg-[#EBE1D0]'
+              : 'border-[#EAE8E3] bg-[#F7F5F0]'
+          }`}
       >
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
           <div className="min-w-0 flex-1">
@@ -1270,13 +1247,12 @@ export const EventsView: React.FC<EventsViewProps> = ({
             <button
               id="new-category-btn"
               onClick={() => setIsCategoryModalOpen(true)}
-              className={`min-h-[38px] sm:min-h-[42px] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold border flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                isDark
+              className={`min-h-[38px] sm:min-h-[42px] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold border flex items-center justify-center gap-1.5 transition-all cursor-pointer ${isDark
                   ? 'border-[#252D43] bg-[#1A2234] text-[#E2E8F0] hover:bg-[#252D43]'
                   : isSepia
-                  ? 'border-[#DECDB8] bg-[#EFE7D8] text-[#2D2319] hover:bg-[#E2D4BF]'
-                  : 'border-[#E5E7EB] bg-white text-[#0B2B68] hover:bg-[#F3F4F6] shadow-2xs'
-              }`}
+                    ? 'border-[#DECDB8] bg-[#EFE7D8] text-[#2D2319] hover:bg-[#E2D4BF]'
+                    : 'border-[#E5E7EB] bg-white text-[#0B2B68] hover:bg-[#F3F4F6] shadow-2xs'
+                }`}
               title="Crear nueva categoría"
               aria-label="Nueva Categoría"
             >
@@ -1365,20 +1341,18 @@ export const EventsView: React.FC<EventsViewProps> = ({
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Buscar prédicas, temas o pasajes bíblicos..."
-              className={`w-full pl-9 pr-16 sm:pr-20 py-2 sm:py-2.5 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${
-                isDark
+              className={`w-full pl-9 pr-16 sm:pr-20 py-2 sm:py-2.5 rounded-xl border text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${isDark
                   ? 'bg-[#182033] border-[#252D43] text-white placeholder-slate-500'
                   : isSepia
-                  ? 'bg-[#EFE7D8] border-[#DECDB8] text-[#2D2319] placeholder-[#8A7156]'
-                  : 'bg-white border-[#E5E7EB] text-slate-900 placeholder-slate-400'
-              }`}
+                    ? 'bg-[#EFE7D8] border-[#DECDB8] text-[#2D2319] placeholder-[#8A7156]'
+                    : 'bg-white border-[#E5E7EB] text-slate-900 placeholder-slate-400'
+                }`}
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className={`absolute right-2 top-1/2 -translate-y-1/2 text-[11px] px-2 py-0.5 rounded-md cursor-pointer ${
-                  isDark ? 'bg-white/10 text-white' : 'bg-slate-200 text-slate-700'
-                }`}
+                className={`absolute right-2 top-1/2 -translate-y-1/2 text-[11px] px-2 py-0.5 rounded-md cursor-pointer ${isDark ? 'bg-white/10 text-white' : 'bg-slate-200 text-slate-700'
+                  }`}
               >
                 Limpiar
               </button>
@@ -1389,23 +1363,21 @@ export const EventsView: React.FC<EventsViewProps> = ({
           <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 text-xs no-scrollbar touch-pan-x w-full max-w-full">
             <button
               onClick={() => setSelectedCategoryFilter('ALL')}
-              className={`px-2.5 sm:px-3 py-1.5 min-h-[34px] sm:min-h-[38px] rounded-xl font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
-                selectedCategoryFilter === 'ALL'
+              className={`px-2.5 sm:px-3 py-1.5 min-h-[34px] sm:min-h-[38px] rounded-xl font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${selectedCategoryFilter === 'ALL'
                   ? 'bg-[#0B2B68] text-[#FED65B] shadow-2xs'
                   : isDark
-                  ? 'bg-[#182033] text-white/70 hover:bg-[#252D43]'
-                  : isSepia
-                  ? 'bg-[#EBE1D0] text-[#5C452D] hover:bg-[#DFCDB8]'
-                  : 'bg-white text-[#454652] hover:bg-[#F3F4F6] border border-[#E5E7EB]'
-              }`}
+                    ? 'bg-[#182033] text-white/70 hover:bg-[#252D43]'
+                    : isSepia
+                      ? 'bg-[#EBE1D0] text-[#5C452D] hover:bg-[#DFCDB8]'
+                      : 'bg-white text-[#454652] hover:bg-[#F3F4F6] border border-[#E5E7EB]'
+                }`}
               title="Mostrar todos los apuntes"
               aria-label="Todos los apuntes"
             >
               <Sparkles className="w-3.5 h-3.5 shrink-0" />
               <span className="text-xs">Todos</span>
-              <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                selectedCategoryFilter === 'ALL' ? 'bg-white/20 text-[#FED65B]' : 'bg-black/5 dark:bg-white/10'
-              }`}>
+              <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${selectedCategoryFilter === 'ALL' ? 'bg-white/20 text-[#FED65B]' : 'bg-black/5 dark:bg-white/10'
+                }`}>
                 {events.length}
               </span>
             </button>
@@ -1421,15 +1393,14 @@ export const EventsView: React.FC<EventsViewProps> = ({
                   onClick={() => setSelectedCategoryFilter(cat.id)}
                   title={cat.name}
                   aria-label={cat.name}
-                  className={`px-2.5 sm:px-3.5 py-1.5 min-h-[34px] sm:min-h-[38px] rounded-xl font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 border ${
-                    isSelected
+                  className={`px-2.5 sm:px-3.5 py-1.5 min-h-[34px] sm:min-h-[38px] rounded-xl font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 border ${isSelected
                       ? 'bg-[#0B2B68] border-[#0B2B68] text-white shadow-2xs'
                       : isDark
-                      ? 'bg-[#182033] border-[#252D43] text-white/80 hover:bg-[#252D43]'
-                      : isSepia
-                      ? 'bg-[#EFE7D8] border-[#DECDB8] text-[#4A3828] hover:bg-[#E5D9C7]'
-                      : 'bg-white border-[#E5E7EB] text-[#334155] hover:bg-[#F8FAFC]'
-                  }`}
+                        ? 'bg-[#182033] border-[#252D43] text-white/80 hover:bg-[#252D43]'
+                        : isSepia
+                          ? 'bg-[#EFE7D8] border-[#DECDB8] text-[#4A3828] hover:bg-[#E5D9C7]'
+                          : 'bg-white border-[#E5E7EB] text-[#334155] hover:bg-[#F8FAFC]'
+                    }`}
                 >
                   <span
                     className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0"
@@ -1439,9 +1410,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                   {/* Category name: on mobile, show truncated or hidden if preferred */}
                   <span className="text-xs sm:text-sm whitespace-nowrap">{cat.name}</span>
                   <span
-                    className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                      isSelected ? 'bg-white/20 text-white' : 'bg-black/5 dark:bg-white/10'
-                    }`}
+                    className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${isSelected ? 'bg-white/20 text-white' : 'bg-black/5 dark:bg-white/10'
+                      }`}
                   >
                     {count}
                   </span>
@@ -1530,9 +1500,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                             href={getMapsUrlForLocation(evt.location)}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md max-w-full truncate hover:text-[#00A3E0] transition-colors ${
-                              isDark ? 'bg-white/5' : 'bg-slate-100'
-                            } ${subtextColor}`}
+                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md max-w-full truncate hover:text-[#00A3E0] transition-colors ${isDark ? 'bg-white/5' : 'bg-slate-100'
+                              } ${subtextColor}`}
                             title="Abrir ubicación en Google Maps"
                             onClick={(e) => e.stopPropagation()}
                           >
@@ -1554,11 +1523,9 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     {evt.description && (
                       <div className="mb-2.5 sm:mb-3">
                         <p
-                          className={`text-xs sm:text-sm whitespace-pre-line leading-relaxed break-words ${
-                            !isExpanded && isLongText ? 'line-clamp-3 sm:line-clamp-4' : ''
-                          } ${
-                            isDark ? 'text-[#D1D5DB]' : isSepia ? 'text-[#4A3B2C]' : 'text-[#475569]'
-                          }`}
+                          className={`text-xs sm:text-sm whitespace-pre-line leading-relaxed break-words ${!isExpanded && isLongText ? 'line-clamp-3 sm:line-clamp-4' : ''
+                            } ${isDark ? 'text-[#D1D5DB]' : isSepia ? 'text-[#4A3B2C]' : 'text-[#475569]'
+                            }`}
                         >
                           {evt.description}
                         </p>
@@ -1596,13 +1563,12 @@ export const EventsView: React.FC<EventsViewProps> = ({
                             <button
                               key={i}
                               onClick={() => handleParseVerseAndNavigate(v)}
-                              className={`px-2 py-1 min-h-[28px] sm:min-h-[32px] rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer ${
-                                isDark
+                              className={`px-2 py-1 min-h-[28px] sm:min-h-[32px] rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer ${isDark
                                   ? 'bg-[#252D43] text-[#93C5FD] hover:bg-[#323D5B]'
                                   : isSepia
-                                  ? 'bg-[#E5D7C3] text-[#633F1E] hover:bg-[#DBCDB8]'
-                                  : 'bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#DBEAFE]'
-                              }`}
+                                    ? 'bg-[#E5D7C3] text-[#633F1E] hover:bg-[#DBCDB8]'
+                                    : 'bg-[#EFF6FF] text-[#1D4ED8] hover:bg-[#DBEAFE]'
+                                }`}
                               title="Toca para abrir este pasaje en la Biblia"
                             >
                               <BookOpen className="w-2.5 h-2.5 sm:w-3 sm:h-3 opacity-70 shrink-0" />
@@ -1620,9 +1586,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                         {evt.tags.map((t, idx) => (
                           <span
                             key={idx}
-                            className={`text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-md font-medium flex items-center gap-0.5 ${
-                              isDark ? 'bg-white/5 text-slate-300' : 'bg-slate-100 text-slate-600'
-                            }`}
+                            className={`text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-md font-medium flex items-center gap-0.5 ${isDark ? 'bg-white/5 text-slate-300' : 'bg-slate-100 text-slate-600'
+                              }`}
                           >
                             <TagIcon className="w-2.5 h-2.5 opacity-60" />
                             {t}
@@ -1634,20 +1599,17 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
                   {/* Actions Footer - Responsive Icons on Mobile, Labels on Tablet/Desktop */}
                   <div
-                    className={`p-3.5 sm:p-5 pt-2.5 sm:pt-3 border-t flex items-center justify-between ${
-                      isDark ? 'border-white/10' : 'border-slate-100'
-                    }`}
+                    className={`p-3.5 sm:p-5 pt-2.5 sm:pt-3 border-t flex items-center justify-between ${isDark ? 'border-white/10' : 'border-slate-100'
+                      }`}
                   >
                     <button
                       onClick={() => handleShareEvent(evt)}
-                      className={`p-1.5 sm:px-3 sm:py-1.5 min-h-[34px] sm:min-h-[38px] rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                        isDark ? 'hover:bg-white/10 text-white/80' : 'hover:bg-slate-100 text-slate-700'
-                      }`}
+                      className={`p-1.5 sm:px-3 sm:py-1.5 min-h-[34px] sm:min-h-[38px] rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${isDark ? 'hover:bg-white/10 text-white/80' : 'hover:bg-slate-100 text-slate-700'
+                        }`}
                       title="Compartir notas de este evento"
                       aria-label="Compartir"
                     >
                       <Share2 className="w-4 h-4 shrink-0 text-[#F47B20]" />
-                      <span className="hidden sm:inline text-xs">Compartir</span>
                     </button>
 
                     <div className="flex items-center gap-1 sm:gap-1.5">
@@ -1658,19 +1620,16 @@ export const EventsView: React.FC<EventsViewProps> = ({
                         aria-label="Iniciar Evento"
                       >
                         <Play className="w-3.5 h-3.5 fill-current shrink-0" />
-                        <span className="font-extrabold">Iniciar</span>
                       </button>
 
                       <button
                         onClick={() => openEditEventModal(evt)}
-                        className={`p-1.5 sm:px-3 sm:py-1.5 min-h-[34px] sm:min-h-[38px] rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                          isDark ? 'hover:bg-white/10 text-slate-300' : 'hover:bg-slate-100 text-slate-600'
-                        }`}
+                        className={`p-1.5 sm:px-3 sm:py-1.5 min-h-[34px] sm:min-h-[38px] rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${isDark ? 'hover:bg-white/10 text-slate-300' : 'hover:bg-slate-100 text-slate-600'
+                          }`}
                         title="Editar apunte"
                         aria-label="Editar"
                       >
                         <Edit3 className="w-4 h-4 text-[#00A3E0]" />
-                        <span className="hidden sm:inline text-xs">Editar</span>
                       </button>
 
                       <button
@@ -1680,7 +1639,6 @@ export const EventsView: React.FC<EventsViewProps> = ({
                         aria-label="Eliminar"
                       >
                         <Trash2 className="w-4 h-4" />
-                        <span className="hidden sm:inline text-xs">Eliminar</span>
                       </button>
                     </div>
                   </div>
@@ -1736,9 +1694,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                   onChange={e => setCatName(e.target.value)}
                   placeholder="Ej: Confraternidad Juvenil, Campamento..."
                   required
-                  className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${
-                    isDark ? 'bg-[#121826] border-[#252D43]' : 'bg-white border-[#E5E7EB]'
-                  }`}
+                  className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2B68] ${isDark ? 'bg-[#121826] border-[#252D43]' : 'bg-white border-[#E5E7EB]'
+                    }`}
                 />
               </div>
 
@@ -1756,13 +1713,12 @@ export const EventsView: React.FC<EventsViewProps> = ({
                         type="button"
                         key={iconKey}
                         onClick={() => setCatIcon(iconKey)}
-                        className={`p-2.5 rounded-xl border flex flex-col items-center gap-1 transition-all cursor-pointer ${
-                          isSelected
+                        className={`p-2.5 rounded-xl border flex flex-col items-center gap-1 transition-all cursor-pointer ${isSelected
                             ? 'bg-[#0B2B68] text-[#FED65B] border-[#0B2B68] ring-2 ring-[#0B2B68]/40'
                             : isDark
-                            ? 'bg-[#121826] border-[#252D43] text-slate-300 hover:bg-[#1A2234]'
-                            : 'bg-white border-[#E5E7EB] text-slate-700 hover:bg-slate-50'
-                        }`}
+                              ? 'bg-[#121826] border-[#252D43] text-slate-300 hover:bg-[#1A2234]'
+                              : 'bg-white border-[#E5E7EB] text-slate-700 hover:bg-slate-50'
+                          }`}
                       >
                         <IconC className="w-5 h-5" />
                         <span className="text-[10px] truncate max-w-full">{iconKey}</span>
@@ -1783,9 +1739,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
                       type="button"
                       key={color}
                       onClick={() => setCatColor(color)}
-                      className={`w-9 h-9 sm:w-8 sm:h-8 rounded-full transition-transform cursor-pointer flex items-center justify-center ${
-                        catColor === color ? 'scale-110 ring-2 ring-offset-2 ring-[#0B2B68]' : 'hover:scale-105'
-                      }`}
+                      className={`w-9 h-9 sm:w-8 sm:h-8 rounded-full transition-transform cursor-pointer flex items-center justify-center ${catColor === color ? 'scale-110 ring-2 ring-offset-2 ring-[#0B2B68]' : 'hover:scale-105'
+                        }`}
                       style={{ backgroundColor: color }}
                     >
                       {catColor === color && <CheckCircle2 className="w-4 h-4 text-white" />}
