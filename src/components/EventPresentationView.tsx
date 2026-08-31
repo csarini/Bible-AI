@@ -23,6 +23,7 @@ import {
 import { UserEvent, EventCategory, ReadingSettings, BibleVerse } from '../types';
 import { fetchBibleChapter } from '../data/bibleData';
 import { getLocalBooksSync } from '../services/bibleDatabaseService';
+import { getMapsUrlForLocation } from '../services/storageService';
 import { EventShareModal } from './EventShareModal';
 
 interface EventPresentationViewProps {
@@ -471,7 +472,7 @@ export const EventPresentationView: React.FC<EventPresentationViewProps> = ({
                 <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white text-xs font-semibold">
                   {event.location && (
                     <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`}
+                      href={getMapsUrlForLocation(event.location)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md hover:bg-black/80 transition-colors"
@@ -536,7 +537,7 @@ export const EventPresentationView: React.FC<EventPresentationViewProps> = ({
                 <div className="flex flex-wrap items-center gap-3 mt-3 pt-3 border-t border-inherit/15 text-xs sm:text-sm">
                   {event.location && (
                     <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`}
+                      href={getMapsUrlForLocation(event.location)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-1.5 text-inherit/80 hover:text-[#00A3E0] font-medium transition-colors"

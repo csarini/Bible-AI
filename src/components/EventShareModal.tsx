@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { UserEvent, EventCategory } from '../types';
 import { ChurchLogo } from './ChurchLogo';
+import { getMapsUrlForLocation } from '../services/storageService';
 
 interface EventShareModalProps {
   isOpen: boolean;
@@ -441,18 +442,30 @@ export const EventShareModal: React.FC<EventShareModalProps> = ({
       ctx.font = '20px sans-serif';
       ctx.fillText('¡Te esperamos! • Entrada e información sujeta a la congregación', width / 2, height - 35);
 
-      // Download Canvas to Image
+      // Download Canvas to Image - Guaranteed trigger for Mobile & Desktop Downloads folder
       canvas.toBlob((blob) => {
-        if (!blob) return;
+        if (!blob) {
+          setIsGeneratingImage(false);
+          return;
+        }
+        const fileName = `afiche-${event.title.toLowerCase().replace(/[^a-z0-9]/g, '-') || 'evento'}.png`;
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `afiche-${event.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}.png`;
+        a.download = fileName;
+        a.setAttribute('download', fileName);
+        a.style.display = 'none';
+        document.body.appendChild(a);
         a.click();
-        URL.revokeObjectURL(url);
+        
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 300);
+
         setIsGeneratingImage(false);
-        if (onToast) onToast('¡Afiche descargado con éxito!');
-      }, 'image/png');
+        if (onToast) onToast('¡Afiche guardado en la carpeta de Descargas de tu móvil / dispositivo!');
+      }, 'image/png', 1.0);
     } catch (e) {
       console.error(e);
       setIsGeneratingImage(false);
@@ -704,7 +717,7 @@ export const EventShareModal: React.FC<EventShareModalProps> = ({
                       </div>
                     </div>
                     <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`}
+                      href={getMapsUrlForLocation(event.location)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[10px] font-bold text-[#00A3E0] hover:text-[#FED65B] flex items-center gap-1 shrink-0 px-2 py-0.5 rounded-md bg-black/40 hover:bg-black/60 transition-colors"

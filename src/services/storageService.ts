@@ -49,6 +49,30 @@ export const INITIAL_EVENT_CATEGORIES: EventCategory[] = [
   }
 ];
 
+export const DEFAULT_CHURCH_LOCATION = 'Almte. Guillermo Brown 1285, J5400 Rivadavia, San Juan';
+export const DEFAULT_CHURCH_COORDINATES = {
+  lat: -31.514918685940362,
+  lng: -68.57393324759724
+};
+
+export function getMapsUrlForLocation(location?: string): string {
+  if (!location) {
+    return `https://www.google.com/maps/search/?api=1&query=${DEFAULT_CHURCH_COORDINATES.lat},${DEFAULT_CHURCH_COORDINATES.lng}`;
+  }
+  const clean = location.trim();
+  if (
+    clean.includes('Almte. Guillermo Brown') ||
+    clean.includes('Brown 1285') ||
+    clean.includes('Santuario Principal') ||
+    clean.includes('Salón Principal') ||
+    clean.includes('Rivadavia, San Juan') ||
+    clean.includes('Salon Principal')
+  ) {
+    return `https://www.google.com/maps/search/?api=1&query=${DEFAULT_CHURCH_COORDINATES.lat},${DEFAULT_CHURCH_COORDINATES.lng}`;
+  }
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(clean)}`;
+}
+
 export const INITIAL_USER_EVENTS: UserEvent[] = [
   {
     id: 'evt_1',
@@ -59,7 +83,7 @@ export const INITIAL_USER_EVENTS: UserEvent[] = [
     eventDate: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString().split('T')[0],
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
     tags: ['Fe', 'Confianza', 'Sermón'],
-    location: 'Santuario Principal El-Shaddai',
+    location: DEFAULT_CHURCH_LOCATION,
     startTime: '10:00',
     endTime: '12:30',
     imageUrl: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=800&auto=format&fit=crop&q=80',
@@ -74,7 +98,7 @@ export const INITIAL_USER_EVENTS: UserEvent[] = [
     eventDate: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString().split('T')[0],
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
     tags: ['Matrimonio', 'Familia', 'Pacto'],
-    location: 'Salón Comunitario / Auditorio B',
+    location: DEFAULT_CHURCH_LOCATION,
     startTime: '18:30',
     endTime: '20:30',
     imageUrl: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&auto=format&fit=crop&q=80',

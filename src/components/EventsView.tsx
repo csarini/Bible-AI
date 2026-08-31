@@ -33,7 +33,7 @@ import {
   Globe
 } from 'lucide-react';
 import { EventCategory, UserEvent, ReadingSettings } from '../types';
-import { StorageService } from '../services/storageService';
+import { StorageService, DEFAULT_CHURCH_LOCATION, DEFAULT_CHURCH_COORDINATES, getMapsUrlForLocation } from '../services/storageService';
 import { EventPresentationView } from './EventPresentationView';
 import { EventShareModal } from './EventShareModal';
 
@@ -112,6 +112,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
   const [presentingEvent, setPresentingEvent] = useState<UserEvent | null>(null);
   const [sharingEvent, setSharingEvent] = useState<UserEvent | null>(null);
   const [isLocating, setIsLocating] = useState(false);
+  const [isGpsPromptOpen, setIsGpsPromptOpen] = useState(false);
 
   // Event Form State
   const [formCategoryId, setFormCategoryId] = useState<string>(categories[0]?.id || 'cat_predica');
@@ -124,7 +125,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
   const [formTags, setFormTags] = useState<string[]>([]);
   
   // Optional Event Details State
-  const [formLocation, setFormLocation] = useState<string>('');
+  const [formLocation, setFormLocation] = useState<string>(DEFAULT_CHURCH_LOCATION);
   const [formStartTime, setFormStartTime] = useState<string>('');
   const [formEndTime, setFormEndTime] = useState<string>('');
   const [formImageUrl, setFormImageUrl] = useState<string>('');
@@ -161,35 +162,56 @@ export const EventsView: React.FC<EventsViewProps> = ({
     setFormEndTime(formatted);
   };
 
-  // Google Maps / GPS Geolocation helper
+  // Trigger GPS permission dialog
   const handleGetGpsLocation = () => {
+    setIsGpsPromptOpen(true);
+  };
+
+  // Execute GPS Geolocation once permission is confirmed by user
+  const handleConfirmGpsAccess = () => {
     if (!navigator.geolocation) {
-      if (onToast) onToast('Tu navegador no soporta geolocalización');
+      setIsGpsPromptOpen(false);
+      if (onToast) onToast('Tu navegador no soporta geolocalización GPS');
       return;
     }
 
     setIsLocating(true);
-    if (onToast) onToast('Obteniendo ubicación GPS...');
+    if (onToast) onToast('Solicitando señal de satélite GPS del móvil...');
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setIsLocating(false);
-        const lat = pos.coords.latitude.toFixed(4);
-        const lng = pos.coords.longitude.toFixed(4);
-        setFormLocation(`Santuario (GPS: ${lat}, ${lng})`);
-        if (onToast) onToast('¡Ubicación GPS obtenida con éxito!');
+        setIsGpsPromptOpen(false);
+        const lat = pos.coords.latitude.toFixed(6);
+        const lng = pos.coords.longitude.toFixed(6);
+        setFormLocation(`GPS: ${lat}, ${lng} (Ubicación Móvil)`);
+        if (onToast) onToast(`¡Coordenadas GPS obtenidas: ${lat}, ${lng}!`);
       },
       (err) => {
         setIsLocating(false);
-        if (onToast) onToast('No se pudo acceder al GPS. Puedes escribir la dirección o buscarla en Google Maps.');
+        setIsGpsPromptOpen(false);
+        let msg = 'No se pudo acceder al GPS del dispositivo.';
+        if (err.code === err.PERMISSION_DENIED) {
+          msg = 'Permiso de GPS no concedido en tu móvil o navegador. Puedes usar la dirección predeterminada del Salón Principal.';
+        } else if (err.code === err.POSITION_UNAVAILABLE) {
+          msg = 'Señal GPS no disponible actualmente en el móvil.';
+        } else if (err.code === err.TIMEOUT) {
+          msg = 'El tiempo de espera del GPS expiró.';
+        }
+        if (onToast) onToast(msg);
       },
-      { enableHighAccuracy: true, timeout: 8000 }
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
     );
   };
 
+  const handleSetDefaultLocation = () => {
+    setFormLocation(DEFAULT_CHURCH_LOCATION);
+    setIsGpsPromptOpen(false);
+    if (onToast) onToast('Ubicación fijada: Salón Principal (Brown 1285, San Juan)');
+  };
+
   const handleOpenMapsSearch = () => {
-    const query = formLocation.trim() || 'Iglesia El-Shaddai';
-    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
+    window.open(getMapsUrlForLocation(formLocation), '_blank');
   };
 
   const isDark = settings.themeMode === 'dark';
@@ -239,7 +261,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
     setFormTags([]);
     setFormVerseInput('');
     setFormTagInput('');
-    setFormLocation('');
+    setFormLocation(DEFAULT_CHURCH_LOCATION);
     setFormStartTime('');
     setFormEndTime('');
     setFormImageUrl('');
@@ -689,20 +711,26 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
                 <div className="flex flex-wrap items-center gap-1.5 mt-2">
                   <span className={`text-[10px] font-semibold ${subtextColor}`}>Sugerencias:</span>
-                  {['Santuario Principal', 'Auditorio Central', 'Online / Transmisión', 'Salón de Jóvenes', 'Salón de Matrimonios'].map(loc => (
+                  {[
+                    { label: 'Salón Principal (Brown 1285, San Juan)', value: DEFAULT_CHURCH_LOCATION },
+                    { label: 'Auditorio Central', value: 'Auditorio Central' },
+                    { label: 'Online / Transmisión', value: 'Online / Transmisión' },
+                    { label: 'Salón de Jóvenes', value: 'Salón de Jóvenes' },
+                    { label: 'Salón de Matrimonios', value: 'Salón de Matrimonios' }
+                  ].map(sug => (
                     <button
-                      key={loc}
+                      key={sug.label}
                       type="button"
-                      onClick={() => setFormLocation(loc)}
+                      onClick={() => setFormLocation(sug.value)}
                       className={`text-[10px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
-                        formLocation === loc
+                        formLocation === sug.value
                           ? 'bg-[#0B2B68] text-white border-[#0B2B68]'
                           : isDark
                           ? 'bg-white/5 border-white/10 hover:bg-white/10'
                           : 'bg-slate-100 border-slate-200 hover:bg-slate-200'
                       }`}
                     >
-                      {loc}
+                      {sug.label}
                     </button>
                   ))}
                 </div>
@@ -1111,6 +1139,83 @@ export const EventsView: React.FC<EventsViewProps> = ({
             </div>
           </div>
         )}
+
+        {/* Modal: Permiso de Ubicación GPS */}
+        {isGpsPromptOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-xs">
+            <div className={`w-full max-w-md rounded-2xl sm:rounded-3xl border shadow-2xl p-5 sm:p-6 relative ${cardBg}`}>
+              <div className="flex items-start gap-3.5 mb-3.5">
+                <div className="w-11 h-11 rounded-2xl bg-[#00A3E0]/15 text-[#00A3E0] flex items-center justify-center shrink-0">
+                  <Navigation className={`w-6 h-6 ${isLocating ? 'animate-spin' : ''}`} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-base sm:text-lg font-bold font-display leading-tight">
+                    Permiso de Ubicación GPS
+                  </h3>
+                  <p className={`text-xs ${subtextColor} mt-0.5`}>
+                    Acceso satelital para registrar el lugar del evento
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsGpsPromptOpen(false)}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="mb-3.5 p-3.5 rounded-xl bg-blue-500/10 border border-blue-500/25 text-xs text-slate-700 dark:text-slate-300 leading-relaxed space-y-1.5">
+                <p>
+                  <strong>Santuario Digital</strong> solicita permiso para acceder al sensor GPS de tu móvil o navegador y capturar las coordenadas exactas de la prédica o actividad.
+                </p>
+                <p className="text-[11px] opacity-80">
+                  Al pulsar &quot;Permitir y Obtener GPS&quot;, tu teléfono mostrará la solicitud oficial del sistema para autorizar el acceso.
+                </p>
+              </div>
+
+              <div className="mb-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/25 text-xs">
+                <div className="flex items-center gap-1.5 font-bold text-amber-600 dark:text-amber-400 mb-1">
+                  <MapPin className="w-3.5 h-3.5 text-[#F47B20]" />
+                  <span>Ubicación Predeterminada (Salón Principal):</span>
+                </div>
+                <p className="font-medium text-slate-800 dark:text-slate-200">{DEFAULT_CHURCH_LOCATION}</p>
+                <p className="text-[10px] text-slate-500 mt-0.5">
+                  Coordenadas: {DEFAULT_CHURCH_COORDINATES.lat}, {DEFAULT_CHURCH_COORDINATES.lng}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={handleConfirmGpsAccess}
+                  disabled={isLocating}
+                  className="w-full py-2.5 sm:py-3 px-4 rounded-xl bg-[#0B2B68] hover:bg-[#081F4B] text-[#FED65B] text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer disabled:opacity-50"
+                >
+                  <Navigation className={`w-4 h-4 ${isLocating ? 'animate-spin' : ''}`} />
+                  <span>{isLocating ? 'Obteniendo GPS...' : 'Permitir y Obtener GPS Actual'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleSetDefaultLocation}
+                  className="w-full py-2 px-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-white/5 text-xs sm:text-sm font-semibold transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <MapPin className="w-3.5 h-3.5 text-[#F47B20]" />
+                  <span>Usar Salón Principal (Brown 1285)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsGpsPromptOpen(false)}
+                  className="w-full py-1 text-center text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -1422,7 +1527,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
                         )}
                         {evt.location && (
                           <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(evt.location)}`}
+                            href={getMapsUrlForLocation(evt.location)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md max-w-full truncate hover:text-[#00A3E0] transition-colors ${
@@ -1720,6 +1825,85 @@ export const EventsView: React.FC<EventsViewProps> = ({
         onToast={onToast}
         currentTheme={settings.themeMode}
       />
+
+      {/* ========================================== */}
+      {/* MODAL: GPS PERMISSION & LOCATION PROMPT */}
+      {/* ========================================== */}
+      {isGpsPromptOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-xs">
+          <div className={`w-full max-w-md rounded-2xl sm:rounded-3xl border shadow-2xl p-5 sm:p-6 relative ${cardBg}`}>
+            <div className="flex items-start gap-3.5 mb-3.5">
+              <div className="w-11 h-11 rounded-2xl bg-[#00A3E0]/15 text-[#00A3E0] flex items-center justify-center shrink-0">
+                <Navigation className={`w-6 h-6 ${isLocating ? 'animate-spin' : ''}`} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h3 className="text-base sm:text-lg font-bold font-display leading-tight">
+                  Permiso de Ubicación GPS
+                </h3>
+                <p className={`text-xs ${subtextColor} mt-0.5`}>
+                  Acceso satelital para registrar el lugar del evento
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsGpsPromptOpen(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="mb-3.5 p-3.5 rounded-xl bg-blue-500/10 border border-blue-500/25 text-xs text-slate-700 dark:text-slate-300 leading-relaxed space-y-1.5">
+              <p>
+                <strong>Santuario Digital</strong> solicita permiso para acceder al sensor GPS de tu móvil o navegador y capturar las coordenadas exactas de la prédica o actividad.
+              </p>
+              <p className="text-[11px] opacity-80">
+                Al pulsar &quot;Permitir y Obtener GPS&quot;, tu teléfono mostrará la solicitud oficial del sistema para autorizar el acceso.
+              </p>
+            </div>
+
+            <div className="mb-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/25 text-xs">
+              <div className="flex items-center gap-1.5 font-bold text-amber-600 dark:text-amber-400 mb-1">
+                <MapPin className="w-3.5 h-3.5 text-[#F47B20]" />
+                <span>Ubicación Predeterminada (Salón Principal):</span>
+              </div>
+              <p className="font-medium text-slate-800 dark:text-slate-200">{DEFAULT_CHURCH_LOCATION}</p>
+              <p className="text-[10px] text-slate-500 mt-0.5">
+                Coordenadas: {DEFAULT_CHURCH_COORDINATES.lat}, {DEFAULT_CHURCH_COORDINATES.lng}
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <button
+                type="button"
+                onClick={handleConfirmGpsAccess}
+                disabled={isLocating}
+                className="w-full py-2.5 sm:py-3 px-4 rounded-xl bg-[#0B2B68] hover:bg-[#081F4B] text-[#FED65B] text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer disabled:opacity-50"
+              >
+                <Navigation className={`w-4 h-4 ${isLocating ? 'animate-spin' : ''}`} />
+                <span>{isLocating ? 'Obteniendo GPS...' : 'Permitir y Obtener GPS Actual'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleSetDefaultLocation}
+                className="w-full py-2 px-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-white/5 text-xs sm:text-sm font-semibold transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <MapPin className="w-3.5 h-3.5 text-[#F47B20]" />
+                <span>Usar Salón Principal (Brown 1285)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsGpsPromptOpen(false)}
+                className="w-full py-1 text-center text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

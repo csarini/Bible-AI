@@ -1,6 +1,6 @@
 {
   "name": "Biblia Inteligente",
     "description": "Santuario digital para lectura bíblica, mapas e itinerarios geográficos interactivos (Viajes de Pablo, Éxodo, Ministerio de Jesús), búsqueda de capítulos, notas de reflexión y devocionales.",
-  "requestFramePermissions": [],
+  "requestFramePermissions": ["geolocation"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
