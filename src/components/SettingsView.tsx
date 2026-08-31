@@ -227,11 +227,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 <button
                   key={size}
                   onClick={() => onUpdateSettings({ fontSize: size })}
-                  className={`py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    settings.fontSize === size
+                  className={`py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${settings.fontSize === size
                       ? 'bg-[#FED65B] text-[#745C00] shadow-xs'
                       : 'bg-[#F0EEE9] text-[#454652] hover:bg-[#EAE8E3]'
-                  }`}
+                    }`}
                 >
                   {size === 'small' ? 'A-' : size === 'medium' ? 'A' : size === 'large' ? 'A+' : 'A++'}
                 </button>
@@ -276,7 +275,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   badge: 'rv1858'
                 }
               ].map((tr) => {
-                const isSelected = settings.translation === tr.id || 
+                const isSelected = settings.translation === tr.id ||
                   (tr.id === 'valera' && (settings.translation === 'RVR1909' || settings.translation === 'RVR1960')) ||
                   (tr.id === 'sse' && settings.translation === 'SSE');
                 return (
@@ -287,19 +286,17 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                       onUpdateSettings({ translation: tr.id });
                       onToast(`Traducción actualizada a ${tr.translation}`);
                     }}
-                    className={`p-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-left flex flex-col justify-between ${
-                      isSelected
+                    className={`p-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-left flex flex-col justify-between ${isSelected
                         ? 'bg-[#0B2B68] text-[#FED65B] shadow-xs ring-2 ring-[#F47B20]/50 font-black'
                         : 'bg-[#F0EEE9] text-[#454652] hover:bg-[#EAE8E3]'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center justify-between w-full">
                       <span className="text-sm font-bold leading-tight">{tr.title}</span>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold ${
-                        isSelected
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold ${isSelected
                           ? 'bg-[#FED65B]/20 text-[#FED65B]'
                           : 'bg-[#C6C5D4]/40 text-[#454652]'
-                      }`}>
+                        }`}>
                         {tr.abbreviation}
                       </span>
                     </div>
@@ -336,89 +333,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </button>
           </div>
         </div>
-      </div>
-
-      {/* Data Backup & File Transfer (Download & Upload) Card */}
-      <div className="bg-[#FBF9F4] border border-[#C6C5D4] rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
-        <div className="flex items-center justify-between border-b border-[#C6C5D4]/50 pb-3">
-          <div className="flex items-center gap-2.5 text-[#000666]">
-            <HardDrive className="w-5 h-5 text-[#735C00]" />
-            <h3 className="font-display-scripture text-lg font-bold">
-              Respaldo y Transferencia de Datos
-            </h3>
-          </div>
-          <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-[#059669] bg-[#059669]/10 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-            <FileJson className="w-3 h-3" />
-            <span>Formato JSON</span>
-          </span>
-        </div>
-
-        <p className="text-xs sm:text-[13px] text-[#454652] leading-relaxed">
-          Descarga o sube tus versículos guardados, notas de prédicas, categorías personalizadas y preferencias de lectura para transferirlos entre dispositivos o mantener una copia de seguridad segura.
-        </p>
-
-        {/* Hidden File Input */}
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".json,application/json"
-          onChange={handleFileUpload}
-          className="hidden"
-          id="backup-file-upload-input"
-        />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
-          {/* Download / Export Button */}
-          <button
-            type="button"
-            id="download-backup-btn"
-            onClick={handleExportBackup}
-            className="p-4 rounded-xl border border-[#0B2B68]/20 bg-white hover:bg-[#F0EEE9] text-[#0B2B68] transition-all cursor-pointer flex flex-col items-start gap-2 text-left shadow-2xs group active:scale-[0.98]"
-          >
-            <div className="p-2 rounded-lg bg-[#0B2B68]/10 text-[#0B2B68] group-hover:bg-[#0B2B68] group-hover:text-[#FED65B] transition-colors">
-              <Download className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="text-xs sm:text-sm font-bold block">Descargar Copia de Seguridad</span>
-              <span className="text-[11px] text-[#767683] block mt-0.5">
-                Genera y guarda un archivo .json con tus datos actuales
-              </span>
-            </div>
-          </button>
-
-          {/* Upload / Import Button */}
-          <button
-            type="button"
-            id="upload-backup-btn"
-            onClick={() => fileInputRef.current?.click()}
-            className="p-4 rounded-xl border border-[#F47B20]/30 bg-white hover:bg-[#FFF7ED] text-[#1B1C19] transition-all cursor-pointer flex flex-col items-start gap-2 text-left shadow-2xs group active:scale-[0.98]"
-          >
-            <div className="p-2 rounded-lg bg-[#F47B20]/15 text-[#F47B20] group-hover:bg-[#F47B20] group-hover:text-white transition-colors">
-              <Upload className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="text-xs sm:text-sm font-bold block text-[#1B1C19] group-hover:text-[#F47B20] transition-colors">
-                Subir y Restaurar Archivo
-              </span>
-              <span className="text-[11px] text-[#767683] block mt-0.5">
-                Selecciona un archivo .json para recuperar tus datos
-              </span>
-            </div>
-          </button>
-        </div>
-
-        {importStatus && (
-          <div
-            className={`p-3 rounded-xl text-xs flex items-center gap-2 ${
-              importStatus.success
-                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                : 'bg-rose-50 text-rose-800 border border-rose-200'
-            }`}
-          >
-            <CheckCircle className="w-4 h-4 shrink-0" />
-            <span>{importStatus.message}</span>
-          </div>
-        )}
       </div>
 
       {/* Official El-Shaddai Church Branding Card */}
