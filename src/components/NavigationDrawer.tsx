@@ -13,7 +13,7 @@ import {
   Moon,
   SunMedium,
   HelpCircle,
-  Settings
+  MessageSquarePlus
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 import { ChurchLogo } from './ChurchLogo';
@@ -25,6 +25,7 @@ interface NavigationDrawerProps {
   onSelectTab: (tab: ActiveTab) => void;
   savedCount: number;
   onOpenCoachMark?: () => void;
+  onOpenFeedback?: () => void;
   onOpenSettings?: () => void;
   currentTheme?: 'light' | 'sepia' | 'dark';
   onThemeChange?: (theme: 'light' | 'sepia' | 'dark') => void;
@@ -37,6 +38,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
   onSelectTab,
   savedCount,
   onOpenCoachMark,
+  onOpenFeedback,
   onOpenSettings,
   currentTheme = 'light',
   onThemeChange
@@ -252,13 +254,13 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           </button>
         )}
 
-        {onOpenSettings && (
+        {onOpenFeedback && (
           <button
             type="button"
-            id="drawer-open-settings-btn"
+            id="drawer-open-feedback-btn"
             onClick={() => {
               onCloseMobile();
-              onOpenSettings();
+              onOpenFeedback();
             }}
             className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-2xs ${isDark
               ? 'bg-[#1C2337] border-[#252D43] text-[#F1F3F9] hover:bg-[#252D43]'
@@ -266,10 +268,11 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
                 ? 'bg-[#EFE7D8] border-[#705335]/25 text-[#2D2319] hover:bg-[#E8DEC9]'
                 : 'bg-white border-[#0B2B68]/15 text-[#0B2B68] hover:bg-[#EAE8E3]'
               }`}
-            title="Ajustes de texto, tipografía y tema"
+            title="Enviar reporte de errores o sugerencias"
+            aria-label="Errores y Sugerencias"
           >
-            <Settings className="w-3.5 h-3.5 text-[#00A3E0]" />
-            <span>Ajustes</span>
+            <MessageSquarePlus className="w-3.5 h-3.5 text-[#00A3E0]" />
+            <span className="truncate">Sugerencias</span>
           </button>
         )}
       </div>

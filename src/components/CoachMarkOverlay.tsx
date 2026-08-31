@@ -8,27 +8,39 @@ import {
   ChevronLeft,
   X,
   Compass,
+  Calendar,
+  Image as ImageIcon,
+  MessageSquarePlus,
   CheckCircle2,
-  HelpCircle
+  Volume2,
+  MapPin
 } from 'lucide-react';
 import { ChurchLogo } from './ChurchLogo';
+import { ActiveTab } from '../types';
 
 interface CoachMarkOverlayProps {
   isOpen: boolean;
   onClose: () => void;
-  onNavigateTab?: (tab: 'scripture' | 'library' | 'ai-mentor' | 'saved') => void;
+  onNavigateTab?: (tab: ActiveTab) => void;
+  currentTheme?: 'light' | 'sepia' | 'dark';
+  onOpenFeedback?: () => void;
 }
 
-export const COACHMARK_STORAGE_KEY = 'el_shaddai_coachmark_seen_v1';
+export const COACHMARK_STORAGE_KEY = 'el_shaddai_coachmark_seen_v2';
 
 export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
   isOpen,
   onClose,
-  onNavigateTab
+  onNavigateTab,
+  currentTheme = 'light',
+  onOpenFeedback
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
 
   if (!isOpen) return null;
+
+  const isDark = currentTheme === 'dark';
+  const isSepia = currentTheme === 'sepia';
 
   const steps = [
     {
@@ -37,19 +49,43 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
       icon: null, // Will use ChurchLogo
       badge: 'Inicio',
       description:
-        'Tu espacio sagrado para leer las Escrituras (RVR1909) con devoción, claridad tipográfica y funcionamiento 100% sin conexión a internet.',
-      tip: 'Los 1.189 capítulos bíblicos se guardan en tu dispositivo para que leas en cualquier lugar sin gastar datos.',
-      targetTab: 'scripture' as const
+        'Tu espacio sagrado para el estudio bíblico devocional. Incluye las versiones RVR1909, NVI y DHH con almacenamiento local para funcionar 100% sin conexión a internet.',
+      tip: 'Los 1.189 capítulos bíblicos se guardan en tu dispositivo para que leas en cualquier lugar sin gastar datos móviles.',
+      targetTab: 'home' as ActiveTab,
+      highlightColor: '#F47B20'
     },
     {
-      title: 'Biblioteca y Búsqueda Ágil',
-      subtitle: '66 Libros del Antiguo y Nuevo Testamento',
-      icon: Library,
-      badge: 'Biblioteca',
+      title: 'Mapas Bíblicos e Itinerarios',
+      subtitle: 'Geografía Sagrada & Rutas Interactivas',
+      icon: Compass,
+      badge: 'Mapas',
       description:
-        'Navega organizadamente por divisiones canónicas (Pentateuco, Históricos, Evangelios, Epístolas) o busca pasajes, personajes y palabras clave en segundos.',
-      tip: 'Puedes pulsar el icono de lupa en la barra superior o en el menú para cambiar de libro al instante.',
-      targetTab: 'library' as const
+        'Explora los viajes misioneros del Apóstol Pablo, la ruta del Éxodo por el desierto y el ministerio de Jesús en Galilea y Judea con coordenadas reales y pasajes bíblicos vinculados.',
+      tip: 'Toca cualquier hito o ciudad en el mapa para leer el pasaje bíblico exacto donde ocurrieron los hechos.',
+      targetTab: 'maps' as ActiveTab,
+      highlightColor: '#00A3E0'
+    },
+    {
+      title: 'Prédicas & Cuaderno de Eventos',
+      subtitle: 'Apuntes de Sermones & Horarios',
+      icon: Calendar,
+      badge: 'Eventos',
+      description:
+        'Registra apuntes completos de las predicaciones semanales, conferencias y cultos, enlazando versículos clave y definiendo horarios de inicio y fin.',
+      tip: 'Cuenta con geolocalización GPS satelital y ubicación predeterminada en el Salón Principal (Brown 1285, San Juan).',
+      targetTab: 'events' as ActiveTab,
+      highlightColor: '#10B981'
+    },
+    {
+      title: 'Generador y Descarga de Afiches',
+      subtitle: 'Diseño Gráfico Publicitario HD',
+      icon: ImageIcon,
+      badge: 'Afiches',
+      description:
+        'Crea automáticamente hermosos afiches con el emblema oficial de la iglesia, versículos y detalles del evento para descargar directo a tu móvil en formato PNG o compartir por WhatsApp.',
+      tip: 'En la sección de Prédicas, presiona "Presentar / Afiche" para personalizar fondos temáticos y guardarlo en tu galería.',
+      targetTab: 'events' as ActiveTab,
+      highlightColor: '#8B5CF6'
     },
     {
       title: 'Mentor Teológico e Histórico IA',
@@ -57,19 +93,32 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
       icon: Sparkles,
       badge: 'Mentor IA',
       description:
-        'Pregunta tus dudas sobre pasajes bíblicos, raíces originales en griego y hebreo bíblico (Shalom, Ágape, Qavah, El-Shaddai) y recibe explicaciones edificantes.',
-      tip: 'Disponible desde la pestaña "Mentor IA" o directamente al tocar cualquier versículo en tu lectura.',
-      targetTab: 'ai-mentor' as const
+        'Resuelve dudas teológicas, explora el contexto histórico del siglo I y descubre el significado en hebreo y griego de palabras como Shalom, Ágape, Qavah y El-Shaddai.',
+      tip: 'Disponible desde la pestaña "Mentor IA" o al tocar cualquier versículo mientras realizas tu lectura diaria.',
+      targetTab: 'ai-mentor' as ActiveTab,
+      highlightColor: '#F59E0B'
     },
     {
-      title: 'Subraya y Guarda en tu Santuario',
-      subtitle: 'Notas Personales y Colores Sagrados',
+      title: 'Subraya, Guarda y Escucha en Audio',
+      subtitle: 'Colores Sagrados & Voz Natural',
       icon: Bookmark,
-      badge: 'Devocional',
+      badge: 'Guardados',
       description:
-        'Al tocar cualquier versículo durante tu lectura, podrás resaltarlo con colores temáticos, añadir reflexiones personales y escucharlo en voz alta.',
-      tip: 'Todos tus versículos guardados quedan organizados en la sección "Versículos Guardados".',
-      targetTab: 'saved' as const
+        'Resalta versículos con categorías de fe, añade reflexiones espirituales, compártelos en hermosas tarjetas y escúchalos en voz alta con el reproductor de audio integrado.',
+      tip: 'Organiza tus versículos favoritos con etiquetas y accede a ellos rápidamente desde la pestaña "Guardados".',
+      targetTab: 'saved' as ActiveTab,
+      highlightColor: '#EC4899'
+    },
+    {
+      title: 'Buzón de Errores y Sugerencias',
+      subtitle: 'Mejora Continua y Acompañamiento',
+      icon: MessageSquarePlus,
+      badge: 'Feedback',
+      description:
+        'Desde el menú lateral puedes enviar reportes de errores técnicos o sugerencias de nuevas funciones directamente a la casilla de correo de desarrollo.',
+      tip: 'El formulario adjunta automáticamente datos de diagnóstico para solucionar cualquier inconveniente de manera inmediata.',
+      targetTab: 'home' as ActiveTab,
+      highlightColor: '#00A3E0'
     }
   ];
 
@@ -103,40 +152,83 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
       localStorage.setItem(COACHMARK_STORAGE_KEY, 'true');
     } catch {}
     if (onNavigateTab) {
-      onNavigateTab('scripture');
+      onNavigateTab('home');
     }
     onClose();
   };
 
+  // Dynamic Theme Token Classes
+  const cardBgClass = isDark
+    ? 'bg-[#182033] border-[#252D43] text-[#F1F3F9]'
+    : isSepia
+    ? 'bg-[#F4ECE1] border-[#DECDB8] text-[#2D2319]'
+    : 'bg-[#FAF8F5] border-[#0B2B68]/20 text-[#1B1C19]';
+
+  const showcaseBgClass = isDark
+    ? 'bg-[#101524] border-[#252D43]'
+    : isSepia
+    ? 'bg-[#EAE0D0] border-[#DECDB8]'
+    : 'bg-white border-[#0B2B68]/15';
+
+  const titleColor = isDark
+    ? 'text-white'
+    : isSepia
+    ? 'text-[#2D2319]'
+    : 'text-[#0B2B68]';
+
+  const bodyTextColor = isDark
+    ? 'text-[#CBD5E1]'
+    : isSepia
+    ? 'text-[#4A3828]'
+    : 'text-[#334155]';
+
+  const tipBoxClass = isDark
+    ? 'bg-[#00A3E0]/10 border-[#00A3E0]/25 text-[#93C5FD]'
+    : isSepia
+    ? 'bg-[#705335]/10 border-[#705335]/25 text-[#5C4228]'
+    : 'bg-[#00A3E0]/10 border-[#00A3E0]/25 text-[#0B2B68]';
+
   return (
     <div
       id="coachmark-overlay-backdrop"
-      className="fixed inset-0 z-60 bg-[#0B2B68]/70 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
+      className="fixed inset-0 z-60 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3.5 sm:p-6 animate-in fade-in duration-200"
       onClick={handleComplete}
     >
       <div
         id="coachmark-card"
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg bg-[#FAF8F5] rounded-3xl border border-[#0B2B68]/20 shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200"
+        className={`w-full max-w-lg rounded-3xl border shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 ${cardBgClass}`}
       >
         {/* Top Decorative Header Accent */}
-        <div className="h-2 w-full bg-gradient-to-r from-[#F25C05] via-[#00A3E0] to-[#0B2B68]" />
+        <div className="h-2 w-full bg-gradient-to-r from-[#F47B20] via-[#00A3E0] to-[#2B3990]" />
 
-        <div className="p-6 sm:p-7 flex flex-col gap-5">
+        <div className="p-5 sm:p-7 flex flex-col gap-4 sm:gap-5">
           {/* Header row with step badge and close button */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-[#0B2B68] text-[#F25C05] text-xs font-bold font-sans uppercase tracking-wider">
-                Guía de Inicio • {currentStep + 1} de {steps.length}
+              <span className="px-3 py-1 rounded-full bg-[#0B2B68] text-[#FED65B] text-xs font-bold font-sans uppercase tracking-wider">
+                Guía • {currentStep + 1} de {steps.length}
               </span>
-              <span className="text-xs font-bold text-[#0B2B68] bg-[#00A3E0]/15 px-2.5 py-1 rounded-full">
+              <span
+                className="text-xs font-bold px-2.5 py-1 rounded-full"
+                style={{
+                  backgroundColor: `${activeStep.highlightColor}20`,
+                  color: isDark ? '#FED65B' : activeStep.highlightColor
+                }}
+              >
                 {activeStep.badge}
               </span>
             </div>
 
             <button
               onClick={handleComplete}
-              className="p-1.5 rounded-full text-[#767683] hover:text-[#0B2B68] hover:bg-[#EAE8E3] transition-colors cursor-pointer"
+              className={`p-1.5 rounded-full transition-colors cursor-pointer ${
+                isDark
+                  ? 'text-slate-400 hover:text-white hover:bg-white/10'
+                  : isSepia
+                  ? 'text-[#705335] hover:text-[#2D2319] hover:bg-[#EAE0D0]'
+                  : 'text-slate-500 hover:text-[#0B2B68] hover:bg-slate-200'
+              }`}
               title="Saltar guía"
               aria-label="Cerrar guía"
             >
@@ -145,22 +237,32 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
           </div>
 
           {/* Visual Showcase Box */}
-          <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-[#0B2B68]/15 shadow-xs">
-            <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#0B2B68]/10 text-[#0B2B68] shadow-2xs shrink-0">
+          <div className={`flex items-center gap-3.5 sm:gap-4 p-3.5 sm:p-4 rounded-2xl border shadow-xs ${showcaseBgClass}`}>
+            <div
+              className={`p-3 rounded-2xl border shadow-2xs shrink-0 flex items-center justify-center ${
+                isDark ? 'bg-[#182033] border-[#252D43]' : isSepia ? 'bg-[#FAF6EF] border-[#DECDB8]' : 'bg-[#FAF8F5] border-[#0B2B68]/10'
+              }`}
+            >
               {Icon ? (
-                <Icon className="w-8 h-8 text-[#F25C05]" />
+                <Icon
+                  className="w-7 h-7 sm:w-8 sm:h-8 transition-transform duration-200 scale-105"
+                  style={{ color: activeStep.highlightColor }}
+                />
               ) : (
-                <div className="w-8 h-8 flex items-center justify-center">
-                  <ChurchLogo size="sm" variant="symbol" showText={false} showSubtitle={false} />
+                <div className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center">
+                  <ChurchLogo size="sm" variant="symbol" showText={false} showSubtitle={false} theme={currentTheme} />
                 </div>
               )}
             </div>
 
-            <div>
-              <h3 className="font-serif italic font-bold text-xl sm:text-2xl text-[#0B2B68] leading-snug">
+            <div className="min-w-0 flex-1">
+              <h3 className={`font-serif italic font-bold text-lg sm:text-xl leading-snug ${titleColor}`}>
                 {activeStep.title}
               </h3>
-              <p className="text-xs font-sans font-bold text-[#F25C05] tracking-wide">
+              <p
+                className="text-xs font-sans font-bold tracking-wide mt-0.5"
+                style={{ color: isDark ? '#FED65B' : activeStep.highlightColor }}
+              >
                 {activeStep.subtitle}
               </p>
             </div>
@@ -168,13 +270,13 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
 
           {/* Body Description */}
           <div className="space-y-3">
-            <p className="font-body-ui text-sm sm:text-[15px] text-[#1B1C19] leading-relaxed">
+            <p className={`font-body-ui text-xs sm:text-sm leading-relaxed ${bodyTextColor}`}>
               {activeStep.description}
             </p>
 
             {/* Practical Tip Box */}
-            <div className="p-3.5 bg-[#00A3E0]/10 rounded-2xl border border-[#00A3E0]/25 flex items-start gap-2.5 text-xs text-[#0B2B68]">
-              <Compass className="w-4 h-4 text-[#F25C05] shrink-0 mt-0.5" />
+            <div className={`p-3 sm:p-3.5 rounded-2xl border flex items-start gap-2.5 text-xs ${tipBoxClass}`}>
+              <Compass className="w-4 h-4 text-[#F47B20] shrink-0 mt-0.5" />
               <span className="font-medium leading-relaxed">
                 <strong>Consejo útil:</strong> {activeStep.tip}
               </span>
@@ -182,7 +284,7 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
           </div>
 
           {/* Stepper Dots Indicator */}
-          <div className="flex items-center justify-center gap-2 py-1">
+          <div className="flex items-center justify-center gap-1.5 py-1">
             {steps.map((_, idx) => (
               <button
                 key={idx}
@@ -195,7 +297,11 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
                 aria-label={`Ir al paso ${idx + 1}`}
                 className={`h-2 rounded-full transition-all cursor-pointer ${
                   idx === currentStep
-                    ? 'w-7 bg-[#F25C05]'
+                    ? 'w-6 sm:w-7 bg-[#F47B20]'
+                    : isDark
+                    ? 'w-2 bg-white/20 hover:bg-white/40'
+                    : isSepia
+                    ? 'w-2 bg-[#705335]/30 hover:bg-[#705335]/50'
                     : 'w-2 bg-[#0B2B68]/20 hover:bg-[#0B2B68]/40'
                 }`}
               />
@@ -203,12 +309,18 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
           </div>
 
           {/* Action Footer Buttons */}
-          <div className="flex items-center justify-between gap-3 pt-2 border-t border-[#0B2B68]/10">
+          <div className="flex items-center justify-between gap-3 pt-2 border-t border-inherit/20">
             {currentStep > 0 ? (
               <button
                 type="button"
                 onClick={handlePrev}
-                className="px-4 py-2.5 rounded-xl font-body-ui text-xs sm:text-sm font-semibold text-[#0B2B68] hover:bg-[#EAE8E3] transition-colors flex items-center gap-1.5 cursor-pointer"
+                className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl font-body-ui text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 cursor-pointer ${
+                  isDark
+                    ? 'text-slate-300 hover:bg-white/10'
+                    : isSepia
+                    ? 'text-[#5C452D] hover:bg-[#EAE0D0]'
+                    : 'text-[#0B2B68] hover:bg-slate-100'
+                }`}
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Anterior</span>
@@ -217,7 +329,13 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
               <button
                 type="button"
                 onClick={handleComplete}
-                className="px-4 py-2.5 rounded-xl font-body-ui text-xs sm:text-sm font-semibold text-[#767683] hover:text-[#0B2B68] hover:bg-[#EAE8E3] transition-colors cursor-pointer"
+                className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl font-body-ui text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
+                  isDark
+                    ? 'text-slate-400 hover:text-white hover:bg-white/10'
+                    : isSepia
+                    ? 'text-[#705335] hover:text-[#2D2319] hover:bg-[#EAE0D0]'
+                    : 'text-slate-500 hover:text-[#0B2B68] hover:bg-slate-100'
+                }`}
               >
                 Saltar guía
               </button>
@@ -226,12 +344,12 @@ export const CoachMarkOverlay: React.FC<CoachMarkOverlayProps> = ({
             <button
               type="button"
               onClick={handleNext}
-              className="px-5 py-2.5 rounded-xl font-body-ui text-xs sm:text-sm font-bold bg-[#0B2B68] text-white hover:bg-[#F25C05] transition-all flex items-center gap-2 cursor-pointer shadow-md"
+              className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-body-ui text-xs sm:text-sm font-bold bg-[#0B2B68] hover:bg-[#081F4B] text-[#FED65B] transition-all flex items-center gap-2 cursor-pointer shadow-md active:scale-95"
             >
               {currentStep === steps.length - 1 ? (
                 <>
-                  <CheckCircle2 className="w-4 h-4 text-[#F25C05]" />
-                  <span>¡Comenzar Lectura!</span>
+                  <CheckCircle2 className="w-4 h-4 text-[#FED65B]" />
+                  <span>¡Comenzar Experiencia!</span>
                 </>
               ) : (
                 <>

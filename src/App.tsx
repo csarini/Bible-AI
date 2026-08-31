@@ -14,6 +14,7 @@ import { EventsView } from './components/EventsView';
 import { SaveVerseModal } from './components/SaveVerseModal';
 import { ShareModal } from './components/ShareModal';
 import { QuickSettingsModal } from './components/QuickSettingsModal';
+import { FeedbackModal } from './components/FeedbackModal';
 import { OfflineDownloadManager } from './components/OfflineDownloadManager';
 import { SplashScreen } from './components/SplashScreen';
 import { CoachMarkOverlay, COACHMARK_STORAGE_KEY } from './components/CoachMarkOverlay';
@@ -28,6 +29,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('home');
   const [isDrawerOpenMobile, setIsDrawerOpenMobile] = useState(false);
   const [isQuickSettingsOpen, setIsQuickSettingsOpen] = useState(false);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [selectedMapItineraryId, setSelectedMapItineraryId] = useState<string | undefined>(undefined);
   const [selectedMapWaypointId, setSelectedMapWaypointId] = useState<string | undefined>(undefined);
 
@@ -275,6 +277,7 @@ export default function App() {
           onSelectTab={(tab) => setActiveTab(tab)}
           savedCount={bookmarks.length}
           onOpenCoachMark={() => setShowCoachMark(true)}
+          onOpenFeedback={() => setIsFeedbackOpen(true)}
           onOpenSettings={() => setIsQuickSettingsOpen(true)}
           currentTheme={settings.themeMode}
           onThemeChange={(theme) => handleUpdateSettings({ themeMode: theme })}
@@ -476,6 +479,18 @@ export default function App() {
         isOpen={showCoachMark}
         onClose={() => setShowCoachMark(false)}
         onNavigateTab={(tab) => setActiveTab(tab)}
+        currentTheme={settings.themeMode}
+        onOpenFeedback={() => setIsFeedbackOpen(true)}
+      />
+
+      {/* Pantalla Completa: Reporte de Errores y Sugerencias */}
+      <FeedbackModal
+        isOpen={isFeedbackOpen}
+        onClose={() => setIsFeedbackOpen(false)}
+        currentTheme={settings.themeMode}
+        onToast={showToast}
+        currentTranslation={settings.translation}
+        activeTabName={activeTab === 'home' ? 'Inicio' : activeTab === 'scripture' ? 'Lectura Bíblica' : activeTab === 'maps' ? 'Mapas Bíblicos' : activeTab === 'events' ? 'Prédicas & Eventos' : activeTab === 'saved' ? 'Guardados' : activeTab === 'library' ? 'Biblioteca' : 'Mentor IA'}
       />
 
       {/* Offline Bible Background Synchronizer & Indicator */}
