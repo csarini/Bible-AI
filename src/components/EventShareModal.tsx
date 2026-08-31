@@ -88,7 +88,7 @@ export const EventShareModal: React.FC<EventShareModalProps> = ({
     let text = `✨ *${event.title.toUpperCase()}* ✨\n`;
     text += `🏛️ *Categoría:* ${catName}\n`;
     text += `📅 *Fecha:* ${formattedDate}\n`;
-    
+
     if (event.startTime) {
       text += `⏰ *Horario:* ${event.startTime}${event.endTime ? ` - ${event.endTime}` : ''}\n`;
     }
@@ -457,7 +457,7 @@ export const EventShareModal: React.FC<EventShareModalProps> = ({
         a.style.display = 'none';
         document.body.appendChild(a);
         a.click();
-        
+
         setTimeout(() => {
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
@@ -563,8 +563,8 @@ export const EventShareModal: React.FC<EventShareModalProps> = ({
   const modalBg = isDark
     ? 'bg-[#141824] text-[#F1F3F9] border-[#252D43]'
     : isSepia
-    ? 'bg-[#FAF6EF] text-[#2D2319] border-[#705335]/25'
-    : 'bg-[#FFFFFF] text-[#1B1C19] border-[#0B2B68]/15';
+      ? 'bg-[#FAF6EF] text-[#2D2319] border-[#705335]/25'
+      : 'bg-[#FFFFFF] text-[#1B1C19] border-[#0B2B68]/15';
 
   return (
     <div
@@ -770,20 +770,6 @@ export const EventShareModal: React.FC<EventShareModalProps> = ({
                 </span>
               </button>
 
-              {/* Facebook Button */}
-              <button
-                onClick={handleFacebookShare}
-                className="flex flex-col items-center gap-1 group cursor-pointer"
-                title="Compartir en Facebook"
-              >
-                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#1877F2] hover:bg-[#166FE5] text-white flex items-center justify-center shadow-md group-hover:scale-105 active:scale-95 transition-all">
-                  <Facebook className="w-5 h-5 sm:w-6 sm:h-6 fill-current" />
-                </div>
-                <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300 group-hover:text-[#1877F2] transition-colors">
-                  Facebook
-                </span>
-              </button>
-
               {/* Email Button */}
               <button
                 onClick={handleEmailShare}
@@ -818,9 +804,8 @@ export const EventShareModal: React.FC<EventShareModalProps> = ({
                 className="flex flex-col items-center gap-1 group cursor-pointer"
                 title="Copiar texto de la invitación"
               >
-                <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-2xl ${
-                  copied ? 'bg-emerald-500 text-white' : 'bg-slate-700 hover:bg-slate-600 text-white'
-                } flex items-center justify-center shadow-md group-hover:scale-105 active:scale-95 transition-all`}>
+                <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-2xl ${copied ? 'bg-emerald-500 text-white' : 'bg-slate-700 hover:bg-slate-600 text-white'
+                  } flex items-center justify-center shadow-md group-hover:scale-105 active:scale-95 transition-all`}>
                   {copied ? <Check className="w-5 h-5 sm:w-6 sm:h-6 text-white" /> : <Copy className="w-5 h-5 sm:w-6 sm:h-6" />}
                 </div>
                 <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300 group-hover:text-emerald-500 transition-colors">
@@ -844,20 +829,6 @@ export const EventShareModal: React.FC<EventShareModalProps> = ({
                 </div>
                 <span className="text-[10px] font-bold text-[#0B2B68] dark:text-[#FED65B] group-hover:underline">
                   Descargar
-                </span>
-              </button>
-
-              {/* Native / More Options Button */}
-              <button
-                onClick={handleNativeShare}
-                className="flex flex-col items-center gap-1 group cursor-pointer"
-                title="Más opciones de compartir del sistema"
-              >
-                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center shadow-md group-hover:scale-105 active:scale-95 transition-all">
-                  <Share2 className="w-5 h-5 sm:w-6 sm:h-6" />
-                </div>
-                <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300 transition-colors">
-                  Más
                 </span>
               </button>
             </div>
