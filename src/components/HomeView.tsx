@@ -149,14 +149,14 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const cardBgClass = isDark
     ? 'bg-[#1C2337] border-[#2E3B5B] text-[#F1F3F9]'
     : isSepia
-    ? 'bg-[#F4EFE6] border-[#705335]/20 text-[#2D2319]'
-    : 'bg-white border-[#0B2B68]/15 text-[#1B1C19]';
+      ? 'bg-[#F4EFE6] border-[#705335]/20 text-[#2D2319]'
+      : 'bg-white border-[#0B2B68]/15 text-[#1B1C19]';
 
   const subCardBgClass = isDark
     ? 'bg-[#131722] border-[#252D43]'
     : isSepia
-    ? 'bg-[#EAE0D0] border-[#705335]/15'
-    : 'bg-[#FAF8F5] border-[#0B2B68]/10';
+      ? 'bg-[#EAE0D0] border-[#705335]/15'
+      : 'bg-[#FAF8F5] border-[#0B2B68]/10';
 
   return (
     <div
@@ -187,11 +187,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   setSelectedTopic(topic.id);
                   handleRandomizeVerse(topic.id);
                 }}
-                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs font-sans font-bold transition-all whitespace-nowrap cursor-pointer shrink-0 ${
-                  isSelected
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs font-sans font-bold transition-all whitespace-nowrap cursor-pointer shrink-0 ${isSelected
                     ? 'bg-[#0B2B68] text-white shadow-2xs'
                     : 'bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-inherit border border-inherit/20'
-                }`}
+                  }`}
               >
                 <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-[#FED65B]' : 'text-[#F47B20]'}`} />
                 <span>{topic.label}</span>
@@ -227,31 +226,28 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <div className={`flex items-center p-1 rounded-xl border ${subCardBgClass}`}>
               <button
                 onClick={() => setActiveSubTab('verse')}
-                className={`px-3 py-1 rounded-lg text-xs font-sans font-bold transition-all cursor-pointer ${
-                  activeSubTab === 'verse'
+                className={`px-3 py-1 rounded-lg text-xs font-sans font-bold transition-all cursor-pointer ${activeSubTab === 'verse'
                     ? 'bg-[#0B2B68] text-white shadow-2xs'
                     : 'opacity-70 hover:opacity-100'
-                }`}
+                  }`}
               >
                 Versículo
               </button>
               <button
                 onClick={() => setActiveSubTab('reflection')}
-                className={`px-3 py-1 rounded-lg text-xs font-sans font-bold transition-all cursor-pointer ${
-                  activeSubTab === 'reflection'
+                className={`px-3 py-1 rounded-lg text-xs font-sans font-bold transition-all cursor-pointer ${activeSubTab === 'reflection'
                     ? 'bg-[#0B2B68] text-white shadow-2xs'
                     : 'opacity-70 hover:opacity-100'
-                }`}
+                  }`}
               >
                 Reflexión
               </button>
               <button
                 onClick={() => setActiveSubTab('prayer')}
-                className={`px-3 py-1 rounded-lg text-xs font-sans font-bold transition-all cursor-pointer ${
-                  activeSubTab === 'prayer'
+                className={`px-3 py-1 rounded-lg text-xs font-sans font-bold transition-all cursor-pointer ${activeSubTab === 'prayer'
                     ? 'bg-[#0B2B68] text-white shadow-2xs'
                     : 'opacity-70 hover:opacity-100'
-                }`}
+                  }`}
               >
                 Oración
               </button>
@@ -343,11 +339,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <button
               type="button"
               onClick={handleToggleAudio}
-              className={`p-2 sm:px-3 sm:py-2 rounded-2xl border transition-all flex items-center gap-1.5 cursor-pointer text-xs font-bold ${
-                isPlayingAudio
+              className={`p-2 sm:px-3 sm:py-2 rounded-2xl border transition-all flex items-center gap-1.5 cursor-pointer text-xs font-bold ${isPlayingAudio
                   ? 'bg-[#0B2B68] text-[#F47B20] border-[#F47B20] animate-pulse'
                   : 'bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border-inherit/30 text-inherit'
-              }`}
+                }`}
               title={isPlayingAudio ? 'Detener lectura de voz' : 'Escuchar versículo en voz alta'}
               aria-label="Audio del versículo"
             >
@@ -592,33 +587,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
         </div>
 
-        {/* Card 7: Devotional & Mobile Widgets */}
-        <div
-          onClick={() => onNavigateTab('widgets')}
-          className={`p-4 sm:p-5 rounded-3xl border shadow-xs transition-all hover:shadow-md cursor-pointer group flex flex-col justify-between ${cardBgClass}`}
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-[#F47B20] block mb-1">
-                Devocional Diario
-              </span>
-              <h3 className="font-serif font-bold text-lg text-inherit group-hover:text-[#F47B20] transition-colors">
-                Widgets Móviles
-              </h3>
-              <p className="text-xs opacity-75 font-sans mt-1">
-                Instala y visualiza el widget con versículo diario en tu pantalla bloqueada.
-              </p>
-            </div>
-            <div className="w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/5 text-inherit flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform border border-inherit/30">
-              <Sun className="w-5 h-5 text-[#F47B20]" />
-            </div>
-          </div>
-
-          <div className="mt-4 pt-3 border-t border-inherit/20 flex items-center justify-between text-xs font-bold text-[#F47B20]">
-            <span>Ver widgets</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </div>
       </section>
     </div>
   );
