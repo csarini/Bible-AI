@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -52,6 +53,28 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
+  List<String> _parseLinkedVerses(String raw) {
+    if (raw.trim().isEmpty) return [];
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is List) {
+        return decoded.map((e) => e.toString()).toList();
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  Map<String, dynamic> _parseMetadata(String? raw) {
+    if (raw == null || raw.trim().isEmpty) return {};
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+    } catch (_) {}
+    return {'location': raw};
+  }
+
   @override
   Widget build(BuildContext context) {
     final bgColor =
@@ -60,6 +83,13 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
         _isHighContrastDark ? const Color(0xFFF1F3F9) : const Color(0xFF1B1C19);
     final subColor =
         _isHighContrastDark ? const Color(0xFF9E9EA7) : const Color(0xFF705335);
+
+    final meta = _parseMetadata(widget.event.foodServiceDetails);
+    final verses = _parseLinkedVerses(widget.event.linkedVersesJson);
+    final location = meta['location'] as String?;
+    final startTime = meta['startTime'] as String?;
+    final endTime = meta['endTime'] as String?;
+    final tags = (meta['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [];
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -149,7 +179,7 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
           IconButton(
             icon: Icon(LucideIcons.plus, size: 16, color: textColor),
             onPressed: () {
-              if (_fontSize < 32) {
+              if (_fontSize < 36) {
                 setState(() => _fontSize += 2);
               }
             },
@@ -176,36 +206,121 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
             const SizedBox(height: 12),
 
             // Metadata Row
-            Row(
+            Wrap(
+              spacing: 16,
+              runSpacing: 8,
               children: [
-                Icon(LucideIcons.calendar, size: 14, color: subColor),
-                const SizedBox(width: 6),
-                Text(
-                  widget.event.eventDate.toLocal().toString().split(' ')[0],
-                  style: GoogleFonts.inter(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: subColor,
-                  ),
-                ),
-                if (widget.event.foodServiceDetails != null) ...[
-                  const SizedBox(width: 16),
-                  Icon(LucideIcons.utensils,
-                      size: 14, color: SanctuaryColors.sunOrange),
-                  const SizedBox(width: 4),
-                  Text(
-                    'Cafetería activa',
-                    style: GoogleFonts.inter(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: SanctuaryColors.sunOrange,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(LucideIcons.calendar, size: 14, color: subColor),
+                    const SizedBox(width: 6),
+                    Text(
+                      widget.event.eventDate.toLocal().toString().split(' ')[0],
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: subColor,
+                      ),
                     ),
+                  ],
+                ),
+                if (startTime != null && startTime.isNotEmpty)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(LucideIcons.clock,
+                          size: 14, color: SanctuaryColors.electricCyan),
+                      const SizedBox(width: 6),
+                      Text(
+                        endTime != null && endTime.isNotEmpty
+                            ? '$startTime - $endTime'
+                            : startTime,
+                        style: GoogleFonts.inter(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: SanctuaryColors.electricCyan,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                if (location != null && location.isNotEmpty)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(LucideIcons.mapPin,
+                          size: 14, color: SanctuaryColors.sunOrange),
+                      const SizedBox(width: 6),
+                      Text(
+                        location,
+                        style: GoogleFonts.inter(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: subColor,
+                        ),
+                      ),
+                    ],
+                  ),
               ],
             ),
 
-            const SizedBox(height: 24),
+            // Linked Verses Chips
+            if (verses.isNotEmpty) ...[
+              const SizedBox(height: 14),
+              Wrap(
+                spacing: 8,
+                runSpacing: 6,
+                children: verses.map((v) {
+                  return Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: SanctuaryColors.waveNavy.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: SanctuaryColors.electricCyan.withOpacity(0.4),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(LucideIcons.bookOpen,
+                            size: 13, color: SanctuaryColors.electricCyan),
+                        const SizedBox(width: 6),
+                        Text(
+                          v,
+                          style: GoogleFonts.inter(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w700,
+                            color: SanctuaryColors.electricCyan,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+
+            // Tags
+            if (tags.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                children: tags.map((t) {
+                  return Text(
+                    '#$t',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: SanctuaryColors.sunOrange,
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+
+            const SizedBox(height: 20),
             Divider(color: subColor.withOpacity(0.3)),
             const SizedBox(height: 16),
 
