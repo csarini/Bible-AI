@@ -123,6 +123,12 @@ class AppDatabase extends _$AppDatabase {
   // ---------------------------------------------------------------------------
   // BOOKMARKS & NOTES CRUD
   // ---------------------------------------------------------------------------
+  Future<List<LocalBookmarkEntry>> getAllBookmarks() {
+    return (select(localBookmarks)
+          ..orderBy([(t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)]))
+        .get();
+  }
+
   Stream<List<LocalBookmarkEntry>> watchAllBookmarks() {
     return (select(localBookmarks)
           ..orderBy([(t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)]))

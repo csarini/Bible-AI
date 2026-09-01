@@ -12,6 +12,9 @@ class BibleBookInfo {
     required this.totalChapters,
     required this.isNewTestament,
   });
+
+  /// Short abbreviation (e.g. 'Gén', 'Éxo', 'Mt', 'Jn')
+  String get abbreviation => id;
 }
 
 const List<BibleBookInfo> kBibleBooks = [
