@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
@@ -104,8 +105,8 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                     verse: bookmark.verse,
                     verseText: bookmark.verseText,
                     colorHex: selectedHex,
-                    customTitle: titleController.text.trim().isEmpty ? null : titleController.text.trim(),
-                    personalNote: noteController.text.trim().isEmpty ? null : noteController.text.trim(),
+                    customTitle: drift.Value(titleController.text.trim().isEmpty ? null : titleController.text.trim()),
+                    personalNote: drift.Value(noteController.text.trim().isEmpty ? null : noteController.text.trim()),
                   ),
                 );
                 Navigator.pop(dialogCtx);

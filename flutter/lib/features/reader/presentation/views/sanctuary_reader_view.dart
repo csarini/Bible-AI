@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/constants/bible_books.dart';
 import '../../../../core/storage/app_database.dart';
@@ -325,8 +326,8 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
                     verse: verse.number,
                     verseText: verse.text,
                     colorHex: selectedHex,
-                    customTitle: titleController.text.trim().isEmpty ? null : titleController.text.trim(),
-                    personalNote: noteController.text.trim().isEmpty ? null : noteController.text.trim(),
+                    customTitle: drift.Value(titleController.text.trim().isEmpty ? null : titleController.text.trim()),
+                    personalNote: drift.Value(noteController.text.trim().isEmpty ? null : noteController.text.trim()),
                   ),
                 );
                 Navigator.pop(dialogCtx);
