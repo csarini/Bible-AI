@@ -189,12 +189,13 @@ class _SanctuarySavedVersesViewState extends ConsumerState<SanctuarySavedVersesV
                 ...SanctuaryColors.pastelPalette.map((col) {
                   final hex = SanctuaryColors.colorToHex(col);
                   final isSelected = _selectedColorFilter == hex;
+                  final categoryLabel = SanctuaryColors.getHighlightLabel(hex);
 
                   return Padding(
                     padding: const EdgeInsets.only(right: 6),
                     child: FilterChip(
                       avatar: CircleAvatar(backgroundColor: col, radius: 8),
-                      label: Text(hex),
+                      label: Text(categoryLabel),
                       selected: isSelected,
                       onSelected: (selected) {
                         setState(() {

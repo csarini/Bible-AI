@@ -69,6 +69,14 @@
   background-color: #D3E7FF;
 }
 
+.bg-highlight-pink {
+  background-color: #FFD6E7;
+}
+
+.bg-highlight-purple {
+  background-color: #E8DDFF;
+}
+
 .border-highlight-yellow {
   border-color: #FFF2B2;
 }
@@ -79,6 +87,14 @@
 
 .border-highlight-blue {
   border-color: #D3E7FF;
+}
+
+.border-highlight-pink {
+  border-color: #FFD6E7;
+}
+
+.border-highlight-purple {
+  border-color: #E8DDFF;
 }
 
 /* Custom scrollbar for scholarly feel */

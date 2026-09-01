@@ -50,7 +50,7 @@ const List<BiblicalRoute> kBiblicalRoutes = [
     scriptureReference: 'Hechos 13 - 14',
     summary:
         'Pablo y Bernabé parten de Antioquía de Siria, viajan a Chipre y recorren Galacia del Sur (Perge, Antioquía de Pisidia, Iconio, Listra y Derbe), plantando las primeras iglesias gentiles.',
-    themeColor: Color(0xFF0B2B68),
+    themeColor: SanctuaryColors.waveNavy,
     waypoints: [
       BiblicalWaypoint(
         name: 'Antioquía de Siria',
@@ -106,7 +106,7 @@ const List<BiblicalRoute> kBiblicalRoutes = [
     scriptureReference: 'Hechos 15:36 - 18:22',
     summary:
         'Acompañado por Silas y luego Timoteo, Pablo cruza a Europa respondiendo al llamado del varón macedonio, fundando congregaciones en Filipos, Tesalónica, Berea, Atenas y Corinto.',
-    themeColor: Color(0xFFF47B20),
+    themeColor: SanctuaryColors.sunOrange,
     waypoints: [
       BiblicalWaypoint(
         name: 'Troas',
@@ -162,7 +162,7 @@ const List<BiblicalRoute> kBiblicalRoutes = [
     scriptureReference: 'Éxodo 12 - 19 / Números',
     summary:
         'La liberación del pueblo de Israel de la esclavitud en Egipto, el milagroso cruce del Mar Rojo y la travesía por el desierto hasta el Monte Sinaí donde recibieron la Ley y el Tabernáculo.',
-    themeColor: Color(0xFF00A3E0),
+    themeColor: SanctuaryColors.cyanAccent,
     waypoints: [
       BiblicalWaypoint(
         name: 'Ramsés (Gosén)',
@@ -209,7 +209,7 @@ const List<BiblicalRoute> kBiblicalRoutes = [
     scriptureReference: 'Evangelios Sinópticos & Juan',
     summary:
         'El ministerio itinerante de Nuestro Señor Jesucristo: milagros en el Mar de Galilea, sermones en los montes y Su entrada triunfal y sacrificio redentor en Jerusalén.',
-    themeColor: Color(0xFF705335),
+    themeColor: SanctuaryColors.brandPurple,
     waypoints: [
       BiblicalWaypoint(
         name: 'Nazaret',

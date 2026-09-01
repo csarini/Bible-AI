@@ -78,11 +78,11 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
   @override
   Widget build(BuildContext context) {
     final bgColor =
-        _isHighContrastDark ? const Color(0xFF0F1117) : const Color(0xFFFAF8F5);
+        _isHighContrastDark ? SanctuaryColors.darkBackground : SanctuaryColors.lightBackground;
     final textColor =
-        _isHighContrastDark ? const Color(0xFFF1F3F9) : const Color(0xFF1B1C19);
+        _isHighContrastDark ? SanctuaryColors.darkTextPrimary : SanctuaryColors.lightTextPrimary;
     final subColor =
-        _isHighContrastDark ? const Color(0xFF9E9EA7) : const Color(0xFF705335);
+        _isHighContrastDark ? SanctuaryColors.darkTextSecondary : SanctuaryColors.lightTextSecondary;
 
     final meta = _parseMetadata(widget.event.foodServiceDetails);
     final verses = _parseLinkedVerses(widget.event.linkedVersesJson);

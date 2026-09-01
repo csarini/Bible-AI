@@ -254,7 +254,7 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: msg.isUser
-                          ? SanctuaryColors.waveNavy
+                          ? theme.colorScheme.primary
                           : theme.cardTheme.color,
                       borderRadius: BorderRadius.circular(18).copyWith(
                         bottomRight:

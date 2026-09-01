@@ -696,6 +696,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
   }
 
   Widget _buildHighlightToolbar(bool isDark) {
+    final surfaceColor = Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface;
     return Positioned(
       bottom: 24,
       left: 16,
@@ -703,7 +704,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
       child: Material(
         elevation: 8,
         borderRadius: BorderRadius.circular(20),
-        color: isDark ? SanctuaryColors.darkSurfaceElevated : Colors.white,
+        color: surfaceColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
@@ -713,33 +714,37 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
               Row(
                 children: SanctuaryColors.pastelPalette.map((color) {
                   final hex = SanctuaryColors.colorToHex(color);
-                  return GestureDetector(
-                    onTap: () async {
-                      final id = '${_selectedVerse!.bookId}_${_selectedVerse!.chapter}_${_selectedVerse!.number}';
-                      await widget.database.insertOrUpdateBookmark(
-                        LocalBookmarksCompanion.insert(
-                          id: id,
-                          bookId: _selectedVerse!.bookId,
-                          bookName: _selectedVerse!.bookName,
-                          chapter: _selectedVerse!.chapter,
-                          verse: _selectedVerse!.number,
-                          verseText: _selectedVerse!.text,
-                          colorHex: hex,
+                  final label = SanctuaryColors.getHighlightLabel(hex);
+                  return Tooltip(
+                    message: label,
+                    child: GestureDetector(
+                      onTap: () async {
+                        final id = '${_selectedVerse!.bookId}_${_selectedVerse!.chapter}_${_selectedVerse!.number}';
+                        await widget.database.insertOrUpdateBookmark(
+                          LocalBookmarksCompanion.insert(
+                            id: id,
+                            bookId: _selectedVerse!.bookId,
+                            bookName: _selectedVerse!.bookName,
+                            chapter: _selectedVerse!.chapter,
+                            verse: _selectedVerse!.number,
+                            verseText: _selectedVerse!.text,
+                            colorHex: hex,
+                          ),
+                        );
+                        setState(() {
+                          _selectedVerse = null;
+                          _selectedBookmark = null;
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.black26),
                         ),
-                      );
-                      setState(() {
-                        _selectedVerse = null;
-                        _selectedBookmark = null;
-                      });
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                      width: 28,
-                      height: 28,
-                      decoration: BoxDecoration(
-                        color: color,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.black26),
                       ),
                     ),
                   );

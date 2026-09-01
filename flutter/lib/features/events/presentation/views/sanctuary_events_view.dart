@@ -21,15 +21,15 @@ const List<Map<String, dynamic>> kCategoryIconOptions = [
   {'key': 'FileText', 'label': 'Apuntes', 'icon': LucideIcons.fileText},
 ];
 
-/// Institutional color palette matching React's PALETTE_COLORS
+/// Institutional color palette matching El-Shaddai specs
 const List<String> kCategoryColorOptions = [
-  '#0B2B68', // Deep Navy
-  '#F47B20', // Warm Amber
-  '#00A3E0', // Cyan Blue
-  '#10B981', // Emerald
-  '#7C3AED', // Purple
+  '#0B2B68', // Wave Navy
+  '#F25C05', // Sun Orange
+  '#00A3E0', // Cyan Accent
+  '#FED65B', // Amber Gold
+  '#4E53A4', // Brand Purple
+  '#10B981', // Emerald Green
   '#DC2626', // Crimson
-  '#D97706', // Gold
   '#DB2777', // Rose
 ];
 
