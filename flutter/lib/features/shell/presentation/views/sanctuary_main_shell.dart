@@ -41,6 +41,7 @@ class SanctuaryMainShell extends ConsumerWidget {
     final List<Widget> views = [
       // 0: Home
       SanctuaryHomeView(
+        database: database,
         onNavigateTab: (index) {
           ref.read(selectedTabProvider.notifier).state = index;
         },
