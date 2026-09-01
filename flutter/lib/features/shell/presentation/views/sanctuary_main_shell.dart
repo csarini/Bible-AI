@@ -298,26 +298,46 @@ class SanctuaryMainShell extends ConsumerWidget {
                     badge: 'Modo Prueba',
                     badgeColor: SanctuaryColors.emeraldGreen,
                   ),
-                  _buildDrawerItem(
-                    ref,
-                    context,
-                    index: 7,
-                    icon: LucideIcons.slidersHorizontal,
-                    title: 'Ajustes',
-                  ),
                 ],
               ),
             ),
 
-            // Drawer Footer Quick Actions
+            // Drawer Footer Quick Actions (Sugerencias & Ayuda)
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 border: Border(top: BorderSide(color: Theme.of(context).colorScheme.outline.withOpacity(0.3))),
               ),
-              child: Row(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        FeedbackDialog.show(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: SanctuaryColors.sunOrange,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        elevation: 0,
+                      ),
+                      icon: const Icon(LucideIcons.messageSquarePlus, size: 16),
+                      label: Text(
+                        'Sugerencias y Errores',
+                        style: GoogleFonts.inter(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  SizedBox(
+                    width: double.infinity,
                     child: OutlinedButton.icon(
                       onPressed: () {
                         Navigator.pop(context);
@@ -328,22 +348,10 @@ class SanctuaryMainShell extends ConsumerWidget {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                       icon: const Icon(LucideIcons.helpCircle, size: 15),
-                      label: const Text('Guía Rápida', style: TextStyle(fontSize: 11)),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        FeedbackDialog.show(context);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      label: Text(
+                        'Guía Rápida Interactiva',
+                        style: GoogleFonts.inter(fontSize: 11.5, fontWeight: FontWeight.w600),
                       ),
-                      icon: const Icon(LucideIcons.messageSquare, size: 15),
-                      label: const Text('Sugerencias', style: TextStyle(fontSize: 11)),
                     ),
                   ),
                 ],
