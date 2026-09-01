@@ -113,8 +113,7 @@ class _SanctuarySearchLibraryViewState
       return matchesQuery;
     }).toList();
 
-    final oldTestamentCount =
-        allBooks.where((b) => !b.isNewTestament).length;
+    final oldTestamentCount = allBooks.where((b) => !b.isNewTestament).length;
     final newTestamentCount = allBooks.where((b) => b.isNewTestament).length;
 
     return Scaffold(
@@ -275,14 +274,14 @@ class _SanctuarySearchLibraryViewState
                           avatar: const Icon(LucideIcons.book,
                               size: 13, color: SanctuaryColors.sunOrange),
                           label: Text(term,
-                              style:
-                                  GoogleFonts.inter(fontSize: 11.5)),
+                              style: GoogleFonts.inter(fontSize: 11.5)),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           onPressed: () {
                             _searchController.text = term;
                             setState(() {});
-                            final refMatch = _parseDirectReference(term);
+                            final refMatch =
+                                _parseDirectReference(term, allBooks);
                             if (refMatch != null) {
                               widget.onSelectPassage(refMatch.book.id,
                                   refMatch.chapter, refMatch.verse);
