@@ -11,6 +11,7 @@ import '../../../../shared/services/share_service.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
 import '../../../../shared/widgets/sanctuary_church_logo.dart';
 import '../../../saved_verses/presentation/views/sanctuary_saved_verses_view.dart';
+import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 import '../../data/services/getbible_service.dart';
 import '../../domain/entities/verse_entity.dart';
 
@@ -394,15 +395,10 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 12.0),
-          child: SanctuaryChurchLogo(
-            size: 28,
-            variant: LogoVariant.symbol,
-            showText: false,
-            showSubtitle: false,
-            isDark: isDark,
-          ),
+        leading: IconButton(
+          icon: const Icon(LucideIcons.menu),
+          tooltip: 'Menú Lateral',
+          onPressed: openSanctuaryDrawer,
         ),
         title: InkWell(
           onTap: _openBookChapterPicker,

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
+import '../../shell/presentation/views/sanctuary_main_shell.dart';
 import 'pulpit_presentation_view.dart';
 
 class SanctuaryEventsView extends StatefulWidget {
@@ -24,6 +25,11 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(LucideIcons.menu),
+          tooltip: 'Menú Lateral',
+          onPressed: openSanctuaryDrawer,
+        ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

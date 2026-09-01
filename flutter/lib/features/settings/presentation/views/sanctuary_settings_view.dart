@@ -11,6 +11,7 @@ import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/widgets/coachmark_guide_dialog.dart';
 import '../../../../shared/widgets/feedback_dialog.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
+import '../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class SanctuarySettingsView extends ConsumerWidget {
   final AppDatabase database;
@@ -207,6 +208,11 @@ class SanctuarySettingsView extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(LucideIcons.menu),
+          tooltip: 'Menú Lateral',
+          onPressed: openSanctuaryDrawer,
+        ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

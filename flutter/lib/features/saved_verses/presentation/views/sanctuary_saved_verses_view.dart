@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/services/share_service.dart';
+import '../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class SanctuarySavedVersesView extends StatefulWidget {
   final AppDatabase database;
@@ -123,6 +124,13 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Navigator.canPop(context)
+            ? const BackButton()
+            : IconButton(
+                icon: const Icon(LucideIcons.menu),
+                tooltip: 'Menú Lateral',
+                onPressed: openSanctuaryDrawer,
+              ),
         title: const Text('Santuario de Guardados'),
       ),
       body: Column(

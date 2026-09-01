@@ -6,6 +6,7 @@ import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/widgets/coachmark_guide_dialog.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
 import '../../../../shared/widgets/sanctuary_church_logo.dart';
+import '../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class DevotionalTopic {
   final String id;
@@ -99,12 +100,10 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Builder(
-          builder: (ctx) => IconButton(
-            icon: const Icon(LucideIcons.menu),
-            tooltip: 'Menú Lateral',
-            onPressed: () => Scaffold.of(ctx).openDrawer(),
-          ),
+        leading: IconButton(
+          icon: const Icon(LucideIcons.menu),
+          tooltip: 'Menú Lateral',
+          onPressed: openSanctuaryDrawer,
         ),
         title: Row(
           mainAxisSize: MainAxisSize.min,

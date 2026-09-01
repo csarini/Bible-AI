@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/constants/bible_books.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
+import '../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class SanctuarySearchLibraryView extends ConsumerStatefulWidget {
   final Function(String bookId, int chapter, int? verse) onSelectPassage;
@@ -103,6 +104,11 @@ class _SanctuarySearchLibraryViewState extends ConsumerState<SanctuarySearchLibr
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(LucideIcons.menu),
+          tooltip: 'Menú Lateral',
+          onPressed: openSanctuaryDrawer,
+        ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

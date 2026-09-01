@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
+import '../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class BiblicalRoute {
   final String id;
@@ -247,6 +248,11 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(LucideIcons.menu),
+          tooltip: 'Menú Lateral',
+          onPressed: openSanctuaryDrawer,
+        ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

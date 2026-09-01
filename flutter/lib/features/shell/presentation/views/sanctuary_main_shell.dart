@@ -20,6 +20,12 @@ import '../../../settings/presentation/views/sanctuary_settings_view.dart';
 
 final selectedTabProvider = StateProvider<int>((ref) => 0);
 
+final GlobalKey<ScaffoldState> sanctuaryScaffoldKey = GlobalKey<ScaffoldState>();
+
+void openSanctuaryDrawer() {
+  sanctuaryScaffoldKey.currentState?.openDrawer();
+}
+
 class SanctuaryMainShell extends ConsumerWidget {
   final AppDatabase database;
 
@@ -72,6 +78,7 @@ class SanctuaryMainShell extends ConsumerWidget {
     else bottomNavIndex = 0; // Default when viewing sub-tabs
 
     return Scaffold(
+      key: sanctuaryScaffoldKey,
       body: IndexedStack(
         index: currentTab.clamp(0, views.length - 1),
         children: views,
@@ -404,8 +411,8 @@ class SanctuaryMainShell extends ConsumerWidget {
           : null,
       selected: isSelected,
       onTap: () {
-        ref.read(selectedTabProvider.notifier).state = index;
         Navigator.of(context).pop(); // Close drawer
+        ref.read(selectedTabProvider.notifier).state = index;
       },
     );
   }
