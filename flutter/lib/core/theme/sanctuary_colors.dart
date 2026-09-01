@@ -14,7 +14,7 @@ class SanctuaryColors {
   static const Color lightBackground = Color(0xFFF9F6F0);
   static const Color lightSurface = Color(0xFFFFFFFF);
   static const Color lightSurfaceElevated = Color(0xFFF2ECE1);
-  static const Color lightBorder = Color(0xFFE4DC CE);
+  static const Color lightBorder = Color(0xFFE4DCCE);
   static const Color lightTextPrimary = Color(0xFF1E2028);
   static const Color lightTextSecondary = Color(0xFF6A6D7D);
 

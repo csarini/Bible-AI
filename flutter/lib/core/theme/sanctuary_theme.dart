@@ -30,7 +30,7 @@ class SanctuaryTheme {
           fontWeight: FontWeight.w700,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: SanctuaryColors.lightSurface,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -70,7 +70,7 @@ class SanctuaryTheme {
           fontWeight: FontWeight.w700,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: SanctuaryColors.sepiaSurface,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -109,7 +109,7 @@ class SanctuaryTheme {
           fontWeight: FontWeight.w700,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: SanctuaryColors.darkSurface,
         elevation: 0,
         shape: RoundedRectangleBorder(
