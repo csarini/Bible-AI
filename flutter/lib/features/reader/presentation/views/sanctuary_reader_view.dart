@@ -517,7 +517,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                         ? _buildErrorWidget()
                         : _buildVersesList(),
               ),
-              _buildChapterNavigationControls(),
+              _buildChapterNavigationControls(allBooks),
             ],
           ),
           if (_selectedVerse != null) _buildHighlightToolbar(isDark),
@@ -795,7 +795,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
     );
   }
 
-  Widget _buildChapterNavigationControls() {
+  Widget _buildChapterNavigationControls(List<BibleBookInfo> allBooks) {
     final theme = Theme.of(context);
     final hasPrev = _currentChapter > 1;
     final hasNext = _currentChapter < _currentBook.totalChapters;
@@ -831,7 +831,6 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
           // Central Quick Book & Chapter Selector
           InkWell(
             onTap: () {
-              final allBooks = ref.read(appAllBooksProvider);
               _openBookChapterPicker(allBooks);
             },
             borderRadius: BorderRadius.circular(20),
