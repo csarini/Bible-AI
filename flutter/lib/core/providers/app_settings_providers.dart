@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../constants/bible_books.dart';
 import '../storage/app_database.dart';
+import '../../features/reader/data/services/offline_bible_sync_service.dart';
 
 enum AppVisualTheme {
   light,
