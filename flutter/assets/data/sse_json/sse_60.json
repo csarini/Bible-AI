@@ -1,0 +1,672 @@
+{
+  "translation": "Sagradas Escrituras (1569)",
+  "abbreviation": "sse",
+  "lang": "es",
+  "language": "Spanish",
+  "direction": "LTR",
+  "encoding": "UTF-8",
+  "nr": 60,
+  "name": "1 Pedro",
+  "chapters": [
+    {
+      "chapter": 1,
+      "name": "1 Pedro 1",
+      "verses": [
+        {
+          "chapter": 1,
+          "verse": 1,
+          "name": "1 Pedro 1:1",
+          "text": "Pedro, ap\u00f3stol de Jesu Cristo, a los extranjeros que est\u00e1n esparcidos en Ponto, en Galacia, en Capadocia, en Asia, y en Bitinia: "
+        },
+        {
+          "chapter": 1,
+          "verse": 2,
+          "name": "1 Pedro 1:2",
+          "text": "Elegidos seg\u00fan la presciencia de Dios el Padre, en santificaci\u00f3n del Esp\u00edritu, para obedecer, y ser rociados con la sangre de Jesu Cristo: Gracia y paz os sea multiplicada. "
+        },
+        {
+          "chapter": 1,
+          "verse": 3,
+          "name": "1 Pedro 1:3",
+          "text": "Alabado sea el Dios y Padre de nuestro Se\u00f1or Jesu Cristo, el cual seg\u00fan su grande misericordia nos ha reengendrado en esperanza viva, por la resurrecci\u00f3n de Jesu Cristo de entre los muertos; "
+        },
+        {
+          "chapter": 1,
+          "verse": 4,
+          "name": "1 Pedro 1:4",
+          "text": "Para la herencia incorruptible, y que no puede contaminarse, ni marchitarse, conservada en los cielos para vosotros, "
+        },
+        {
+          "chapter": 1,
+          "verse": 5,
+          "name": "1 Pedro 1:5",
+          "text": "Que sois guardados en la virtud de Dios por medio de la fe, para alcanzar la salvaci\u00f3n que est\u00e1 aparejada para ser manifestada en el postrimero tiempo. "
+        },
+        {
+          "chapter": 1,
+          "verse": 6,
+          "name": "1 Pedro 1:6",
+          "text": "En lo cual vosotros os regocij\u00e1is grandemente, estando al presente un poco de tiempo, si es necesario, afligidos en diversas tentaciones. "
+        },
+        {
+          "chapter": 1,
+          "verse": 7,
+          "name": "1 Pedro 1:7",
+          "text": "Para que la prueba de vuestra fe, muy m\u00e1s preciosa que el oro, (el cual perece, mas empero es probado con fuego,) sea hallada en alabanza, y gloria, y honra, cuando Jesu Cristo fuere manifestado: "
+        },
+        {
+          "chapter": 1,
+          "verse": 8,
+          "name": "1 Pedro 1:8",
+          "text": "Al cual no habiendo visto, le am\u00e1is: en el cual creyendo, aunque al presente no le veais, os alegr\u00e1is con gozo inefable y lleno de gloria; "
+        },
+        {
+          "chapter": 1,
+          "verse": 9,
+          "name": "1 Pedro 1:9",
+          "text": "Recibiendo el fin de vuestra fe, que es, la salud de vuestras almas. "
+        },
+        {
+          "chapter": 1,
+          "verse": 10,
+          "name": "1 Pedro 1:10",
+          "text": "De la cual salud los profetas (que profetizaron de la gracia que hab\u00eda de venir en vosotros) han inquirido, y diligentemente buscado: "
+        },
+        {
+          "chapter": 1,
+          "verse": 11,
+          "name": "1 Pedro 1:11",
+          "text": "Escudri\u00f1ando cu\u00e1ndo, y en qu\u00e9 punto de tiempo significaba el Esp\u00edritu de Cristo que estaba en ellos: el cual antes anunciaba las aflicciones que hab\u00edan de venir a Cristo, y las glorias despu\u00e9s de ellas: "
+        },
+        {
+          "chapter": 1,
+          "verse": 12,
+          "name": "1 Pedro 1:12",
+          "text": "A los cuales fue revelado, que no para s\u00ed mismos, sino para nosotros administraban las cosas, que ahora os son anunciadas de los que os han predicado el evangelio, por el Esp\u00edritu Santo enviado del cielo: en las cuales cosas desean mirar los \u00e1ngeles. "
+        },
+        {
+          "chapter": 1,
+          "verse": 13,
+          "name": "1 Pedro 1:13",
+          "text": "Por lo cual teniendo los lomos de vuestro entendimiento ce\u00f1idos, y sobrios, esper\u00e1d perfectamente en la gracia que se os ha de traer en la manifestaci\u00f3n de Jesu Cristo: "
+        },
+        {
+          "chapter": 1,
+          "verse": 14,
+          "name": "1 Pedro 1:14",
+          "text": "Como hijos obedientes, no conform\u00e1ndoos con las concupiscencias que antes ten\u00edais estando en vuestra ignorancia; "
+        },
+        {
+          "chapter": 1,
+          "verse": 15,
+          "name": "1 Pedro 1:15",
+          "text": "Mas como aquel que os ha llamado es santo, semejantemente tambi\u00e9n vosotros sed santos en todo proceder; "
+        },
+        {
+          "chapter": 1,
+          "verse": 16,
+          "name": "1 Pedro 1:16",
+          "text": "Porque escrito est\u00e1: Sed santos, porque yo soy santo. "
+        },
+        {
+          "chapter": 1,
+          "verse": 17,
+          "name": "1 Pedro 1:17",
+          "text": "Y si invoc\u00e1is por Padre a aquel que sin acepci\u00f3n de personas juzga seg\u00fan la obra de cada uno, convers\u00e1d en temor todo el tiempo de vuestra peregrinaci\u00f3n: "
+        },
+        {
+          "chapter": 1,
+          "verse": 18,
+          "name": "1 Pedro 1:18",
+          "text": "Sabiendo que hab\u00e9is sido rescatados de vuestra vana conversaci\u00f3n, (la cual recibisteis de vuestros padres,) no con cosas corruptibles, como oro o plata; "
+        },
+        {
+          "chapter": 1,
+          "verse": 19,
+          "name": "1 Pedro 1:19",
+          "text": "Mas con la sangre preciosa de Cristo, como de un cordero sin mancha, y sin contaminaci\u00f3n: "
+        },
+        {
+          "chapter": 1,
+          "verse": 20,
+          "name": "1 Pedro 1:20",
+          "text": "Ya preordinado ciertamente de antes de la fundaci\u00f3n del mundo, pero manifestado en los postrimeros tiempos por amor de vosotros, "
+        },
+        {
+          "chapter": 1,
+          "verse": 21,
+          "name": "1 Pedro 1:21",
+          "text": "Que por medio de \u00e9l creeis en Dios, el cual le resucit\u00f3 de entre los muertos, y le ha dado gloria, para que vuestra fe y esperanza sea en Dios: "
+        },
+        {
+          "chapter": 1,
+          "verse": 22,
+          "name": "1 Pedro 1:22",
+          "text": "Habiendo purificado vuestras almas en la obediencia de la verdad, por medio del Esp\u00edritu, para un amor hermanable, sin fingimiento am\u00e1os unos a otros entra\u00f1ablemente de coraz\u00f3n puro: "
+        },
+        {
+          "chapter": 1,
+          "verse": 23,
+          "name": "1 Pedro 1:23",
+          "text": "Siendo renacidos, no de simiente corruptible, sino de incorruptible, por la palabra del Dios viviente, y que permanece para siempre. "
+        },
+        {
+          "chapter": 1,
+          "verse": 24,
+          "name": "1 Pedro 1:24",
+          "text": "Porque toda carne es como yerba, y toda la gloria del hombre como la flor de la yerba: la yerba se sec\u00f3, y la flor se cay\u00f3; "
+        },
+        {
+          "chapter": 1,
+          "verse": 25,
+          "name": "1 Pedro 1:25",
+          "text": "Mas la palabra del Se\u00f1or permanece perpetuamente: y esta es la palabra que por el evangelio os ha sido evangelizada.  "
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "name": "1 Pedro 2",
+      "verses": [
+        {
+          "chapter": 2,
+          "verse": 1,
+          "name": "1 Pedro 2:1",
+          "text": "Por lo que desechando toda malicia, y todo enga\u00f1o, y fingimientos, y envidias, y toda habla mala, "
+        },
+        {
+          "chapter": 2,
+          "verse": 2,
+          "name": "1 Pedro 2:2",
+          "text": "Como ni\u00f1os reci\u00e9n nacidos, dese\u00e1d ardientemente la leche no adulterada de la palabra, para que por ella crezc\u00e1is: "
+        },
+        {
+          "chapter": 2,
+          "verse": 3,
+          "name": "1 Pedro 2:3",
+          "text": "Si empero hab\u00e9is gustado que el Se\u00f1or es benigno. "
+        },
+        {
+          "chapter": 2,
+          "verse": 4,
+          "name": "1 Pedro 2:4",
+          "text": "Al cual alleg\u00e1ndoos, como a la piedra viva, reprobada cierto de los hombres, empero elegida de Dios, y preciosa, "
+        },
+        {
+          "chapter": 2,
+          "verse": 5,
+          "name": "1 Pedro 2:5",
+          "text": "Vosotros tambi\u00e9n, como piedras vivas, sed edificados para ser una casa espiritual, un sacerdocio santo, para ofrecer sacrificios espirituales, agradables a Dios por medio de Jesu Cristo. "
+        },
+        {
+          "chapter": 2,
+          "verse": 6,
+          "name": "1 Pedro 2:6",
+          "text": "Por lo cual tambi\u00e9n contiene la Escritura: He aqu\u00ed, yo pongo en Si\u00f3n la principal piedra del \u00e1ngulo, escogida, preciosa; y el que creyere en \u00e9l no ser\u00e1 confundido. "
+        },
+        {
+          "chapter": 2,
+          "verse": 7,
+          "name": "1 Pedro 2:7",
+          "text": "Para vosotros pues que creeis \u00e9l es precioso; mas para los desobedientes, la piedra que los edificadores reprobaron, esta fue hecha la cabeza del \u00e1ngulo, "
+        },
+        {
+          "chapter": 2,
+          "verse": 8,
+          "name": "1 Pedro 2:8",
+          "text": "Y piedra de tropiezo, y roca de esc\u00e1ndalo, a aquellos que tropiezan en la palabra, siendo desobedientes; a lo que tambi\u00e9n fueron destinados. "
+        },
+        {
+          "chapter": 2,
+          "verse": 9,
+          "name": "1 Pedro 2:9",
+          "text": "Mas vosotros sois el linaje elegido, el real sacerdocio, naci\u00f3n santa, pueblo ganado, para que anuncieis las virtudes de aquel que os ha llamado de las tinieblas a su luz admirable: "
+        },
+        {
+          "chapter": 2,
+          "verse": 10,
+          "name": "1 Pedro 2:10",
+          "text": "Vosotros, que en el tiempo pasado er\u00e1is no pueblo, mas ahora sois pueblo de Dios, que en el tiempo pasado no hab\u00edais alcanzado misericordia, mas ahora hab\u00e9is ya alcanzado misericordia. "
+        },
+        {
+          "chapter": 2,
+          "verse": 11,
+          "name": "1 Pedro 2:11",
+          "text": "Amados, yo os ruego, como a extranjeros y caminantes, os absteng\u00e1is de los deseos carnales, que batallan contra el alma, "
+        },
+        {
+          "chapter": 2,
+          "verse": 12,
+          "name": "1 Pedro 2:12",
+          "text": "Y teng\u00e1is vuestra conversaci\u00f3n honesta entre los Gentiles; para que en lo que ellos murmuran de vosotros como de malhechores, glorifiquen a Dios en el d\u00eda de la visitaci\u00f3n, estim\u00e1ndoos por las buenas obras. "
+        },
+        {
+          "chapter": 2,
+          "verse": 13,
+          "name": "1 Pedro 2:13",
+          "text": "Sed pues sujetos a toda ordenaci\u00f3n humana por causa del Se\u00f1or: ahora sea a rey, como a superior: "
+        },
+        {
+          "chapter": 2,
+          "verse": 14,
+          "name": "1 Pedro 2:14",
+          "text": "Ahora a los gobernadores, como enviados por \u00e9l, para venganza de los malhechores, y para loor de los que hacen bien. "
+        },
+        {
+          "chapter": 2,
+          "verse": 15,
+          "name": "1 Pedro 2:15",
+          "text": "Porque esta es la voluntad de Dios, que haciendo bien, embozal\u00e9is la ignorancia de los hombres vanos: "
+        },
+        {
+          "chapter": 2,
+          "verse": 16,
+          "name": "1 Pedro 2:16",
+          "text": "Como estando en libertad, y no como teniendo la libertad por cobertura de malicia, sino como siervos de Dios. "
+        },
+        {
+          "chapter": 2,
+          "verse": 17,
+          "name": "1 Pedro 2:17",
+          "text": "Honr\u00e1d a todos. Am\u00e1d la fraternidad. Tem\u00e9d a Dios. Honr\u00e1d al rey. "
+        },
+        {
+          "chapter": 2,
+          "verse": 18,
+          "name": "1 Pedro 2:18",
+          "text": "Vosotros, siervos, sed sujetos con todo temor a vuestros se\u00f1ores; no solamente a los buenos y humanos, mas aun tambi\u00e9n a los rigurosos. "
+        },
+        {
+          "chapter": 2,
+          "verse": 19,
+          "name": "1 Pedro 2:19",
+          "text": "Porque esto es agradable, si alguno a causa de la conciencia, que tiene delante de Dios, sufre molestias, padeciendo injustamente. "
+        },
+        {
+          "chapter": 2,
+          "verse": 20,
+          "name": "1 Pedro 2:20",
+          "text": "Porque \u00bfqu\u00e9 gloria es, si pecando vosotros sois abofeteados, y lo sufr\u00eds? empero si haciendo bien, sois afligidos, y lo sufr\u00eds, esto es cierto agradable delante de Dios. "
+        },
+        {
+          "chapter": 2,
+          "verse": 21,
+          "name": "1 Pedro 2:21",
+          "text": "Porque para esto fuisteis llamados, pues que tambi\u00e9n Cristo padeci\u00f3 por nosotros, dej\u00e1ndonos un modelo, para que vosotros sig\u00e1is sus pisadas. "
+        },
+        {
+          "chapter": 2,
+          "verse": 22,
+          "name": "1 Pedro 2:22",
+          "text": "El cual no hizo pecado, ni fue hallado enga\u00f1o en su boca: "
+        },
+        {
+          "chapter": 2,
+          "verse": 23,
+          "name": "1 Pedro 2:23",
+          "text": "El cual maldici\u00e9ndole, no tornaba a maldecir; y cuando padec\u00eda, no amenazaba; sino que remit\u00eda su causa al que juzga justamente. "
+        },
+        {
+          "chapter": 2,
+          "verse": 24,
+          "name": "1 Pedro 2:24",
+          "text": "El mismo que llev\u00f3 nuestros pecados en su cuerpo sobre el madero, para que nosotros siendo muertos a los pecados, vivi\u00e9semos a la justicia. Por las heridas del cual hab\u00e9is sido sanados. "
+        },
+        {
+          "chapter": 2,
+          "verse": 25,
+          "name": "1 Pedro 2:25",
+          "text": "Porque vosotros er\u00e1is como ovejas descarriadas; mas ahora sois ya convertidos al Pastor, y Obispo de vuestras almas.  "
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "name": "1 Pedro 3",
+      "verses": [
+        {
+          "chapter": 3,
+          "verse": 1,
+          "name": "1 Pedro 3:1",
+          "text": "Semejantemente vosotras mujeres, sed sujetas a vuestros maridos; para que si tambi\u00e9n algunos no creen a la palabra, sean ganados sin palabra por la conversaci\u00f3n de las mujeres: "
+        },
+        {
+          "chapter": 3,
+          "verse": 2,
+          "name": "1 Pedro 3:2",
+          "text": "Considerando vuestra casta conversaci\u00f3n, que es con reverencia. "
+        },
+        {
+          "chapter": 3,
+          "verse": 3,
+          "name": "1 Pedro 3:3",
+          "text": "La compostura de las cuales, no sea exterior con encrespamiento de cabellos, y atav\u00edo de oro, ni en composici\u00f3n de ropas; "
+        },
+        {
+          "chapter": 3,
+          "verse": 4,
+          "name": "1 Pedro 3:4",
+          "text": "Mas el hombre del coraz\u00f3n que est\u00e1 encubierto sea sin toda corrupci\u00f3n, y de esp\u00edritu agradable, y pac\u00edfico, lo cual es de grande estima delante de Dios. "
+        },
+        {
+          "chapter": 3,
+          "verse": 5,
+          "name": "1 Pedro 3:5",
+          "text": "Porque as\u00ed tambi\u00e9n se ataviaban en el tiempo antiguo aquellas santas mujeres que esperaban en Dios, estando sujetas a sus propios maridos: "
+        },
+        {
+          "chapter": 3,
+          "verse": 6,
+          "name": "1 Pedro 3:6",
+          "text": "Al modo que Sara obedec\u00eda a Abraham, llam\u00e1ndole se\u00f1or: de la cual vosotras sois hechas hijas, haciendo bien, y no siendo amedrentadas de ning\u00fan pavor. "
+        },
+        {
+          "chapter": 3,
+          "verse": 7,
+          "name": "1 Pedro 3:7",
+          "text": "Vosotros maridos semejantemente cohabit\u00e1d con ellas seg\u00fan ciencia, dando honor a la mujer, como a vaso m\u00e1s fr\u00e1gil, y como a herederas juntamente de la gracia de vida; para que vuestras oraciones no sean impedidas. "
+        },
+        {
+          "chapter": 3,
+          "verse": 8,
+          "name": "1 Pedro 3:8",
+          "text": "Y finalmente sed todos de un consentimiento, de una afecci\u00f3n, am\u00e1ndoos hermanablemente, misericordiosos, amigables, "
+        },
+        {
+          "chapter": 3,
+          "verse": 9,
+          "name": "1 Pedro 3:9",
+          "text": "No volviendo mal por mal, ni maldici\u00f3n por maldici\u00f3n, sino antes por el contrario, bendiciendo: sabiendo que para esto vosotros fuisteis llamados, para que pose\u00e1is en herencia bendici\u00f3n. "
+        },
+        {
+          "chapter": 3,
+          "verse": 10,
+          "name": "1 Pedro 3:10",
+          "text": "Porque el que quiere amar la vida, y ver los d\u00edas buenos, refrene su lengua de mal, y sus labios no hablen enga\u00f1o. "
+        },
+        {
+          "chapter": 3,
+          "verse": 11,
+          "name": "1 Pedro 3:11",
+          "text": "Ap\u00e1rtese del mal, y haga bien: busque la paz, y s\u00edgala. "
+        },
+        {
+          "chapter": 3,
+          "verse": 12,
+          "name": "1 Pedro 3:12",
+          "text": "Porque los ojos del Se\u00f1or est\u00e1n sobre los justos, y sus o\u00eddos atentos a sus oraciones: el rostro del Se\u00f1or est\u00e1 sobre aquellos que hacen mal. "
+        },
+        {
+          "chapter": 3,
+          "verse": 13,
+          "name": "1 Pedro 3:13",
+          "text": "\u00bfY qui\u00e9n es aquel que os podr\u00e1 empecer, si fueseis imitadores del bueno? "
+        },
+        {
+          "chapter": 3,
+          "verse": 14,
+          "name": "1 Pedro 3:14",
+          "text": "Mas tambi\u00e9n si alguna cosa padec\u00e9is por amor a la justicia, sois bienaventurados. Por tanto no tem\u00e1is por el temor de aquellos, y no se\u00e1is turbados; "
+        },
+        {
+          "chapter": 3,
+          "verse": 15,
+          "name": "1 Pedro 3:15",
+          "text": "Mas santific\u00e1d al Se\u00f1or Dios en vuestros corazones; y est\u00e1d siempre aparejados para responder a cada uno que os demanda raz\u00f3n de la esperanza que est\u00e1 en vosotros; y esto con mansedumbre y reverencia; "
+        },
+        {
+          "chapter": 3,
+          "verse": 16,
+          "name": "1 Pedro 3:16",
+          "text": "Teniendo buena conciencia, para que en lo que dicen mal de vosotros como de malhechores, sean confundidos los que calumnian vuestro buen proceder en Cristo. "
+        },
+        {
+          "chapter": 3,
+          "verse": 17,
+          "name": "1 Pedro 3:17",
+          "text": "Porque mejor es que padezc\u00e1is haciendo bien, (si la voluntad de Dios as\u00ed lo quiere,) que no haciendo mal. "
+        },
+        {
+          "chapter": 3,
+          "verse": 18,
+          "name": "1 Pedro 3:18",
+          "text": "Porque tambi\u00e9n Cristo padeci\u00f3 una vez por los pecados, el justo por los injustos, para llevarnos a Dios, mortificado a la verdad en la carne, pero vivificado por el Esp\u00edritu. "
+        },
+        {
+          "chapter": 3,
+          "verse": 19,
+          "name": "1 Pedro 3:19",
+          "text": "En el cual tambi\u00e9n fue, y predic\u00f3 a los esp\u00edritus que estaban en c\u00e1rcel: "
+        },
+        {
+          "chapter": 3,
+          "verse": 20,
+          "name": "1 Pedro 3:20",
+          "text": "Los cuales en el tiempo pasado fueron desobedientes, cuando una vez se esperaba la paciencia de Dios, en los d\u00edas de No\u00e9, cuando se aparejaba el arca, en la cual pocas, es a saber, ocho personas, fueron salvas por agua. "
+        },
+        {
+          "chapter": 3,
+          "verse": 21,
+          "name": "1 Pedro 3:21",
+          "text": "A la figura de la cual el bautismo, que ahora corresponde, nos salva a nosotros tambi\u00e9n, (no quitando las inmundicias de la carne, mas dando testimonio de buena conciencia delante de Dios,) por medio de la resurrecci\u00f3n de Jesu Cristo: "
+        },
+        {
+          "chapter": 3,
+          "verse": 22,
+          "name": "1 Pedro 3:22",
+          "text": "El cual, siendo subido al cielo, est\u00e1 a la diestra de Dios: a quien est\u00e1n sujetos los \u00e1ngeles, y las potestades, y virtudes.  "
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "name": "1 Pedro 4",
+      "verses": [
+        {
+          "chapter": 4,
+          "verse": 1,
+          "name": "1 Pedro 4:1",
+          "text": "Pues que Cristo ha padecido por nosotros en la carne, vosotros tambi\u00e9n est\u00e1d armados del mismo pensamiento: que el que ha padecido en la carne, ces\u00f3 de pecado; "
+        },
+        {
+          "chapter": 4,
+          "verse": 2,
+          "name": "1 Pedro 4:2",
+          "text": "Para que ya el tiempo que queda en carne, viva, no a las concupiscencias de los hombres, sino a la voluntad de Dios. "
+        },
+        {
+          "chapter": 4,
+          "verse": 3,
+          "name": "1 Pedro 4:3",
+          "text": "Porque nos debe bastar que el tiempo pasado de nuestra vida hayamos hecho la voluntad de los Gentiles, cuando convers\u00e1bamos en lujurias, en concupiscencias, en embriagueces, en glotoner\u00edas, en beberes, y en abominables idolatr\u00edas. "
+        },
+        {
+          "chapter": 4,
+          "verse": 4,
+          "name": "1 Pedro 4:4",
+          "text": "En lo cual les parece cosa extra\u00f1a de que vosotros no corr\u00e1is juntamente con ellos en el mismo desenfrenamiento de disoluci\u00f3n, ultraj\u00e1ndoos: "
+        },
+        {
+          "chapter": 4,
+          "verse": 5,
+          "name": "1 Pedro 4:5",
+          "text": "Los cuales dar\u00e1n cuenta al que est\u00e1 aparejado para juzgar los vivos y los muertos. "
+        },
+        {
+          "chapter": 4,
+          "verse": 6,
+          "name": "1 Pedro 4:6",
+          "text": "Porque por esto ha sido predicado tambi\u00e9n el evangelio a los muertos; para que sean juzgados seg\u00fan los hombres en la carne, mas vivan seg\u00fan Dios en el esp\u00edritu. "
+        },
+        {
+          "chapter": 4,
+          "verse": 7,
+          "name": "1 Pedro 4:7",
+          "text": "Mas el fin de todas las cosas se acerca. Sed pues templados, y vel\u00e1d en oraci\u00f3n. "
+        },
+        {
+          "chapter": 4,
+          "verse": 8,
+          "name": "1 Pedro 4:8",
+          "text": "Y sobre todo ten\u00e9d entre vosotros ferviente caridad; porque la caridad cubrir\u00e1 la multitud de pecados. "
+        },
+        {
+          "chapter": 4,
+          "verse": 9,
+          "name": "1 Pedro 4:9",
+          "text": "Hosped\u00e1os amorosamente los unos a los otros sin murmuraciones. "
+        },
+        {
+          "chapter": 4,
+          "verse": 10,
+          "name": "1 Pedro 4:10",
+          "text": "Cada uno seg\u00fan el don que ha recibido, admin\u00edstrelo a los otros, como buenos dispensadores de las diferentes gracias de Dios. "
+        },
+        {
+          "chapter": 4,
+          "verse": 11,
+          "name": "1 Pedro 4:11",
+          "text": "Si alguno habla, hable conforme a los or\u00e1culos de Dios: si alguno ministra, ministre conforme a la virtud que Dios da: para que en todas cosas sea Dios glorificado por medio de Jesu Cristo, al cual es gloria, e imperio para siempre jam\u00e1s. Am\u00e9n. "
+        },
+        {
+          "chapter": 4,
+          "verse": 12,
+          "name": "1 Pedro 4:12",
+          "text": "Car\u00edsimos, no os maravill\u00e9is cuando sois examinados por fuego, (lo cual se hace para vuestra prueba,) como si alguna cosa peregrina os aconteciese; "
+        },
+        {
+          "chapter": 4,
+          "verse": 13,
+          "name": "1 Pedro 4:13",
+          "text": "Mas antes, en que sois participantes de las aflicciones de Cristo, regocij\u00e1os; para que tambi\u00e9n en la revelaci\u00f3n de su gloria os regocij\u00e9is saltando de gozo. "
+        },
+        {
+          "chapter": 4,
+          "verse": 14,
+          "name": "1 Pedro 4:14",
+          "text": "Si sois vituperados por el nombre de Cristo, sois bienaventurados; porque el Esp\u00edritu de gloria, y de Dios reposa sobre vosotros. Cierto seg\u00fan ellos \u00e9l es blasfemado, mas seg\u00fan vosotros es glorificado. "
+        },
+        {
+          "chapter": 4,
+          "verse": 15,
+          "name": "1 Pedro 4:15",
+          "text": "As\u00ed que no sea ninguno de vosotros afligido como homicida, o ladr\u00f3n, o malhechor, o explorador de lo ajeno. "
+        },
+        {
+          "chapter": 4,
+          "verse": 16,
+          "name": "1 Pedro 4:16",
+          "text": "Pero si alguno es afligido como Cristiano, no se averg\u00fcence, antes glorifique a Dios en esta parte. "
+        },
+        {
+          "chapter": 4,
+          "verse": 17,
+          "name": "1 Pedro 4:17",
+          "text": "Porque ya es tiempo que el juicio comience por la casa de Dios; y si primero comienza por nosotros, \u00bfqu\u00e9 fin ser\u00e1 el de aquellos que no obedecen al evangelio de Dios? "
+        },
+        {
+          "chapter": 4,
+          "verse": 18,
+          "name": "1 Pedro 4:18",
+          "text": "Y si el justo es dificultosamente salvo, \u00bfad\u00f3nde parecer\u00e1 el infiel, y el pecador? "
+        },
+        {
+          "chapter": 4,
+          "verse": 19,
+          "name": "1 Pedro 4:19",
+          "text": "Por lo que, aun los que son afligidos seg\u00fan la voluntad de Dios, encomi\u00e9ndenle sus almas, haciendo bien, como a su fiel Creador.  "
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "name": "1 Pedro 5",
+      "verses": [
+        {
+          "chapter": 5,
+          "verse": 1,
+          "name": "1 Pedro 5:1",
+          "text": "Yo ruego a los ancianos que est\u00e1n entre vosotros, (yo anciano tambi\u00e9n con ellos, y testigo de las aflicciones de Cristo, que soy tambi\u00e9n participante de la gloria que ha de ser revelada:) "
+        },
+        {
+          "chapter": 5,
+          "verse": 2,
+          "name": "1 Pedro 5:2",
+          "text": "Apacent\u00e1d el reba\u00f1o de Dios que est\u00e1 entre vosotros, teniendo cuidado de \u00e9l, no por fuerza, mas voluntariamente: no por ganancia deshonesta, sino de un \u00e1nimo pronto; "
+        },
+        {
+          "chapter": 5,
+          "verse": 3,
+          "name": "1 Pedro 5:3",
+          "text": "Y no como teniendo se\u00f1or\u00edo sobre las herencias de Dios, sino de tal manera que se\u00e1is dechados de la grey. "
+        },
+        {
+          "chapter": 5,
+          "verse": 4,
+          "name": "1 Pedro 5:4",
+          "text": "Y cuando apareciere el Pr\u00edncipe de los pastores, vosotros recibir\u00e9is la corona inmarcesible de gloria. "
+        },
+        {
+          "chapter": 5,
+          "verse": 5,
+          "name": "1 Pedro 5:5",
+          "text": "Semejantemente vosotros los j\u00f3venes, sed sujetos a los ancianos, de tal manera que se\u00e1is todos sujetos uno a otro. Vest\u00edos de humildad de \u00e1nimo; porque Dios resiste a los soberbios, y da gracia a los humildes. "
+        },
+        {
+          "chapter": 5,
+          "verse": 6,
+          "name": "1 Pedro 5:6",
+          "text": "Humill\u00e1os pues debajo de la poderosa mano de Dios, para que \u00e9l os ensalce cuando fuere tiempo: "
+        },
+        {
+          "chapter": 5,
+          "verse": 7,
+          "name": "1 Pedro 5:7",
+          "text": "Echando toda vuestra solicitud en \u00e9l; porque \u00e9l tiene cuidado de vosotros. "
+        },
+        {
+          "chapter": 5,
+          "verse": 8,
+          "name": "1 Pedro 5:8",
+          "text": "Sed templados, y vel\u00e1d; porque vuestro adversario el diablo anda como le\u00f3n bramando en derredor de vosotros, buscando alguno que trague: "
+        },
+        {
+          "chapter": 5,
+          "verse": 9,
+          "name": "1 Pedro 5:9",
+          "text": "Al cual resist\u00edd firmes en la fe, sabiendo que las mismas aflicciones han de ser cumplidas en la compa\u00f1\u00eda de vuestros hermanos que est\u00e1n en el mundo. "
+        },
+        {
+          "chapter": 5,
+          "verse": 10,
+          "name": "1 Pedro 5:10",
+          "text": "Mas el Dios de toda gracia, que nos ha llamado a su gloria eterna por Jesu Cristo, despu\u00e9s que hubiereis un poco de tiempo padecido, el mismo os perfeccione, confirme, corrobore, y establezca: "
+        },
+        {
+          "chapter": 5,
+          "verse": 11,
+          "name": "1 Pedro 5:11",
+          "text": "A \u00e9l la gloria, y el imperio para siempre. Am\u00e9n. "
+        },
+        {
+          "chapter": 5,
+          "verse": 12,
+          "name": "1 Pedro 5:12",
+          "text": "Por Silvano que os es (seg\u00fan yo pienso) hermano fiel, os he escrito brevemente, amonest\u00e1ndoos, y testific\u00e1ndoos, que \u00e9sta es la verdadera gracia de Dios, en la cual est\u00e1is. "
+        },
+        {
+          "chapter": 5,
+          "verse": 13,
+          "name": "1 Pedro 5:13",
+          "text": "La iglesia que est\u00e1 en Babilonia, juntamente elegida con vosotros, se os encomienda, y M\u00e1rcos mi hijo. "
+        },
+        {
+          "chapter": 5,
+          "verse": 14,
+          "name": "1 Pedro 5:14",
+          "text": "Salud\u00e1os unos a otros con beso de amor. Paz a vosotros todos, los que est\u00e1is en Cristo Jes\u00fas. Am\u00e9n.   "
+        }
+      ]
+    }
+  ]
+}
