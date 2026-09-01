@@ -25,7 +25,13 @@ import { initBibleDatabase, getLocalBooksSync, getBookByIdOrNumber } from './ser
 import { startFullDownload } from './services/offlineBibleService';
 
 export default function App() {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => {
+    try {
+      return localStorage.getItem('sanctuary_bible_imported') !== 'true';
+    } catch {
+      return true;
+    }
+  });
   const [showCoachMark, setShowCoachMark] = useState(false);
   const [activeTab, setActiveTab] = useState<ActiveTab>('home');
   const [isDrawerOpenMobile, setIsDrawerOpenMobile] = useState(false);
@@ -71,6 +77,9 @@ export default function App() {
     // Initialize and seed the 3 Bible translations into IndexedDB local
     initBibleDatabase()
       .then(() => {
+        try {
+          localStorage.setItem('sanctuary_bible_imported', 'true');
+        } catch (_) {}
         // Automatically start background downloading of all Bible verses across translations
         startFullDownload().catch((err) => console.warn('Background sync notice:', err));
       })

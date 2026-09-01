@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/providers/app_settings_providers.dart';
+import 'core/services/bible_data_import_service.dart';
 import 'core/storage/app_database.dart';
 import 'core/theme/sanctuary_theme.dart';
 import 'features/shell/presentation/views/sanctuary_main_shell.dart';
@@ -19,25 +20,42 @@ void main() async {
 
   // Initialize Drift Local SQLite Database
   final database = AppDatabase();
+  final importService = BibleDataImportService(database: database);
+  final needsImport = await importService.isImportNeeded();
 
   runApp(
     ProviderScope(
-      child: DigitalSanctuaryApp(database: database),
+      child: DigitalSanctuaryApp(
+        database: database,
+        initialNeedsImport: needsImport,
+      ),
     ),
   );
 }
 
 class DigitalSanctuaryApp extends ConsumerStatefulWidget {
   final AppDatabase database;
+  final bool initialNeedsImport;
 
-  const DigitalSanctuaryApp({super.key, required this.database});
+  const DigitalSanctuaryApp({
+    super.key,
+    required this.database,
+    this.initialNeedsImport = false,
+  });
 
   @override
   ConsumerState<DigitalSanctuaryApp> createState() => _DigitalSanctuaryAppState();
 }
 
 class _DigitalSanctuaryAppState extends ConsumerState<DigitalSanctuaryApp> {
-  bool _isInitialized = false;
+  late bool _isInitialized;
+
+  @override
+  void initState() {
+    super.initState();
+    // Si ya se importó toda la información a la BD local, no mostrar el splash screen
+    _isInitialized = !widget.initialNeedsImport;
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -24,15 +24,15 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
       setFadeState('visible');
     }, 100);
 
-    // Stage 2: Begin exit transition
+    // Stage 2: Begin exit transition at 2.6s
     const t2 = setTimeout(() => {
       setFadeState('exiting');
-    }, 2200);
+    }, 2600);
 
-    // Stage 3: Finish and unmount
+    // Stage 3: Finish and unmount at 3.0s
     const t3 = setTimeout(() => {
       onComplete();
-    }, 2700);
+    }, 3000);
 
     return () => {
       clearTimeout(t1);

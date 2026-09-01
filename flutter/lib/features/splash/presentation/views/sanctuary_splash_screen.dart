@@ -66,10 +66,18 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
   Future<void> _startInitialization() async {
     final needsImport = await _importService.isImportNeeded();
 
-    if (needsImport) {
-      // Execute full offline JSON database import
-      try {
-        await _importService.importAllBibleData(
+    if (!needsImport) {
+      // Si ya está importado, cerrar de inmediato
+      if (mounted) {
+        widget.onComplete();
+      }
+      return;
+    }
+
+    // Si aún no se importó: esperar 3 segundos para que realice la importación y cerrar el splashscreen
+    try {
+      await Future.wait([
+        _importService.importAllBibleData(
           onProgress: (progress, message) {
             if (mounted) {
               setState(() {
@@ -78,19 +86,11 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
               });
             }
           },
-        );
-      } catch (e) {
-        debugPrint('Error during Bible data import: $e');
-      }
-    } else {
-      // Fast start: smooth simulated progress for brief splash branding
-      for (int i = 1; i <= 20; i++) {
-        await Future.delayed(const Duration(milliseconds: 60));
-        if (!mounted) return;
-        setState(() {
-          _progress = i / 20.0;
-        });
-      }
+        ),
+        Future.delayed(const Duration(seconds: 3)),
+      ]);
+    } catch (e) {
+      debugPrint('Error during Bible data import: $e');
     }
 
     if (!mounted) return;
@@ -100,8 +100,11 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
       _isExiting = true;
     });
 
-    // Exit transition
-    await _animController.reverse();
+    // Cierre y transición de salida
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (mounted) {
+      await _animController.reverse();
+    }
     if (mounted) {
       widget.onComplete();
     }
