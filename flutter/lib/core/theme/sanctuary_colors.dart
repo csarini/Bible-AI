@@ -12,6 +12,7 @@ class SanctuaryColors {
   static const Color sunOrange = Color(0xFFF25C05); // Institutional El-Shaddai Orange
   static const Color sunOrangeAccent = Color(0xFFF47B20);
   static const Color cyanAccent = Color(0xFF00A3E0); // Institutional El-Shaddai Cyan
+  static const Color electricCyan = Color(0xFF00A3E0); // Institutional Cyan Accent
   static const Color amberGold = Color(0xFFFED65B); // Institutional El-Shaddai Amber/Gold
   static const Color brandPurple = Color(0xFF4E53A4);
   static const Color emeraldGreen = Color(0xFF10B981);
