@@ -5,7 +5,6 @@ import {
   BookOpen,
   Library,
   Bookmark,
-  Smartphone,
   Sparkles,
   X,
   Compass,

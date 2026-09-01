@@ -157,12 +157,14 @@ export const OFFICIAL_TRANSLATIONS: BibleTranslationOption[] = [
   }
 ];
 
+export type ThemeMode = 'light' | 'sepia' | 'dark';
+
 export interface ReadingSettings {
   fontSize: 'small' | 'medium' | 'large' | 'extra-large';
   fontFamily: 'Literata' | 'Playfair' | 'Inter';
   lineHeight: 'normal' | 'relaxed' | 'spacious';
   translation: 'valera' | 'sse' | 'rv1858' | string;
-  themeMode: 'light' | 'sepia' | 'dark';
+  themeMode: ThemeMode;
   showVerseNumbers: boolean;
 }
 

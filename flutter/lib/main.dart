@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/storage/app_database.dart';
 import 'core/theme/sanctuary_theme.dart';
-import 'features/reader/presentation/views/sanctuary_reader_view.dart';
+import 'features/settings/presentation/views/sanctuary_settings_view.dart';
+import 'features/shell/presentation/views/sanctuary_main_shell.dart';
 import 'shared/services/home_widget_service.dart';
 
 void main() async {
@@ -25,20 +26,23 @@ void main() async {
   );
 }
 
-class DigitalSanctuaryApp extends StatelessWidget {
+class DigitalSanctuaryApp extends ConsumerWidget {
   final AppDatabase database;
 
   const DigitalSanctuaryApp({super.key, required this.database});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(appThemeModeProvider);
+
     return MaterialApp(
       title: 'Biblia Inteligente (Digital Sanctuary)',
       debugShowCheckedModeBanner: false,
       theme: SanctuaryTheme.light(),
       darkTheme: SanctuaryTheme.dark(),
-      themeMode: ThemeMode.system,
-      home: SanctuaryReaderView(database: database),
+      themeMode: themeMode,
+      home: SanctuaryMainShell(database: database),
     );
   }
 }
+

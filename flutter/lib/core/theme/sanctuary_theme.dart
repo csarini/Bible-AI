@@ -45,6 +45,46 @@ class SanctuaryTheme {
     );
   }
 
+  static ThemeData sepia() {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: SanctuaryColors.sepiaBackground,
+      colorScheme: const ColorScheme.light(
+        primary: SanctuaryColors.sepiaTextSecondary,
+        secondary: SanctuaryColors.sunOrange,
+        tertiary: SanctuaryColors.cyanAccent,
+        surface: SanctuaryColors.sepiaSurface,
+        onSurface: SanctuaryColors.sepiaTextPrimary,
+        outline: SanctuaryColors.sepiaBorder,
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: SanctuaryColors.sepiaBackground,
+        elevation: 0,
+        centerTitle: true,
+        scrolledUnderElevation: 0,
+        iconTheme: const IconThemeData(color: SanctuaryColors.sepiaTextSecondary),
+        titleTextStyle: GoogleFonts.plusJakartaSans(
+          color: SanctuaryColors.sepiaTextPrimary,
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      cardTheme: CardTheme(
+        color: SanctuaryColors.sepiaSurface,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(color: SanctuaryColors.sepiaBorder),
+        ),
+      ),
+      textTheme: _buildTextTheme(
+        textColor: SanctuaryColors.sepiaTextPrimary,
+        secondaryColor: SanctuaryColors.sepiaTextSecondary,
+      ),
+    );
+  }
+
   static ThemeData dark() {
     return ThemeData(
       useMaterial3: true,

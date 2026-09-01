@@ -18,6 +18,14 @@ class SanctuaryColors {
   static const Color lightTextPrimary = Color(0xFF1E2028);
   static const Color lightTextSecondary = Color(0xFF6A6D7D);
 
+  // --- Sepia Theme (Warm Parchment Archetype) ---
+  static const Color sepiaBackground = Color(0xFFFAF6EF);
+  static const Color sepiaSurface = Color(0xFFF4EFE6);
+  static const Color sepiaSurfaceElevated = Color(0xFFEAE0D0);
+  static const Color sepiaBorder = Color(0xFFD8CCBA);
+  static const Color sepiaTextPrimary = Color(0xFF2D2319);
+  static const Color sepiaTextSecondary = Color(0xFF705335);
+
   // --- Dark Theme (Deep Sanctuary Archetype) ---
   static const Color darkBackground = Color(0xFF121318);
   static const Color darkSurface = Color(0xFF1E1F25);
