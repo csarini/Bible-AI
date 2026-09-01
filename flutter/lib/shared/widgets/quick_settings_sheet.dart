@@ -1,0 +1,523 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../core/providers/app_settings_providers.dart';
+import '../../core/theme/sanctuary_colors.dart';
+
+class QuickSettingsSheet extends ConsumerWidget {
+  const QuickSettingsSheet({super.key});
+
+  static void show(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => const QuickSettingsSheet(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    final visualTheme = ref.watch(appVisualThemeModeProvider);
+    final translation = ref.watch(appTranslationProvider);
+    final fontSize = ref.watch(appFontSizeProvider);
+    final fontFamily = ref.watch(appFontFamilyProvider);
+    final lineSpacing = ref.watch(appLineSpacingProvider);
+    final showVerseNumbers = ref.watch(appShowVerseNumbersProvider);
+
+    // Calculate preview style
+    double previewSize = 17.0;
+    if (fontSize == 'small') previewSize = 15.0;
+    if (fontSize == 'large') previewSize = 20.0;
+    if (fontSize == 'xlarge') previewSize = 23.0;
+
+    double previewHeight = 1.68;
+    if (lineSpacing == 'compact') previewHeight = 1.45;
+    if (lineSpacing == 'relaxed') previewHeight = 1.95;
+
+    TextStyle previewTextStyle;
+    if (fontFamily == 'playfair') {
+      previewTextStyle = GoogleFonts.playfairDisplay(
+        fontSize: previewSize,
+        height: previewHeight,
+        color: theme.colorScheme.onSurface,
+      );
+    } else if (fontFamily == 'jakarta') {
+      previewTextStyle = GoogleFonts.plusJakartaSans(
+        fontSize: previewSize,
+        height: previewHeight,
+        color: theme.colorScheme.onSurface,
+      );
+    } else {
+      previewTextStyle = GoogleFonts.merriweather(
+        fontSize: previewSize,
+        height: previewHeight,
+        color: theme.colorScheme.onSurface,
+      );
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Handle bar
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade400,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+
+            // Header
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: SanctuaryColors.sunOrange.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(LucideIcons.settings2, size: 20, color: SanctuaryColors.sunOrange),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Ajustes de Lectura Bíblica',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        'Personaliza la tipografía, tamaño y aspecto visual',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 11.5,
+                          color: theme.colorScheme.onSurface.withOpacity(0.65),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(LucideIcons.x, size: 20),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 18),
+
+            // Live Preview Card
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: theme.cardTheme.color,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: theme.colorScheme.outline.withOpacity(0.3)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'VISTA PREVIA EN VIVO',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.8,
+                          color: SanctuaryColors.sunOrange,
+                        ),
+                      ),
+                      Text(
+                        'S. Juan 1:1 (${translation.toUpperCase()})',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: SanctuaryColors.waveNavy,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        if (showVerseNumbers)
+                          TextSpan(
+                            text: '1 ',
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                              color: SanctuaryColors.sunOrange,
+                            ),
+                          ),
+                        TextSpan(
+                          text: 'En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios.',
+                          style: previewTextStyle,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 18),
+
+            // 1. Theme Selection
+            _buildSectionLabel('1. Tonalidad Visual & Ambiente'),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildChoiceChip(
+                    label: '☀️ Claro',
+                    sub: 'Pergamino',
+                    isSelected: visualTheme == AppVisualTheme.light,
+                    onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.light,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildChoiceChip(
+                    label: '📜 Sepia',
+                    sub: 'Cálido',
+                    isSelected: visualTheme == AppVisualTheme.sepia,
+                    onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.sepia,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildChoiceChip(
+                    label: '🌙 Oscuro',
+                    sub: 'Noche',
+                    isSelected: visualTheme == AppVisualTheme.dark,
+                    onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.dark,
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 18),
+
+            // 2. Font Size
+            _buildSectionLabel('2. Tamaño de Letra'),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildChoiceChip(
+                    label: 'A-',
+                    sub: '15px',
+                    isSelected: fontSize == 'small',
+                    onTap: () => ref.read(appFontSizeProvider.notifier).state = 'small',
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildChoiceChip(
+                    label: 'A',
+                    sub: '17.5px',
+                    isSelected: fontSize == 'medium',
+                    onTap: () => ref.read(appFontSizeProvider.notifier).state = 'medium',
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildChoiceChip(
+                    label: 'A+',
+                    sub: '20px',
+                    isSelected: fontSize == 'large',
+                    onTap: () => ref.read(appFontSizeProvider.notifier).state = 'large',
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildChoiceChip(
+                    label: 'A++',
+                    sub: '23px',
+                    isSelected: fontSize == 'xlarge',
+                    onTap: () => ref.read(appFontSizeProvider.notifier).state = 'xlarge',
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 18),
+
+            // 3. Font Family
+            _buildSectionLabel('3. Familia Tipográfica'),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildChoiceChip(
+                    label: 'Merriweather',
+                    sub: 'Serif Clásico',
+                    isSelected: fontFamily == 'merriweather',
+                    onTap: () => ref.read(appFontFamilyProvider.notifier).state = 'merriweather',
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildChoiceChip(
+                    label: 'Playfair',
+                    sub: 'Elegante',
+                    isSelected: fontFamily == 'playfair',
+                    onTap: () => ref.read(appFontFamilyProvider.notifier).state = 'playfair',
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildChoiceChip(
+                    label: 'Jakarta',
+                    sub: 'Sans Moderno',
+                    isSelected: fontFamily == 'jakarta',
+                    onTap: () => ref.read(appFontFamilyProvider.notifier).state = 'jakarta',
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 18),
+
+            // 4. Line Spacing
+            _buildSectionLabel('4. Interlineado y Espaciado'),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildChoiceChip(
+                    label: 'Compacto',
+                    sub: '1.45',
+                    isSelected: lineSpacing == 'compact',
+                    onTap: () => ref.read(appLineSpacingProvider.notifier).state = 'compact',
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildChoiceChip(
+                    label: 'Cómodo',
+                    sub: '1.68',
+                    isSelected: lineSpacing == 'normal',
+                    onTap: () => ref.read(appLineSpacingProvider.notifier).state = 'normal',
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildChoiceChip(
+                    label: 'Amplio',
+                    sub: '1.95',
+                    isSelected: lineSpacing == 'relaxed',
+                    onTap: () => ref.read(appLineSpacingProvider.notifier).state = 'relaxed',
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 18),
+
+            // 5. Canonical Bible Translation
+            _buildSectionLabel('5. Traducción Canónica'),
+            const SizedBox(height: 8),
+            Column(
+              children: [
+                _buildTranslationTile(
+                  title: 'Reina-Valera 1909 (RVR1909)',
+                  subtitle: 'Texto canónico en español clásico protestante',
+                  isSelected: translation == 'valera',
+                  onTap: () => ref.read(appTranslationProvider.notifier).state = 'valera',
+                ),
+                const SizedBox(height: 6),
+                _buildTranslationTile(
+                  title: 'Biblia del Oso 1569 (SSE)',
+                  subtitle: 'Casiodoro de Reina, traducción histórica original',
+                  isSelected: translation == 'sse',
+                  onTap: () => ref.read(appTranslationProvider.notifier).state = 'sse',
+                ),
+                const SizedBox(height: 6),
+                _buildTranslationTile(
+                  title: 'Reina Valera NT 1858 (RV 1858)',
+                  subtitle: 'Nuevo Testamento, revisión histórica de 1858',
+                  isSelected: translation == 'rv1858',
+                  onTap: () => ref.read(appTranslationProvider.notifier).state = 'rv1858',
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // 6. Show Verse Numbers Switch
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: BoxDecoration(
+                color: theme.cardTheme.color,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: theme.colorScheme.outline.withOpacity(0.3)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Mostrar números de versículo',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13.5,
+                        ),
+                      ),
+                      Text(
+                        'Facilita la ubicación de pasajes y referencias',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 11,
+                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Switch(
+                    value: showVerseNumbers,
+                    activeColor: SanctuaryColors.sunOrange,
+                    onChanged: (val) => ref.read(appShowVerseNumbersProvider.notifier).state = val,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionLabel(String text) {
+    return Text(
+      text,
+      style: GoogleFonts.plusJakartaSans(
+        fontSize: 12.5,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 0.3,
+      ),
+    );
+  }
+
+  Widget _buildChoiceChip({
+    required String label,
+    required String sub,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+        decoration: BoxDecoration(
+          color: isSelected ? SanctuaryColors.waveNavy : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? SanctuaryColors.waveNavy : Colors.grey.withOpacity(0.3),
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.plusJakartaSans(
+                fontWeight: FontWeight.w700,
+                fontSize: 12.5,
+                color: isSelected ? Colors.white : null,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              sub,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 10,
+                color: isSelected ? Colors.white70 : Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTranslationTile({
+    required String title,
+    required String subtitle,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? SanctuaryColors.waveNavy.withOpacity(0.08) : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? SanctuaryColors.waveNavy : Colors.grey.withOpacity(0.25),
+            width: isSelected ? 1.5 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              isSelected ? LucideIcons.checkCircle2 : LucideIcons.circle,
+              size: 18,
+              color: isSelected ? SanctuaryColors.waveNavy : Colors.grey,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: isSelected ? SanctuaryColors.waveNavy : null,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 11,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'core/providers/app_settings_providers.dart';
 import 'core/storage/app_database.dart';
 import 'core/theme/sanctuary_theme.dart';
-import 'features/settings/presentation/views/sanctuary_settings_view.dart';
 import 'features/shell/presentation/views/sanctuary_main_shell.dart';
 import 'shared/services/home_widget_service.dart';
 
@@ -33,16 +33,36 @@ class DigitalSanctuaryApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(appThemeModeProvider);
+    final visualTheme = ref.watch(appVisualThemeModeProvider);
+
+    ThemeData activeTheme;
+    ThemeMode themeMode;
+
+    switch (visualTheme) {
+      case AppVisualTheme.sepia:
+        activeTheme = SanctuaryTheme.sepia();
+        themeMode = ThemeMode.light;
+        break;
+      case AppVisualTheme.dark:
+        activeTheme = SanctuaryTheme.dark();
+        themeMode = ThemeMode.dark;
+        break;
+      case AppVisualTheme.light:
+      default:
+        activeTheme = SanctuaryTheme.light();
+        themeMode = ThemeMode.light;
+        break;
+    }
 
     return MaterialApp(
       title: 'Biblia Inteligente (Digital Sanctuary)',
       debugShowCheckedModeBanner: false,
-      theme: SanctuaryTheme.light(),
+      theme: activeTheme,
       darkTheme: SanctuaryTheme.dark(),
       themeMode: themeMode,
       home: SanctuaryMainShell(database: database),
     );
   }
 }
+
 

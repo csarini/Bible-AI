@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' as drift;
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/constants/bible_books.dart';
+import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/services/share_service.dart';
+import '../../../../shared/widgets/quick_settings_sheet.dart';
 import '../../../../shared/widgets/sanctuary_church_logo.dart';
 import '../../../saved_verses/presentation/views/sanctuary_saved_verses_view.dart';
 import '../../data/services/getbible_service.dart';
 import '../../domain/entities/verse_entity.dart';
 
-class SanctuaryReaderView extends StatefulWidget {
+class SanctuaryReaderView extends ConsumerStatefulWidget {
   final AppDatabase database;
 
   const SanctuaryReaderView({super.key, required this.database});
 
   @override
-  State<SanctuaryReaderView> createState() => _SanctuaryReaderViewState();
+  ConsumerState<SanctuaryReaderView> createState() => _SanctuaryReaderViewState();
 }
 
-class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
+class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
   final GetBibleService _bibleService = GetBibleService();
   final ScrollController _scrollController = ScrollController();
 
@@ -36,7 +40,15 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
   @override
   void initState() {
     super.initState();
-    _loadChapter();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final initialBookId = ref.read(appSelectedBookProvider);
+      final initialChapter = ref.read(appSelectedChapterProvider);
+      try {
+        _currentBook = kBibleBooks.firstWhere((b) => b.id == initialBookId);
+        _currentChapter = initialChapter;
+      } catch (_) {}
+      _loadChapter();
+    });
   }
 
   @override
@@ -53,9 +65,11 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
       _selectedBookmark = null;
     });
 
+    final translation = ref.read(appTranslationProvider);
+
     try {
       final response = await _bibleService.fetchChapter(
-        translationKey: 'valera',
+        translationKey: translation,
         bookNumber: _currentBook.number,
         chapterNumber: _currentChapter,
       );
@@ -197,6 +211,8 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
                                         _currentBook = book;
                                         _currentChapter = chNum;
                                       });
+                                      ref.read(appSelectedBookProvider.notifier).state = book.id;
+                                      ref.read(appSelectedChapterProvider.notifier).state = chNum;
                                       _loadChapter();
                                     },
                                     borderRadius: BorderRadius.circular(10),
@@ -346,7 +362,35 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    // Listen to external book/chapter navigation requests (e.g. from Search/Library view)
+    ref.listen<String>(appSelectedBookProvider, (previous, next) {
+      if (next != _currentBook.id) {
+        try {
+          setState(() {
+            _currentBook = kBibleBooks.firstWhere((b) => b.id == next);
+          });
+          _loadChapter();
+        } catch (_) {}
+      }
+    });
+
+    ref.listen<int>(appSelectedChapterProvider, (previous, next) {
+      if (next != _currentChapter) {
+        setState(() {
+          _currentChapter = next;
+        });
+        _loadChapter();
+      }
+    });
+
+    ref.listen<String>(appTranslationProvider, (previous, next) {
+      if (previous != next) {
+        _loadChapter();
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -368,7 +412,13 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('${_currentBook.name} $_currentChapter'),
+                Text(
+                  '${_currentBook.name} $_currentChapter',
+                  style: GoogleFonts.plusJakartaSans(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16.5,
+                  ),
+                ),
                 const SizedBox(width: 4),
                 const Icon(LucideIcons.chevronDown, size: 16),
               ],
@@ -376,6 +426,11 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
           ),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(LucideIcons.settings2),
+            tooltip: 'Ajustes Rápidos de Lectura',
+            onPressed: () => QuickSettingsSheet.show(context),
+          ),
           IconButton(
             icon: const Icon(LucideIcons.bookmark),
             tooltip: 'Santuario de Guardados',
@@ -412,6 +467,8 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
   }
 
   Widget _buildVerseOfTheDayCard() {
+    final translation = ref.watch(appTranslationProvider).toUpperCase();
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(12),
@@ -431,21 +488,21 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
             child: const Icon(LucideIcons.sparkles, color: Colors.white, size: 16),
           ),
           const SizedBox(width: 10),
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'VERSÍCULO DEL DÍA (RVR1909)',
-                  style: TextStyle(
+                  'VERSÍCULO DEL DÍA ($translation)',
+                  style: const TextStyle(
                     fontSize: 9.5,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 1.0,
                     color: SanctuaryColors.waveNavy,
                   ),
                 ),
-                SizedBox(height: 2),
-                Text(
+                const SizedBox(height: 2),
+                const Text(
                   '"Lámpara es a mis pies tu palabra, y lumbrera a mi camino."',
                   style: TextStyle(
                     fontSize: 12.5,
@@ -462,6 +519,20 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
   }
 
   Widget _buildVersesList() {
+    final fontSize = ref.watch(appFontSizeProvider);
+    final fontFamily = ref.watch(appFontFamilyProvider);
+    final lineSpacing = ref.watch(appLineSpacingProvider);
+    final showVerseNumbers = ref.watch(appShowVerseNumbersProvider);
+
+    double bodyFontSize = 17.0;
+    if (fontSize == 'small') bodyFontSize = 15.0;
+    if (fontSize == 'large') bodyFontSize = 20.0;
+    if (fontSize == 'xlarge') bodyFontSize = 23.0;
+
+    double bodyHeight = 1.68;
+    if (lineSpacing == 'compact') bodyHeight = 1.45;
+    if (lineSpacing == 'relaxed') bodyHeight = 1.95;
+
     return StreamBuilder<List<LocalBookmarkEntry>>(
       stream: widget.database.watchAllBookmarks(),
       builder: (context, snapshot) {
@@ -480,6 +551,27 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
             final verse = _verses[index];
             final bookmark = bookmarkMap[verse.number];
             final isSelected = _selectedVerse?.number == verse.number;
+
+            TextStyle verseStyle;
+            if (fontFamily == 'playfair') {
+              verseStyle = GoogleFonts.playfairDisplay(
+                fontSize: bodyFontSize,
+                height: bodyHeight,
+                color: bookmark != null ? Colors.black87 : Theme.of(context).colorScheme.onSurface,
+              );
+            } else if (fontFamily == 'jakarta') {
+              verseStyle = GoogleFonts.plusJakartaSans(
+                fontSize: bodyFontSize,
+                height: bodyHeight,
+                color: bookmark != null ? Colors.black87 : Theme.of(context).colorScheme.onSurface,
+              );
+            } else {
+              verseStyle = GoogleFonts.merriweather(
+                fontSize: bodyFontSize,
+                height: bodyHeight,
+                color: bookmark != null ? Colors.black87 : Theme.of(context).colorScheme.onSurface,
+              );
+            }
 
             return GestureDetector(
               onTap: () => _onVerseTapped(verse),
@@ -517,21 +609,18 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
                     RichText(
                       text: TextSpan(
                         children: [
-                          TextSpan(
-                            text: '${verse.number}  ',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                              color: SanctuaryColors.waveNavy.withOpacity(0.75),
+                          if (showVerseNumbers)
+                            TextSpan(
+                              text: '${verse.number}  ',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                color: SanctuaryColors.waveNavy.withOpacity(0.75),
+                              ),
                             ),
-                          ),
                           TextSpan(
                             text: verse.text,
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: bookmark != null
-                                      ? Colors.black87
-                                      : Theme.of(context).colorScheme.onSurface,
-                                ),
+                            style: verseStyle,
                           ),
                         ],
                       ),
@@ -653,6 +742,7 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
             onPressed: _currentChapter > 1
                 ? () {
                     setState(() => _currentChapter--);
+                    ref.read(appSelectedChapterProvider.notifier).state = _currentChapter;
                     _loadChapter();
                   }
                 : null,
@@ -667,6 +757,7 @@ class _SanctuaryReaderViewState extends State<SanctuaryReaderView> {
             onPressed: _currentChapter < _currentBook.totalChapters
                 ? () {
                     setState(() => _currentChapter++);
+                    ref.read(appSelectedChapterProvider.notifier).state = _currentChapter;
                     _loadChapter();
                   }
                 : null,

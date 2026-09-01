@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
+import '../../../../shared/widgets/coachmark_guide_dialog.dart';
+import '../../../../shared/widgets/quick_settings_sheet.dart';
+import '../../../../shared/widgets/sanctuary_church_logo.dart';
 
 class DevotionalTopic {
   final String id;
@@ -96,31 +99,48 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: Builder(
+          builder: (ctx) => IconButton(
+            icon: const Icon(LucideIcons.menu),
+            tooltip: 'Menú Lateral',
+            onPressed: () => Scaffold.of(ctx).openDrawer(),
+          ),
+        ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: SanctuaryColors.sunOrange.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Icon(
-                LucideIcons.bookMarked,
-                size: 20,
-                color: SanctuaryColors.sunOrange,
-              ),
+            const SanctuaryChurchLogo(
+              size: 26,
+              variant: LogoVariant.symbol,
+              showText: false,
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Text(
               'Santuario Digital',
               style: GoogleFonts.plusJakartaSans(
                 fontWeight: FontWeight.w800,
-                fontSize: 18,
+                fontSize: 17,
               ),
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(LucideIcons.search),
+            tooltip: 'Buscar en las Escrituras',
+            onPressed: () => widget.onNavigateTab(2), // Tab 2: Biblioteca & Búsqueda
+          ),
+          IconButton(
+            icon: const Icon(LucideIcons.settings2),
+            tooltip: 'Ajustes Rápidos',
+            onPressed: () => QuickSettingsSheet.show(context),
+          ),
+          IconButton(
+            icon: const Icon(LucideIcons.helpCircle),
+            tooltip: 'Guía Rápida',
+            onPressed: () => CoachMarkGuideDialog.show(context),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

@@ -1,26 +1,209 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
-
-final appThemeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.light);
-final appTranslationProvider = StateProvider<String>((ref) => 'valera');
-final appFontSizeProvider = StateProvider<String>((ref) => 'medium');
+import '../../../../shared/widgets/coachmark_guide_dialog.dart';
+import '../../../../shared/widgets/feedback_dialog.dart';
+import '../../../../shared/widgets/quick_settings_sheet.dart';
 
 class SanctuarySettingsView extends ConsumerWidget {
   final AppDatabase database;
 
   const SanctuarySettingsView({super.key, required this.database});
 
+  Future<void> _exportBackupJson(BuildContext context) async {
+    final bookmarks = await database.getAllBookmarks();
+    final backupData = {
+      'app': 'Biblia Inteligente (Digital Sanctuary)',
+      'version': '1.2.0-flutter',
+      'exportedAt': DateTime.now().toIso8601String(),
+      'bookmarksCount': bookmarks.length,
+      'bookmarks': bookmarks.map((b) => {
+        'id': b.id,
+        'bookId': b.bookId,
+        'bookName': b.bookName,
+        'chapter': b.chapter,
+        'verse': b.verse,
+        'verseText': b.verseText,
+        'colorHex': b.colorHex,
+        'customTitle': b.customTitle,
+        'personalNote': b.personalNote,
+        'createdAt': b.createdAt.toIso8601String(),
+      }).toList(),
+    };
+
+    final jsonStr = const JsonEncoder.withIndent('  ').convert(backupData);
+    await Clipboard.setData(ClipboardData(text: jsonStr));
+
+    if (context.mounted) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Row(
+            children: [
+              const Icon(LucideIcons.checkCircle2, color: Color(0xFF10B981), size: 22),
+              const SizedBox(width: 8),
+              Text(
+                'Copia JSON Exportada',
+                style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w800, fontSize: 16),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Se han empaquetado ${bookmarks.length} versículos guardados y notas personales.',
+                style: GoogleFonts.plusJakartaSans(fontSize: 13),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  'El código JSON completo ha sido copiado automáticamente a tu portapapeles. Puedes guardarlo en un archivo o enviarlo por correo.',
+                  style: GoogleFonts.plusJakartaSans(fontSize: 11, color: Colors.grey.shade700),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: SanctuaryColors.waveNavy,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Entendido'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  void _showImportJsonDialog(BuildContext context) {
+    final textController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            const Icon(LucideIcons.upload, color: SanctuaryColors.sunOrange, size: 22),
+            const SizedBox(width: 8),
+            Text(
+              'Restaurar Respaldo JSON',
+              style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w800, fontSize: 16),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Pega aquí el contenido JSON exportado previamente:',
+              style: GoogleFonts.plusJakartaSans(fontSize: 12.5),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: textController,
+              maxLines: 5,
+              style: GoogleFonts.firaCode(fontSize: 11),
+              decoration: InputDecoration(
+                hintText: '{\n  "app": "Biblia Inteligente...",\n  "bookmarks": [...]\n}',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: SanctuaryColors.sunOrange,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            onPressed: () async {
+              final raw = textController.text.trim();
+              if (raw.isEmpty) return;
+
+              try {
+                final Map<String, dynamic> data = jsonDecode(raw);
+                final List<dynamic>? bookmarks = data['bookmarks'];
+
+                int imported = 0;
+                if (bookmarks != null) {
+                  for (final item in bookmarks) {
+                    final id = item['id'] as String? ?? '${item['bookId']}_${item['chapter']}_${item['verse']}';
+                    await database.insertOrUpdateBookmark(
+                      LocalBookmarksCompanion.insert(
+                        id: id,
+                        bookId: item['bookId'] as String,
+                        bookName: item['bookName'] as String,
+                        chapter: item['chapter'] as int,
+                        verse: item['verse'] as int,
+                        verseText: item['verseText'] as String,
+                        colorHex: item['colorHex'] as String,
+                        customTitle: drift.Value(item['customTitle'] as String?),
+                        personalNote: drift.Value(item['personalNote'] as String?),
+                        createdAt: item['createdAt'] != null
+                            ? drift.Value(DateTime.parse(item['createdAt'] as String))
+                            : const drift.Value.absent(),
+                      ),
+                    );
+                    imported++;
+                  }
+                }
+
+                Navigator.pop(ctx);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('¡Éxito! Se restauraron $imported versículos guardados.'),
+                      backgroundColor: const Color(0xFF10B981),
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Error al procesar JSON: Formato no válido ($e)'),
+                      backgroundColor: Colors.redAccent,
+                    ),
+                  );
+                }
+              }
+            },
+            child: const Text('Restaurar Ahora'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final themeMode = ref.watch(appThemeModeProvider);
+    final visualTheme = ref.watch(appVisualThemeModeProvider);
     final translation = ref.watch(appTranslationProvider);
-    final fontSize = ref.watch(appFontSizeProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -45,7 +228,7 @@ class SanctuarySettingsView extends ConsumerWidget {
           // Section 1: Themes & Visual Appearance
           _buildCard(
             context,
-            title: 'Apariencia & Modo de Lectura',
+            title: 'Apariencia & Tonalidad Visual',
             icon: LucideIcons.palette,
             iconColor: SanctuaryColors.sunOrange,
             child: Column(
@@ -61,34 +244,30 @@ class SanctuarySettingsView extends ConsumerWidget {
                     Expanded(
                       child: _buildOptionTile(
                         context,
-                        label: 'Claro',
+                        label: '☀️ Claro',
                         subtitle: 'Pergamino',
-                        isSelected: themeMode == ThemeMode.light,
-                        onTap: () => ref.read(appThemeModeProvider.notifier).state = ThemeMode.light,
+                        isSelected: visualTheme == AppVisualTheme.light,
+                        onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.light,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: _buildOptionTile(
                         context,
-                        label: 'Sepia',
+                        label: '📜 Sepia',
                         subtitle: 'Cálido',
-                        isSelected: false, // Custom Sepia mapped in SanctuaryTheme
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Tema Sepia activado.')),
-                          );
-                        },
+                        isSelected: visualTheme == AppVisualTheme.sepia,
+                        onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.sepia,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: _buildOptionTile(
                         context,
-                        label: 'Oscuro',
+                        label: '🌙 Oscuro',
                         subtitle: 'Noche',
-                        isSelected: themeMode == ThemeMode.dark,
-                        onTap: () => ref.read(appThemeModeProvider.notifier).state = ThemeMode.dark,
+                        isSelected: visualTheme == AppVisualTheme.dark,
+                        onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.dark,
                       ),
                     ),
                   ],
@@ -102,7 +281,7 @@ class SanctuarySettingsView extends ConsumerWidget {
           // Section 2: Canonical Translations
           _buildCard(
             context,
-            title: 'Traducción de las Escrituras',
+            title: 'Traducción Canónica de las Escrituras',
             icon: LucideIcons.book,
             iconColor: SanctuaryColors.waveNavy,
             child: Column(
@@ -140,7 +319,37 @@ class SanctuarySettingsView extends ConsumerWidget {
 
           const SizedBox(height: 16),
 
-          // Section 3: Data Backup (Export / Import JSON)
+          // Section 3: Reading Quick Settings Launcher
+          _buildCard(
+            context,
+            title: 'Tipografía & Espaciado',
+            icon: LucideIcons.slidersHorizontal,
+            iconColor: SanctuaryColors.cyanAccent,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Configura el tamaño de fuente, familias tipográficas (Merriweather, Playfair, Jakarta) e interlineado:',
+                  style: GoogleFonts.plusJakartaSans(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.75)),
+                ),
+                const SizedBox(height: 12),
+                FilledButton.icon(
+                  onPressed: () => QuickSettingsSheet.show(context),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: SanctuaryColors.waveNavy,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    minimumSize: const Size.fromHeight(42),
+                  ),
+                  icon: const Icon(LucideIcons.settings2, size: 16),
+                  label: const Text('Abrir Ajustes de Lectura y Tipografía'),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Section 4: Data Backup (Export / Import JSON)
           _buildCard(
             context,
             title: 'Respaldo & Transferencia (JSON)',
@@ -158,20 +367,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: () {
-                          final backupData = {
-                            'app': 'Biblia Inteligente (Digital Sanctuary)',
-                            'version': '1.2.0-flutter',
-                            'exportedAt': DateTime.now().toIso8601String(),
-                          };
-                          final jsonStr = jsonEncode(backupData);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Copia de seguridad generada en formato JSON.'),
-                              backgroundColor: SanctuaryColors.waveNavy,
-                            ),
-                          );
-                        },
+                        onPressed: () => _exportBackupJson(context),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -183,14 +379,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                     const SizedBox(width: 10),
                     Expanded(
                       child: FilledButton.icon(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Listo para importar archivo de respaldo .json'),
-                              backgroundColor: SanctuaryColors.sunOrange,
-                            ),
-                          );
-                        },
+                        onPressed: () => _showImportJsonDialog(context),
                         style: FilledButton.styleFrom(
                           backgroundColor: SanctuaryColors.sunOrange,
                           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -208,7 +397,64 @@ class SanctuarySettingsView extends ConsumerWidget {
 
           const SizedBox(height: 16),
 
-          // Section 4: El-Shaddai Church Branding Card
+          // Section 5: Guided Tour & Feedback
+          _buildCard(
+            context,
+            title: 'Ayuda, Guía & Soporte',
+            icon: LucideIcons.helpCircle,
+            iconColor: Colors.purple,
+            child: Column(
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.purple.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(LucideIcons.compass, color: Colors.purple, size: 20),
+                  ),
+                  title: Text(
+                    'Ver Guía Rápida Interactiva',
+                    style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w700, fontSize: 13.5),
+                  ),
+                  subtitle: Text(
+                    'Recorre las 7 secciones de la app paso a paso',
+                    style: GoogleFonts.plusJakartaSans(fontSize: 11),
+                  ),
+                  trailing: const Icon(LucideIcons.chevronRight, size: 16),
+                  onTap: () => CoachMarkGuideDialog.show(context),
+                ),
+                const Divider(),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: SanctuaryColors.sunOrange.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(LucideIcons.messageSquare, color: SanctuaryColors.sunOrange, size: 20),
+                  ),
+                  title: Text(
+                    'Reportar Error o Sugerencia',
+                    style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w700, fontSize: 13.5),
+                  ),
+                  subtitle: Text(
+                    'Envía comentarios directos al equipo de desarrollo',
+                    style: GoogleFonts.plusJakartaSans(fontSize: 11),
+                  ),
+                  trailing: const Icon(LucideIcons.chevronRight, size: 16),
+                  onTap: () => FeedbackDialog.show(context),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Section 6: El-Shaddai Church Branding Card
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
