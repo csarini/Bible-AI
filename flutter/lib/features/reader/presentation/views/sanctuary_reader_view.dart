@@ -25,7 +25,7 @@ class SanctuaryReaderView extends ConsumerStatefulWidget {
 }
 
 class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
-  final GetBibleService _bibleService = GetBibleService();
+  late final GetBibleService _bibleService;
   final ScrollController _scrollController = ScrollController();
 
   BibleBookInfo _currentBook = kBibleBooks.firstWhere((b) => b.id == 'MAT');
@@ -41,6 +41,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
   @override
   void initState() {
     super.initState();
+    _bibleService = GetBibleService(database: widget.database);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final initialBookId = ref.read(appSelectedBookProvider);
       final initialChapter = ref.read(appSelectedChapterProvider);
@@ -65,18 +66,17 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
     if (index != -1) {
       final verse = _verses[index];
       _onVerseTapped(verse);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_scrollController.hasClients) {
-          final maxScroll = _scrollController.position.maxScrollExtent;
-          final targetOffset = (_verses.length > 1)
-              ? (index / _verses.length) * maxScroll
-              : 0.0;
-          _scrollController.animateTo(
-            targetOffset.clamp(0.0, maxScroll),
-            duration: const Duration(milliseconds: 350),
-            curve: Curves.easeInOut,
-          );
-        }
+      Future.delayed(const Duration(milliseconds: 120), () {
+        if (!mounted || !_scrollController.hasClients) return;
+        final maxScroll = _scrollController.position.maxScrollExtent;
+        final targetOffset = (_verses.length > 1)
+            ? (index / _verses.length) * maxScroll
+            : 0.0;
+        _scrollController.animateTo(
+          targetOffset.clamp(0.0, maxScroll),
+          duration: const Duration(milliseconds: 380),
+          curve: Curves.easeInOut,
+        );
       });
     }
   }
@@ -96,6 +96,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
         translationKey: translation,
         bookNumber: _currentBook.number,
         chapterNumber: _currentChapter,
+        bookCode: _currentBook.id,
+        bookName: _currentBook.name,
       );
 
       final verses = response.verses.map((v) {
@@ -154,7 +156,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
     });
   }
 
-  void _openBookChapterPicker() {
+  void _openBookChapterPicker(List<BibleBookInfo> allBooks) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -192,9 +194,9 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                   Expanded(
                     child: ListView.builder(
                       controller: scrollController,
-                      itemCount: kBibleBooks.length,
+                      itemCount: allBooks.length,
                       itemBuilder: (context, index) {
-                        final book = kBibleBooks[index];
+                        final book = allBooks[index];
                         final isSelected = book.id == _currentBook.id;
 
                         return ExpansionTile(
@@ -394,6 +396,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
+    final allBooks = ref.watch(bibleBooksStreamProvider(widget.database)).valueOrNull ?? kBibleBooks;
+
     // Listen to external book/chapter/verse navigation requests (e.g. from Home, Search, Saved Verses)
     ref.listen<String>(appSelectedBookProvider, (previous, next) {
       if (next != _currentBook.id) {
@@ -401,7 +405,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
           final nextChapter = ref.read(appSelectedChapterProvider);
           final nextVerse = ref.read(appSelectedVerseProvider);
           setState(() {
-            _currentBook = kBibleBooks.firstWhere((b) => b.id == next);
+            _currentBook = allBooks.firstWhere((b) => b.id == next, orElse: () => kBibleBooks.firstWhere((b) => b.id == next));
             _currentChapter = nextChapter;
           });
           _loadChapter(nextVerse);
@@ -433,6 +437,26 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
       }
     });
 
+    ref.listen<int>(selectedTabProvider, (previous, next) {
+      if (next == 1) {
+        final targetBook = ref.read(appSelectedBookProvider);
+        final targetChapter = ref.read(appSelectedChapterProvider);
+        final targetVerse = ref.read(appSelectedVerseProvider);
+
+        if (targetBook != _currentBook.id || targetChapter != _currentChapter) {
+          setState(() {
+            _currentBook = allBooks.firstWhere((b) => b.id == targetBook, orElse: () => kBibleBooks.firstWhere((b) => b.id == targetBook));
+            _currentChapter = targetChapter;
+          });
+          _loadChapter(targetVerse);
+        } else if (targetVerse != null && _verses.isNotEmpty) {
+          Future.delayed(const Duration(milliseconds: 80), () {
+            if (mounted) _scrollToAndHighlightVerse(targetVerse);
+          });
+        }
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -441,7 +465,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
           onPressed: openSanctuaryDrawer,
         ),
         title: InkWell(
-          onTap: _openBookChapterPicker,
+          onTap: () => _openBookChapterPicker(allBooks),
           borderRadius: BorderRadius.circular(8),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

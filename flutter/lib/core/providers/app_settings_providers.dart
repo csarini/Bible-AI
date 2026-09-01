@@ -29,3 +29,22 @@ final bookmarksCountStreamProvider =
     StreamProvider.family<int, AppDatabase>((ref, database) {
   return database.watchAllBookmarks().map((list) => list.length);
 });
+
+// Database Stream Provider for dynamic Bible Books list loaded from DB
+final bibleBooksStreamProvider =
+    StreamProvider.family<List<BibleBookInfo>, AppDatabase>((ref, database) {
+  final translation = ref.watch(appTranslationProvider);
+  return database.watchBooksByTranslation(translation).map((entries) {
+    if (entries.isEmpty) {
+      return kBibleBooks;
+    }
+    return entries.map((e) => BibleBookInfo.fromEntry(e)).toList();
+  });
+});
+
+// Offline Bible Chapters Sync Status Stream Provider
+final offlineSyncStatusStreamProvider =
+    StreamProvider.family<OfflineSyncStatus, OfflineBibleSyncService>((ref, service) {
+  return service.statusStream;
+});
+

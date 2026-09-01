@@ -314,7 +314,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
         {/* Hero Actions Toolbar */}
         <div className="relative z-10 pt-4 mt-4 border-t border-inherit/20 flex flex-wrap items-center justify-between gap-2.5">
-          {/* Primary Action: Read in Context */}
+          {/* Primary Action: Continuar leyendo */}
           <button
             type="button"
             onClick={() =>
@@ -325,12 +325,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
               )
             }
             className="p-2 sm:px-4 sm:py-2.5 rounded-2xl bg-[#F47B20] hover:bg-[#EA580C] text-white text-xs font-bold transition-all shadow-xs flex items-center gap-2 cursor-pointer active:scale-95"
-            title="Leer este versículo en su contexto bíblico completo"
-            aria-label="Leer en contexto"
+            title="Continuar leyendo este versículo en su contexto bíblico completo"
+            aria-label="Continuar leyendo"
           >
             <BookOpen className="w-4 h-4" />
-            <span className="hidden sm:inline">Leer en Contexto</span>
-            <ArrowRight className="w-3.5 h-3.5 hidden sm:inline" />
+            <span>Continuar leyendo</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
 
           {/* Secondary Quick Action Buttons */}
@@ -410,183 +410,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </button>
           </div>
         </div>
-      </section>
-
-      {/* Main Feature Cards Grid (Bento Style) */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
-        {/* Card 1: Continue Reading */}
-        <div
-          onClick={() => onNavigateScripture(lastReadBookId, lastReadChapter)}
-          className={`p-4 sm:p-5 rounded-3xl border shadow-xs transition-all hover:shadow-md cursor-pointer group flex flex-col justify-between ${cardBgClass}`}
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-[#F47B20] block mb-1">
-                Continuar Lectura
-              </span>
-              <h3 className="font-serif font-bold text-lg text-inherit group-hover:text-[#F47B20] transition-colors">
-                {lastReadBook.name} {lastReadChapter}
-              </h3>
-              <p className="text-xs opacity-75 font-sans mt-1">
-                {lastReadBook.testament === 'OT' ? 'Antiguo Testamento' : 'Nuevo Testamento'} • {lastReadBook.category}
-              </p>
-            </div>
-            <div className="w-10 h-10 rounded-2xl bg-[#0B2B68] text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-2xs">
-              <BookOpen className="w-5 h-5 text-[#FED65B]" />
-            </div>
-          </div>
-
-          <div className="mt-4 pt-3 border-t border-inherit/20 flex items-center justify-between text-xs font-bold text-[#F47B20]">
-            <span>Reanudar ahora</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </div>
-
-        {/* Card 2: Interactive Biblical Maps */}
-        <div
-          onClick={() => onNavigateTab('maps')}
-          className={`p-4 sm:p-5 rounded-3xl border shadow-xs transition-all hover:shadow-md cursor-pointer group flex flex-col justify-between ${cardBgClass}`}
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-[#00A3E0] block mb-1">
-                Geografía Sagrada
-              </span>
-              <h3 className="font-serif font-bold text-lg text-inherit group-hover:text-[#00A3E0] transition-colors">
-                Mapas Bíblicos
-              </h3>
-              <p className="text-xs opacity-75 font-sans mt-1">
-                Rutas de Jesús, Éxodo y viajes de Pablo con arqueología y sincronización.
-              </p>
-            </div>
-            <div className="w-10 h-10 rounded-2xl bg-[#00A3E0]/20 text-[#00A3E0] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform border border-[#00A3E0]/40">
-              <Compass className="w-5 h-5" />
-            </div>
-          </div>
-
-          <div className="mt-4 pt-3 border-t border-inherit/20 flex items-center justify-between text-xs font-bold text-[#00A3E0]">
-            <span>Explorar itinerarios</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </div>
-
-        {/* Card 3: AI Theological Mentor */}
-        <div
-          onClick={() => onNavigateTab('ai-mentor')}
-          className={`p-4 sm:p-5 rounded-3xl border shadow-xs transition-all hover:shadow-md cursor-pointer group flex flex-col justify-between ${cardBgClass}`}
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <div className="flex items-center gap-1.5 flex-wrap mb-1">
-                <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-[#F47B20]">
-                  Exégesis & Contexto
-                </span>
-                <span className="text-[9px] font-sans font-bold uppercase tracking-wider bg-[#F47B20]/15 text-[#F47B20] px-2 py-0.5 rounded-full">
-                  Modo Prueba (2/día)
-                </span>
-              </div>
-              <h3 className="font-serif font-bold text-lg text-inherit group-hover:text-[#F47B20] transition-colors">
-                Mentor Teológico IA
-              </h3>
-              <p className="text-xs opacity-75 font-sans mt-1">
-                Respuestas bíblicas, contexto histórico, griego y hebreo bíblico.
-              </p>
-            </div>
-            <div className="w-10 h-10 rounded-2xl bg-[#0B2B68] text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-2xs">
-              <Sparkles className="w-5 h-5 text-[#F47B20]" />
-            </div>
-          </div>
-
-          <div className="mt-4 pt-3 border-t border-inherit/20 flex items-center justify-between text-xs font-bold text-[#F47B20]">
-            <span>Consultar al mentor (2/día)</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </div>
-
-        {/* Card 4: Search & 66 Books Library */}
-        <div
-          onClick={() => onNavigateTab('library')}
-          className={`p-4 sm:p-5 rounded-3xl border shadow-xs transition-all hover:shadow-md cursor-pointer group flex flex-col justify-between ${cardBgClass}`}
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-[#F47B20] block mb-1">
-                Biblioteca Canónica
-              </span>
-              <h3 className="font-serif font-bold text-lg text-inherit group-hover:text-[#F47B20] transition-colors">
-                Buscar en la Biblia
-              </h3>
-              <p className="text-xs opacity-75 font-sans mt-1">
-                66 libros del Antiguo y Nuevo Testamento con búsqueda instantánea.
-              </p>
-            </div>
-            <div className="w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/5 text-inherit flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform border border-inherit/30">
-              <Search className="w-5 h-5 text-[#F47B20]" />
-            </div>
-          </div>
-
-          <div className="mt-4 pt-3 border-t border-inherit/20 flex items-center justify-between text-xs font-bold text-[#F47B20]">
-            <span>Abrir biblioteca</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </div>
-
-        {/* Card 5: Saved Verses Sanctuary */}
-        <div
-          onClick={() => onNavigateTab('saved')}
-          className={`p-4 sm:p-5 rounded-3xl border shadow-xs transition-all hover:shadow-md cursor-pointer group flex flex-col justify-between ${cardBgClass}`}
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-[#FED65B] block mb-1">
-                Mis Favoritos
-              </span>
-              <h3 className="font-serif font-bold text-lg text-inherit group-hover:text-[#F47B20] transition-colors">
-                Versículos Guardados
-              </h3>
-              <p className="text-xs opacity-75 font-sans mt-1">
-                {bookmarksCount} {bookmarksCount === 1 ? 'versículo destacado' : 'versículos destacados'} con tus notas personales.
-              </p>
-            </div>
-            <div className="w-10 h-10 rounded-2xl bg-[#0B2B68] text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-2xs">
-              <Bookmark className="w-5 h-5 text-[#FED65B]" />
-            </div>
-          </div>
-
-          <div className="mt-4 pt-3 border-t border-inherit/20 flex items-center justify-between text-xs font-bold text-[#F47B20]">
-            <span>Ver santuario</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </div>
-
-        {/* Card 6: Prédicas, Devocionales y Eventos */}
-        <div
-          onClick={() => onNavigateTab('events')}
-          className={`p-4 sm:p-5 rounded-3xl border shadow-xs transition-all hover:shadow-md cursor-pointer group flex flex-col justify-between ${cardBgClass}`}
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-[#0B2B68] dark:text-[#FED65B] block mb-1">
-                Bitácora Espiritual
-              </span>
-              <h3 className="font-serif font-bold text-lg text-inherit group-hover:text-[#0B2B68] dark:group-hover:text-[#FED65B] transition-colors">
-                Prédicas & Eventos
-              </h3>
-              <p className="text-xs opacity-75 font-sans mt-1">
-                Apuntes de sermones dominicales, reuniones de matrimonios y estudios con citas bíblicas.
-              </p>
-            </div>
-            <div className="w-10 h-10 rounded-2xl bg-[#0B2B68] text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-2xs">
-              <Calendar className="w-5 h-5 text-[#FED65B]" />
-            </div>
-          </div>
-
-          <div className="mt-4 pt-3 border-t border-inherit/20 flex items-center justify-between text-xs font-bold text-[#0B2B68] dark:text-[#FED65B]">
-            <span>Abrir bitácora</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </div>
-
       </section>
     </div>
   );

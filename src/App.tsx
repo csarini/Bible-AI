@@ -22,6 +22,7 @@ import { StorageService } from './services/storageService';
 import { ShareContent } from './services/shareService';
 import { ActiveTab, BibleVerse, LocalBookmark, ReadingSettings, HighlightColor } from './types';
 import { initBibleDatabase, getLocalBooksSync, getBookByIdOrNumber } from './services/bibleDatabaseService';
+import { startFullDownload } from './services/offlineBibleService';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -68,7 +69,12 @@ export default function App() {
 
   useEffect(() => {
     // Initialize and seed the 3 Bible translations into IndexedDB local
-    initBibleDatabase().catch((err) => console.error('Error init DB:', err));
+    initBibleDatabase()
+      .then(() => {
+        // Automatically start background downloading of all Bible verses across translations
+        startFullDownload().catch((err) => console.warn('Background sync notice:', err));
+      })
+      .catch((err) => console.error('Error init DB:', err));
 
     // Load initial stored bookmarks and recent searches
     const bms = StorageService.getBookmarks();

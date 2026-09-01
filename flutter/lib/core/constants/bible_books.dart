@@ -4,6 +4,7 @@ class BibleBookInfo {
   final String name;
   final int totalChapters;
   final bool isNewTestament;
+  final String? translation;
 
   const BibleBookInfo({
     required this.number,
@@ -11,11 +12,92 @@ class BibleBookInfo {
     required this.name,
     required this.totalChapters,
     required this.isNewTestament,
+    this.translation,
   });
+
+  factory BibleBookInfo.fromEntry(dynamic entry) {
+    return BibleBookInfo(
+      number: entry.bookNumber as int,
+      id: entry.bookCode as String,
+      name: entry.name as String,
+      totalChapters: entry.totalChapters as int,
+      isNewTestament: entry.isNewTestament as bool,
+      translation: entry.translationKey as String?,
+    );
+  }
 
   /// Short abbreviation (e.g. 'Gén', 'Éxo', 'Mt', 'Jn')
   String get abbreviation => id;
 }
+
+const Map<int, ({String code, int chapters, bool isNT})> kCanonicalBookMetadata = {
+  1: (code: 'GEN', chapters: 50, isNT: false),
+  2: (code: 'EXO', chapters: 40, isNT: false),
+  3: (code: 'LEV', chapters: 27, isNT: false),
+  4: (code: 'NUM', chapters: 36, isNT: false),
+  5: (code: 'DEU', chapters: 34, isNT: false),
+  6: (code: 'JOS', chapters: 24, isNT: false),
+  7: (code: 'JDG', chapters: 21, isNT: false),
+  8: (code: 'RUT', chapters: 4, isNT: false),
+  9: (code: '1SA', chapters: 31, isNT: false),
+  10: (code: '2SA', chapters: 24, isNT: false),
+  11: (code: '1KI', chapters: 22, isNT: false),
+  12: (code: '2KI', chapters: 25, isNT: false),
+  13: (code: '1CH', chapters: 29, isNT: false),
+  14: (code: '2CH', chapters: 36, isNT: false),
+  15: (code: 'EZR', chapters: 10, isNT: false),
+  16: (code: 'NEH', chapters: 13, isNT: false),
+  17: (code: 'EST', chapters: 10, isNT: false),
+  18: (code: 'JOB', chapters: 42, isNT: false),
+  19: (code: 'PSA', chapters: 150, isNT: false),
+  20: (code: 'PRO', chapters: 31, isNT: false),
+  21: (code: 'ECC', chapters: 12, isNT: false),
+  22: (code: 'SNG', chapters: 8, isNT: false),
+  23: (code: 'ISA', chapters: 66, isNT: false),
+  24: (code: 'JER', chapters: 52, isNT: false),
+  25: (code: 'LAM', chapters: 5, isNT: false),
+  26: (code: 'EZK', chapters: 48, isNT: false),
+  27: (code: 'DAN', chapters: 12, isNT: false),
+  28: (code: 'HOS', chapters: 14, isNT: false),
+  29: (code: 'JOL', chapters: 3, isNT: false),
+  30: (code: 'AMO', chapters: 9, isNT: false),
+  31: (code: 'OBA', chapters: 1, isNT: false),
+  32: (code: 'JON', chapters: 4, isNT: false),
+  33: (code: 'MIC', chapters: 7, isNT: false),
+  34: (code: 'NAM', chapters: 3, isNT: false),
+  35: (code: 'HAB', chapters: 3, isNT: false),
+  36: (code: 'ZEP', chapters: 3, isNT: false),
+  37: (code: 'HAG', chapters: 2, isNT: false),
+  38: (code: 'ZEC', chapters: 14, isNT: false),
+  39: (code: 'MAL', chapters: 4, isNT: false),
+  40: (code: 'MAT', chapters: 28, isNT: true),
+  41: (code: 'MRK', chapters: 16, isNT: true),
+  42: (code: 'LUK', chapters: 24, isNT: true),
+  43: (code: 'JHN', chapters: 21, isNT: true),
+  44: (code: 'ACT', chapters: 28, isNT: true),
+  45: (code: 'ROM', chapters: 16, isNT: true),
+  46: (code: '1CO', chapters: 16, isNT: true),
+  47: (code: '2CO', chapters: 13, isNT: true),
+  48: (code: 'GAL', chapters: 6, isNT: true),
+  49: (code: 'EPH', chapters: 6, isNT: true),
+  50: (code: 'PHP', chapters: 4, isNT: true),
+  51: (code: 'COL', chapters: 4, isNT: true),
+  52: (code: '1TH', chapters: 5, isNT: true),
+  53: (code: '2TH', chapters: 3, isNT: true),
+  54: (code: '1TI', chapters: 6, isNT: true),
+  55: (code: '2TI', chapters: 4, isNT: true),
+  56: (code: 'TIT', chapters: 3, isNT: true),
+  57: (code: 'PHM', chapters: 1, isNT: true),
+  58: (code: 'HEB', chapters: 13, isNT: true),
+  59: (code: 'JAS', chapters: 5, isNT: true),
+  60: (code: '1PE', chapters: 5, isNT: true),
+  61: (code: '2PE', chapters: 3, isNT: true),
+  62: (code: '1JN', chapters: 5, isNT: true),
+  63: (code: '2JN', chapters: 1, isNT: true),
+  64: (code: '3JN', chapters: 1, isNT: true),
+  65: (code: 'JUD', chapters: 1, isNT: true),
+  66: (code: 'REV', chapters: 22, isNT: true),
+};
 
 const List<BibleBookInfo> kBibleBooks = [
   // Antiguo Testamento

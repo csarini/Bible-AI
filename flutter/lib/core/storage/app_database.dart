@@ -1,14 +1,50 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import '../constants/bible_books.dart';
 
 part 'app_database.g.dart';
 
 // =============================================================================
 // TABLE DEFINITIONS
 // =============================================================================
+
+@DataClassName('BibleBookEntry')
+class LocalBibleBooks extends Table {
+  TextColumn get id => text()(); // e.g. 'valera_1', 'sse_40'
+  TextColumn get translationKey => text().named('translation_key')(); // 'valera', 'sse', 'rv1858'
+  IntColumn get bookNumber => integer().named('book_number')(); // 1..66
+  TextColumn get bookCode => text().named('book_code')(); // 'GEN', 'MAT', etc.
+  TextColumn get name => text()(); // 'Génesis', 'San Mateo'
+  IntColumn get totalChapters => integer().named('total_chapters')();
+  BoolColumn get isNewTestament => boolean().withDefault(const Constant(false)).named('is_new_testament')();
+  TextColumn get url => text().nullable()();
+  TextColumn get sha => text().nullable()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime).named('created_at')();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DataClassName('BibleTranslationEntry')
+class LocalBibleTranslations extends Table {
+  TextColumn get id => text()(); // 'valera', 'sse', 'rv1858'
+  TextColumn get name => text()(); // 'Reina Valera (1909)'
+  TextColumn get abbreviation => text()(); // 'valera'
+  TextColumn get description => text().nullable()();
+  TextColumn get language => text().withDefault(const Constant('Spanish'))();
+  TextColumn get direction => text().withDefault(const Constant('LTR'))();
+  TextColumn get distributionAbbreviation => text().nullable().named('distribution_abbreviation')();
+  TextColumn get url => text().nullable()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime).named('created_at')();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
 
 @DataClassName('LocalBookmarkEntry')
 class LocalBookmarks extends Table {
@@ -73,11 +109,35 @@ class FoodCourtMenus extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+@DataClassName('BibleChapterEntry')
+class LocalBibleChapters extends Table {
+  TextColumn get id => text()(); // e.g. 'valera_40_1' or 'rv1858_1_1'
+  TextColumn get translationKey => text().named('translation_key')();
+  IntColumn get bookNumber => integer().named('book_number')();
+  TextColumn get bookCode => text().named('book_code')();
+  TextColumn get bookName => text().named('book_name')();
+  IntColumn get chapter => integer()();
+  TextColumn get versesJson => text().named('verses_json')();
+  IntColumn get verseCount => integer().withDefault(const Constant(0)).named('verse_count')();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime).named('created_at')();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 // =============================================================================
 // DRIFT DATABASE & CRUD OPERATIONS
 // =============================================================================
 
-@DriftDatabase(tables: [LocalBookmarks, EventCategories, UserEvents, FoodCourtMenus])
+@DriftDatabase(tables: [
+  LocalBookmarks,
+  EventCategories,
+  UserEvents,
+  FoodCourtMenus,
+  LocalBibleBooks,
+  LocalBibleTranslations,
+  LocalBibleChapters,
+])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
@@ -119,6 +179,225 @@ class AppDatabase extends _$AppDatabase {
       });
     },
   );
+
+  // ---------------------------------------------------------------------------
+  // BIBLE BOOKS & TRANSLATIONS CRUD & SEEDING
+  // ---------------------------------------------------------------------------
+  Stream<List<BibleBookEntry>> watchBooksByTranslation(String translationKey) {
+    return (select(localBibleBooks)
+          ..where((t) => t.translationKey.equals(translationKey))
+          ..orderBy([(t) => OrderingTerm(expression: t.bookNumber)]))
+        .watch();
+  }
+
+  Future<List<BibleBookEntry>> getBooksByTranslation(String translationKey) {
+    return (select(localBibleBooks)
+          ..where((t) => t.translationKey.equals(translationKey))
+          ..orderBy([(t) => OrderingTerm(expression: t.bookNumber)]))
+        .get();
+  }
+
+  Future<List<BibleBookEntry>> getAllBibleBooks() {
+    return (select(localBibleBooks)
+          ..orderBy([(t) => OrderingTerm(expression: t.bookNumber)]))
+        .get();
+  }
+
+  Future<BibleBookEntry?> getBookByCode(String translationKey, String bookCode) {
+    return (select(localBibleBooks)
+          ..where((t) =>
+              t.translationKey.equals(translationKey) &
+              t.bookCode.equals(bookCode)))
+        .getSingleOrNull();
+  }
+
+  Future<BibleBookEntry?> getBookByNumber(String translationKey, int bookNumber) {
+    return (select(localBibleBooks)
+          ..where((t) =>
+              t.translationKey.equals(translationKey) &
+              t.bookNumber.equals(bookNumber)))
+        .getSingleOrNull();
+  }
+
+  Stream<List<BibleTranslationEntry>> watchAllTranslations() {
+    return (select(localBibleTranslations)
+          ..orderBy([(t) => OrderingTerm(expression: t.name)]))
+        .watch();
+  }
+
+  Future<List<BibleTranslationEntry>> getAllTranslations() {
+    return (select(localBibleTranslations)
+          ..orderBy([(t) => OrderingTerm(expression: t.name)]))
+        .get();
+  }
+
+  Future<void> ensureBibleDataSeeded() async {
+    try {
+      final existingBooks = await (select(localBibleBooks)..limit(1)).get();
+      if (existingBooks.isNotEmpty) {
+        return; // Already populated
+      }
+
+      // 1. Seed Translations Catalog from assets/data/translations_catalog.json
+      try {
+        final catalogString = await rootBundle.loadString('assets/data/translations_catalog.json');
+        final catalogJson = json.decode(catalogString) as Map<String, dynamic>;
+
+        final translationsList = <LocalBibleTranslationsCompanion>[];
+        catalogJson.forEach((key, val) {
+          if (val is Map<String, dynamic>) {
+            translationsList.add(LocalBibleTranslationsCompanion.insert(
+              id: key,
+              name: val['translation'] as String? ?? key,
+              abbreviation: val['abbreviation'] as String? ?? key,
+              description: Value(val['description'] as String?),
+              language: Value(val['language'] as String? ?? 'Spanish'),
+              direction: Value(val['direction'] as String? ?? 'LTR'),
+              distributionAbbreviation: Value(val['distribution_abbreviation'] as String?),
+              url: Value(val['url'] as String?),
+            ));
+          }
+        });
+
+        if (translationsList.isNotEmpty) {
+          await batch((b) {
+            b.insertAllOnConflictUpdate(localBibleTranslations, translationsList);
+          });
+        }
+      } catch (e) {
+        // Log error silently and continue with books
+      }
+
+      // 2. Seed Books for each available translation from assets/data/books_*.json
+      final translationFiles = {
+        'valera': 'assets/data/books_valera.json',
+        'sse': 'assets/data/books_sse.json',
+        'rv1858': 'assets/data/books_rv1858.json',
+      };
+
+      final allBooksToInsert = <LocalBibleBooksCompanion>[];
+
+      for (final entry in translationFiles.entries) {
+        final transKey = entry.key;
+        final assetPath = entry.value;
+
+        try {
+          final booksString = await rootBundle.loadString(assetPath);
+          final booksJson = json.decode(booksString) as Map<String, dynamic>;
+
+          booksJson.forEach((key, val) {
+            if (val is Map<String, dynamic>) {
+              final nr = val['nr'] as int? ?? int.tryParse(key) ?? 1;
+              final name = val['name'] as String? ?? '';
+              final meta = kCanonicalBookMetadata[nr] ??
+                  (code: 'BK$nr', chapters: 1, isNT: nr >= 40);
+
+              allBooksToInsert.add(LocalBibleBooksCompanion.insert(
+                id: '${transKey}_$nr',
+                translationKey: transKey,
+                bookNumber: nr,
+                bookCode: meta.code,
+                name: name,
+                totalChapters: meta.chapters,
+                isNewTestament: Value(meta.isNT),
+                url: Value(val['url'] as String?),
+                sha: Value(val['sha'] as String?),
+              ));
+            }
+          });
+        } catch (e) {
+          // Continue to next translation file if any issue
+        }
+      }
+
+      if (allBooksToInsert.isNotEmpty) {
+        await batch((b) {
+          b.insertAllOnConflictUpdate(localBibleBooks, allBooksToInsert);
+        });
+      }
+    } catch (e) {
+      // General safety catch
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // BIBLE CHAPTERS & VERSES LOCAL STORAGE (OFFLINE CACHE)
+  // ---------------------------------------------------------------------------
+  Future<BibleChapterEntry?> getChapter(
+    String translationKey,
+    int bookNumber,
+    int chapter,
+  ) {
+    return (select(localBibleChapters)
+          ..where((t) =>
+              t.translationKey.equals(translationKey) &
+              t.bookNumber.equals(bookNumber) &
+              t.chapter.equals(chapter)))
+        .getSingleOrNull();
+  }
+
+  Stream<BibleChapterEntry?> watchChapter(
+    String translationKey,
+    int bookNumber,
+    int chapter,
+  ) {
+    return (select(localBibleChapters)
+          ..where((t) =>
+              t.translationKey.equals(translationKey) &
+              t.bookNumber.equals(bookNumber) &
+              t.chapter.equals(chapter)))
+        .watchSingleOrNull();
+  }
+
+  Future<bool> hasChapter(
+    String translationKey,
+    int bookNumber,
+    int chapter,
+  ) async {
+    final entry = await getChapter(translationKey, bookNumber, chapter);
+    return entry != null && entry.versesJson.isNotEmpty;
+  }
+
+  Future<int> saveChapter({
+    required String translationKey,
+    required int bookNumber,
+    required String bookCode,
+    required String bookName,
+    required int chapter,
+    required String versesJson,
+    required int verseCount,
+  }) {
+    final id = '${translationKey}_${bookNumber}_$chapter';
+    return into(localBibleChapters).insertOnConflictUpdate(
+      LocalBibleChaptersCompanion.insert(
+        id: id,
+        translationKey: translationKey,
+        bookNumber: bookNumber,
+        bookCode: bookCode,
+        name: bookName,
+        chapter: chapter,
+        versesJson: versesJson,
+        verseCount: Value(verseCount),
+      ),
+    );
+  }
+
+  Future<int> countStoredChapters([String? translationKey]) async {
+    final query = select(localBibleChapters);
+    if (translationKey != null && translationKey.isNotEmpty) {
+      query.where((t) => t.translationKey.equals(translationKey));
+    }
+    final list = await query.get();
+    return list.length;
+  }
+
+  Stream<int> watchStoredChaptersCount([String? translationKey]) {
+    final query = select(localBibleChapters);
+    if (translationKey != null && translationKey.isNotEmpty) {
+      query.where((t) => t.translationKey.equals(translationKey));
+    }
+    return query.watch().map((list) => list.length);
+  }
 
   // ---------------------------------------------------------------------------
   // BOOKMARKS & NOTES CRUD

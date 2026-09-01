@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/providers/app_settings_providers.dart';
 import 'core/storage/app_database.dart';
 import 'core/theme/sanctuary_theme.dart';
+import 'features/reader/data/services/offline_bible_sync_service.dart';
 import 'features/shell/presentation/views/sanctuary_main_shell.dart';
 import 'shared/services/home_widget_service.dart';
 
@@ -18,6 +19,15 @@ void main() async {
 
   // Initialize Drift Local SQLite Database
   final database = AppDatabase();
+  try {
+    await database.ensureBibleDataSeeded();
+  } catch (e) {
+    debugPrint('Bible books seeding error: $e');
+  }
+
+  // Start background downloader for all Bible verses in non-blocking fashion
+  final syncService = OfflineBibleSyncService(database: database);
+  syncService.startBackgroundSync();
 
   runApp(
     ProviderScope(

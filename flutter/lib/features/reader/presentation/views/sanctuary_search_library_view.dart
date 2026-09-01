@@ -4,15 +4,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/constants/bible_books.dart';
 import '../../../../core/providers/app_settings_providers.dart';
+import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class SanctuarySearchLibraryView extends ConsumerStatefulWidget {
   final Function(String bookId, int chapter, int? verse) onSelectPassage;
+  final AppDatabase? database;
 
   const SanctuarySearchLibraryView({
     super.key,
     required this.onSelectPassage,
+    this.database,
   });
 
   @override
@@ -41,7 +44,7 @@ class _SanctuarySearchLibraryViewState
 
   // Fast direct reference detector (e.g. "Juan 3:16" or "Mateo 4")
   ({BibleBookInfo book, int chapter, int? verse})? _parseDirectReference(
-      String query) {
+      String query, List<BibleBookInfo> allBooks) {
     final trimmed = query.trim();
     if (trimmed.isEmpty) return null;
 
@@ -57,7 +60,7 @@ class _SanctuarySearchLibraryViewState
           match.group(3) != null ? int.tryParse(match.group(3)!) : null;
 
       try {
-        final found = kBibleBooks.firstWhere((b) =>
+        final found = allBooks.firstWhere((b) =>
             b.name.toLowerCase() == bookQuery ||
             b.name.toLowerCase().startsWith(bookQuery) ||
             b.abbreviation.toLowerCase() == bookQuery);
@@ -90,9 +93,14 @@ class _SanctuarySearchLibraryViewState
     final theme = Theme.of(context);
     final query = _searchController.text.trim().toLowerCase();
 
-    final directRef = _parseDirectReference(_searchController.text);
+    final allBooks = widget.database != null
+        ? (ref.watch(bibleBooksStreamProvider(widget.database!)).valueOrNull ??
+            kBibleBooks)
+        : kBibleBooks;
 
-    final filteredBooks = kBibleBooks.where((book) {
+    final directRef = _parseDirectReference(_searchController.text, allBooks);
+
+    final filteredBooks = allBooks.where((book) {
       final matchesQuery = query.isEmpty ||
           book.name.toLowerCase().contains(query) ||
           book.abbreviation.toLowerCase().contains(query);
@@ -106,8 +114,8 @@ class _SanctuarySearchLibraryViewState
     }).toList();
 
     final oldTestamentCount =
-        kBibleBooks.where((b) => !b.isNewTestament).length;
-    final newTestamentCount = kBibleBooks.where((b) => b.isNewTestament).length;
+        allBooks.where((b) => !b.isNewTestament).length;
+    final newTestamentCount = allBooks.where((b) => b.isNewTestament).length;
 
     return Scaffold(
       appBar: AppBar(

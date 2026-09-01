@@ -50,6 +50,7 @@ class SanctuaryMainShell extends ConsumerWidget {
       SanctuaryReaderView(database: database),
       // 2: Search & Library (66 Books & direct reference jump)
       SanctuarySearchLibraryView(
+        database: database,
         onSelectPassage: (bookId, chapter, verse) {
           ref.read(appSelectedBookProvider.notifier).state = bookId;
           ref.read(appSelectedChapterProvider.notifier).state = chapter;

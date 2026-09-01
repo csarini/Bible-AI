@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import '../../../../core/storage/app_database.dart';
 
 // =============================================================================
 // DTOs MATCHING GETBIBLE.NET v2 JSON SCHEMA
@@ -83,22 +85,67 @@ class GetBibleResponseDto {
 }
 
 // =============================================================================
-// GETBIBLE SERVICE CLIENT
+// GETBIBLE SERVICE CLIENT (WITH LOCAL DB FIRST STRATEGY)
 // =============================================================================
 
 class GetBibleService {
   final http.Client _client;
+  final AppDatabase? database;
   static const String _baseUrl = 'https://api.getbible.net/v2';
 
-  GetBibleService({http.Client? client}) : _client = client ?? http.Client();
+  GetBibleService({
+    this.database,
+    http.Client? client,
+  }) : _client = client ?? http.Client();
 
-  /// Fetches a complete chapter from GetBible.net v2.
-  /// Example URL: https://api.getbible.net/v2/rv1858/1/1.json
+  /// Fetches a complete chapter: checks the local database first.
+  /// If found in SQLite, returns instantly.
+  /// If not found in SQLite, fetches from GetBible.net API and caches locally.
   Future<GetBibleResponseDto> fetchChapter({
     required String translationKey,
     required int bookNumber,
     required int chapterNumber,
+    String? bookCode,
+    String? bookName,
+    String? bookUrl,
   }) async {
+    // 1. FIRST: Check local SQLite database
+    if (database != null) {
+      try {
+        final localChapter = await database!.getChapter(
+          translationKey,
+          bookNumber,
+          chapterNumber,
+        );
+
+        if (localChapter != null && localChapter.versesJson.isNotEmpty) {
+          final decodedList = json.decode(localChapter.versesJson) as List<dynamic>;
+          final verses = decodedList
+              .map((v) => GetBibleVerseDto.fromJson(v as Map<String, dynamic>))
+              .toList();
+
+          if (verses.isNotEmpty) {
+            return GetBibleResponseDto(
+              translation: localChapter.translationKey,
+              abbreviation: localChapter.translationKey,
+              lang: 'es',
+              language: 'Spanish',
+              direction: 'LTR',
+              encoding: 'UTF-8',
+              bookNr: localChapter.bookNumber,
+              bookName: localChapter.name,
+              chapter: localChapter.chapter,
+              name: '${localChapter.name} ${localChapter.chapter}',
+              verses: verses,
+            );
+          }
+        }
+      } catch (e) {
+        debugPrint('Local DB read fallback for $translationKey $bookNumber:$chapterNumber: $e');
+      }
+    }
+
+    // 2. SECOND: Fetch from GetBible API if not found locally
     final uri = Uri.parse('$_baseUrl/$translationKey/$bookNumber/$chapterNumber.json');
 
     try {
@@ -109,7 +156,27 @@ class GetBibleService {
 
       if (response.statusCode == 200) {
         final decoded = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-        return GetBibleResponseDto.fromJson(decoded);
+        final dto = GetBibleResponseDto.fromJson(decoded);
+
+        // 3. Save into local SQLite database for future offline access
+        if (database != null && dto.verses.isNotEmpty) {
+          try {
+            final versesMapList = dto.verses.map((v) => v.toJson()).toList();
+            await database!.saveChapter(
+              translationKey: translationKey,
+              bookNumber: bookNumber,
+              bookCode: bookCode ?? '',
+              bookName: dto.bookName.isNotEmpty ? dto.bookName : (bookName ?? 'Libro $bookNumber'),
+              chapter: chapterNumber,
+              versesJson: json.encode(versesMapList),
+              verseCount: dto.verses.length,
+            );
+          } catch (e) {
+            debugPrint('Failed to cache fetched chapter into DB: $e');
+          }
+        }
+
+        return dto;
       } else if (response.statusCode == 404) {
         throw Exception('Pasaje no encontrado en GetBible: Libro $bookNumber, Capítulo $chapterNumber.');
       } else {
@@ -120,3 +187,4 @@ class GetBibleService {
     }
   }
 }
+
