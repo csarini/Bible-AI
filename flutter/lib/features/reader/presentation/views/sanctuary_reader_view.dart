@@ -44,11 +44,12 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final initialBookId = ref.read(appSelectedBookProvider);
       final initialChapter = ref.read(appSelectedChapterProvider);
+      final initialVerse = ref.read(appSelectedVerseProvider);
       try {
         _currentBook = kBibleBooks.firstWhere((b) => b.id == initialBookId);
         _currentChapter = initialChapter;
       } catch (_) {}
-      _loadChapter();
+      _loadChapter(initialVerse);
     });
   }
 
@@ -58,7 +59,29 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
     super.dispose();
   }
 
-  Future<void> _loadChapter() async {
+  void _scrollToAndHighlightVerse(int verseNumber) {
+    if (_verses.isEmpty) return;
+    final index = _verses.indexWhere((v) => v.number == verseNumber);
+    if (index != -1) {
+      final verse = _verses[index];
+      _onVerseTapped(verse);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          final maxScroll = _scrollController.position.maxScrollExtent;
+          final targetOffset = (_verses.length > 1)
+              ? (index / _verses.length) * maxScroll
+              : 0.0;
+          _scrollController.animateTo(
+            targetOffset.clamp(0.0, maxScroll),
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
+  }
+
+  Future<void> _loadChapter([int? targetVerseNumber]) async {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -90,7 +113,12 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
           _verses = verses;
           _isLoading = false;
         });
-        if (_scrollController.hasClients) {
+        final targetVerse = targetVerseNumber ?? ref.read(appSelectedVerseProvider);
+        if (targetVerse != null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _scrollToAndHighlightVerse(targetVerse);
+          });
+        } else if (_scrollController.hasClients) {
           _scrollController.animateTo(
             0,
             duration: const Duration(milliseconds: 250),
@@ -366,24 +394,36 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    // Listen to external book/chapter navigation requests (e.g. from Search/Library view)
+    // Listen to external book/chapter/verse navigation requests (e.g. from Home, Search, Saved Verses)
     ref.listen<String>(appSelectedBookProvider, (previous, next) {
       if (next != _currentBook.id) {
         try {
+          final nextChapter = ref.read(appSelectedChapterProvider);
+          final nextVerse = ref.read(appSelectedVerseProvider);
           setState(() {
             _currentBook = kBibleBooks.firstWhere((b) => b.id == next);
+            _currentChapter = nextChapter;
           });
-          _loadChapter();
+          _loadChapter(nextVerse);
         } catch (_) {}
       }
     });
 
     ref.listen<int>(appSelectedChapterProvider, (previous, next) {
       if (next != _currentChapter) {
+        final nextVerse = ref.read(appSelectedVerseProvider);
         setState(() {
           _currentChapter = next;
         });
-        _loadChapter();
+        _loadChapter(nextVerse);
+      }
+    });
+
+    ref.listen<int?>(appSelectedVerseProvider, (previous, next) {
+      if (next != null) {
+        if (_verses.isNotEmpty) {
+          _scrollToAndHighlightVerse(next);
+        }
       }
     });
 

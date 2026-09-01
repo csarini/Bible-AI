@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/services/share_service.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 
-class SanctuarySavedVersesView extends StatefulWidget {
+class SanctuarySavedVersesView extends ConsumerStatefulWidget {
   final AppDatabase database;
 
   const SanctuarySavedVersesView({super.key, required this.database});
 
   @override
-  State<SanctuarySavedVersesView> createState() =>
+  ConsumerState<SanctuarySavedVersesView> createState() =>
       _SanctuarySavedVersesViewState();
 }
 
-class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
+class _SanctuarySavedVersesViewState extends ConsumerState<SanctuarySavedVersesView> {
   String _searchQuery = '';
   String? _selectedColorFilter;
 
@@ -259,93 +261,105 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
     final highlightColor = SanctuaryColors.getHighlightColor(item.colorHex);
 
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: highlightColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    '${item.bookName} ${item.chapter}:${item.verse}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                      color: Colors.black87,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          ref.read(appSelectedBookProvider.notifier).state = item.bookId;
+          ref.read(appSelectedChapterProvider.notifier).state = item.chapter;
+          ref.read(appSelectedVerseProvider.notifier).state = item.verse;
+          ref.read(selectedTabProvider.notifier).state = 1; // Reader tab
+          if (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: highlightColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      '${item.bookName} ${item.chapter}:${item.verse}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        color: Colors.black87,
+                      ),
                     ),
                   ),
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(LucideIcons.edit2, size: 18),
-                      tooltip: 'Editar Nota / Color',
-                      onPressed: () => _editBookmark(item),
-                    ),
-                    IconButton(
-                      icon: const Icon(LucideIcons.share2, size: 18),
-                      tooltip: 'Compartir',
-                      onPressed: () {
-                        ShareService.shareScripture(
-                          context: context,
-                          reference:
-                              '${item.bookName} ${item.chapter}:${item.verse}',
-                          text: item.verseText,
-                          customTitle: item.customTitle,
-                          personalReflection: item.personalNote,
-                        );
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(LucideIcons.trash2,
-                          size: 18, color: Colors.redAccent),
-                      tooltip: 'Eliminar',
-                      onPressed: () => widget.database.deleteBookmark(item.id),
-                    ),
-                  ],
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(LucideIcons.edit2, size: 18),
+                        tooltip: 'Editar Nota / Color',
+                        onPressed: () => _editBookmark(item),
+                      ),
+                      IconButton(
+                        icon: const Icon(LucideIcons.share2, size: 18),
+                        tooltip: 'Compartir',
+                        onPressed: () {
+                          ShareService.shareScripture(
+                            context: context,
+                            reference:
+                                '${item.bookName} ${item.chapter}:${item.verse}',
+                            text: item.verseText,
+                            customTitle: item.customTitle,
+                            personalReflection: item.personalNote,
+                          );
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(LucideIcons.trash2,
+                            size: 18, color: Colors.redAccent),
+                        tooltip: 'Eliminar',
+                        onPressed: () => widget.database.deleteBookmark(item.id),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              if (item.customTitle != null && item.customTitle!.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(
+                  item.customTitle!,
+                  style:
+                      const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                 ),
               ],
-            ),
-            if (item.customTitle != null && item.customTitle!.isNotEmpty) ...[
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
               Text(
-                item.customTitle!,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                '"${item.verseText}"',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontStyle: FontStyle.italic,
+                      height: 1.45,
+                    ),
               ),
-            ],
-            const SizedBox(height: 6),
-            Text(
-              '"${item.verseText}"',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontStyle: FontStyle.italic,
-                    height: 1.45,
+              if (item.personalNote != null && item.personalNote!.isNotEmpty) ...[
+                const SizedBox(height: 10),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: SanctuaryColors.waveNavy.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-            ),
-            if (item.personalNote != null && item.personalNote!.isNotEmpty) ...[
-              const SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: SanctuaryColors.waveNavy.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(10),
+                  child: Text(
+                    'Reflexión: ${item.personalNote}',
+                    style: const TextStyle(fontSize: 12.5),
+                  ),
                 ),
-                child: Text(
-                  'Reflexión: ${item.personalNote}',
-                  style: const TextStyle(fontSize: 12.5),
-                ),
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
