@@ -4,7 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/services/share_service.dart';
-import '../../shell/presentation/views/sanctuary_main_shell.dart';
+import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class SanctuarySavedVersesView extends StatefulWidget {
   final AppDatabase database;
@@ -12,7 +12,8 @@ class SanctuarySavedVersesView extends StatefulWidget {
   const SanctuarySavedVersesView({super.key, required this.database});
 
   @override
-  State<SanctuarySavedVersesView> createState() => _SanctuarySavedVersesViewState();
+  State<SanctuarySavedVersesView> createState() =>
+      _SanctuarySavedVersesViewState();
 }
 
 class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
@@ -20,15 +21,18 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
   String? _selectedColorFilter;
 
   void _editBookmark(LocalBookmarkEntry bookmark) {
-    final titleController = TextEditingController(text: bookmark.customTitle ?? '');
-    final noteController = TextEditingController(text: bookmark.personalNote ?? '');
+    final titleController =
+        TextEditingController(text: bookmark.customTitle ?? '');
+    final noteController =
+        TextEditingController(text: bookmark.personalNote ?? '');
     String selectedHex = bookmark.colorHex;
 
     showDialog(
       context: context,
       builder: (dialogCtx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
             'Editar ${bookmark.bookName} ${bookmark.chapter}:${bookmark.verse}',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -38,7 +42,9 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Color de resaltado:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                const Text('Color de resaltado:',
+                    style:
+                        TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 6),
                 Row(
                   children: SanctuaryColors.pastelPalette.map((col) {
@@ -54,12 +60,15 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                           color: col,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: isChosen ? SanctuaryColors.waveNavy : Colors.black26,
+                            color: isChosen
+                                ? SanctuaryColors.waveNavy
+                                : Colors.black26,
                             width: isChosen ? 2.5 : 1,
                           ),
                         ),
                         child: isChosen
-                            ? const Icon(Icons.check, size: 16, color: SanctuaryColors.waveNavy)
+                            ? const Icon(Icons.check,
+                                size: 16, color: SanctuaryColors.waveNavy)
                             : null,
                       ),
                     );
@@ -70,7 +79,8 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                   controller: titleController,
                   decoration: InputDecoration(
                     labelText: 'Título Personal',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -79,7 +89,8 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                   maxLines: 3,
                   decoration: InputDecoration(
                     labelText: 'Reflexión / Nota',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
                 ),
               ],
@@ -94,7 +105,8 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: SanctuaryColors.waveNavy,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
               ),
               onPressed: () async {
                 await widget.database.insertOrUpdateBookmark(
@@ -106,8 +118,12 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                     verse: bookmark.verse,
                     verseText: bookmark.verseText,
                     colorHex: selectedHex,
-                    customTitle: drift.Value(titleController.text.trim().isEmpty ? null : titleController.text.trim()),
-                    personalNote: drift.Value(noteController.text.trim().isEmpty ? null : noteController.text.trim()),
+                    customTitle: drift.Value(titleController.text.trim().isEmpty
+                        ? null
+                        : titleController.text.trim()),
+                    personalNote: drift.Value(noteController.text.trim().isEmpty
+                        ? null
+                        : noteController.text.trim()),
                   ),
                 );
                 Navigator.pop(dialogCtx);
@@ -139,12 +155,14 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 8, 14, 4),
             child: TextField(
-              onChanged: (val) => setState(() => _searchQuery = val.toLowerCase()),
+              onChanged: (val) =>
+                  setState(() => _searchQuery = val.toLowerCase()),
               decoration: InputDecoration(
                 hintText: 'Buscar por libro, pasaje, título o nota...',
                 prefixIcon: const Icon(LucideIcons.search, size: 18),
                 filled: true,
-                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
                   borderSide: BorderSide.none,
@@ -162,7 +180,8 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                 FilterChip(
                   label: const Text('Todos'),
                   selected: _selectedColorFilter == null,
-                  onSelected: (_) => setState(() => _selectedColorFilter = null),
+                  onSelected: (_) =>
+                      setState(() => _selectedColorFilter = null),
                 ),
                 const SizedBox(width: 6),
                 ...SanctuaryColors.pastelPalette.map((col) {
@@ -192,18 +211,25 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
               stream: widget.database.watchAllBookmarks(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator(color: SanctuaryColors.waveNavy));
+                  return const Center(
+                      child: CircularProgressIndicator(
+                          color: SanctuaryColors.waveNavy));
                 }
 
                 final allBookmarks = snapshot.data ?? [];
                 final filtered = allBookmarks.where((b) {
-                  final matchesQuery = b.bookName.toLowerCase().contains(_searchQuery) ||
+                  final matchesQuery = b.bookName
+                          .toLowerCase()
+                          .contains(_searchQuery) ||
                       b.verseText.toLowerCase().contains(_searchQuery) ||
-                      (b.customTitle?.toLowerCase().contains(_searchQuery) ?? false) ||
-                      (b.personalNote?.toLowerCase().contains(_searchQuery) ?? false);
+                      (b.customTitle?.toLowerCase().contains(_searchQuery) ??
+                          false) ||
+                      (b.personalNote?.toLowerCase().contains(_searchQuery) ??
+                          false);
 
                   final matchesColor = _selectedColorFilter == null ||
-                      b.colorHex.toUpperCase() == _selectedColorFilter!.toUpperCase();
+                      b.colorHex.toUpperCase() ==
+                          _selectedColorFilter!.toUpperCase();
 
                   return matchesQuery && matchesColor;
                 }).toList();
@@ -242,7 +268,8 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: highlightColor,
                     borderRadius: BorderRadius.circular(8),
@@ -269,7 +296,8 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                       onPressed: () {
                         ShareService.shareScripture(
                           context: context,
-                          reference: '${item.bookName} ${item.chapter}:${item.verse}',
+                          reference:
+                              '${item.bookName} ${item.chapter}:${item.verse}',
                           text: item.verseText,
                           customTitle: item.customTitle,
                           personalReflection: item.personalNote,
@@ -277,7 +305,8 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                       },
                     ),
                     IconButton(
-                      icon: const Icon(LucideIcons.trash2, size: 18, color: Colors.redAccent),
+                      icon: const Icon(LucideIcons.trash2,
+                          size: 18, color: Colors.redAccent),
                       tooltip: 'Eliminar',
                       onPressed: () => widget.database.deleteBookmark(item.id),
                     ),
@@ -289,7 +318,8 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
               const SizedBox(height: 8),
               Text(
                 item.customTitle!,
-                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
               ),
             ],
             const SizedBox(height: 6),
@@ -328,7 +358,8 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(LucideIcons.bookmark, size: 48, color: SanctuaryColors.waveNavy.withOpacity(0.3)),
+            Icon(LucideIcons.bookmark,
+                size: 48, color: SanctuaryColors.waveNavy.withOpacity(0.3)),
             const SizedBox(height: 12),
             const Text(
               'No hay versículos guardados',

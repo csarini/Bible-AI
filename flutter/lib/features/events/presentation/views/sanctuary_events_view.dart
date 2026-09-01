@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
-import '../../shell/presentation/views/sanctuary_main_shell.dart';
+import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 import 'pulpit_presentation_view.dart';
 
 class SanctuaryEventsView extends StatefulWidget {
@@ -33,7 +33,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(LucideIcons.calendar, size: 20, color: SanctuaryColors.sunOrange),
+            const Icon(LucideIcons.calendar,
+                size: 20, color: SanctuaryColors.sunOrange),
             const SizedBox(width: 8),
             Text(
               'Prédicas & Cuaderno',
@@ -46,7 +47,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(LucideIcons.plusCircle, color: SanctuaryColors.sunOrange),
+            icon: const Icon(LucideIcons.plusCircle,
+                color: SanctuaryColors.sunOrange),
             onPressed: () => _showAddEventDialog(context),
             tooltip: 'Registrar nueva prédica o evento',
           ),
@@ -70,11 +72,14 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                       selected: _selectedCategory == 'all',
                       selectedColor: SanctuaryColors.waveNavy,
                       labelStyle: TextStyle(
-                        color: _selectedCategory == 'all' ? Colors.white : theme.colorScheme.onSurface,
+                        color: _selectedCategory == 'all'
+                            ? Colors.white
+                            : theme.colorScheme.onSurface,
                         fontWeight: FontWeight.w700,
                         fontSize: 12,
                       ),
-                      onSelected: (_) => setState(() => _selectedCategory = 'all'),
+                      onSelected: (_) =>
+                          setState(() => _selectedCategory = 'all'),
                     ),
                     const SizedBox(width: 8),
                     ...categories.map((cat) {
@@ -86,11 +91,14 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                           selected: isSelected,
                           selectedColor: SanctuaryColors.waveNavy,
                           labelStyle: TextStyle(
-                            color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+                            color: isSelected
+                                ? Colors.white
+                                : theme.colorScheme.onSurface,
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
                           ),
-                          onSelected: (_) => setState(() => _selectedCategory = cat.id),
+                          onSelected: (_) =>
+                              setState(() => _selectedCategory = cat.id),
                         ),
                       );
                     }),
@@ -125,7 +133,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: SanctuaryColors.sunOrange.withOpacity(0.12),
+                              color:
+                                  SanctuaryColors.sunOrange.withOpacity(0.12),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
@@ -148,7 +157,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                             textAlign: TextAlign.center,
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 13,
-                              color: theme.colorScheme.onSurface.withOpacity(0.65),
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.65),
                             ),
                           ),
                           const SizedBox(height: 20),
@@ -190,10 +200,15 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                               children: [
                                 Row(
                                   children: [
-                                    const Icon(LucideIcons.calendar, size: 14, color: SanctuaryColors.sunOrange),
+                                    const Icon(LucideIcons.calendar,
+                                        size: 14,
+                                        color: SanctuaryColors.sunOrange),
                                     const SizedBox(width: 6),
                                     Text(
-                                      item.eventDate.toLocal().toString().split(' ')[0],
+                                      item.eventDate
+                                          .toLocal()
+                                          .toString()
+                                          .split(' ')[0],
                                       style: GoogleFonts.plusJakartaSans(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700,
@@ -209,15 +224,22 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                       onPressed: () {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
-                                            builder: (_) => PulpitPresentationView(event: item),
+                                            builder: (_) =>
+                                                PulpitPresentationView(
+                                                    event: item),
                                           ),
                                         );
                                       },
                                       style: TextButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                        backgroundColor: SanctuaryColors.waveNavy.withOpacity(0.1),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 4),
+                                        backgroundColor: SanctuaryColors
+                                            .waveNavy
+                                            .withOpacity(0.1),
                                       ),
-                                      icon: const Icon(LucideIcons.presentation, size: 14, color: SanctuaryColors.waveNavy),
+                                      icon: const Icon(LucideIcons.presentation,
+                                          size: 14,
+                                          color: SanctuaryColors.waveNavy),
                                       label: Text(
                                         'Púlpito',
                                         style: GoogleFonts.plusJakartaSans(
@@ -228,12 +250,17 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                       ),
                                     ),
                                     IconButton(
-                                      icon: const Icon(LucideIcons.trash2, size: 16, color: Colors.redAccent),
+                                      icon: const Icon(LucideIcons.trash2,
+                                          size: 16, color: Colors.redAccent),
                                       onPressed: () async {
-                                        await widget.database.deleteEvent(item.id);
+                                        await widget.database
+                                            .deleteEvent(item.id);
                                         if (context.mounted) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(content: Text('Nota eliminada.')),
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                                content:
+                                                    Text('Nota eliminada.')),
                                           );
                                         }
                                       },
@@ -258,7 +285,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                               style: GoogleFonts.plusJakartaSans(
                                 fontSize: 13.5,
                                 height: 1.5,
-                                color: theme.colorScheme.onSurface.withOpacity(0.8),
+                                color: theme.colorScheme.onSurface
+                                    .withOpacity(0.8),
                               ),
                             ),
                           ],
@@ -286,7 +314,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
         return AlertDialog(
           title: Text(
             'Nueva Nota / Prédica',
-            style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w700, fontSize: 17),
+            style: GoogleFonts.plusJakartaSans(
+                fontWeight: FontWeight.w700, fontSize: 17),
           ),
           content: SingleChildScrollView(
             child: Column(
@@ -338,7 +367,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                   Navigator.of(ctx).pop();
                 }
               },
-              style: FilledButton.styleFrom(backgroundColor: SanctuaryColors.waveNavy),
+              style: FilledButton.styleFrom(
+                  backgroundColor: SanctuaryColors.waveNavy),
               child: const Text('Guardar'),
             ),
           ],

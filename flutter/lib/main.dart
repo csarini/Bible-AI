@@ -48,7 +48,6 @@ class DigitalSanctuaryApp extends ConsumerWidget {
         themeMode = ThemeMode.dark;
         break;
       case AppVisualTheme.light:
-      default:
         activeTheme = SanctuaryTheme.light();
         themeMode = ThemeMode.light;
         break;
@@ -64,5 +63,3 @@ class DigitalSanctuaryApp extends ConsumerWidget {
     );
   }
 }
-
-

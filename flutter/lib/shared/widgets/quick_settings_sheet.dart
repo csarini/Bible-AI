@@ -20,7 +20,6 @@ class QuickSettingsSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     final visualTheme = ref.watch(appVisualThemeModeProvider);
     final translation = ref.watch(appTranslationProvider);
@@ -93,7 +92,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     color: SanctuaryColors.sunOrange.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Icon(LucideIcons.settings2, size: 20, color: SanctuaryColors.sunOrange),
+                  child: const Icon(LucideIcons.settings2,
+                      size: 20, color: SanctuaryColors.sunOrange),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -132,7 +132,8 @@ class QuickSettingsSheet extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: theme.cardTheme.color,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: theme.colorScheme.outline.withOpacity(0.3)),
+                border: Border.all(
+                    color: theme.colorScheme.outline.withOpacity(0.3)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +174,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                             ),
                           ),
                         TextSpan(
-                          text: 'En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios.',
+                          text:
+                              'En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios.',
                           style: previewTextStyle,
                         ),
                       ],
@@ -195,7 +197,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: '☀️ Claro',
                     sub: 'Pergamino',
                     isSelected: visualTheme == AppVisualTheme.light,
-                    onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.light,
+                    onTap: () => ref
+                        .read(appVisualThemeModeProvider.notifier)
+                        .state = AppVisualTheme.light,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -204,7 +208,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: '📜 Sepia',
                     sub: 'Cálido',
                     isSelected: visualTheme == AppVisualTheme.sepia,
-                    onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.sepia,
+                    onTap: () => ref
+                        .read(appVisualThemeModeProvider.notifier)
+                        .state = AppVisualTheme.sepia,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -213,7 +219,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: '🌙 Oscuro',
                     sub: 'Noche',
                     isSelected: visualTheme == AppVisualTheme.dark,
-                    onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.dark,
+                    onTap: () => ref
+                        .read(appVisualThemeModeProvider.notifier)
+                        .state = AppVisualTheme.dark,
                   ),
                 ),
               ],
@@ -231,7 +239,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'A-',
                     sub: '15px',
                     isSelected: fontSize == 'small',
-                    onTap: () => ref.read(appFontSizeProvider.notifier).state = 'small',
+                    onTap: () =>
+                        ref.read(appFontSizeProvider.notifier).state = 'small',
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -240,7 +249,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'A',
                     sub: '17.5px',
                     isSelected: fontSize == 'medium',
-                    onTap: () => ref.read(appFontSizeProvider.notifier).state = 'medium',
+                    onTap: () =>
+                        ref.read(appFontSizeProvider.notifier).state = 'medium',
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -249,7 +259,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'A+',
                     sub: '20px',
                     isSelected: fontSize == 'large',
-                    onTap: () => ref.read(appFontSizeProvider.notifier).state = 'large',
+                    onTap: () =>
+                        ref.read(appFontSizeProvider.notifier).state = 'large',
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -258,7 +269,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'A++',
                     sub: '23px',
                     isSelected: fontSize == 'xlarge',
-                    onTap: () => ref.read(appFontSizeProvider.notifier).state = 'xlarge',
+                    onTap: () =>
+                        ref.read(appFontSizeProvider.notifier).state = 'xlarge',
                   ),
                 ),
               ],
@@ -276,7 +288,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'Merriweather',
                     sub: 'Serif Clásico',
                     isSelected: fontFamily == 'merriweather',
-                    onTap: () => ref.read(appFontFamilyProvider.notifier).state = 'merriweather',
+                    onTap: () => ref
+                        .read(appFontFamilyProvider.notifier)
+                        .state = 'merriweather',
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -285,7 +299,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'Playfair',
                     sub: 'Elegante',
                     isSelected: fontFamily == 'playfair',
-                    onTap: () => ref.read(appFontFamilyProvider.notifier).state = 'playfair',
+                    onTap: () => ref
+                        .read(appFontFamilyProvider.notifier)
+                        .state = 'playfair',
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -294,7 +310,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'Jakarta',
                     sub: 'Sans Moderno',
                     isSelected: fontFamily == 'jakarta',
-                    onTap: () => ref.read(appFontFamilyProvider.notifier).state = 'jakarta',
+                    onTap: () => ref
+                        .read(appFontFamilyProvider.notifier)
+                        .state = 'jakarta',
                   ),
                 ),
               ],
@@ -312,7 +330,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'Compacto',
                     sub: '1.45',
                     isSelected: lineSpacing == 'compact',
-                    onTap: () => ref.read(appLineSpacingProvider.notifier).state = 'compact',
+                    onTap: () => ref
+                        .read(appLineSpacingProvider.notifier)
+                        .state = 'compact',
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -321,7 +341,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'Cómodo',
                     sub: '1.68',
                     isSelected: lineSpacing == 'normal',
-                    onTap: () => ref.read(appLineSpacingProvider.notifier).state = 'normal',
+                    onTap: () => ref
+                        .read(appLineSpacingProvider.notifier)
+                        .state = 'normal',
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -330,7 +352,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'Amplio',
                     sub: '1.95',
                     isSelected: lineSpacing == 'relaxed',
-                    onTap: () => ref.read(appLineSpacingProvider.notifier).state = 'relaxed',
+                    onTap: () => ref
+                        .read(appLineSpacingProvider.notifier)
+                        .state = 'relaxed',
                   ),
                 ),
               ],
@@ -347,21 +371,24 @@ class QuickSettingsSheet extends ConsumerWidget {
                   title: 'Reina-Valera 1909 (RVR1909)',
                   subtitle: 'Texto canónico en español clásico protestante',
                   isSelected: translation == 'valera',
-                  onTap: () => ref.read(appTranslationProvider.notifier).state = 'valera',
+                  onTap: () => ref.read(appTranslationProvider.notifier).state =
+                      'valera',
                 ),
                 const SizedBox(height: 6),
                 _buildTranslationTile(
                   title: 'Biblia del Oso 1569 (SSE)',
                   subtitle: 'Casiodoro de Reina, traducción histórica original',
                   isSelected: translation == 'sse',
-                  onTap: () => ref.read(appTranslationProvider.notifier).state = 'sse',
+                  onTap: () =>
+                      ref.read(appTranslationProvider.notifier).state = 'sse',
                 ),
                 const SizedBox(height: 6),
                 _buildTranslationTile(
                   title: 'Reina Valera NT 1858 (RV 1858)',
                   subtitle: 'Nuevo Testamento, revisión histórica de 1858',
                   isSelected: translation == 'rv1858',
-                  onTap: () => ref.read(appTranslationProvider.notifier).state = 'rv1858',
+                  onTap: () => ref.read(appTranslationProvider.notifier).state =
+                      'rv1858',
                 ),
               ],
             ),
@@ -374,7 +401,8 @@ class QuickSettingsSheet extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: theme.cardTheme.color,
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: theme.colorScheme.outline.withOpacity(0.3)),
+                border: Border.all(
+                    color: theme.colorScheme.outline.withOpacity(0.3)),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -401,7 +429,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                   Switch(
                     value: showVerseNumbers,
                     activeColor: SanctuaryColors.sunOrange,
-                    onChanged: (val) => ref.read(appShowVerseNumbersProvider.notifier).state = val,
+                    onChanged: (val) => ref
+                        .read(appShowVerseNumbersProvider.notifier)
+                        .state = val,
                   ),
                 ],
               ),
@@ -438,7 +468,9 @@ class QuickSettingsSheet extends ConsumerWidget {
           color: isSelected ? SanctuaryColors.waveNavy : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? SanctuaryColors.waveNavy : Colors.grey.withOpacity(0.3),
+            color: isSelected
+                ? SanctuaryColors.waveNavy
+                : Colors.grey.withOpacity(0.3),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -478,10 +510,14 @@ class QuickSettingsSheet extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? SanctuaryColors.waveNavy.withOpacity(0.08) : Colors.transparent,
+          color: isSelected
+              ? SanctuaryColors.waveNavy.withOpacity(0.08)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? SanctuaryColors.waveNavy : Colors.grey.withOpacity(0.25),
+            color: isSelected
+                ? SanctuaryColors.waveNavy
+                : Colors.grey.withOpacity(0.25),
             width: isSelected ? 1.5 : 1,
           ),
         ),

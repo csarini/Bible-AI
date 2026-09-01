@@ -6,7 +6,7 @@ import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/widgets/coachmark_guide_dialog.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
 import '../../../../shared/widgets/sanctuary_church_logo.dart';
-import '../../shell/presentation/views/sanctuary_main_shell.dart';
+import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class DevotionalTopic {
   final String id;
@@ -34,45 +34,60 @@ const List<DevotionalTopic> kDevotionalTopics = [
     label: 'Paz',
     icon: LucideIcons.heart,
     reference: 'Filipenses 4:6-7',
-    verse: 'Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias. Y la paz de Dios, que sobrepasa todo entendimiento, guardará vuestros corazones y vuestros pensamientos en Cristo Jesús.',
-    reflection: 'La paz de Dios no depende de circunstancias externas favorables, sino de la presencia constante del Espíritu Santo. Al entregar nuestras cargas en oración sincera, Su serenidad inunda nuestra mente.',
-    prayer: 'Señor Jesús, hoy rindo ante Tu presencia cada preocupación e incertidumbre. Llena mi corazón de Tu paz perfecta que sobrepasa todo entendimiento humano. Amén.',
+    verse:
+        'Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias. Y la paz de Dios, que sobrepasa todo entendimiento, guardará vuestros corazones y vuestros pensamientos en Cristo Jesús.',
+    reflection:
+        'La paz de Dios no depende de circunstancias externas favorables, sino de la presencia constante del Espíritu Santo. Al entregar nuestras cargas en oración sincera, Su serenidad inunda nuestra mente.',
+    prayer:
+        'Señor Jesús, hoy rindo ante Tu presencia cada preocupación e incertidumbre. Llena mi corazón de Tu paz perfecta que sobrepasa todo entendimiento humano. Amén.',
   ),
   DevotionalTopic(
     id: 'esperanza',
     label: 'Esperanza',
     icon: LucideIcons.sun,
     reference: 'Jeremías 29:11',
-    verse: 'Porque yo sé los pensamientos que tengo acerca de vosotros, dice Jehová, pensamientos de paz, y no de mal, para daros el fin que esperáis.',
-    reflection: 'Dios tiene trazado un propósito eterno para tu vida. Incluso en medio de temporadas de espera o prueba, Sus designios permanecen inalterables y llenos de bondad.',
-    prayer: 'Padre Celestial, renuevo hoy mi confianza en Tus promesas eternas. Guíame a caminar con gozo y firmeza, sabiendo que mi futuro está seguro en Tus manos. Amén.',
+    verse:
+        'Porque yo sé los pensamientos que tengo acerca de vosotros, dice Jehová, pensamientos de paz, y no de mal, para daros el fin que esperáis.',
+    reflection:
+        'Dios tiene trazado un propósito eterno para tu vida. Incluso en medio de temporadas de espera o prueba, Sus designios permanecen inalterables y llenos de bondad.',
+    prayer:
+        'Padre Celestial, renuevo hoy mi confianza en Tus promesas eternas. Guíame a caminar con gozo y firmeza, sabiendo que mi futuro está seguro en Tus manos. Amén.',
   ),
   DevotionalTopic(
     id: 'fortaleza',
     label: 'Fortaleza',
     icon: LucideIcons.shield,
     reference: 'Isaías 40:29-31',
-    verse: 'Él da esfuerzo al cansado, y multiplica las fuerzas al que no tiene ningunas... los que esperan a Jehová tendrán nuevas fuerzas; levantarán alas como las águilas.',
-    reflection: 'Nuestras fuerzas humanas se agotan, pero el poder de Jehová es inagotable. Esperar en Dios no es inactividad, sino confianza activa en Su socorro oportuno.',
-    prayer: 'Amado Dios, cuando mis fuerzas decaigan, recuérdame que Tu poder se perfecciona en mi debilidad. Levanto mis ojos a Ti y recibo nuevo vigor hoy. Amén.',
+    verse:
+        'Él da esfuerzo al cansado, y multiplica las fuerzas al que no tiene ningunas... los que esperan a Jehová tendrán nuevas fuerzas; levantarán alas como las águilas.',
+    reflection:
+        'Nuestras fuerzas humanas se agotan, pero el poder de Jehová es inagotable. Esperar en Dios no es inactividad, sino confianza activa en Su socorro oportuno.',
+    prayer:
+        'Amado Dios, cuando mis fuerzas decaigan, recuérdame que Tu poder se perfecciona en mi debilidad. Levanto mis ojos a Ti y recibo nuevo vigor hoy. Amén.',
   ),
   DevotionalTopic(
     id: 'amor',
     label: 'Amor',
     icon: LucideIcons.sparkles,
     reference: '1 Corintios 13:4-7',
-    verse: 'El amor es sufrido, es benigno; el amor no tiene envidia, el amor no es jactancioso, no se envanece; no hace nada indebido, no busca lo suyo, no se irrita, no guarda rencor.',
-    reflection: 'El amor ágape es el mayor testimonio del creyente. No es una emoción pasajera, sino una decisión diaria de reflejar el perdón y la gracia de Cristo hacia nuestro prójimo.',
-    prayer: 'Señor, derrama Tu amor en mi corazón para que pueda perdonar, servir y edificar a quienes me rodean, siendo un instrumento genuino de Tu gracia. Amén.',
+    verse:
+        'El amor es sufrido, es benigno; el amor no tiene envidia, el amor no es jactancioso, no se envanece; no hace nada indebido, no busca lo suyo, no se irrita, no guarda rencor.',
+    reflection:
+        'El amor ágape es el mayor testimonio del creyente. No es una emoción pasajera, sino una decisión diaria de reflejar el perdón y la gracia de Cristo hacia nuestro prójimo.',
+    prayer:
+        'Señor, derrama Tu amor en mi corazón para que pueda perdonar, servir y edificar a quienes me rodean, siendo un instrumento genuino de Tu gracia. Amén.',
   ),
   DevotionalTopic(
     id: 'sabiduria',
     label: 'Sabiduría',
     icon: LucideIcons.bookOpen,
     reference: 'Santiago 1:5',
-    verse: 'Y si alguno de vosotros tiene falta de sabiduría, pídala a Dios, el cual da a todos abundantemente y sin reproche, y le será dada.',
-    reflection: 'La verdadera sabiduría no proviene de la erudición humana, sino del temor de Dios y la obediencia a Su Palabra. Él responde con generosidad a quien la busca con humildad.',
-    prayer: 'Dios todopoderoso, concédeme discernimiento y sabiduría del cielo para tomar cada decisión conforme a Tu santa voluntad en este día. Amén.',
+    verse:
+        'Y si alguno de vosotros tiene falta de sabiduría, pídala a Dios, el cual da a todos abundantemente y sin reproche, y le será dada.',
+    reflection:
+        'La verdadera sabiduría no proviene de la erudición humana, sino del temor de Dios y la obediencia a Su Palabra. Él responde con generosidad a quien la busca con humildad.',
+    prayer:
+        'Dios todopoderoso, concédeme discernimiento y sabiduría del cielo para tomar cada decisión conforme a Tu santa voluntad en este día. Amén.',
   ),
 ];
 
@@ -127,7 +142,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
           IconButton(
             icon: const Icon(LucideIcons.search),
             tooltip: 'Buscar en las Escrituras',
-            onPressed: () => widget.onNavigateTab(2), // Tab 2: Biblioteca & Búsqueda
+            onPressed: () =>
+                widget.onNavigateTab(2), // Tab 2: Biblioteca & Búsqueda
           ),
           IconButton(
             icon: const Icon(LucideIcons.settings2),
@@ -163,7 +179,9 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                         Icon(
                           item.icon,
                           size: 14,
-                          color: isSelected ? Colors.white : SanctuaryColors.sunOrange,
+                          color: isSelected
+                              ? Colors.white
+                              : SanctuaryColors.sunOrange,
                         ),
                         const SizedBox(width: 6),
                         Text(item.label),
@@ -172,7 +190,9 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                     selected: isSelected,
                     selectedColor: SanctuaryColors.waveNavy,
                     labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+                      color: isSelected
+                          ? Colors.white
+                          : theme.colorScheme.onSurface,
                       fontWeight: FontWeight.w700,
                       fontSize: 13,
                     ),
@@ -209,7 +229,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
                             color: SanctuaryColors.sunOrange.withOpacity(0.12),
                             borderRadius: BorderRadius.circular(20),
@@ -293,7 +314,9 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                             );
                           },
                           icon: Icon(
-                            _isPlayingAudio ? LucideIcons.volumeX : LucideIcons.volume2,
+                            _isPlayingAudio
+                                ? LucideIcons.volumeX
+                                : LucideIcons.volume2,
                             color: SanctuaryColors.sunOrange,
                           ),
                           tooltip: 'Escuchar devocional en voz alta',
@@ -410,7 +433,9 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
           style: GoogleFonts.plusJakartaSans(
             fontSize: 11,
             fontWeight: FontWeight.w700,
-            color: isSelected ? Colors.white : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+            color: isSelected
+                ? Colors.white
+                : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
           ),
         ),
       ),
@@ -455,7 +480,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                 ),
                 if (badge != null)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
                       color: SanctuaryColors.sunOrange,
                       borderRadius: BorderRadius.circular(8),

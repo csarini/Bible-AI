@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/storage/app_database.dart';
-import '../../data/repositories/event_repository_impl.dart';
 import '../../domain/repositories/event_repository.dart';
 
 enum EventStatus { initial, loading, loaded, error }

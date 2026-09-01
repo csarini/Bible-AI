@@ -5,7 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/constants/bible_books.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
-import '../../shell/presentation/views/sanctuary_main_shell.dart';
+import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class SanctuarySearchLibraryView extends ConsumerStatefulWidget {
   final Function(String bookId, int chapter, int? verse) onSelectPassage;
@@ -16,10 +16,12 @@ class SanctuarySearchLibraryView extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<SanctuarySearchLibraryView> createState() => _SanctuarySearchLibraryViewState();
+  ConsumerState<SanctuarySearchLibraryView> createState() =>
+      _SanctuarySearchLibraryViewState();
 }
 
-class _SanctuarySearchLibraryViewState extends ConsumerState<SanctuarySearchLibraryView> {
+class _SanctuarySearchLibraryViewState
+    extends ConsumerState<SanctuarySearchLibraryView> {
   final TextEditingController _searchController = TextEditingController();
   String _activeTabFilter = 'all'; // 'all', 'OT', 'NT'
   final List<String> _recentSearches = [
@@ -38,17 +40,21 @@ class _SanctuarySearchLibraryViewState extends ConsumerState<SanctuarySearchLibr
   }
 
   // Fast direct reference detector (e.g. "Juan 3:16" or "Mateo 4")
-  ({BibleBookInfo book, int chapter, int? verse})? _parseDirectReference(String query) {
+  ({BibleBookInfo book, int chapter, int? verse})? _parseDirectReference(
+      String query) {
     final trimmed = query.trim();
     if (trimmed.isEmpty) return null;
 
-    final regex = RegExp(r'^([1-3]?\s?[A-Za-zÁÉÍÓÚáéíóúñ]+)\s+(\d+)(?::(\d+))?$', caseSensitive: false);
+    final regex = RegExp(
+        r'^([1-3]?\s?[A-Za-zÁÉÍÓÚáéíóúñ]+)\s+(\d+)(?::(\d+))?$',
+        caseSensitive: false);
     final match = regex.firstMatch(trimmed);
 
     if (match != null) {
       final bookQuery = match.group(1)!.trim().toLowerCase();
       final chapterNum = int.tryParse(match.group(2)!) ?? 1;
-      final verseNum = match.group(3) != null ? int.tryParse(match.group(3)!) : null;
+      final verseNum =
+          match.group(3) != null ? int.tryParse(match.group(3)!) : null;
 
       try {
         final found = kBibleBooks.firstWhere((b) =>
@@ -99,7 +105,8 @@ class _SanctuarySearchLibraryViewState extends ConsumerState<SanctuarySearchLibr
       return matchesQuery;
     }).toList();
 
-    final oldTestamentCount = kBibleBooks.where((b) => !b.isNewTestament).length;
+    final oldTestamentCount =
+        kBibleBooks.where((b) => !b.isNewTestament).length;
     final newTestamentCount = kBibleBooks.where((b) => b.isNewTestament).length;
 
     return Scaffold(
@@ -112,7 +119,8 @@ class _SanctuarySearchLibraryViewState extends ConsumerState<SanctuarySearchLibr
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(LucideIcons.library, size: 20, color: SanctuaryColors.sunOrange),
+            const Icon(LucideIcons.library,
+                size: 20, color: SanctuaryColors.sunOrange),
             const SizedBox(width: 8),
             Text(
               'Biblioteca Bíblica (66 Libros)',
@@ -138,18 +146,21 @@ class _SanctuarySearchLibraryViewState extends ConsumerState<SanctuarySearchLibr
                     onChanged: (_) => setState(() {}),
                     onSubmitted: (val) {
                       if (directRef != null) {
-                        widget.onSelectPassage(directRef.book.id, directRef.chapter, directRef.verse);
+                        widget.onSelectPassage(directRef.book.id,
+                            directRef.chapter, directRef.verse);
                       }
                     },
                     decoration: InputDecoration(
                       prefixIcon: const Icon(LucideIcons.search, size: 18),
-                      hintText: 'Buscar libro o cita (ej: Juan 3:16, Mateo 4, Salmos)',
+                      hintText:
+                          'Buscar libro o cita (ej: Juan 3:16, Mateo 4, Salmos)',
                       hintStyle: GoogleFonts.plusJakartaSans(fontSize: 13),
                       filled: true,
                       fillColor: theme.cardTheme.color,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
-                        borderSide: BorderSide(color: theme.colorScheme.outline.withOpacity(0.3)),
+                        borderSide: BorderSide(
+                            color: theme.colorScheme.outline.withOpacity(0.3)),
                       ),
                       suffixIcon: _searchController.text.isNotEmpty
                           ? IconButton(
@@ -174,15 +185,19 @@ class _SanctuarySearchLibraryViewState extends ConsumerState<SanctuarySearchLibr
                       ),
                       borderRadius: BorderRadius.circular(14),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 10),
                         decoration: BoxDecoration(
                           color: SanctuaryColors.sunOrange.withOpacity(0.12),
                           borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: SanctuaryColors.sunOrange.withOpacity(0.3)),
+                          border: Border.all(
+                              color:
+                                  SanctuaryColors.sunOrange.withOpacity(0.3)),
                         ),
                         child: Row(
                           children: [
-                            const Icon(LucideIcons.bookOpen, color: SanctuaryColors.sunOrange, size: 20),
+                            const Icon(LucideIcons.bookOpen,
+                                color: SanctuaryColors.sunOrange, size: 20),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
@@ -195,7 +210,8 @@ class _SanctuarySearchLibraryViewState extends ConsumerState<SanctuarySearchLibr
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 4),
                               decoration: BoxDecoration(
                                 color: SanctuaryColors.waveNavy,
                                 borderRadius: BorderRadius.circular(8),
@@ -248,15 +264,20 @@ class _SanctuarySearchLibraryViewState extends ConsumerState<SanctuarySearchLibr
                       runSpacing: 6,
                       children: _recentSearches.map((term) {
                         return ActionChip(
-                          avatar: const Icon(LucideIcons.book, size: 13, color: SanctuaryColors.sunOrange),
-                          label: Text(term, style: GoogleFonts.plusJakartaSans(fontSize: 11.5)),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          avatar: const Icon(LucideIcons.book,
+                              size: 13, color: SanctuaryColors.sunOrange),
+                          label: Text(term,
+                              style:
+                                  GoogleFonts.plusJakartaSans(fontSize: 11.5)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
                           onPressed: () {
                             _searchController.text = term;
                             setState(() {});
                             final refMatch = _parseDirectReference(term);
                             if (refMatch != null) {
-                              widget.onSelectPassage(refMatch.book.id, refMatch.chapter, refMatch.verse);
+                              widget.onSelectPassage(refMatch.book.id,
+                                  refMatch.chapter, refMatch.verse);
                             }
                           },
                         );
@@ -290,7 +311,8 @@ class _SanctuarySearchLibraryViewState extends ConsumerState<SanctuarySearchLibr
                       decoration: BoxDecoration(
                         color: theme.cardTheme.color,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: theme.colorScheme.outline.withOpacity(0.25)),
+                        border: Border.all(
+                            color: theme.colorScheme.outline.withOpacity(0.25)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -300,11 +322,14 @@ class _SanctuarySearchLibraryViewState extends ConsumerState<SanctuarySearchLibr
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 2),
                                 decoration: BoxDecoration(
                                   color: book.isNewTestament
-                                      ? SanctuaryColors.waveNavy.withOpacity(0.12)
-                                      : SanctuaryColors.sunOrange.withOpacity(0.15),
+                                      ? SanctuaryColors.waveNavy
+                                          .withOpacity(0.12)
+                                      : SanctuaryColors.sunOrange
+                                          .withOpacity(0.15),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
@@ -312,11 +337,14 @@ class _SanctuarySearchLibraryViewState extends ConsumerState<SanctuarySearchLibr
                                   style: GoogleFonts.plusJakartaSans(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w800,
-                                    color: book.isNewTestament ? SanctuaryColors.waveNavy : SanctuaryColors.sunOrange,
+                                    color: book.isNewTestament
+                                        ? SanctuaryColors.waveNavy
+                                        : SanctuaryColors.sunOrange,
                                   ),
                                 ),
                               ),
-                              const Icon(LucideIcons.chevronRight, size: 14, color: Colors.grey),
+                              const Icon(LucideIcons.chevronRight,
+                                  size: 14, color: Colors.grey),
                             ],
                           ),
                           Column(
@@ -336,7 +364,8 @@ class _SanctuarySearchLibraryViewState extends ConsumerState<SanctuarySearchLibr
                                 '${book.totalChapters} Capítulos',
                                 style: GoogleFonts.plusJakartaSans(
                                   fontSize: 11,
-                                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                                  color: theme.colorScheme.onSurface
+                                      .withOpacity(0.6),
                                 ),
                               ),
                             ],
@@ -384,10 +413,12 @@ class _BookChapterVersePickerSheet extends StatefulWidget {
   });
 
   @override
-  State<_BookChapterVersePickerSheet> createState() => _BookChapterVersePickerSheetState();
+  State<_BookChapterVersePickerSheet> createState() =>
+      _BookChapterVersePickerSheetState();
 }
 
-class _BookChapterVersePickerSheetState extends State<_BookChapterVersePickerSheet> {
+class _BookChapterVersePickerSheetState
+    extends State<_BookChapterVersePickerSheet> {
   int _selectedChapter = 1;
   int _step = 1; // 1: Chapters, 2: Verses
 
@@ -430,7 +461,9 @@ class _BookChapterVersePickerSheetState extends State<_BookChapterVersePickerShe
                     ),
                   ),
                   Text(
-                    widget.book.isNewTestament ? 'Nuevo Testamento' : 'Antiguo Testamento',
+                    widget.book.isNewTestament
+                        ? 'Nuevo Testamento'
+                        : 'Antiguo Testamento',
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 11,
                       color: Colors.grey,
@@ -482,10 +515,14 @@ class _BookChapterVersePickerSheetState extends State<_BookChapterVersePickerShe
                     child: Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: isSelected ? SanctuaryColors.waveNavy : theme.cardTheme.color,
+                        color: isSelected
+                            ? SanctuaryColors.waveNavy
+                            : theme.cardTheme.color,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: isSelected ? SanctuaryColors.waveNavy : Colors.grey.withOpacity(0.25),
+                          color: isSelected
+                              ? SanctuaryColors.waveNavy
+                              : Colors.grey.withOpacity(0.25),
                         ),
                       ),
                       child: Text(
@@ -506,7 +543,8 @@ class _BookChapterVersePickerSheetState extends State<_BookChapterVersePickerShe
               style: FilledButton.styleFrom(
                 backgroundColor: SanctuaryColors.waveNavy,
                 minimumSize: const Size.fromHeight(44),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
               ),
               icon: const Icon(LucideIcons.bookOpen, size: 16),
               label: Text('Leer ${widget.book.name} desde el Inicio →'),
@@ -524,7 +562,8 @@ class _BookChapterVersePickerSheetState extends State<_BookChapterVersePickerShe
                   ),
                 ),
                 TextButton.icon(
-                  onPressed: () => widget.onSelectPassage(_selectedChapter, null),
+                  onPressed: () =>
+                      widget.onSelectPassage(_selectedChapter, null),
                   icon: const Icon(LucideIcons.bookOpen, size: 14),
                   label: const Text('Leer Cap. Completo'),
                 ),
@@ -549,13 +588,18 @@ class _BookChapterVersePickerSheetState extends State<_BookChapterVersePickerShe
                       decoration: BoxDecoration(
                         color: theme.cardTheme.color,
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.grey.withOpacity(0.25)),
+                        border:
+                            Border.all(color: Colors.grey.withOpacity(0.25)),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('V.', style: TextStyle(fontSize: 8, color: Colors.grey.shade600)),
-                          Text('$vNum', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                          Text('V.',
+                              style: TextStyle(
+                                  fontSize: 8, color: Colors.grey.shade600)),
+                          Text('$vNum',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 13)),
                         ],
                       ),
                     ),

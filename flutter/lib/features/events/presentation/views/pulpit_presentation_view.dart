@@ -54,9 +54,12 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = _isHighContrastDark ? const Color(0xFF0F1117) : const Color(0xFFFAF8F5);
-    final textColor = _isHighContrastDark ? const Color(0xFFF1F3F9) : const Color(0xFF1B1C19);
-    final subColor = _isHighContrastDark ? const Color(0xFF9E9EA7) : const Color(0xFF705335);
+    final bgColor =
+        _isHighContrastDark ? const Color(0xFF0F1117) : const Color(0xFFFAF8F5);
+    final textColor =
+        _isHighContrastDark ? const Color(0xFFF1F3F9) : const Color(0xFF1B1C19);
+    final subColor =
+        _isHighContrastDark ? const Color(0xFF9E9EA7) : const Color(0xFF705335);
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -82,14 +85,16 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             margin: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
-              color: SanctuaryColors.sunOrange.withOpacity(0.15),
+              color: SanctuaryColors.sunOrange..withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: SanctuaryColors.sunOrange.withOpacity(0.4)),
+              border: Border.all(
+                  color: SanctuaryColors.sunOrange..withValues(alpha: 0.4)),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(LucideIcons.clock, size: 14, color: SanctuaryColors.sunOrange),
+                const Icon(LucideIcons.clock,
+                    size: 14, color: SanctuaryColors.sunOrange),
                 const SizedBox(width: 6),
                 Text(
                   _formatTimer(_secondsElapsed),
@@ -185,7 +190,8 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
                 ),
                 if (widget.event.foodServiceDetails != null) ...[
                   const SizedBox(width: 16),
-                  Icon(LucideIcons.utensils, size: 14, color: SanctuaryColors.sunOrange),
+                  Icon(LucideIcons.utensils,
+                      size: 14, color: SanctuaryColors.sunOrange),
                   const SizedBox(width: 4),
                   Text(
                     'Cafetería activa',
@@ -200,7 +206,7 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
             ),
 
             const SizedBox(height: 24),
-            Divider(color: subColor.withOpacity(0.3)),
+            Divider(color: subColor..withValues(alpha: 0.3)),
             const SizedBox(height: 16),
 
             // Sermon Notes / Scripture Body

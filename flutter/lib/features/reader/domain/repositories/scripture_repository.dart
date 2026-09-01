@@ -24,13 +24,20 @@ class ScriptureRepositoryImpl implements ScriptureRepository {
     required int chapter,
     required String bookName,
     required String bookId,
-  }) {
-    return _service.fetchChapter(
-      translation: translation,
+  }) async {
+    final response = await _service.fetchChapter(
+      translationKey: translation,
+      chapterNumber: chapter,
       bookNumber: bookNumber,
-      chapter: chapter,
-      bookName: bookName,
-      bookId: bookId,
     );
+    return response.verses
+        .map((verse) => VerseEntity(
+              text: verse.text,
+              number: verse.verse,
+              chapter: chapter,
+              bookName: bookName,
+              bookId: bookId,
+            ))
+        .toList();
   }
 }

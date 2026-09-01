@@ -11,7 +11,7 @@ import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/widgets/coachmark_guide_dialog.dart';
 import '../../../../shared/widgets/feedback_dialog.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
-import '../../shell/presentation/views/sanctuary_main_shell.dart';
+import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class SanctuarySettingsView extends ConsumerWidget {
   final AppDatabase database;
@@ -25,18 +25,20 @@ class SanctuarySettingsView extends ConsumerWidget {
       'version': '1.2.0-flutter',
       'exportedAt': DateTime.now().toIso8601String(),
       'bookmarksCount': bookmarks.length,
-      'bookmarks': bookmarks.map((b) => {
-        'id': b.id,
-        'bookId': b.bookId,
-        'bookName': b.bookName,
-        'chapter': b.chapter,
-        'verse': b.verse,
-        'verseText': b.verseText,
-        'colorHex': b.colorHex,
-        'customTitle': b.customTitle,
-        'personalNote': b.personalNote,
-        'createdAt': b.createdAt.toIso8601String(),
-      }).toList(),
+      'bookmarks': bookmarks
+          .map((b) => {
+                'id': b.id,
+                'bookId': b.bookId,
+                'bookName': b.bookName,
+                'chapter': b.chapter,
+                'verse': b.verse,
+                'verseText': b.verseText,
+                'colorHex': b.colorHex,
+                'customTitle': b.customTitle,
+                'personalNote': b.personalNote,
+                'createdAt': b.createdAt.toIso8601String(),
+              })
+          .toList(),
     };
 
     final jsonStr = const JsonEncoder.withIndent('  ').convert(backupData);
@@ -46,14 +48,17 @@ class SanctuarySettingsView extends ConsumerWidget {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Row(
             children: [
-              const Icon(LucideIcons.checkCircle2, color: Color(0xFF10B981), size: 22),
+              const Icon(LucideIcons.checkCircle2,
+                  color: Color(0xFF10B981), size: 22),
               const SizedBox(width: 8),
               Text(
                 'Copia JSON Exportada',
-                style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w800, fontSize: 16),
+                style: GoogleFonts.plusJakartaSans(
+                    fontWeight: FontWeight.w800, fontSize: 16),
               ),
             ],
           ),
@@ -74,7 +79,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                 ),
                 child: Text(
                   'El código JSON completo ha sido copiado automáticamente a tu portapapeles. Puedes guardarlo en un archivo o enviarlo por correo.',
-                  style: GoogleFonts.plusJakartaSans(fontSize: 11, color: Colors.grey.shade700),
+                  style: GoogleFonts.plusJakartaSans(
+                      fontSize: 11, color: Colors.grey.shade700),
                 ),
               ),
             ],
@@ -83,7 +89,8 @@ class SanctuarySettingsView extends ConsumerWidget {
             FilledButton(
               style: FilledButton.styleFrom(
                 backgroundColor: SanctuaryColors.waveNavy,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
               ),
               onPressed: () => Navigator.pop(ctx),
               child: const Text('Entendido'),
@@ -103,11 +110,13 @@ class SanctuarySettingsView extends ConsumerWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Row(
           children: [
-            const Icon(LucideIcons.upload, color: SanctuaryColors.sunOrange, size: 22),
+            const Icon(LucideIcons.upload,
+                color: SanctuaryColors.sunOrange, size: 22),
             const SizedBox(width: 8),
             Text(
               'Restaurar Respaldo JSON',
-              style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w800, fontSize: 16),
+              style: GoogleFonts.plusJakartaSans(
+                  fontWeight: FontWeight.w800, fontSize: 16),
             ),
           ],
         ),
@@ -125,8 +134,10 @@ class SanctuarySettingsView extends ConsumerWidget {
               maxLines: 5,
               style: GoogleFonts.firaCode(fontSize: 11),
               decoration: InputDecoration(
-                hintText: '{\n  "app": "Biblia Inteligente...",\n  "bookmarks": [...]\n}',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                hintText:
+                    '{\n  "app": "Biblia Inteligente...",\n  "bookmarks": [...]\n}',
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               ),
             ),
           ],
@@ -139,7 +150,8 @@ class SanctuarySettingsView extends ConsumerWidget {
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: SanctuaryColors.sunOrange,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
             ),
             onPressed: () async {
               final raw = textController.text.trim();
@@ -152,7 +164,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                 int imported = 0;
                 if (bookmarks != null) {
                   for (final item in bookmarks) {
-                    final id = item['id'] as String? ?? '${item['bookId']}_${item['chapter']}_${item['verse']}';
+                    final id = item['id'] as String? ??
+                        '${item['bookId']}_${item['chapter']}_${item['verse']}';
                     await database.insertOrUpdateBookmark(
                       LocalBookmarksCompanion.insert(
                         id: id,
@@ -162,10 +175,13 @@ class SanctuarySettingsView extends ConsumerWidget {
                         verse: item['verse'] as int,
                         verseText: item['verseText'] as String,
                         colorHex: item['colorHex'] as String,
-                        customTitle: drift.Value(item['customTitle'] as String?),
-                        personalNote: drift.Value(item['personalNote'] as String?),
+                        customTitle:
+                            drift.Value(item['customTitle'] as String?),
+                        personalNote:
+                            drift.Value(item['personalNote'] as String?),
                         createdAt: item['createdAt'] != null
-                            ? drift.Value(DateTime.parse(item['createdAt'] as String))
+                            ? drift.Value(
+                                DateTime.parse(item['createdAt'] as String))
                             : const drift.Value.absent(),
                       ),
                     );
@@ -177,7 +193,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('¡Éxito! Se restauraron $imported versículos guardados.'),
+                      content: Text(
+                          '¡Éxito! Se restauraron $imported versículos guardados.'),
                       backgroundColor: const Color(0xFF10B981),
                     ),
                   );
@@ -186,7 +203,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Error al procesar JSON: Formato no válido ($e)'),
+                      content: Text(
+                          'Error al procesar JSON: Formato no válido ($e)'),
                       backgroundColor: Colors.redAccent,
                     ),
                   );
@@ -216,7 +234,8 @@ class SanctuarySettingsView extends ConsumerWidget {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(LucideIcons.settings, size: 20, color: Color(0xFF705335)),
+            const Icon(LucideIcons.settings,
+                size: 20, color: Color(0xFF705335)),
             const SizedBox(width: 8),
             Text(
               'Ajustes del Santuario',
@@ -242,7 +261,9 @@ class SanctuarySettingsView extends ConsumerWidget {
               children: [
                 Text(
                   'Elige la tonalidad visual que mejor se adapte a tu iluminación ambiental:',
-                  style: GoogleFonts.plusJakartaSans(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.75)),
+                  style: GoogleFonts.plusJakartaSans(
+                      fontSize: 13,
+                      color: theme.colorScheme.onSurface.withOpacity(0.75)),
                 ),
                 const SizedBox(height: 14),
                 Row(
@@ -253,7 +274,9 @@ class SanctuarySettingsView extends ConsumerWidget {
                         label: '☀️ Claro',
                         subtitle: 'Pergamino',
                         isSelected: visualTheme == AppVisualTheme.light,
-                        onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.light,
+                        onTap: () => ref
+                            .read(appVisualThemeModeProvider.notifier)
+                            .state = AppVisualTheme.light,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -263,7 +286,9 @@ class SanctuarySettingsView extends ConsumerWidget {
                         label: '📜 Sepia',
                         subtitle: 'Cálido',
                         isSelected: visualTheme == AppVisualTheme.sepia,
-                        onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.sepia,
+                        onTap: () => ref
+                            .read(appVisualThemeModeProvider.notifier)
+                            .state = AppVisualTheme.sepia,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -273,7 +298,9 @@ class SanctuarySettingsView extends ConsumerWidget {
                         label: '🌙 Oscuro',
                         subtitle: 'Noche',
                         isSelected: visualTheme == AppVisualTheme.dark,
-                        onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.dark,
+                        onTap: () => ref
+                            .read(appVisualThemeModeProvider.notifier)
+                            .state = AppVisualTheme.dark,
                       ),
                     ),
                   ],
@@ -299,16 +326,19 @@ class SanctuarySettingsView extends ConsumerWidget {
                   abbreviation: 'RVR1909',
                   description: 'Texto canónico en español clásico protestante.',
                   isSelected: translation == 'valera',
-                  onTap: () => ref.read(appTranslationProvider.notifier).state = 'valera',
+                  onTap: () => ref.read(appTranslationProvider.notifier).state =
+                      'valera',
                 ),
                 const Divider(height: 20),
                 _buildTranslationRow(
                   context,
                   title: 'Biblia del Oso 1569',
                   abbreviation: 'SSE 1569',
-                  description: 'Casiodoro de Reina, traducción histórica original.',
+                  description:
+                      'Casiodoro de Reina, traducción histórica original.',
                   isSelected: translation == 'sse',
-                  onTap: () => ref.read(appTranslationProvider.notifier).state = 'sse',
+                  onTap: () =>
+                      ref.read(appTranslationProvider.notifier).state = 'sse',
                 ),
                 const Divider(height: 20),
                 _buildTranslationRow(
@@ -317,7 +347,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                   abbreviation: 'RV 1858',
                   description: 'Nuevo Testamento, revisión histórica de 1858.',
                   isSelected: translation == 'rv1858',
-                  onTap: () => ref.read(appTranslationProvider.notifier).state = 'rv1858',
+                  onTap: () => ref.read(appTranslationProvider.notifier).state =
+                      'rv1858',
                 ),
               ],
             ),
@@ -336,14 +367,17 @@ class SanctuarySettingsView extends ConsumerWidget {
               children: [
                 Text(
                   'Configura el tamaño de fuente, familias tipográficas (Merriweather, Playfair, Jakarta) e interlineado:',
-                  style: GoogleFonts.plusJakartaSans(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.75)),
+                  style: GoogleFonts.plusJakartaSans(
+                      fontSize: 13,
+                      color: theme.colorScheme.onSurface.withOpacity(0.75)),
                 ),
                 const SizedBox(height: 12),
                 FilledButton.icon(
                   onPressed: () => QuickSettingsSheet.show(context),
                   style: FilledButton.styleFrom(
                     backgroundColor: SanctuaryColors.waveNavy,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                     minimumSize: const Size.fromHeight(42),
                   ),
                   icon: const Icon(LucideIcons.settings2, size: 16),
@@ -366,7 +400,9 @@ class SanctuarySettingsView extends ConsumerWidget {
               children: [
                 Text(
                   'Descarga o restaura una copia de seguridad con todos tus versículos guardados, notas de prédicas y categorías:',
-                  style: GoogleFonts.plusJakartaSans(fontSize: 13, color: theme.colorScheme.onSurface.withOpacity(0.75)),
+                  style: GoogleFonts.plusJakartaSans(
+                      fontSize: 13,
+                      color: theme.colorScheme.onSurface.withOpacity(0.75)),
                 ),
                 const SizedBox(height: 14),
                 Row(
@@ -376,7 +412,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                         onPressed: () => _exportBackupJson(context),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
                         ),
                         icon: const Icon(LucideIcons.download, size: 16),
                         label: const Text('Exportar JSON'),
@@ -389,7 +426,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                         style: FilledButton.styleFrom(
                           backgroundColor: SanctuaryColors.sunOrange,
                           padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
                         ),
                         icon: const Icon(LucideIcons.upload, size: 16),
                         label: const Text('Restaurar JSON'),
@@ -419,11 +457,13 @@ class SanctuarySettingsView extends ConsumerWidget {
                       color: Colors.purple.withOpacity(0.12),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(LucideIcons.compass, color: Colors.purple, size: 20),
+                    child: const Icon(LucideIcons.compass,
+                        color: Colors.purple, size: 20),
                   ),
                   title: Text(
                     'Ver Guía Rápida Interactiva',
-                    style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w700, fontSize: 13.5),
+                    style: GoogleFonts.plusJakartaSans(
+                        fontWeight: FontWeight.w700, fontSize: 13.5),
                   ),
                   subtitle: Text(
                     'Recorre las 7 secciones de la app paso a paso',
@@ -441,11 +481,13 @@ class SanctuarySettingsView extends ConsumerWidget {
                       color: SanctuaryColors.sunOrange.withOpacity(0.12),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(LucideIcons.messageSquare, color: SanctuaryColors.sunOrange, size: 20),
+                    child: const Icon(LucideIcons.messageSquare,
+                        color: SanctuaryColors.sunOrange, size: 20),
                   ),
                   title: Text(
                     'Reportar Error o Sugerencia',
-                    style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w700, fontSize: 13.5),
+                    style: GoogleFonts.plusJakartaSans(
+                        fontWeight: FontWeight.w700, fontSize: 13.5),
                   ),
                   subtitle: Text(
                     'Envía comentarios directos al equipo de desarrollo',
@@ -466,7 +508,8 @@ class SanctuarySettingsView extends ConsumerWidget {
             decoration: BoxDecoration(
               color: SanctuaryColors.waveNavy.withOpacity(0.06),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: SanctuaryColors.waveNavy.withOpacity(0.2)),
+              border:
+                  Border.all(color: SanctuaryColors.waveNavy.withOpacity(0.2)),
             ),
             child: Row(
               children: [
@@ -476,7 +519,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                     color: SanctuaryColors.waveNavy,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(LucideIcons.church, color: Colors.white, size: 24),
+                  child: const Icon(LucideIcons.church,
+                      color: Colors.white, size: 24),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -568,7 +612,9 @@ class SanctuarySettingsView extends ConsumerWidget {
           color: isSelected ? SanctuaryColors.waveNavy : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? SanctuaryColors.waveNavy : Theme.of(context).colorScheme.outline.withOpacity(0.3),
+            color: isSelected
+                ? SanctuaryColors.waveNavy
+                : Theme.of(context).colorScheme.outline.withOpacity(0.3),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -579,7 +625,9 @@ class SanctuarySettingsView extends ConsumerWidget {
               style: GoogleFonts.plusJakartaSans(
                 fontWeight: FontWeight.w700,
                 fontSize: 13,
-                color: isSelected ? Colors.white : Theme.of(context).colorScheme.onSurface,
+                color: isSelected
+                    ? Colors.white
+                    : Theme.of(context).colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 2),
@@ -587,7 +635,9 @@ class SanctuarySettingsView extends ConsumerWidget {
               subtitle,
               style: GoogleFonts.plusJakartaSans(
                 fontSize: 10,
-                color: isSelected ? Colors.white70 : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                color: isSelected
+                    ? Colors.white70
+                    : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
           ],
@@ -618,7 +668,9 @@ class SanctuarySettingsView extends ConsumerWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? SanctuaryColors.waveNavy : theme.colorScheme.outline,
+                  color: isSelected
+                      ? SanctuaryColors.waveNavy
+                      : theme.colorScheme.outline,
                   width: isSelected ? 6 : 2,
                 ),
               ),
@@ -639,7 +691,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                       ),
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: SanctuaryColors.waveNavy.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(6),
