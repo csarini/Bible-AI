@@ -45,14 +45,14 @@ class QuickSettingsSheet extends ConsumerWidget {
         height: previewHeight,
         color: theme.colorScheme.onSurface,
       );
-    } else if (fontFamily == 'jakarta') {
-      previewTextStyle = GoogleFonts.plusJakartaSans(
+    } else if (fontFamily == 'inter' || fontFamily == 'jakarta') {
+      previewTextStyle = GoogleFonts.inter(
         fontSize: previewSize,
         height: previewHeight,
         color: theme.colorScheme.onSurface,
       );
     } else {
-      previewTextStyle = GoogleFonts.merriweather(
+      previewTextStyle = GoogleFonts.literata(
         fontSize: previewSize,
         height: previewHeight,
         color: theme.colorScheme.onSurface,
@@ -102,14 +102,14 @@ class QuickSettingsSheet extends ConsumerWidget {
                     children: [
                       Text(
                         'Ajustes de Lectura Bíblica',
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.inter(
                           fontWeight: FontWeight.w800,
                           fontSize: 16,
                         ),
                       ),
                       Text(
                         'Personaliza la tipografía, tamaño y aspecto visual',
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.inter(
                           fontSize: 11.5,
                           color: theme.colorScheme.onSurface.withOpacity(0.65),
                         ),
@@ -143,7 +143,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                     children: [
                       Text(
                         'VISTA PREVIA EN VIVO',
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.inter(
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 0.8,
@@ -152,7 +152,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                       ),
                       Text(
                         'S. Juan 1:1 (${translation.toUpperCase()})',
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.inter(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
                           color: SanctuaryColors.waveNavy,
@@ -167,7 +167,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                         if (showVerseNumbers)
                           TextSpan(
                             text: '1 ',
-                            style: GoogleFonts.plusJakartaSans(
+                            style: GoogleFonts.inter(
                               fontSize: 12,
                               fontWeight: FontWeight.w800,
                               color: SanctuaryColors.sunOrange,
@@ -285,19 +285,19 @@ class QuickSettingsSheet extends ConsumerWidget {
               children: [
                 Expanded(
                   child: _buildChoiceChip(
-                    label: 'Merriweather',
-                    sub: 'Serif Clásico',
-                    isSelected: fontFamily == 'merriweather',
+                    label: 'Literata',
+                    sub: 'Serifa Bíblica',
+                    isSelected: fontFamily == 'literata' || fontFamily == 'merriweather',
                     onTap: () => ref
                         .read(appFontFamilyProvider.notifier)
-                        .state = 'merriweather',
+                        .state = 'literata',
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildChoiceChip(
                     label: 'Playfair',
-                    sub: 'Elegante',
+                    sub: 'Editorial',
                     isSelected: fontFamily == 'playfair',
                     onTap: () => ref
                         .read(appFontFamilyProvider.notifier)
@@ -307,12 +307,12 @@ class QuickSettingsSheet extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildChoiceChip(
-                    label: 'Jakarta',
-                    sub: 'Sans Moderno',
-                    isSelected: fontFamily == 'jakarta',
+                    label: 'Inter',
+                    sub: 'Sans Moderna',
+                    isSelected: fontFamily == 'inter' || fontFamily == 'jakarta',
                     onTap: () => ref
                         .read(appFontFamilyProvider.notifier)
-                        .state = 'jakarta',
+                        .state = 'inter',
                   ),
                 ),
               ],
@@ -412,14 +412,14 @@ class QuickSettingsSheet extends ConsumerWidget {
                     children: [
                       Text(
                         'Mostrar números de versículo',
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           fontSize: 13.5,
                         ),
                       ),
                       Text(
                         'Facilita la ubicación de pasajes y referencias',
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.inter(
                           fontSize: 11,
                           color: theme.colorScheme.onSurface.withOpacity(0.6),
                         ),
@@ -445,7 +445,7 @@ class QuickSettingsSheet extends ConsumerWidget {
   Widget _buildSectionLabel(String text) {
     return Text(
       text,
-      style: GoogleFonts.plusJakartaSans(
+      style: GoogleFonts.inter(
         fontSize: 12.5,
         fontWeight: FontWeight.w800,
         letterSpacing: 0.3,
@@ -478,7 +478,7 @@ class QuickSettingsSheet extends ConsumerWidget {
           children: [
             Text(
               label,
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 fontSize: 12.5,
                 color: isSelected ? Colors.white : null,
@@ -487,7 +487,7 @@ class QuickSettingsSheet extends ConsumerWidget {
             const SizedBox(height: 2),
             Text(
               sub,
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontSize: 10,
                 color: isSelected ? Colors.white70 : Colors.grey,
               ),
@@ -535,7 +535,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.inter(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: isSelected ? SanctuaryColors.waveNavy : null,
@@ -543,7 +543,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                   ),
                   Text(
                     subtitle,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.inter(
                       fontSize: 11,
                       color: Colors.grey.shade600,
                     ),

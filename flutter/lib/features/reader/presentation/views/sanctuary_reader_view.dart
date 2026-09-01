@@ -410,7 +410,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
               children: [
                 Text(
                   '${_currentBook.name} $_currentChapter',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.inter(
                     fontWeight: FontWeight.w800,
                     fontSize: 16.5,
                   ),
@@ -555,14 +555,14 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                 height: bodyHeight,
                 color: bookmark != null ? Colors.black87 : Theme.of(context).colorScheme.onSurface,
               );
-            } else if (fontFamily == 'jakarta') {
-              verseStyle = GoogleFonts.plusJakartaSans(
+            } else if (fontFamily == 'inter' || fontFamily == 'jakarta') {
+              verseStyle = GoogleFonts.inter(
                 fontSize: bodyFontSize,
                 height: bodyHeight,
                 color: bookmark != null ? Colors.black87 : Theme.of(context).colorScheme.onSurface,
               );
             } else {
-              verseStyle = GoogleFonts.merriweather(
+              verseStyle = GoogleFonts.literata(
                 fontSize: bodyFontSize,
                 height: bodyHeight,
                 color: bookmark != null ? Colors.black87 : Theme.of(context).colorScheme.onSurface,

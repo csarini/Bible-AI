@@ -73,7 +73,7 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
         ),
         title: Text(
           'Modo Presentación (Púlpito)',
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.inter(
             fontSize: 16,
             fontWeight: FontWeight.w700,
             color: textColor,
@@ -85,10 +85,10 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             margin: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
-              color: SanctuaryColors.sunOrange..withValues(alpha: 0.15),
+              color: SanctuaryColors.sunOrange.withOpacity(0.15),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                  color: SanctuaryColors.sunOrange..withValues(alpha: 0.4)),
+                  color: SanctuaryColors.sunOrange.withOpacity(0.4)),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -98,7 +98,7 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
                 const SizedBox(width: 6),
                 Text(
                   _formatTimer(_secondsElapsed),
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.inter(
                     fontWeight: FontWeight.w800,
                     fontSize: 13,
                     color: SanctuaryColors.sunOrange,
@@ -166,7 +166,7 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
             // Sermon Title
             Text(
               widget.event.title,
-              style: GoogleFonts.merriweather(
+              style: GoogleFonts.playfairDisplay(
                 fontSize: _fontSize * 1.35,
                 fontWeight: FontWeight.w800,
                 color: textColor,
@@ -182,7 +182,7 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
                 const SizedBox(width: 6),
                 Text(
                   widget.event.eventDate.toLocal().toString().split(' ')[0],
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.inter(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: subColor,
@@ -195,7 +195,7 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
                   const SizedBox(width: 4),
                   Text(
                     'Cafetería activa',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.inter(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: SanctuaryColors.sunOrange,
@@ -206,13 +206,13 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
             ),
 
             const SizedBox(height: 24),
-            Divider(color: subColor..withValues(alpha: 0.3)),
+            Divider(color: subColor.withOpacity(0.3)),
             const SizedBox(height: 16),
 
             // Sermon Notes / Scripture Body
             Text(
               widget.event.description,
-              style: GoogleFonts.merriweather(
+              style: GoogleFonts.literata(
                 fontSize: _fontSize,
                 height: 1.8,
                 color: textColor,

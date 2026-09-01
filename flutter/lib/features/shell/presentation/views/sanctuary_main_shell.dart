@@ -132,7 +132,7 @@ class SanctuaryMainShell extends ConsumerWidget {
       drawer: Drawer(
         child: Column(
           children: [
-            // Drawer Header
+              // Drawer Header
             Container(
               padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
               decoration: const BoxDecoration(
@@ -167,18 +167,31 @@ class SanctuaryMainShell extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Santuario Digital',
-                              style: GoogleFonts.plusJakartaSans(
+                              'El-Shaddai',
+                              style: GoogleFonts.playfairDisplay(
                                 color: Colors.white,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 17,
+                                fontWeight: FontWeight.w700,
+                                fontStyle: FontStyle.italic,
+                                fontSize: 19,
                               ),
                             ),
                             Text(
-                              'Iglesia Cristiana El-Shaddai',
-                              style: GoogleFonts.plusJakartaSans(
-                                color: Colors.white70,
-                                fontSize: 11.5,
+                              'DIOS TODOPODEROSO',
+                              style: GoogleFonts.inter(
+                                color: SanctuaryColors.amberGold,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 8.5,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'SANTUARIO DIGITAL',
+                              style: GoogleFonts.inter(
+                                color: Colors.white.withOpacity(0.65),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 10,
+                                letterSpacing: 0.8,
                               ),
                             ),
                           ],
@@ -226,7 +239,7 @@ class SanctuaryMainShell extends ConsumerWidget {
               ),
             ),
 
-            // Navigation Items List
+              // Navigation Items List
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(vertical: 8),
@@ -236,64 +249,61 @@ class SanctuaryMainShell extends ConsumerWidget {
                     context,
                     index: 0,
                     icon: LucideIcons.home,
-                    title: 'Inicio & Devocional',
-                    badge: 'HOY',
+                    title: 'Inicio',
+                    badge: 'Hoy',
                   ),
                   _buildDrawerItem(
                     ref,
                     context,
                     index: 1,
                     icon: LucideIcons.bookOpen,
-                    title: 'Lector Bíblico',
-                    badge: '66 LIBROS',
+                    title: 'Lectura',
                   ),
                   _buildDrawerItem(
                     ref,
                     context,
                     index: 2,
                     icon: LucideIcons.library,
-                    title: 'Biblioteca & Búsqueda',
-                    badge: 'AT/NT',
+                    title: 'Buscar',
+                  ),
+                  _buildDrawerItem(
+                    ref,
+                    context,
+                    index: 4,
+                    icon: LucideIcons.compass,
+                    title: 'Mapas',
                   ),
                   _buildDrawerItem(
                     ref,
                     context,
                     index: 3,
                     icon: LucideIcons.bookmark,
-                    title: 'Versículos & Notas',
+                    title: 'Guardados',
                     badge: bookmarksCount > 0 ? '$bookmarksCount' : null,
                   ),
                   _buildDrawerItem(
                     ref,
                     context,
-                    index: 4,
-                    icon: LucideIcons.map,
-                    title: 'Mapas & Rutas Bíblicas',
-                    badge: 'RUTAS',
-                  ),
-                  _buildDrawerItem(
-                    ref,
-                    context,
                     index: 5,
-                    icon: LucideIcons.mic,
-                    title: 'Prédicas & Modo Púlpito',
-                    badge: 'HD',
+                    icon: LucideIcons.calendar,
+                    title: 'Prédicas & Eventos',
                   ),
-                  const Divider(),
+                  const Divider(indent: 16, endIndent: 16),
                   _buildDrawerItem(
                     ref,
                     context,
                     index: 6,
                     icon: LucideIcons.sparkles,
-                    title: 'Mentor Teológico IA',
-                    badge: '2/DÍA',
+                    title: 'Mentor IA',
+                    badge: 'Modo Prueba',
+                    badgeColor: SanctuaryColors.emeraldGreen,
                   ),
                   _buildDrawerItem(
                     ref,
                     context,
                     index: 7,
-                    icon: LucideIcons.settings,
-                    title: 'Ajustes & Respaldo JSON',
+                    icon: LucideIcons.slidersHorizontal,
+                    title: 'Ajustes',
                   ),
                 ],
               ),
@@ -361,10 +371,10 @@ class SanctuaryMainShell extends ConsumerWidget {
         alignment: Alignment.center,
         child: Text(
           label,
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w700,
-            color: isSelected ? Colors.black87 : Colors.white70,
+            color: isSelected ? Colors.white : Colors.white70,
           ),
         ),
       ),
@@ -378,6 +388,7 @@ class SanctuaryMainShell extends ConsumerWidget {
     required IconData icon,
     required String title,
     String? badge,
+    Color? badgeColor,
   }) {
     final isSelected = ref.watch(selectedTabProvider) == index;
     return ListTile(
@@ -387,7 +398,8 @@ class SanctuaryMainShell extends ConsumerWidget {
       ),
       title: Text(
         title,
-        style: GoogleFonts.plusJakartaSans(
+        style: GoogleFonts.inter(
+          fontSize: 14,
           fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
           color: isSelected ? SanctuaryColors.sunOrange : null,
         ),
@@ -396,12 +408,12 @@ class SanctuaryMainShell extends ConsumerWidget {
           ? Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: SanctuaryColors.sunOrange,
+                color: badgeColor ?? SanctuaryColors.sunOrange,
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
                 badge,
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.inter(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
                   color: Colors.white,

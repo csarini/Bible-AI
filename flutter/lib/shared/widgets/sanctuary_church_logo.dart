@@ -74,7 +74,7 @@ class SanctuaryChurchLogo extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     'DIOS TODOPODEROSO',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.inter(
                       fontSize: size * 0.18,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.4,
@@ -116,7 +116,7 @@ class SanctuaryChurchLogo extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               'DIOS TODOPODEROSO',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontSize: size * 0.19,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.8,

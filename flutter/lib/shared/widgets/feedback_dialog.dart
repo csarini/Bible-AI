@@ -143,14 +143,14 @@ Plataforma: Flutter Nativo
                       children: [
                         Text(
                           'Sugerencias y Errores',
-                          style: GoogleFonts.plusJakartaSans(
+                          style: GoogleFonts.inter(
                             fontWeight: FontWeight.w800,
                             fontSize: 16.5,
                           ),
                         ),
                         Text(
                           'Ayúdanos a mejorar el Santuario Digital',
-                          style: GoogleFonts.plusJakartaSans(
+                          style: GoogleFonts.inter(
                             fontSize: 11.5,
                             color: theme.colorScheme.onSurface.withOpacity(0.65),
                           ),
@@ -170,7 +170,7 @@ Plataforma: Flutter Nativo
               // Category Selector
               Text(
                 '1. ¿Qué deseas enviar?',
-                style: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w800),
+                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 8),
               Row(
@@ -209,14 +209,14 @@ Plataforma: Flutter Nativo
               // Title input
               Text(
                 '2. Resumen / Título',
-                style: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w800),
+                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 6),
               TextField(
                 controller: _titleController,
                 decoration: InputDecoration(
                   hintText: 'Ej. No se escucha el audio, Error al guardar versículo...',
-                  hintStyle: GoogleFonts.plusJakartaSans(fontSize: 12, color: Colors.grey),
+                  hintStyle: GoogleFonts.inter(fontSize: 12, color: Colors.grey),
                   filled: true,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   border: OutlineInputBorder(
@@ -224,7 +224,7 @@ Plataforma: Flutter Nativo
                     borderSide: BorderSide(color: theme.colorScheme.outline.withOpacity(0.3)),
                   ),
                 ),
-                style: GoogleFonts.plusJakartaSans(fontSize: 13),
+                style: GoogleFonts.inter(fontSize: 13),
               ),
 
               const SizedBox(height: 14),
@@ -232,7 +232,7 @@ Plataforma: Flutter Nativo
               // Description input
               Text(
                 '3. Descripción detallada *',
-                style: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w800),
+                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 6),
               TextField(
@@ -240,7 +240,7 @@ Plataforma: Flutter Nativo
                 maxLines: 4,
                 decoration: InputDecoration(
                   hintText: 'Describe qué ocurrió, qué esperabas que pasara o cuál es tu propuesta...',
-                  hintStyle: GoogleFonts.plusJakartaSans(fontSize: 12, color: Colors.grey),
+                  hintStyle: GoogleFonts.inter(fontSize: 12, color: Colors.grey),
                   filled: true,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   border: OutlineInputBorder(
@@ -248,7 +248,7 @@ Plataforma: Flutter Nativo
                     borderSide: BorderSide(color: theme.colorScheme.outline.withOpacity(0.3)),
                   ),
                 ),
-                style: GoogleFonts.plusJakartaSans(fontSize: 13),
+                style: GoogleFonts.inter(fontSize: 13),
               ),
 
               const SizedBox(height: 14),
@@ -256,7 +256,7 @@ Plataforma: Flutter Nativo
               // Sender Details (Optional)
               Text(
                 '4. Tus Datos (Opcional)',
-                style: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w800),
+                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 6),
               Row(
@@ -266,7 +266,7 @@ Plataforma: Flutter Nativo
                       controller: _nameController,
                       decoration: InputDecoration(
                         hintText: 'Tu Nombre',
-                        hintStyle: GoogleFonts.plusJakartaSans(fontSize: 12, color: Colors.grey),
+                        hintStyle: GoogleFonts.inter(fontSize: 12, color: Colors.grey),
                         filled: true,
                         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                         border: OutlineInputBorder(
@@ -274,7 +274,7 @@ Plataforma: Flutter Nativo
                           borderSide: BorderSide(color: theme.colorScheme.outline.withOpacity(0.3)),
                         ),
                       ),
-                      style: GoogleFonts.plusJakartaSans(fontSize: 12.5),
+                      style: GoogleFonts.inter(fontSize: 12.5),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -283,7 +283,7 @@ Plataforma: Flutter Nativo
                       controller: _emailController,
                       decoration: InputDecoration(
                         hintText: 'Tu Correo (para responderte)',
-                        hintStyle: GoogleFonts.plusJakartaSans(fontSize: 12, color: Colors.grey),
+                        hintStyle: GoogleFonts.inter(fontSize: 12, color: Colors.grey),
                         filled: true,
                         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                         border: OutlineInputBorder(
@@ -291,7 +291,7 @@ Plataforma: Flutter Nativo
                           borderSide: BorderSide(color: theme.colorScheme.outline.withOpacity(0.3)),
                         ),
                       ),
-                      style: GoogleFonts.plusJakartaSans(fontSize: 12.5),
+                      style: GoogleFonts.inter(fontSize: 12.5),
                     ),
                   ),
                 ],
@@ -317,11 +317,11 @@ Plataforma: Flutter Nativo
                         children: [
                           Text(
                             'Destinatario del soporte:',
-                            style: GoogleFonts.plusJakartaSans(fontSize: 10, color: Colors.grey.shade600),
+                            style: GoogleFonts.inter(fontSize: 10, color: Colors.grey.shade600),
                           ),
                           Text(
                             'cmedinavera@gmail.com',
-                            style: GoogleFonts.plusJakartaSans(
+                            style: GoogleFonts.inter(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: SanctuaryColors.waveNavy,
@@ -353,7 +353,7 @@ Plataforma: Flutter Nativo
                       ),
                       label: Text(
                         _copied ? '¡Copiado!' : 'Copiar Texto',
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           color: _copied ? const Color(0xFF10B981) : null,
                         ),
@@ -373,7 +373,7 @@ Plataforma: Flutter Nativo
                       icon: const Icon(LucideIcons.send, size: 16),
                       label: Text(
                         'Enviar / Compartir',
-                        style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w800),
+                        style: GoogleFonts.inter(fontWeight: FontWeight.w800),
                       ),
                     ),
                   ),
@@ -412,7 +412,7 @@ Plataforma: Flutter Nativo
             const SizedBox(height: 4),
             Text(
               label,
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
                 color: isSelected ? color : null,

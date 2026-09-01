@@ -153,7 +153,7 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
             const SizedBox(width: 8),
             Text(
               'Mentor Teológico IA',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 fontSize: 17,
               ),
@@ -189,7 +189,7 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                 const SizedBox(width: 4),
                 Text(
                   '$remaining/$_dailyLimit hoy',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.inter(
                     fontWeight: FontWeight.w800,
                     fontSize: 11,
                     color: remaining > 0
@@ -224,7 +224,7 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                 Expanded(
                   child: Text(
                     'Modo Prueba: 2 consultas/día (reinicio automático a medianoche)',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.inter(
                       fontSize: 11.5,
                       fontWeight: FontWeight.w700,
                       color: SanctuaryColors.sunOrange,
@@ -272,7 +272,7 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                       children: [
                         Text(
                           msg.text,
-                          style: GoogleFonts.plusJakartaSans(
+                          style: GoogleFonts.inter(
                             fontSize: 14,
                             height: 1.5,
                             color: msg.isUser
@@ -297,7 +297,7 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                                 Expanded(
                                   child: Text(
                                     msg.originalLanguageNote!,
-                                    style: GoogleFonts.plusJakartaSans(
+                                    style: GoogleFonts.inter(
                                       fontSize: 11,
                                       fontWeight: FontWeight.w600,
                                       color: const Color(0xFF10B981),
@@ -330,7 +330,7 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                   const SizedBox(width: 10),
                   Text(
                     'Analizando textos originales y contexto...',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.inter(
                         fontSize: 12, color: SanctuaryColors.sunOrange),
                   ),
                 ],
@@ -352,7 +352,7 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                   return ActionChip(
                     label: Text(
                       prompt,
-                      style: GoogleFonts.plusJakartaSans(
+                      style: GoogleFonts.inter(
                           fontSize: 11, fontWeight: FontWeight.w600),
                     ),
                     onPressed: () => _sendMessage(prompt),
@@ -381,7 +381,7 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                       hintText: remaining > 0
                           ? 'Pregunta sobre teología, hebreo o griego...'
                           : 'Cupo diario agotado por hoy',
-                      hintStyle: GoogleFonts.plusJakartaSans(fontSize: 13),
+                      hintStyle: GoogleFonts.inter(fontSize: 13),
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 12),
                       border: OutlineInputBorder(

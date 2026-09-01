@@ -57,7 +57,7 @@ class SanctuarySettingsView extends ConsumerWidget {
               const SizedBox(width: 8),
               Text(
                 'Copia JSON Exportada',
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.inter(
                     fontWeight: FontWeight.w800, fontSize: 16),
               ),
             ],
@@ -68,7 +68,7 @@ class SanctuarySettingsView extends ConsumerWidget {
             children: [
               Text(
                 'Se han empaquetado ${bookmarks.length} versículos guardados y notas personales.',
-                style: GoogleFonts.plusJakartaSans(fontSize: 13),
+                style: GoogleFonts.inter(fontSize: 13),
               ),
               const SizedBox(height: 10),
               Container(
@@ -79,7 +79,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                 ),
                 child: Text(
                   'El código JSON completo ha sido copiado automáticamente a tu portapapeles. Puedes guardarlo en un archivo o enviarlo por correo.',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.inter(
                       fontSize: 11, color: Colors.grey.shade700),
                 ),
               ),
@@ -115,7 +115,7 @@ class SanctuarySettingsView extends ConsumerWidget {
             const SizedBox(width: 8),
             Text(
               'Restaurar Respaldo JSON',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                   fontWeight: FontWeight.w800, fontSize: 16),
             ),
           ],
@@ -126,7 +126,7 @@ class SanctuarySettingsView extends ConsumerWidget {
           children: [
             Text(
               'Pega aquí el contenido JSON exportado previamente:',
-              style: GoogleFonts.plusJakartaSans(fontSize: 12.5),
+              style: GoogleFonts.inter(fontSize: 12.5),
             ),
             const SizedBox(height: 10),
             TextField(
@@ -239,7 +239,7 @@ class SanctuarySettingsView extends ConsumerWidget {
             const SizedBox(width: 8),
             Text(
               'Ajustes del Santuario',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 fontSize: 17,
               ),
@@ -261,7 +261,7 @@ class SanctuarySettingsView extends ConsumerWidget {
               children: [
                 Text(
                   'Elige la tonalidad visual que mejor se adapte a tu iluminación ambiental:',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.inter(
                       fontSize: 13,
                       color: theme.colorScheme.onSurface.withOpacity(0.75)),
                 ),
@@ -366,8 +366,8 @@ class SanctuarySettingsView extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Configura el tamaño de fuente, familias tipográficas (Merriweather, Playfair, Jakarta) e interlineado:',
-                  style: GoogleFonts.plusJakartaSans(
+                  'Configura el tamaño de fuente, familias tipográficas (Literata, Playfair, Inter) e interlineado:',
+                  style: GoogleFonts.inter(
                       fontSize: 13,
                       color: theme.colorScheme.onSurface.withOpacity(0.75)),
                 ),
@@ -400,7 +400,7 @@ class SanctuarySettingsView extends ConsumerWidget {
               children: [
                 Text(
                   'Descarga o restaura una copia de seguridad con todos tus versículos guardados, notas de prédicas y categorías:',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.inter(
                       fontSize: 13,
                       color: theme.colorScheme.onSurface.withOpacity(0.75)),
                 ),
@@ -462,12 +462,12 @@ class SanctuarySettingsView extends ConsumerWidget {
                   ),
                   title: Text(
                     'Ver Guía Rápida Interactiva',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.inter(
                         fontWeight: FontWeight.w700, fontSize: 13.5),
                   ),
                   subtitle: Text(
                     'Recorre las 7 secciones de la app paso a paso',
-                    style: GoogleFonts.plusJakartaSans(fontSize: 11),
+                    style: GoogleFonts.inter(fontSize: 11),
                   ),
                   trailing: const Icon(LucideIcons.chevronRight, size: 16),
                   onTap: () => CoachMarkGuideDialog.show(context),
@@ -486,12 +486,12 @@ class SanctuarySettingsView extends ConsumerWidget {
                   ),
                   title: Text(
                     'Reportar Error o Sugerencia',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.inter(
                         fontWeight: FontWeight.w700, fontSize: 13.5),
                   ),
                   subtitle: Text(
                     'Envía comentarios directos al equipo de desarrollo',
-                    style: GoogleFonts.plusJakartaSans(fontSize: 11),
+                    style: GoogleFonts.inter(fontSize: 11),
                   ),
                   trailing: const Icon(LucideIcons.chevronRight, size: 16),
                   onTap: () => FeedbackDialog.show(context),
@@ -529,7 +529,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                     children: [
                       Text(
                         'Iglesia Cristiana El-Shaddai',
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.inter(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
                           color: SanctuaryColors.waveNavy,
@@ -538,7 +538,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                       const SizedBox(height: 2),
                       Text(
                         'Santuario Digital v1.2.0 • Edificación y Discipulado Bíblico',
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.inter(
                           fontSize: 11,
                           color: theme.colorScheme.onSurface.withOpacity(0.65),
                         ),
@@ -581,7 +581,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Text(
                   title,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.inter(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
@@ -622,7 +622,7 @@ class SanctuarySettingsView extends ConsumerWidget {
           children: [
             Text(
               label,
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 fontSize: 13,
                 color: isSelected
@@ -633,7 +633,7 @@ class SanctuarySettingsView extends ConsumerWidget {
             const SizedBox(height: 2),
             Text(
               subtitle,
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontSize: 10,
                 color: isSelected
                     ? Colors.white70
@@ -684,7 +684,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                     children: [
                       Text(
                         title,
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           fontSize: 13.5,
                         ),
@@ -699,7 +699,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                         ),
                         child: Text(
                           abbreviation,
-                          style: GoogleFonts.plusJakartaSans(
+                          style: GoogleFonts.inter(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
                             color: SanctuaryColors.waveNavy,
@@ -711,7 +711,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                   const SizedBox(height: 2),
                   Text(
                     description,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.inter(
                       fontSize: 11.5,
                       color: theme.colorScheme.onSurface.withOpacity(0.65),
                     ),

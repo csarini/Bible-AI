@@ -14,9 +14,9 @@ final appTranslationProvider =
 final appFontSizeProvider = StateProvider<String>(
     (ref) => 'medium'); // 'small', 'medium', 'large', 'xlarge'
 final appFontFamilyProvider = StateProvider<String>(
-    (ref) => 'merriweather'); // 'merriweather', 'playfair', 'jakarta'
+    (ref) => 'literata'); // 'literata' (Serifa Bíblica), 'playfair' (Editorial), 'inter' (Sans Moderna)
 final appLineSpacingProvider =
-    StateProvider<String>((ref) => 'normal'); // 'compact', 'normal', 'relaxed'
+    StateProvider<String>((ref) => 'normal'); // 'compact', 'normal', 'relaxed', 'spacious'
 final appShowVerseNumbersProvider = StateProvider<bool>((ref) => true);
 
 // Active navigation and bible coordinates

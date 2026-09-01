@@ -119,7 +119,7 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
                   ),
                   child: Text(
                     step.tag,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.inter(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.8,
@@ -129,7 +129,7 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
                 ),
                 Text(
                   'Paso ${_currentStepIndex + 1} de ${kGuideSteps.length}',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.inter(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                     color: theme.colorScheme.onSurface.withOpacity(0.6),
@@ -162,7 +162,7 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
                   Expanded(
                     child: Text(
                       step.title,
-                      style: GoogleFonts.plusJakartaSans(
+                      style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
                         color: theme.colorScheme.onSurface,
@@ -178,7 +178,7 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
             // Description
             Text(
               step.description,
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontSize: 13.5,
                 height: 1.6,
                 color: theme.colorScheme.onSurface.withOpacity(0.85),

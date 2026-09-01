@@ -131,7 +131,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
             const SizedBox(width: 8),
             Text(
               'Santuario Digital',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontWeight: FontWeight.w800,
                 fontSize: 17,
               ),
@@ -237,7 +237,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                           ),
                           child: Text(
                             topic.reference,
-                            style: GoogleFonts.plusJakartaSans(
+                            style: GoogleFonts.inter(
                               fontWeight: FontWeight.w800,
                               fontSize: 12,
                               color: SanctuaryColors.sunOrange,
@@ -267,7 +267,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                     if (_activeDevotionalTab == 'verse') ...[
                       Text(
                         '«${topic.verse}»',
-                        style: GoogleFonts.merriweather(
+                        style: GoogleFonts.literata(
                           fontSize: 17,
                           height: 1.7,
                           fontStyle: FontStyle.italic,
@@ -277,7 +277,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                     ] else if (_activeDevotionalTab == 'reflection') ...[
                       Text(
                         topic.reflection,
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.inter(
                           fontSize: 15,
                           height: 1.6,
                           color: theme.colorScheme.onSurface,
@@ -286,7 +286,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                     ] else ...[
                       Text(
                         topic.prayer,
-                        style: GoogleFonts.merriweather(
+                        style: GoogleFonts.literata(
                           fontSize: 15.5,
                           height: 1.65,
                           color: theme.colorScheme.onSurface,
@@ -345,7 +345,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
             // Modules Grid Section Title
             Text(
               'Herramientas del Santuario',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontSize: 17,
                 fontWeight: FontWeight.w800,
                 color: theme.colorScheme.onSurface,
@@ -374,36 +374,36 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                   subtitle: 'Marcadores y notas',
                   icon: LucideIcons.bookmark,
                   color: SanctuaryColors.sunOrange,
-                  onTap: () => widget.onNavigateTab(2),
+                  onTap: () => widget.onNavigateTab(3),
                 ),
                 _buildModuleCard(
                   title: 'Mapas Bíblicos',
                   subtitle: 'Viajes de Pablo y Éxodo',
                   icon: LucideIcons.mapPin,
                   color: SanctuaryColors.cyanAccent,
-                  onTap: () => widget.onNavigateTab(3),
-                ),
-                _buildModuleCard(
-                  title: 'Prédicas & Púlpito',
-                  subtitle: 'Modo presentación HD',
-                  icon: LucideIcons.mic,
-                  color: SanctuaryColors.brandPurple,
                   onTap: () => widget.onNavigateTab(4),
                 ),
                 _buildModuleCard(
-                  title: 'Mentor Teológico IA',
+                  title: 'Prédicas & Eventos',
+                  subtitle: 'Modo presentación HD',
+                  icon: LucideIcons.mic,
+                  color: SanctuaryColors.brandPurple,
+                  onTap: () => widget.onNavigateTab(5),
+                ),
+                _buildModuleCard(
+                  title: 'Mentor IA',
                   subtitle: 'Modo Prueba (2/día)',
                   icon: LucideIcons.sparkles,
-                  color: const Color(0xFF10B981),
+                  color: SanctuaryColors.emeraldGreen,
                   badge: '2/DÍA',
-                  onTap: () => widget.onNavigateTab(5),
+                  onTap: () => widget.onNavigateTab(6),
                 ),
                 _buildModuleCard(
                   title: 'Ajustes & Respaldo',
                   subtitle: 'Exportar/Importar JSON',
                   icon: LucideIcons.settings,
                   color: const Color(0xFF705335),
-                  onTap: () => widget.onNavigateTab(6),
+                  onTap: () => widget.onNavigateTab(7),
                 ),
               ],
             ),
@@ -430,7 +430,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
         ),
         child: Text(
           title,
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w700,
             color: isSelected
@@ -488,7 +488,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                     ),
                     child: Text(
                       badge,
-                      style: GoogleFonts.plusJakartaSans(
+                      style: GoogleFonts.inter(
                         fontSize: 9,
                         fontWeight: FontWeight.w800,
                         color: Colors.white,
@@ -502,7 +502,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.inter(
                     fontWeight: FontWeight.w700,
                     fontSize: 13.5,
                   ),
@@ -512,7 +512,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.inter(
                     fontSize: 11,
                     color: theme.colorScheme.onSurface.withOpacity(0.65),
                   ),

@@ -283,7 +283,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
             const SizedBox(width: 8),
             Text(
               'Mapas & Rutas Bíblicas',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 fontSize: 17,
               ),
@@ -358,7 +358,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                         children: [
                           Text(
                             currentRoute.period,
-                            style: GoogleFonts.plusJakartaSans(
+                            style: GoogleFonts.inter(
                               fontWeight: FontWeight.w800,
                               fontSize: 11,
                               color: currentRoute.themeColor,
@@ -366,7 +366,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                           ),
                           Text(
                             currentRoute.scriptureReference,
-                            style: GoogleFonts.plusJakartaSans(
+                            style: GoogleFonts.inter(
                               fontWeight: FontWeight.w800,
                               fontSize: 11,
                               color: currentRoute.themeColor,
@@ -377,7 +377,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                       const SizedBox(height: 4),
                       Text(
                         currentRoute.summary,
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.inter(
                           fontSize: 12,
                           height: 1.4,
                           color: theme.colorScheme.onSurface,
@@ -438,7 +438,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                                 ),
                                 child: Text(
                                   'PUNTO ${_selectedWaypointIndex + 1} DE ${currentRoute.waypoints.length}',
-                                  style: GoogleFonts.plusJakartaSans(
+                                  style: GoogleFonts.inter(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w800,
                                     color: Colors.white,
@@ -447,7 +447,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                               ),
                               Text(
                                 '${currentWaypoint.latitude.toStringAsFixed(2)}° N, ${currentWaypoint.longitude.toStringAsFixed(2)}° E',
-                                style: GoogleFonts.plusJakartaSans(
+                                style: GoogleFonts.inter(
                                   fontSize: 11,
                                   color: Colors.white70,
                                   fontWeight: FontWeight.w600,
@@ -460,7 +460,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                             children: [
                               Text(
                                 currentWaypoint.name,
-                                style: GoogleFonts.merriweather(
+                                style: GoogleFonts.playfairDisplay(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white,
@@ -468,7 +468,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                               ),
                               Text(
                                 currentWaypoint.region,
-                                style: GoogleFonts.plusJakartaSans(
+                                style: GoogleFonts.inter(
                                   fontSize: 12,
                                   color: Colors.white.withOpacity(0.85),
                                 ),
@@ -519,7 +519,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                               child: Center(
                                 child: Text(
                                   '${idx + 1}. ${wp.name}',
-                                  style: GoogleFonts.plusJakartaSans(
+                                  style: GoogleFonts.inter(
                                     fontSize: 11,
                                     fontWeight: isSelected
                                         ? FontWeight.w800
@@ -550,7 +550,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                                 const SizedBox(width: 6),
                                 Text(
                                   'Referencia Bíblica:',
-                                  style: GoogleFonts.plusJakartaSans(
+                                  style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 13,
                                   ),
@@ -558,7 +558,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                                 const SizedBox(width: 6),
                                 Text(
                                   currentWaypoint.scripture,
-                                  style: GoogleFonts.plusJakartaSans(
+                                  style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w800,
                                     fontSize: 13,
                                     color: SanctuaryColors.sunOrange,
@@ -569,7 +569,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                             const SizedBox(height: 12),
                             Text(
                               currentWaypoint.description,
-                              style: GoogleFonts.plusJakartaSans(
+                              style: GoogleFonts.inter(
                                 fontSize: 14.5,
                                 height: 1.65,
                                 color: theme.colorScheme.onSurface,

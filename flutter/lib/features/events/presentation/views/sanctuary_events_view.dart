@@ -38,7 +38,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
             const SizedBox(width: 8),
             Text(
               'Prédicas & Cuaderno',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 fontSize: 17,
               ),
@@ -146,7 +146,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                           const SizedBox(height: 16),
                           Text(
                             'Sin prédicas ni notas registradas',
-                            style: GoogleFonts.plusJakartaSans(
+                            style: GoogleFonts.inter(
                               fontWeight: FontWeight.w700,
                               fontSize: 16,
                             ),
@@ -155,7 +155,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                           Text(
                             'Toca el botón + para registrar apuntes de sermones, pasajes bíblicos y reuniones eclesiales.',
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.plusJakartaSans(
+                            style: GoogleFonts.inter(
                               fontSize: 13,
                               color:
                                   theme.colorScheme.onSurface.withOpacity(0.65),
@@ -209,7 +209,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                           .toLocal()
                                           .toString()
                                           .split(' ')[0],
-                                      style: GoogleFonts.plusJakartaSans(
+                                      style: GoogleFonts.inter(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700,
                                         color: SanctuaryColors.sunOrange,
@@ -242,7 +242,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                           color: SanctuaryColors.waveNavy),
                                       label: Text(
                                         'Púlpito',
-                                        style: GoogleFonts.plusJakartaSans(
+                                        style: GoogleFonts.inter(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w800,
                                           color: SanctuaryColors.waveNavy,
@@ -272,7 +272,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                             const SizedBox(height: 8),
                             Text(
                               item.title,
-                              style: GoogleFonts.merriweather(
+                              style: GoogleFonts.playfairDisplay(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -282,7 +282,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                               item.description,
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.plusJakartaSans(
+                              style: GoogleFonts.inter(
                                 fontSize: 13.5,
                                 height: 1.5,
                                 color: theme.colorScheme.onSurface
@@ -314,7 +314,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
         return AlertDialog(
           title: Text(
             'Nueva Nota / Prédica',
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700, fontSize: 17),
           ),
           content: SingleChildScrollView(

@@ -124,7 +124,7 @@ class _SanctuarySearchLibraryViewState
             const SizedBox(width: 8),
             Text(
               'Biblioteca Bíblica (66 Libros)',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 fontSize: 17,
               ),
@@ -154,7 +154,7 @@ class _SanctuarySearchLibraryViewState
                       prefixIcon: const Icon(LucideIcons.search, size: 18),
                       hintText:
                           'Buscar libro o cita (ej: Juan 3:16, Mateo 4, Salmos)',
-                      hintStyle: GoogleFonts.plusJakartaSans(fontSize: 13),
+                      hintStyle: GoogleFonts.inter(fontSize: 13),
                       filled: true,
                       fillColor: theme.cardTheme.color,
                       border: OutlineInputBorder(
@@ -202,7 +202,7 @@ class _SanctuarySearchLibraryViewState
                             Expanded(
                               child: Text(
                                 'Ir directo a ${directRef.book.name} ${directRef.chapter}${directRef.verse != null ? ':${directRef.verse}' : ''}',
-                                style: GoogleFonts.plusJakartaSans(
+                                style: GoogleFonts.inter(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 13,
                                   color: SanctuaryColors.waveNavy,
@@ -218,7 +218,7 @@ class _SanctuarySearchLibraryViewState
                               ),
                               child: Text(
                                 'Abrir →',
-                                style: GoogleFonts.plusJakartaSans(
+                                style: GoogleFonts.inter(
                                   color: Colors.white,
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
@@ -251,7 +251,7 @@ class _SanctuarySearchLibraryViewState
                   if (query.isEmpty) ...[
                     Text(
                       'BÚSQUEDAS FRECUENTES',
-                      style: GoogleFonts.plusJakartaSans(
+                      style: GoogleFonts.inter(
                         fontSize: 10,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 0.8,
@@ -268,7 +268,7 @@ class _SanctuarySearchLibraryViewState
                               size: 13, color: SanctuaryColors.sunOrange),
                           label: Text(term,
                               style:
-                                  GoogleFonts.plusJakartaSans(fontSize: 11.5)),
+                                  GoogleFonts.inter(fontSize: 11.5)),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           onPressed: () {
@@ -334,7 +334,7 @@ class _SanctuarySearchLibraryViewState
                                 ),
                                 child: Text(
                                   book.abbreviation,
-                                  style: GoogleFonts.plusJakartaSans(
+                                  style: GoogleFonts.inter(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w800,
                                     color: book.isNewTestament
@@ -352,7 +352,7 @@ class _SanctuarySearchLibraryViewState
                             children: [
                               Text(
                                 book.name,
-                                style: GoogleFonts.merriweather(
+                                style: GoogleFonts.playfairDisplay(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -362,7 +362,7 @@ class _SanctuarySearchLibraryViewState
                               const SizedBox(height: 2),
                               Text(
                                 '${book.totalChapters} Capítulos',
-                                style: GoogleFonts.plusJakartaSans(
+                                style: GoogleFonts.inter(
                                   fontSize: 11,
                                   color: theme.colorScheme.onSurface
                                       .withOpacity(0.6),
@@ -455,7 +455,7 @@ class _BookChapterVersePickerSheetState
                 children: [
                   Text(
                     widget.book.name,
-                    style: GoogleFonts.merriweather(
+                    style: GoogleFonts.playfairDisplay(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -464,7 +464,7 @@ class _BookChapterVersePickerSheetState
                     widget.book.isNewTestament
                         ? 'Nuevo Testamento'
                         : 'Antiguo Testamento',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.inter(
                       fontSize: 11,
                       color: Colors.grey,
                     ),
@@ -556,7 +556,7 @@ class _BookChapterVersePickerSheetState
               children: [
                 Text(
                   'Capítulo $_selectedChapter: Selecciona un versículo',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.inter(
                     fontWeight: FontWeight.w700,
                     fontSize: 12.5,
                   ),
@@ -625,7 +625,7 @@ class _BookChapterVersePickerSheetState
         ),
         child: Text(
           label,
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w700,
             color: isCurrent ? Colors.white : Colors.grey,
