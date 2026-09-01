@@ -530,42 +530,44 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
     final translation = ref.watch(appTranslationProvider).toUpperCase();
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: SanctuaryColors.waveNavy.withOpacity(0.07),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: SanctuaryColors.waveNavy.withOpacity(0.15)),
+        color: Theme.of(context).colorScheme.primary.withOpacity(0.06),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.12)),
       ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
               color: SanctuaryColors.sunOrange,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(LucideIcons.sparkles, color: Colors.white, size: 16),
+            child: const Icon(LucideIcons.sparkles, color: Colors.white, size: 14),
           ),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   'VERSÍCULO DEL DÍA ($translation)',
-                  style: const TextStyle(
-                    fontSize: 9.5,
+                  style: TextStyle(
+                    fontSize: 9.0,
                     fontWeight: FontWeight.w800,
-                    letterSpacing: 1.0,
-                    color: SanctuaryColors.waveNavy,
+                    letterSpacing: 0.9,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                const SizedBox(height: 2),
                 const Text(
-                  '"Lámpara es a mis pies tu palabra, y lumbrera a mi camino."',
+                  '«Lámpara es a mis pies tu palabra, y lumbrera a mi camino.»',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 12.5,
+                    fontSize: 12.0,
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.w600,
                   ),
@@ -794,17 +796,24 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
   }
 
   Widget _buildChapterNavigationControls() {
+    final theme = Theme.of(context);
+    final hasPrev = _currentChapter > 1;
+    final hasNext = _currentChapter < _currentBook.totalChapters;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        border: Border(top: BorderSide(color: Theme.of(context).colorScheme.outline)),
+        color: theme.colorScheme.surface,
+        border: Border(
+          top: BorderSide(color: theme.colorScheme.outline.withOpacity(0.2)),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          TextButton.icon(
-            onPressed: _currentChapter > 1
+          // Previous Chapter Icon Button
+          IconButton.filledTonal(
+            onPressed: hasPrev
                 ? () {
                     setState(() => _currentChapter--);
                     ref.read(appSelectedChapterProvider.notifier).state = _currentChapter;
@@ -812,14 +821,52 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                   }
                 : null,
             icon: const Icon(LucideIcons.chevronLeft, size: 18),
-            label: const Text('Anterior'),
+            tooltip: 'Capítulo anterior (${_currentChapter - 1})',
+            style: IconButton.styleFrom(
+              padding: const EdgeInsets.all(8),
+              minimumSize: const Size(36, 36),
+            ),
           ),
-          Text(
-            'Capítulo $_currentChapter de ${_currentBook.totalChapters}',
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+
+          // Central Quick Book & Chapter Selector
+          InkWell(
+            onTap: () {
+              final allBooks = ref.read(appAllBooksProvider);
+              _openBookChapterPicker(allBooks);
+            },
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: theme.colorScheme.outline.withOpacity(0.2)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${_currentBook.name} $_currentChapter/${_currentBook.totalChapters}',
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Icon(
+                    LucideIcons.chevronDown,
+                    size: 14,
+                    color: theme.colorScheme.primary,
+                  ),
+                ],
+              ),
+            ),
           ),
-          TextButton.icon(
-            onPressed: _currentChapter < _currentBook.totalChapters
+
+          // Next Chapter Icon Button
+          IconButton.filledTonal(
+            onPressed: hasNext
                 ? () {
                     setState(() => _currentChapter++);
                     ref.read(appSelectedChapterProvider.notifier).state = _currentChapter;
@@ -827,7 +874,11 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                   }
                 : null,
             icon: const Icon(LucideIcons.chevronRight, size: 18),
-            label: const Text('Siguiente'),
+            tooltip: 'Capítulo siguiente (${_currentChapter + 1})',
+            style: IconButton.styleFrom(
+              padding: const EdgeInsets.all(8),
+              minimumSize: const Size(36, 36),
+            ),
           ),
         ],
       ),

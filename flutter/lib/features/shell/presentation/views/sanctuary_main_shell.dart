@@ -90,58 +90,73 @@ class SanctuaryMainShell extends ConsumerWidget {
         onDestinationSelected: (index) {
           ref.read(selectedTabProvider.notifier).state = index;
         },
-        height: 66,
-        elevation: 2,
+        height: 64,
+        elevation: 0,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         destinations: [
           const NavigationDestination(
             icon: Icon(LucideIcons.home, size: 20),
-            selectedIcon: Icon(LucideIcons.home, size: 20, color: SanctuaryColors.sunOrange),
+            selectedIcon: Icon(LucideIcons.home, size: 20),
             label: 'Inicio',
+            tooltip: 'Inicio Devocional',
           ),
           const NavigationDestination(
             icon: Icon(LucideIcons.bookOpen, size: 20),
-            selectedIcon: Icon(LucideIcons.bookOpen, size: 20, color: SanctuaryColors.waveNavy),
+            selectedIcon: Icon(LucideIcons.bookOpen, size: 20),
             label: 'Lector',
+            tooltip: 'Lectura Bíblica',
           ),
           const NavigationDestination(
             icon: Icon(LucideIcons.library, size: 20),
-            selectedIcon: Icon(LucideIcons.library, size: 20, color: SanctuaryColors.cyanAccent),
+            selectedIcon: Icon(LucideIcons.library, size: 20),
             label: 'Biblioteca',
+            tooltip: '66 Libros y Búsqueda',
           ),
           NavigationDestination(
             icon: Badge(
               label: Text('$bookmarksCount'),
               isLabelVisible: bookmarksCount > 0,
-              backgroundColor: SanctuaryColors.sunOrange,
+              backgroundColor: Theme.of(context).colorScheme.primary,
               child: const Icon(LucideIcons.bookmark, size: 20),
             ),
             selectedIcon: Badge(
               label: Text('$bookmarksCount'),
               isLabelVisible: bookmarksCount > 0,
-              backgroundColor: SanctuaryColors.sunOrange,
-              child: const Icon(LucideIcons.bookmark, size: 20, color: SanctuaryColors.sunOrange),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: const Icon(LucideIcons.bookmark, size: 20),
             ),
             label: 'Guardados',
+            tooltip: 'Versículos y Notas Guardadas',
           ),
           const NavigationDestination(
             icon: Icon(LucideIcons.map, size: 20),
-            selectedIcon: Icon(LucideIcons.map, size: 20, color: SanctuaryColors.waveNavy),
+            selectedIcon: Icon(LucideIcons.map, size: 20),
             label: 'Mapas',
+            tooltip: 'Mapas Bíblicos Interactivos',
           ),
         ],
       ),
       drawer: Drawer(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         child: Column(
           children: [
-              // Drawer Header
+            // Drawer Header
             Container(
-              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
-              decoration: const BoxDecoration(
+              padding: const EdgeInsets.fromLTRB(18, 46, 18, 16),
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [SanctuaryColors.waveNavy, Color(0xFF001533)],
+                  colors: visualTheme == AppVisualTheme.dark
+                      ? [SanctuaryColors.darkSurface, SanctuaryColors.darkBackground]
+                      : visualTheme == AppVisualTheme.sepia
+                          ? [SanctuaryColors.sepiaSurface, SanctuaryColors.sepiaBackground]
+                          : [SanctuaryColors.waveNavy, const Color(0xFF001533)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
+                ),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+                  ),
                 ),
               ),
               child: Column(
@@ -150,20 +165,26 @@ class SanctuaryMainShell extends ConsumerWidget {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(7),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.12),
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: Colors.white24),
+                          color: visualTheme == AppVisualTheme.light
+                              ? Colors.white.withOpacity(0.12)
+                              : Theme.of(context).colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: visualTheme == AppVisualTheme.light
+                                ? Colors.white24
+                                : Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                          ),
                         ),
-                        child: const SanctuaryChurchLogo(
-                          size: 32,
+                        child: SanctuaryChurchLogo(
+                          size: 28,
                           variant: LogoVariant.symbol,
                           showText: false,
-                          isDark: true,
+                          isDark: visualTheme != AppVisualTheme.light,
                         ),
                       ),
-                      const SizedBox(width: 14),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,29 +192,33 @@ class SanctuaryMainShell extends ConsumerWidget {
                             Text(
                               'El-Shaddai',
                               style: GoogleFonts.playfairDisplay(
-                                color: Colors.white,
+                                color: visualTheme == AppVisualTheme.light
+                                    ? Colors.white
+                                    : Theme.of(context).colorScheme.onSurface,
                                 fontWeight: FontWeight.w700,
                                 fontStyle: FontStyle.italic,
-                                fontSize: 19,
+                                fontSize: 18,
                               ),
                             ),
                             Text(
                               'DIOS TODOPODEROSO',
                               style: GoogleFonts.inter(
-                                color: SanctuaryColors.amberGold,
+                                color: visualTheme == AppVisualTheme.light
+                                    ? SanctuaryColors.amberGold
+                                    : Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.w900,
                                 fontSize: 8.5,
-                                letterSpacing: 1.2,
+                                letterSpacing: 1.1,
                               ),
                             ),
-                            const SizedBox(height: 2),
                             Text(
-                              'SANTUARIO DIGITAL',
+                              'Santuario Digital',
                               style: GoogleFonts.inter(
-                                color: Colors.white.withOpacity(0.65),
+                                color: visualTheme == AppVisualTheme.light
+                                    ? Colors.white.withOpacity(0.7)
+                                    : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                                 fontWeight: FontWeight.w600,
                                 fontSize: 10,
-                                letterSpacing: 0.8,
                               ),
                             ),
                           ],
@@ -201,35 +226,40 @@ class SanctuaryMainShell extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 14),
                   // Segmented Quick Theme Selector
                   Container(
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(3),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.25),
-                      borderRadius: BorderRadius.circular(12),
+                      color: visualTheme == AppVisualTheme.light
+                          ? Colors.black.withOpacity(0.2)
+                          : Theme.of(context).colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
                       children: [
                         Expanded(
                           child: _buildDrawerThemeButton(
-                            label: '☀️ Claro',
+                            icon: LucideIcons.sun,
+                            label: 'Claro',
                             isSelected: visualTheme == AppVisualTheme.light,
                             onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.light,
                           ),
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 3),
                         Expanded(
                           child: _buildDrawerThemeButton(
-                            label: '📜 Sepia',
+                            icon: LucideIcons.bookOpen,
+                            label: 'Sepia',
                             isSelected: visualTheme == AppVisualTheme.sepia,
                             onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.sepia,
                           ),
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 3),
                         Expanded(
                           child: _buildDrawerThemeButton(
-                            label: '🌙 Oscuro',
+                            icon: LucideIcons.moon,
+                            label: 'Oscuro',
                             isSelected: visualTheme == AppVisualTheme.dark,
                             onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.dark,
                           ),
@@ -241,17 +271,17 @@ class SanctuaryMainShell extends ConsumerWidget {
               ),
             ),
 
-              // Navigation Items List
+            // Navigation Items List with Theme-declared Colors
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                 children: [
                   _buildDrawerItem(
                     ref,
                     context,
                     index: 0,
                     icon: LucideIcons.home,
-                    title: 'Inicio',
+                    title: 'Inicio Devocional',
                     badge: 'Hoy',
                   ),
                   _buildDrawerItem(
@@ -259,29 +289,29 @@ class SanctuaryMainShell extends ConsumerWidget {
                     context,
                     index: 1,
                     icon: LucideIcons.bookOpen,
-                    title: 'Lectura',
+                    title: 'Lector Bíblico',
                   ),
                   _buildDrawerItem(
                     ref,
                     context,
                     index: 2,
                     icon: LucideIcons.library,
-                    title: 'Buscar',
-                  ),
-                  _buildDrawerItem(
-                    ref,
-                    context,
-                    index: 4,
-                    icon: LucideIcons.compass,
-                    title: 'Mapas',
+                    title: 'Biblioteca & Búsqueda',
                   ),
                   _buildDrawerItem(
                     ref,
                     context,
                     index: 3,
                     icon: LucideIcons.bookmark,
-                    title: 'Guardados',
+                    title: 'Guardados & Notas',
                     badge: bookmarksCount > 0 ? '$bookmarksCount' : null,
+                  ),
+                  _buildDrawerItem(
+                    ref,
+                    context,
+                    index: 4,
+                    icon: LucideIcons.map,
+                    title: 'Mapas Bíblicos',
                   ),
                   _buildDrawerItem(
                     ref,
@@ -290,69 +320,85 @@ class SanctuaryMainShell extends ConsumerWidget {
                     icon: LucideIcons.calendar,
                     title: 'Prédicas & Eventos',
                   ),
-                  const Divider(indent: 16, endIndent: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    child: Divider(
+                      height: 1,
+                      color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+                    ),
+                  ),
                   _buildDrawerItem(
                     ref,
                     context,
                     index: 6,
                     icon: LucideIcons.sparkles,
-                    title: 'Mentor IA',
-                    badge: 'Modo Prueba',
-                    badgeColor: SanctuaryColors.emeraldGreen,
+                    title: 'Mentor Teológico IA',
+                    badge: 'IA',
+                    badgeColor: Theme.of(context).colorScheme.primary,
+                  ),
+                  _buildDrawerItem(
+                    ref,
+                    context,
+                    index: 7,
+                    icon: LucideIcons.settings,
+                    title: 'Configuración',
                   ),
                 ],
               ),
             ),
 
-            // Drawer Footer Quick Actions (Sugerencias & Ayuda)
+            // Drawer Footer Quick Actions (Icon-focused & Compact to save space)
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: Theme.of(context).colorScheme.outline.withOpacity(0.3))),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        FeedbackDialog.show(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: SanctuaryColors.sunOrange,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        elevation: 0,
-                      ),
-                      icon: const Icon(LucideIcons.messageSquarePlus, size: 16),
-                      label: Text(
-                        'Sugerencias y Errores',
-                        style: GoogleFonts.inter(
-                          fontSize: 12.5,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
+                color: Theme.of(context).colorScheme.surface,
+                border: Border(
+                  top: BorderSide(
+                    color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
                   ),
-                  const SizedBox(height: 6),
-                  SizedBox(
-                    width: double.infinity,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
                     child: OutlinedButton.icon(
                       onPressed: () {
                         Navigator.pop(context);
                         CoachMarkGuideDialog.show(context);
                       },
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        side: BorderSide(color: Theme.of(context).colorScheme.outline.withOpacity(0.3)),
                       ),
-                      icon: const Icon(LucideIcons.helpCircle, size: 15),
+                      icon: const Icon(LucideIcons.helpCircle, size: 16),
                       label: Text(
-                        'Guía Rápida Interactiva',
-                        style: GoogleFonts.inter(fontSize: 11.5, fontWeight: FontWeight.w600),
+                        'Guía',
+                        style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: FilledButton.tonalIcon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        FeedbackDialog.show(context);
+                      },
+                      style: FilledButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.14),
+                        foregroundColor: Theme.of(context).colorScheme.primary,
+                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        elevation: 0,
+                      ),
+                      icon: const Icon(LucideIcons.messageSquarePlus, size: 16),
+                      label: Text(
+                        'Feedback',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
@@ -366,6 +412,7 @@ class SanctuaryMainShell extends ConsumerWidget {
   }
 
   Widget _buildDrawerThemeButton({
+    required IconData icon,
     required String label,
     required bool isSelected,
     required VoidCallback onTap,
@@ -373,19 +420,31 @@ class SanctuaryMainShell extends ConsumerWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.symmetric(vertical: 5),
         decoration: BoxDecoration(
           color: isSelected ? SanctuaryColors.sunOrange : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(7),
         ),
         alignment: Alignment.center,
-        child: Text(
-          label,
-          style: GoogleFonts.inter(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            color: isSelected ? Colors.white : Colors.white70,
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 13,
+              color: isSelected ? Colors.white : Colors.white70,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: isSelected ? Colors.white : Colors.white70,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -400,42 +459,57 @@ class SanctuaryMainShell extends ConsumerWidget {
     String? badge,
     Color? badgeColor,
   }) {
+    final theme = Theme.of(context);
     final isSelected = ref.watch(selectedTabProvider) == index;
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: isSelected ? SanctuaryColors.sunOrange : null,
+    final activeColor = theme.colorScheme.primary;
+    final inactiveColor = theme.colorScheme.onSurface.withOpacity(0.75);
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 2),
+      decoration: BoxDecoration(
+        color: isSelected ? activeColor.withOpacity(0.12) : Colors.transparent,
+        borderRadius: BorderRadius.circular(10),
       ),
-      title: Text(
-        title,
-        style: GoogleFonts.inter(
-          fontSize: 14,
-          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-          color: isSelected ? SanctuaryColors.sunOrange : null,
+      child: ListTile(
+        dense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        leading: Icon(
+          icon,
+          size: 20,
+          color: isSelected ? activeColor : inactiveColor,
         ),
-      ),
-      trailing: badge != null
-          ? Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: badgeColor ?? SanctuaryColors.sunOrange,
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Text(
-                badge,
-                style: GoogleFonts.inter(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
+        title: Text(
+          title,
+          style: GoogleFonts.inter(
+            fontSize: 13.5,
+            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            color: isSelected ? activeColor : theme.colorScheme.onSurface,
+          ),
+        ),
+        trailing: badge != null
+            ? Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: badgeColor ?? activeColor,
+                  borderRadius: BorderRadius.circular(6),
                 ),
-              ),
-            )
-          : null,
-      selected: isSelected,
-      onTap: () {
-        Navigator.of(context).pop(); // Close drawer
-        ref.read(selectedTabProvider.notifier).state = index;
-      },
+                child: Text(
+                  badge,
+                  style: GoogleFonts.inter(
+                    fontSize: 9.5,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            : null,
+        selected: isSelected,
+        onTap: () {
+          Navigator.of(context).pop(); // Close drawer
+          ref.read(selectedTabProvider.notifier).state = index;
+        },
+      ),
     );
   }
 }

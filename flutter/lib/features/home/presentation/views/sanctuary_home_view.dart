@@ -469,29 +469,33 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                     // Actions Row: Share Button + Save to Bookmarks Button
                     Row(
                       children: [
-                        // Compartir Button
+                        // Compartir Icon-focused Button
                         OutlinedButton.icon(
                           onPressed: _shareCurrentVerse,
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(
-                              color: theme.colorScheme.outline.withOpacity(0.4),
+                              color: theme.colorScheme.outline.withOpacity(0.35),
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                           ),
-                          icon: const Icon(LucideIcons.share2, size: 16, color: SanctuaryColors.cyanAccent),
+                          icon: Icon(
+                            LucideIcons.share2,
+                            size: 16,
+                            color: theme.colorScheme.primary,
+                          ),
                           label: Text(
                             'Compartir',
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.w700,
-                              fontSize: 13,
+                              fontSize: 12.5,
                               color: theme.colorScheme.onSurface,
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 8),
 
                         // Guardar en la Sección de Guardados Button
                         FilledButton.icon(
@@ -499,11 +503,11 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                           style: FilledButton.styleFrom(
                             backgroundColor: _isSavedInBookmarks
                                 ? SanctuaryColors.emeraldGreen
-                                : SanctuaryColors.waveNavy,
+                                : theme.colorScheme.primary,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                           ),
                           icon: Icon(
                             _isSavedInBookmarks ? LucideIcons.bookmarkCheck : LucideIcons.bookmark,
@@ -514,7 +518,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                             _isSavedInBookmarks ? 'Guardado' : 'Guardar',
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.w700,
-                              fontSize: 13,
+                              fontSize: 12.5,
                               color: Colors.white,
                             ),
                           ),
@@ -523,13 +527,17 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                         const Spacer(),
 
                         // Shortcut to open Saved Verses tab
-                        IconButton(
+                        IconButton.filledTonal(
                           onPressed: () => widget.onNavigateTab(3),
-                          tooltip: 'Ir a sección de Guardados',
-                          icon: const Icon(
+                          tooltip: 'Ver Guardados & Notas',
+                          icon: Icon(
                             LucideIcons.folderHeart,
-                            size: 20,
-                            color: SanctuaryColors.sunOrange,
+                            size: 18,
+                            color: theme.colorScheme.primary,
+                          ),
+                          style: IconButton.styleFrom(
+                            padding: const EdgeInsets.all(8),
+                            minimumSize: const Size(36, 36),
                           ),
                         ),
                       ],
