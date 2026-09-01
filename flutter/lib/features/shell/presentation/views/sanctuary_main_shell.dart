@@ -7,7 +7,6 @@ import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/widgets/coachmark_guide_dialog.dart';
 import '../../../../shared/widgets/feedback_dialog.dart';
-import '../../../../shared/widgets/quick_settings_sheet.dart';
 import '../../../../shared/widgets/sanctuary_church_logo.dart';
 import '../../../ai_mentor/presentation/views/sanctuary_ai_mentor_view.dart';
 import '../../../events/presentation/views/sanctuary_events_view.dart';
@@ -20,7 +19,8 @@ import '../../../settings/presentation/views/sanctuary_settings_view.dart';
 
 final selectedTabProvider = StateProvider<int>((ref) => 0);
 
-final GlobalKey<ScaffoldState> sanctuaryScaffoldKey = GlobalKey<ScaffoldState>();
+final GlobalKey<ScaffoldState> sanctuaryScaffoldKey =
+    GlobalKey<ScaffoldState>();
 
 void openSanctuaryDrawer() {
   sanctuaryScaffoldKey.currentState?.openDrawer();
@@ -35,7 +35,8 @@ class SanctuaryMainShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(selectedTabProvider);
     final visualTheme = ref.watch(appVisualThemeModeProvider);
-    final bookmarksCountAsync = ref.watch(bookmarksCountStreamProvider(database));
+    final bookmarksCountAsync =
+        ref.watch(bookmarksCountStreamProvider(database));
     final bookmarksCount = bookmarksCountAsync.value ?? 0;
 
     final List<Widget> views = [
@@ -72,12 +73,18 @@ class SanctuaryMainShell extends ConsumerWidget {
 
     // Bottom Navigation Bar mapping for primary 5 destinations
     int bottomNavIndex = 0;
-    if (currentTab == 0) bottomNavIndex = 0;
-    else if (currentTab == 1) bottomNavIndex = 1;
-    else if (currentTab == 2) bottomNavIndex = 2;
-    else if (currentTab == 3) bottomNavIndex = 3;
-    else if (currentTab == 4) bottomNavIndex = 4;
-    else bottomNavIndex = 0; // Default when viewing sub-tabs
+    if (currentTab == 0)
+      bottomNavIndex = 0;
+    else if (currentTab == 1)
+      bottomNavIndex = 1;
+    else if (currentTab == 2)
+      bottomNavIndex = 2;
+    else if (currentTab == 3)
+      bottomNavIndex = 3;
+    else if (currentTab == 4)
+      bottomNavIndex = 4;
+    else
+      bottomNavIndex = 0; // Default when viewing sub-tabs
 
     return Scaffold(
       key: sanctuaryScaffoldKey,
@@ -146,16 +153,25 @@ class SanctuaryMainShell extends ConsumerWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: visualTheme == AppVisualTheme.dark
-                      ? [SanctuaryColors.darkSurface, SanctuaryColors.darkBackground]
+                      ? [
+                          SanctuaryColors.darkSurface,
+                          SanctuaryColors.darkBackground
+                        ]
                       : visualTheme == AppVisualTheme.sepia
-                          ? [SanctuaryColors.sepiaSurface, SanctuaryColors.sepiaBackground]
+                          ? [
+                              SanctuaryColors.sepiaSurface,
+                              SanctuaryColors.sepiaBackground
+                            ]
                           : [SanctuaryColors.waveNavy, const Color(0xFF001533)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 border: Border(
                   bottom: BorderSide(
-                    color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .outline
+                        .withValues(alpha: 0.2),
                   ),
                 ),
               ),
@@ -168,13 +184,18 @@ class SanctuaryMainShell extends ConsumerWidget {
                         padding: const EdgeInsets.all(7),
                         decoration: BoxDecoration(
                           color: visualTheme == AppVisualTheme.light
-                              ? Colors.white.withOpacity(0.12)
-                              : Theme.of(context).colorScheme.surfaceContainerHighest,
+                              ? Colors.white.withValues(alpha: 0.12)
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: visualTheme == AppVisualTheme.light
                                 ? Colors.white24
-                                : Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .outline
+                                    .withValues(alpha: 0.3),
                           ),
                         ),
                         child: SanctuaryChurchLogo(
@@ -215,8 +236,11 @@ class SanctuaryMainShell extends ConsumerWidget {
                               'Santuario Digital',
                               style: GoogleFonts.inter(
                                 color: visualTheme == AppVisualTheme.light
-                                    ? Colors.white.withOpacity(0.7)
-                                    : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                    ? Colors.white.withValues(alpha: 0.7)
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.6),
                                 fontWeight: FontWeight.w600,
                                 fontSize: 10,
                               ),
@@ -232,8 +256,10 @@ class SanctuaryMainShell extends ConsumerWidget {
                     padding: const EdgeInsets.all(3),
                     decoration: BoxDecoration(
                       color: visualTheme == AppVisualTheme.light
-                          ? Colors.black.withOpacity(0.2)
-                          : Theme.of(context).colorScheme.surfaceContainerHighest,
+                          ? Colors.black.withValues(alpha: 0.2)
+                          : Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
@@ -243,7 +269,9 @@ class SanctuaryMainShell extends ConsumerWidget {
                             icon: LucideIcons.sun,
                             label: 'Claro',
                             isSelected: visualTheme == AppVisualTheme.light,
-                            onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.light,
+                            onTap: () => ref
+                                .read(appVisualThemeModeProvider.notifier)
+                                .state = AppVisualTheme.light,
                           ),
                         ),
                         const SizedBox(width: 3),
@@ -252,7 +280,9 @@ class SanctuaryMainShell extends ConsumerWidget {
                             icon: LucideIcons.bookOpen,
                             label: 'Sepia',
                             isSelected: visualTheme == AppVisualTheme.sepia,
-                            onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.sepia,
+                            onTap: () => ref
+                                .read(appVisualThemeModeProvider.notifier)
+                                .state = AppVisualTheme.sepia,
                           ),
                         ),
                         const SizedBox(width: 3),
@@ -261,7 +291,9 @@ class SanctuaryMainShell extends ConsumerWidget {
                             icon: LucideIcons.moon,
                             label: 'Oscuro',
                             isSelected: visualTheme == AppVisualTheme.dark,
-                            onTap: () => ref.read(appVisualThemeModeProvider.notifier).state = AppVisualTheme.dark,
+                            onTap: () => ref
+                                .read(appVisualThemeModeProvider.notifier)
+                                .state = AppVisualTheme.dark,
                           ),
                         ),
                       ],
@@ -321,10 +353,14 @@ class SanctuaryMainShell extends ConsumerWidget {
                     title: 'Prédicas & Eventos',
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     child: Divider(
                       height: 1,
-                      color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .outline
+                          .withValues(alpha: 0.2),
                     ),
                   ),
                   _buildDrawerItem(
@@ -354,7 +390,10 @@ class SanctuaryMainShell extends ConsumerWidget {
                 color: Theme.of(context).colorScheme.surface,
                 border: Border(
                   top: BorderSide(
-                    color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .outline
+                        .withValues(alpha: 0.2),
                   ),
                 ),
               ),
@@ -367,14 +406,21 @@ class SanctuaryMainShell extends ConsumerWidget {
                         CoachMarkGuideDialog.show(context);
                       },
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        side: BorderSide(color: Theme.of(context).colorScheme.outline.withOpacity(0.3)),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 8),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        side: BorderSide(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .outline
+                                .withValues(alpha: 0.3)),
                       ),
                       icon: const Icon(LucideIcons.helpCircle, size: 16),
                       label: Text(
                         'Guía',
-                        style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+                        style: GoogleFonts.inter(
+                            fontSize: 12, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
@@ -386,10 +432,15 @@ class SanctuaryMainShell extends ConsumerWidget {
                         FeedbackDialog.show(context);
                       },
                       style: FilledButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.14),
+                        backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: 0.14),
                         foregroundColor: Theme.of(context).colorScheme.primary,
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 8),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
                         elevation: 0,
                       ),
                       icon: const Icon(LucideIcons.messageSquarePlus, size: 16),
@@ -462,12 +513,14 @@ class SanctuaryMainShell extends ConsumerWidget {
     final theme = Theme.of(context);
     final isSelected = ref.watch(selectedTabProvider) == index;
     final activeColor = theme.colorScheme.primary;
-    final inactiveColor = theme.colorScheme.onSurface.withOpacity(0.75);
+    final inactiveColor = theme.colorScheme.onSurface.withValues(alpha: 0.75);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2),
       decoration: BoxDecoration(
-        color: isSelected ? activeColor.withOpacity(0.12) : Colors.transparent,
+        color: isSelected
+            ? activeColor.withValues(alpha: 0.12)
+            : Colors.transparent,
         borderRadius: BorderRadius.circular(10),
       ),
       child: ListTile(

@@ -334,10 +334,10 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
             margin: const EdgeInsets.symmetric(horizontal: 16),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: currentRoute.themeColor.withOpacity(0.08),
+              color: currentRoute.themeColor.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: currentRoute.themeColor.withOpacity(0.25),
+                color: currentRoute.themeColor.withValues(alpha: 0.25),
               ),
             ),
             child: Row(
@@ -400,7 +400,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                 color: theme.cardTheme.color,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: theme.colorScheme.outline.withOpacity(0.3),
+                  color: theme.colorScheme.outline.withValues(alpha: 0.3),
                 ),
               ),
               child: ClipRRect(
@@ -416,7 +416,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            currentRoute.themeColor.withOpacity(0.85),
+                            currentRoute.themeColor.withValues(alpha: 0.85),
                             currentRoute.themeColor,
                           ],
                         ),
@@ -470,7 +470,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                                 currentWaypoint.region,
                                 style: GoogleFonts.inter(
                                   fontSize: 12,
-                                  color: Colors.white.withOpacity(0.85),
+                                  color: Colors.white.withValues(alpha: 0.85),
                                 ),
                               ),
                             ],
@@ -485,11 +485,12 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: 8),
                       decoration: BoxDecoration(
-                        color:
-                            theme.colorScheme.surfaceVariant.withOpacity(0.5),
+                        color: theme.colorScheme.surfaceVariant
+                            .withValues(alpha: 0.5),
                         border: Border(
                           bottom: BorderSide(
-                            color: theme.colorScheme.outline.withOpacity(0.2),
+                            color: theme.colorScheme.outline
+                                .withValues(alpha: 0.2),
                           ),
                         ),
                       ),

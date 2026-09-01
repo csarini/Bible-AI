@@ -22,49 +22,56 @@ class GuideStep {
 const List<GuideStep> kGuideSteps = [
   GuideStep(
     title: '1. Inicio & Devocional Diario',
-    description: 'Encuentra versículos diarios seleccionados por temática (Paz, Esperanza, Fortaleza, Sabiduría) con reflexiones espirituales, oraciones guiadas y audio TTS.',
+    description:
+        'Encuentra versículos diarios seleccionados por temática (Paz, Esperanza, Fortaleza, Sabiduría) con reflexiones espirituales, oraciones guiadas y audio TTS.',
     icon: LucideIcons.home,
     color: SanctuaryColors.sunOrange,
     tag: 'ESPIRITUALIDAD',
   ),
   GuideStep(
     title: '2. Lector Bíblico & Versículos',
-    description: 'Lee los 66 libros canónicos con ajuste de tamaño de letra, fuentes (Merriweather, Playfair, Jakarta), interlineado, resaltador multicolor y notas personales.',
+    description:
+        'Lee los 66 libros canónicos con ajuste de tamaño de letra, fuentes (Merriweather, Playfair, Jakarta), interlineado, resaltador multicolor y notas personales.',
     icon: LucideIcons.bookOpen,
     color: SanctuaryColors.waveNavy,
     tag: 'CANON BÍBLICO',
   ),
   GuideStep(
     title: '3. Biblioteca & Búsqueda Rápida',
-    description: 'Filtra rápidamente por Antiguo y Nuevo Testamento. Escribe referencias directas como "Juan 3:16" o "Mateo 4" para saltar al versículo al instante.',
+    description:
+        'Filtra rápidamente por Antiguo y Nuevo Testamento. Escribe referencias directas como "Juan 3:16" o "Mateo 4" para saltar al versículo al instante.',
     icon: LucideIcons.search,
     color: SanctuaryColors.cyanAccent,
     tag: 'NAVEGACIÓN',
   ),
   GuideStep(
     title: '4. Mapas Bíblicos Interactivos',
-    description: 'Explora los 4 viajes misioneros del apóstol Pablo, la ruta del Éxodo por el Mar Rojo y el Monte Sinaí con detalles geográficos e históricos.',
+    description:
+        'Explora los 4 viajes misioneros del apóstol Pablo, la ruta del Éxodo por el Mar Rojo y el Monte Sinaí con detalles geográficos e históricos.',
     icon: LucideIcons.map,
     color: SanctuaryColors.waveNavy,
     tag: 'GEOGRAFÍA BÍBLICA',
   ),
   GuideStep(
     title: '5. Prédicas & Modo Púlpito HD',
-    description: 'Diseñado para pastores y predicadores: vista de alto contraste para proyección, temporizador de mensaje, notas de sermón y control de tipografía grande.',
+    description:
+        'Diseñado para pastores y predicadores: vista de alto contraste para proyección, temporizador de mensaje, notas de sermón y control de tipografía grande.',
     icon: LucideIcons.mic,
     color: SanctuaryColors.brandPurple,
     tag: 'MINISTERIO',
   ),
   GuideStep(
     title: '6. Mentor Teológico IA',
-    description: 'Consulta dudas doctrinales, contexto histórico y pasajes paralelos con asistencia de IA responsable basada estrictamente en las Sagradas Escrituras.',
+    description:
+        'Consulta dudas doctrinales, contexto histórico y pasajes paralelos con asistencia de IA responsable basada estrictamente en las Sagradas Escrituras.',
     icon: LucideIcons.sparkles,
     color: Color(0xFF10B981),
     tag: 'ESTUDIO BÍBLICO',
   ),
   GuideStep(
     title: '7. Ajustes, 3 Temas & Respaldo JSON',
-    description: 'Alterna al instante entre modo Claro (Pergamino), Sepia (Cálido) y Oscuro (Noche). Exporta e importa copias de seguridad de todas tus notas en formato JSON.',
+    description:
+        'Alterna al instante entre modo Claro (Pergamino), Sepia (Cálido) y Oscuro (Noche). Exporta e importa copias de seguridad de todas tus notas en formato JSON.',
     icon: LucideIcons.settings,
     color: Color(0xFF705335),
     tag: 'PERSONALIZACIÓN',
@@ -76,7 +83,8 @@ class CoachMarkGuideDialog extends StatefulWidget {
 
   const CoachMarkGuideDialog({super.key, this.onNavigateToSection});
 
-  static void show(BuildContext context, {Function(int targetTab)? onNavigate}) {
+  static void show(BuildContext context,
+      {Function(int targetTab)? onNavigate}) {
     showDialog(
       context: context,
       builder: (_) => CoachMarkGuideDialog(onNavigateToSection: onNavigate),
@@ -112,9 +120,10 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: step.color.withOpacity(0.12),
+                    color: step.color.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -132,7 +141,7 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
                   style: GoogleFonts.inter(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
-                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ],
@@ -144,9 +153,9 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: step.color.withOpacity(0.08),
+                color: step.color.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: step.color.withOpacity(0.2)),
+                border: Border.all(color: step.color.withValues(alpha: 0.2)),
               ),
               child: Row(
                 children: [
@@ -181,7 +190,7 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
               style: GoogleFonts.inter(
                 fontSize: 13.5,
                 height: 1.6,
-                color: theme.colorScheme.onSurface.withOpacity(0.85),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
               ),
             ),
 
@@ -198,7 +207,9 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
                   width: isCurrent ? 24 : 7,
                   height: 7,
                   decoration: BoxDecoration(
-                    color: isCurrent ? SanctuaryColors.waveNavy : Colors.grey.shade300,
+                    color: isCurrent
+                        ? SanctuaryColors.waveNavy
+                        : Colors.grey.shade300,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 );
@@ -231,10 +242,14 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
                   },
                   style: FilledButton.styleFrom(
                     backgroundColor: SanctuaryColors.waveNavy,
-                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
-                  icon: Icon(isLastStep ? LucideIcons.check : LucideIcons.arrowRight, size: 16),
+                  icon: Icon(
+                      isLastStep ? LucideIcons.check : LucideIcons.arrowRight,
+                      size: 16),
                   label: Text(isLastStep ? '¡Comenzar!' : 'Siguiente'),
                 ),
               ],

@@ -76,7 +76,8 @@ Plataforma: Flutter Nativo
     if (_descriptionController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Por favor escribe una descripción del error o sugerencia.'),
+          content:
+              Text('Por favor escribe una descripción del error o sugerencia.'),
           backgroundColor: Colors.redAccent,
         ),
       );
@@ -102,7 +103,8 @@ Plataforma: Flutter Nativo
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('¡Mensaje copiado al portapapeles! Puedes pegarlo en tu correo o mensaje.'),
+          content: Text(
+              '¡Mensaje copiado al portapapeles! Puedes pegarlo en tu correo o mensaje.'),
           backgroundColor: SanctuaryColors.waveNavy,
         ),
       );
@@ -131,10 +133,11 @@ Plataforma: Flutter Nativo
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: SanctuaryColors.sunOrange.withOpacity(0.12),
+                      color: SanctuaryColors.sunOrange.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(14),
                     ),
-                    child: const Icon(LucideIcons.messageSquare, color: SanctuaryColors.sunOrange, size: 22),
+                    child: const Icon(LucideIcons.messageSquare,
+                        color: SanctuaryColors.sunOrange, size: 22),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -152,7 +155,8 @@ Plataforma: Flutter Nativo
                           'Ayúdanos a mejorar el Santuario Digital',
                           style: GoogleFonts.inter(
                             fontSize: 11.5,
-                            color: theme.colorScheme.onSurface.withOpacity(0.65),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.65),
                           ),
                         ),
                       ],
@@ -170,7 +174,8 @@ Plataforma: Flutter Nativo
               // Category Selector
               Text(
                 '1. ¿Qué deseas enviar?',
-                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800),
+                style: GoogleFonts.inter(
+                    fontSize: 12, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 8),
               Row(
@@ -209,19 +214,25 @@ Plataforma: Flutter Nativo
               // Title input
               Text(
                 '2. Resumen / Título',
-                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800),
+                style: GoogleFonts.inter(
+                    fontSize: 12, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 6),
               TextField(
                 controller: _titleController,
                 decoration: InputDecoration(
-                  hintText: 'Ej. No se escucha el audio, Error al guardar versículo...',
-                  hintStyle: GoogleFonts.inter(fontSize: 12, color: Colors.grey),
+                  hintText:
+                      'Ej. No se escucha el audio, Error al guardar versículo...',
+                  hintStyle:
+                      GoogleFonts.inter(fontSize: 12, color: Colors.grey),
                   filled: true,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: theme.colorScheme.outline.withOpacity(0.3)),
+                    borderSide: BorderSide(
+                        color:
+                            theme.colorScheme.outline.withValues(alpha: 0.3)),
                   ),
                 ),
                 style: GoogleFonts.inter(fontSize: 13),
@@ -232,20 +243,26 @@ Plataforma: Flutter Nativo
               // Description input
               Text(
                 '3. Descripción detallada *',
-                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800),
+                style: GoogleFonts.inter(
+                    fontSize: 12, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 6),
               TextField(
                 controller: _descriptionController,
                 maxLines: 4,
                 decoration: InputDecoration(
-                  hintText: 'Describe qué ocurrió, qué esperabas que pasara o cuál es tu propuesta...',
-                  hintStyle: GoogleFonts.inter(fontSize: 12, color: Colors.grey),
+                  hintText:
+                      'Describe qué ocurrió, qué esperabas que pasara o cuál es tu propuesta...',
+                  hintStyle:
+                      GoogleFonts.inter(fontSize: 12, color: Colors.grey),
                   filled: true,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: theme.colorScheme.outline.withOpacity(0.3)),
+                    borderSide: BorderSide(
+                        color:
+                            theme.colorScheme.outline.withValues(alpha: 0.3)),
                   ),
                 ),
                 style: GoogleFonts.inter(fontSize: 13),
@@ -256,7 +273,8 @@ Plataforma: Flutter Nativo
               // Sender Details (Optional)
               Text(
                 '4. Tus Datos (Opcional)',
-                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800),
+                style: GoogleFonts.inter(
+                    fontSize: 12, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 6),
               Row(
@@ -266,12 +284,16 @@ Plataforma: Flutter Nativo
                       controller: _nameController,
                       decoration: InputDecoration(
                         hintText: 'Tu Nombre',
-                        hintStyle: GoogleFonts.inter(fontSize: 12, color: Colors.grey),
+                        hintStyle:
+                            GoogleFonts.inter(fontSize: 12, color: Colors.grey),
                         filled: true,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 10),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: theme.colorScheme.outline.withOpacity(0.3)),
+                          borderSide: BorderSide(
+                              color: theme.colorScheme.outline
+                                  .withValues(alpha: 0.3)),
                         ),
                       ),
                       style: GoogleFonts.inter(fontSize: 12.5),
@@ -283,12 +305,16 @@ Plataforma: Flutter Nativo
                       controller: _emailController,
                       decoration: InputDecoration(
                         hintText: 'Tu Correo (para responderte)',
-                        hintStyle: GoogleFonts.inter(fontSize: 12, color: Colors.grey),
+                        hintStyle:
+                            GoogleFonts.inter(fontSize: 12, color: Colors.grey),
                         filled: true,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 10),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: theme.colorScheme.outline.withOpacity(0.3)),
+                          borderSide: BorderSide(
+                              color: theme.colorScheme.outline
+                                  .withValues(alpha: 0.3)),
                         ),
                       ),
                       style: GoogleFonts.inter(fontSize: 12.5),
@@ -303,13 +329,15 @@ Plataforma: Flutter Nativo
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: SanctuaryColors.waveNavy.withOpacity(0.06),
+                  color: SanctuaryColors.waveNavy.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: SanctuaryColors.waveNavy.withOpacity(0.15)),
+                  border: Border.all(
+                      color: SanctuaryColors.waveNavy.withValues(alpha: 0.15)),
                 ),
                 child: Row(
                   children: [
-                    const Icon(LucideIcons.mail, size: 18, color: SanctuaryColors.waveNavy),
+                    const Icon(LucideIcons.mail,
+                        size: 18, color: SanctuaryColors.waveNavy),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Column(
@@ -317,7 +345,8 @@ Plataforma: Flutter Nativo
                         children: [
                           Text(
                             'Destinatario del soporte:',
-                            style: GoogleFonts.inter(fontSize: 10, color: Colors.grey.shade600),
+                            style: GoogleFonts.inter(
+                                fontSize: 10, color: Colors.grey.shade600),
                           ),
                           Text(
                             'cmedinavera@gmail.com',
@@ -344,7 +373,8 @@ Plataforma: Flutter Nativo
                       onPressed: _copyToClipboard,
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
                       ),
                       icon: Icon(
                         _copied ? LucideIcons.check : LucideIcons.copy,
@@ -368,7 +398,8 @@ Plataforma: Flutter Nativo
                       style: FilledButton.styleFrom(
                         backgroundColor: SanctuaryColors.sunOrange,
                         padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
                       ),
                       icon: const Icon(LucideIcons.send, size: 16),
                       label: Text(
@@ -399,10 +430,13 @@ Plataforma: Flutter Nativo
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.12) : Colors.transparent,
+          color:
+              isSelected ? color.withValues(alpha: 0.12) : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: isSelected ? color : Theme.of(context).colorScheme.outline.withOpacity(0.2),
+            color: isSelected
+                ? color
+                : Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
             width: isSelected ? 2 : 1,
           ),
         ),

@@ -89,7 +89,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: SanctuaryColors.sunOrange.withOpacity(0.15),
+                    color: SanctuaryColors.sunOrange.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Icon(LucideIcons.settings2,
@@ -111,7 +111,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                         'Personaliza la tipografía, tamaño y aspecto visual',
                         style: GoogleFonts.inter(
                           fontSize: 11.5,
-                          color: theme.colorScheme.onSurface.withOpacity(0.65),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.65),
                         ),
                       ),
                     ],
@@ -133,7 +134,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 color: theme.cardTheme.color,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                    color: theme.colorScheme.outline.withOpacity(0.3)),
+                    color: theme.colorScheme.outline.withValues(alpha: 0.3)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,7 +288,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                   child: _buildChoiceChip(
                     label: 'Literata',
                     sub: 'Serifa Bíblica',
-                    isSelected: fontFamily == 'literata' || fontFamily == 'merriweather',
+                    isSelected: fontFamily == 'literata' ||
+                        fontFamily == 'merriweather',
                     onTap: () => ref
                         .read(appFontFamilyProvider.notifier)
                         .state = 'literata',
@@ -309,7 +311,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                   child: _buildChoiceChip(
                     label: 'Inter',
                     sub: 'Sans Moderna',
-                    isSelected: fontFamily == 'inter' || fontFamily == 'jakarta',
+                    isSelected:
+                        fontFamily == 'inter' || fontFamily == 'jakarta',
                     onTap: () => ref
                         .read(appFontFamilyProvider.notifier)
                         .state = 'inter',
@@ -402,7 +405,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 color: theme.cardTheme.color,
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
-                    color: theme.colorScheme.outline.withOpacity(0.3)),
+                    color: theme.colorScheme.outline.withValues(alpha: 0.3)),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -421,7 +424,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                         'Facilita la ubicación de pasajes y referencias',
                         style: GoogleFonts.inter(
                           fontSize: 11,
-                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.6),
                         ),
                       ),
                     ],
@@ -470,7 +474,7 @@ class QuickSettingsSheet extends ConsumerWidget {
           border: Border.all(
             color: isSelected
                 ? SanctuaryColors.waveNavy
-                : Colors.grey.withOpacity(0.3),
+                : Colors.grey.withValues(alpha: 0.3),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -511,13 +515,13 @@ class QuickSettingsSheet extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? SanctuaryColors.waveNavy.withOpacity(0.08)
+              ? SanctuaryColors.waveNavy.withValues(alpha: 0.08)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
                 ? SanctuaryColors.waveNavy
-                : Colors.grey.withOpacity(0.25),
+                : Colors.grey.withValues(alpha: 0.25),
             width: isSelected ? 1.5 : 1,
           ),
         ),

@@ -167,13 +167,13 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
             decoration: BoxDecoration(
               color: remaining > 0
-                  ? const Color(0xFF10B981).withOpacity(0.15)
-                  : Colors.redAccent.withOpacity(0.15),
+                  ? const Color(0xFF10B981).withValues(alpha: 0.15)
+                  : Colors.redAccent.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: remaining > 0
-                    ? const Color(0xFF10B981).withOpacity(0.4)
-                    : Colors.redAccent.withOpacity(0.4),
+                    ? const Color(0xFF10B981).withValues(alpha: 0.4)
+                    : Colors.redAccent.withValues(alpha: 0.4),
               ),
             ),
             child: Row(
@@ -209,10 +209,10 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: SanctuaryColors.sunOrange.withOpacity(0.1),
+              color: SanctuaryColors.sunOrange.withValues(alpha: 0.1),
               border: Border(
                 bottom: BorderSide(
-                  color: SanctuaryColors.sunOrange.withOpacity(0.25),
+                  color: SanctuaryColors.sunOrange.withValues(alpha: 0.25),
                 ),
               ),
             ),
@@ -264,7 +264,8 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                       ),
                       border: !msg.isUser
                           ? Border.all(
-                              color: theme.colorScheme.outline.withOpacity(0.3))
+                              color: theme.colorScheme.outline
+                                  .withValues(alpha: 0.3))
                           : null,
                     ),
                     child: Column(
@@ -285,7 +286,8 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF10B981).withOpacity(0.12),
+                              color: const Color(0xFF10B981)
+                                  .withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Row(
@@ -368,7 +370,7 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
               color: theme.scaffoldBackgroundColor,
               border: Border(
                 top: BorderSide(
-                  color: theme.colorScheme.outline.withOpacity(0.25),
+                  color: theme.colorScheme.outline.withValues(alpha: 0.25),
                 ),
               ),
             ),
@@ -387,7 +389,8 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                         borderSide: BorderSide(
-                            color: theme.colorScheme.outline.withOpacity(0.3)),
+                            color: theme.colorScheme.outline
+                                .withValues(alpha: 0.3)),
                       ),
                       enabled: remaining > 0,
                     ),

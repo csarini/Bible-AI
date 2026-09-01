@@ -57,7 +57,8 @@ class SanctuaryThemeExtension extends ThemeExtension<SanctuaryThemeExtension> {
   }
 
   @override
-  SanctuaryThemeExtension lerp(ThemeExtension<SanctuaryThemeExtension>? other, double t) {
+  SanctuaryThemeExtension lerp(
+      ThemeExtension<SanctuaryThemeExtension>? other, double t) {
     if (other is! SanctuaryThemeExtension) return this;
     return SanctuaryThemeExtension(
       surfaceElevated: Color.lerp(surfaceElevated, other.surfaceElevated, t)!,
@@ -154,19 +155,23 @@ class SanctuaryTheme {
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: SanctuaryColors.lightSurface,
-        indicatorColor: SanctuaryColors.waveNavy.withOpacity(0.12),
+        indicatorColor: SanctuaryColors.waveNavy.withValues(alpha: 0.12),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return GoogleFonts.inter(
             fontSize: 11.5,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-            color: isSelected ? SanctuaryColors.waveNavy : SanctuaryColors.lightTextSecondary,
+            color: isSelected
+                ? SanctuaryColors.waveNavy
+                : SanctuaryColors.lightTextSecondary,
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: isSelected ? SanctuaryColors.waveNavy : SanctuaryColors.lightTextSecondary,
+            color: isSelected
+                ? SanctuaryColors.waveNavy
+                : SanctuaryColors.lightTextSecondary,
             size: 20,
           );
         }),
@@ -191,31 +196,37 @@ class SanctuaryTheme {
         selectedColor: SanctuaryColors.waveNavy,
         side: const BorderSide(color: SanctuaryColors.lightBorder),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        labelStyle: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+        labelStyle:
+            GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: SanctuaryColors.sunOrange,
           foregroundColor: Colors.white,
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700),
+          textStyle:
+              GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: SanctuaryColors.waveNavy,
           side: const BorderSide(color: SanctuaryColors.lightBorder),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
-          textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
+          textStyle:
+              GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: SanctuaryColors.lightSurfaceElevated,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: SanctuaryColors.lightBorder),
@@ -226,17 +237,21 @@ class SanctuaryTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: SanctuaryColors.waveNavy, width: 1.5),
+          borderSide:
+              const BorderSide(color: SanctuaryColors.waveNavy, width: 1.5),
         ),
-        hintStyle: GoogleFonts.inter(color: SanctuaryColors.lightTextSecondary, fontSize: 14),
+        hintStyle: GoogleFonts.inter(
+            color: SanctuaryColors.lightTextSecondary, fontSize: 14),
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return SanctuaryColors.sunOrange;
+          if (states.contains(WidgetState.selected))
+            return SanctuaryColors.sunOrange;
           return SanctuaryColors.lightTextSecondary;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return SanctuaryColors.sunOrange.withOpacity(0.35);
+          if (states.contains(WidgetState.selected))
+            return SanctuaryColors.sunOrange.withValues(alpha: 0.35);
           return SanctuaryColors.lightSurfaceElevated;
         }),
       ),
@@ -291,7 +306,8 @@ class SanctuaryTheme {
         elevation: 0,
         centerTitle: true,
         scrolledUnderElevation: 0,
-        iconTheme: const IconThemeData(color: SanctuaryColors.sepiaTextSecondary),
+        iconTheme:
+            const IconThemeData(color: SanctuaryColors.sepiaTextSecondary),
         titleTextStyle: GoogleFonts.inter(
           color: SanctuaryColors.sepiaTextPrimary,
           fontSize: 17,
@@ -312,19 +328,23 @@ class SanctuaryTheme {
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: SanctuaryColors.sepiaSurface,
-        indicatorColor: SanctuaryColors.sepiaActive.withOpacity(0.15),
+        indicatorColor: SanctuaryColors.sepiaActive.withValues(alpha: 0.15),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return GoogleFonts.inter(
             fontSize: 11.5,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-            color: isSelected ? SanctuaryColors.sepiaActive : SanctuaryColors.sepiaTextSecondary,
+            color: isSelected
+                ? SanctuaryColors.sepiaActive
+                : SanctuaryColors.sepiaTextSecondary,
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: isSelected ? SanctuaryColors.sepiaActive : SanctuaryColors.sepiaTextSecondary,
+            color: isSelected
+                ? SanctuaryColors.sepiaActive
+                : SanctuaryColors.sepiaTextSecondary,
             size: 20,
           );
         }),
@@ -349,31 +369,37 @@ class SanctuaryTheme {
         selectedColor: SanctuaryColors.sepiaActive,
         side: const BorderSide(color: SanctuaryColors.sepiaBorder),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        labelStyle: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+        labelStyle:
+            GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: SanctuaryColors.sepiaActive,
           foregroundColor: SanctuaryColors.sepiaSurface,
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700),
+          textStyle:
+              GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: SanctuaryColors.sepiaTextPrimary,
           side: const BorderSide(color: SanctuaryColors.sepiaBorder),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
-          textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
+          textStyle:
+              GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: SanctuaryColors.sepiaSurfaceElevated,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: SanctuaryColors.sepiaBorder),
@@ -384,17 +410,21 @@ class SanctuaryTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: SanctuaryColors.sepiaActive, width: 1.5),
+          borderSide:
+              const BorderSide(color: SanctuaryColors.sepiaActive, width: 1.5),
         ),
-        hintStyle: GoogleFonts.inter(color: SanctuaryColors.sepiaTextSecondary, fontSize: 14),
+        hintStyle: GoogleFonts.inter(
+            color: SanctuaryColors.sepiaTextSecondary, fontSize: 14),
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return SanctuaryColors.sepiaActive;
+          if (states.contains(WidgetState.selected))
+            return SanctuaryColors.sepiaActive;
           return SanctuaryColors.sepiaTextSecondary;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return SanctuaryColors.sepiaActive.withOpacity(0.35);
+          if (states.contains(WidgetState.selected))
+            return SanctuaryColors.sepiaActive.withValues(alpha: 0.35);
           return SanctuaryColors.sepiaSurfaceElevated;
         }),
       ),
@@ -470,19 +500,23 @@ class SanctuaryTheme {
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: SanctuaryColors.darkSurface,
-        indicatorColor: SanctuaryColors.darkActive.withOpacity(0.4),
+        indicatorColor: SanctuaryColors.darkActive.withValues(alpha: 0.4),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return GoogleFonts.inter(
             fontSize: 11.5,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-            color: isSelected ? SanctuaryColors.sunOrange : SanctuaryColors.darkTextSecondary,
+            color: isSelected
+                ? SanctuaryColors.sunOrange
+                : SanctuaryColors.darkTextSecondary,
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: isSelected ? SanctuaryColors.sunOrange : SanctuaryColors.darkTextSecondary,
+            color: isSelected
+                ? SanctuaryColors.sunOrange
+                : SanctuaryColors.darkTextSecondary,
             size: 20,
           );
         }),
@@ -507,31 +541,37 @@ class SanctuaryTheme {
         selectedColor: SanctuaryColors.sunOrange,
         side: const BorderSide(color: SanctuaryColors.darkBorder),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        labelStyle: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+        labelStyle:
+            GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: SanctuaryColors.sunOrange,
           foregroundColor: Colors.white,
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700),
+          textStyle:
+              GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: SanctuaryColors.darkTextPrimary,
           side: const BorderSide(color: SanctuaryColors.darkBorder),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
-          textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
+          textStyle:
+              GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: SanctuaryColors.darkSurfaceElevated,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: SanctuaryColors.darkBorder),
@@ -542,17 +582,21 @@ class SanctuaryTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: SanctuaryColors.sunOrange, width: 1.5),
+          borderSide:
+              const BorderSide(color: SanctuaryColors.sunOrange, width: 1.5),
         ),
-        hintStyle: GoogleFonts.inter(color: SanctuaryColors.darkTextSecondary, fontSize: 14),
+        hintStyle: GoogleFonts.inter(
+            color: SanctuaryColors.darkTextSecondary, fontSize: 14),
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return SanctuaryColors.sunOrange;
+          if (states.contains(WidgetState.selected))
+            return SanctuaryColors.sunOrange;
           return SanctuaryColors.darkTextSecondary;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return SanctuaryColors.sunOrange.withOpacity(0.35);
+          if (states.contains(WidgetState.selected))
+            return SanctuaryColors.sunOrange.withValues(alpha: 0.35);
           return SanctuaryColors.darkSurfaceElevated;
         }),
       ),

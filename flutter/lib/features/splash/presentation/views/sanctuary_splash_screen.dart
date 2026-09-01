@@ -20,7 +20,8 @@ class SanctuarySplashScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<SanctuarySplashScreen> createState() => _SanctuarySplashScreenState();
+  ConsumerState<SanctuarySplashScreen> createState() =>
+      _SanctuarySplashScreenState();
 }
 
 class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
@@ -127,31 +128,39 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
             ? const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Color(0xFFF5EFE6), Color(0xFFEAE0D0), Color(0xFFDFD3BF)],
+                colors: [
+                  Color(0xFFF5EFE6),
+                  Color(0xFFEAE0D0),
+                  Color(0xFFDFD3BF)
+                ],
               )
             : const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Color(0xFFFFFFFF), Color(0xFFFAF8F5), Color(0xFFF5EFEB)],
+                colors: [
+                  Color(0xFFFFFFFF),
+                  Color(0xFFFAF8F5),
+                  Color(0xFFF5EFEB)
+                ],
               );
 
     final cardBgColor = isDark
-        ? const Color(0xFF131722).withOpacity(0.90)
+        ? const Color(0xFF131722).withValues(alpha: 0.90)
         : isSepia
-            ? const Color(0xFFFAF6EF).withOpacity(0.90)
-            : Colors.white.withOpacity(0.90);
+            ? const Color(0xFFFAF6EF).withValues(alpha: 0.90)
+            : Colors.white.withValues(alpha: 0.90);
 
     final cardBorderColor = isDark
-        ? const Color(0xFF3B49A8).withOpacity(0.40)
+        ? const Color(0xFF3B49A8).withValues(alpha: 0.40)
         : isSepia
-            ? const Color(0xFF705335).withOpacity(0.20)
-            : SanctuaryColors.waveNavy.withOpacity(0.12);
+            ? const Color(0xFF705335).withValues(alpha: 0.20)
+            : SanctuaryColors.waveNavy.withValues(alpha: 0.12);
 
     final topLabelColor = isDark
-        ? const Color(0xFFFED65B).withOpacity(0.85)
+        ? const Color(0xFFFED65B).withValues(alpha: 0.85)
         : isSepia
-            ? const Color(0xFF705335).withOpacity(0.80)
-            : SanctuaryColors.waveNavy.withOpacity(0.70);
+            ? const Color(0xFF705335).withValues(alpha: 0.80)
+            : SanctuaryColors.waveNavy.withValues(alpha: 0.70);
 
     final quoteTextColor = isDark
         ? const Color(0xFFF1F3F9)
@@ -166,10 +175,10 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
             : SanctuaryColors.sunOrange;
 
     final progressBarTrack = isDark
-        ? Colors.white.withOpacity(0.12)
+        ? Colors.white.withValues(alpha: 0.12)
         : isSepia
-            ? const Color(0xFF705335).withOpacity(0.20)
-            : SanctuaryColors.waveNavy.withOpacity(0.10);
+            ? const Color(0xFF705335).withValues(alpha: 0.20)
+            : SanctuaryColors.waveNavy.withValues(alpha: 0.10);
 
     final progressBarGradient = isDark
         ? const [Color(0xFFF47B20), Color(0xFFFED65B), Color(0xFF00A3E0)]
@@ -178,10 +187,10 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
             : const [Color(0xFFF47B20), Color(0xFF00A3E0), Color(0xFF0B2B68)];
 
     final progressLabelColor = isDark
-        ? Colors.white.withOpacity(0.70)
+        ? Colors.white.withValues(alpha: 0.70)
         : isSepia
-            ? const Color(0xFF705335).withOpacity(0.80)
-            : SanctuaryColors.waveNavy.withOpacity(0.70);
+            ? const Color(0xFF705335).withValues(alpha: 0.80)
+            : SanctuaryColors.waveNavy.withValues(alpha: 0.70);
 
     return Scaffold(
       body: Container(
@@ -246,7 +255,7 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
                             BoxShadow(
                               color: isDark
                                   ? Colors.black54
-                                  : Colors.black.withOpacity(0.06),
+                                  : Colors.black.withValues(alpha: 0.06),
                               blurRadius: 24,
                               offset: const Offset(0, 8),
                             ),
@@ -316,7 +325,8 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
                               duration: const Duration(milliseconds: 150),
                               curve: Curves.easeOut,
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(colors: progressBarGradient),
+                                gradient:
+                                    LinearGradient(colors: progressBarGradient),
                                 borderRadius: BorderRadius.circular(3),
                               ),
                             ),

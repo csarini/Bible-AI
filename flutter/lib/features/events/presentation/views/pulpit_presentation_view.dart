@@ -77,19 +77,24 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor =
-        _isHighContrastDark ? SanctuaryColors.darkBackground : SanctuaryColors.lightBackground;
-    final textColor =
-        _isHighContrastDark ? SanctuaryColors.darkTextPrimary : SanctuaryColors.lightTextPrimary;
-    final subColor =
-        _isHighContrastDark ? SanctuaryColors.darkTextSecondary : SanctuaryColors.lightTextSecondary;
+    final bgColor = _isHighContrastDark
+        ? SanctuaryColors.darkBackground
+        : SanctuaryColors.lightBackground;
+    final textColor = _isHighContrastDark
+        ? SanctuaryColors.darkTextPrimary
+        : SanctuaryColors.lightTextPrimary;
+    final subColor = _isHighContrastDark
+        ? SanctuaryColors.darkTextSecondary
+        : SanctuaryColors.lightTextSecondary;
 
     final meta = _parseMetadata(widget.event.foodServiceDetails);
     final verses = _parseLinkedVerses(widget.event.linkedVersesJson);
     final location = meta['location'] as String?;
     final startTime = meta['startTime'] as String?;
     final endTime = meta['endTime'] as String?;
-    final tags = (meta['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [];
+    final tags =
+        (meta['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
+            [];
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -115,10 +120,10 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             margin: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
-              color: SanctuaryColors.sunOrange.withOpacity(0.15),
+              color: SanctuaryColors.sunOrange.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                  color: SanctuaryColors.sunOrange.withOpacity(0.4)),
+                  color: SanctuaryColors.sunOrange.withValues(alpha: 0.4)),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -275,10 +280,11 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: SanctuaryColors.waveNavy.withOpacity(0.2),
+                      color: SanctuaryColors.waveNavy.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: SanctuaryColors.electricCyan.withOpacity(0.4),
+                        color:
+                            SanctuaryColors.electricCyan.withValues(alpha: 0.4),
                       ),
                     ),
                     child: Row(
@@ -321,7 +327,7 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
             ],
 
             const SizedBox(height: 20),
-            Divider(color: subColor.withOpacity(0.3)),
+            Divider(color: subColor.withValues(alpha: 0.3)),
             const SizedBox(height: 16),
 
             // Sermon Notes / Scripture Body

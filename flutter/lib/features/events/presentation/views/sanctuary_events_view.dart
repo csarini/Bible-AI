@@ -37,27 +37,33 @@ const List<String> kCategoryColorOptions = [
 const List<Map<String, String>> kEventImagePresets = [
   {
     'label': 'Culto Dominical',
-    'url': 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=800&auto=format&fit=crop&q=80',
+    'url':
+        'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=800&auto=format&fit=crop&q=80',
   },
   {
     'label': 'Conferencia & Prédica',
-    'url': 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&auto=format&fit=crop&q=80',
+    'url':
+        'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&auto=format&fit=crop&q=80',
   },
   {
     'label': 'Matrimonios & Familia',
-    'url': 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&auto=format&fit=crop&q=80',
+    'url':
+        'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&auto=format&fit=crop&q=80',
   },
   {
     'label': 'Alabanza & Adoración',
-    'url': 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop&q=80',
+    'url':
+        'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop&q=80',
   },
   {
     'label': 'Jóvenes & Campamento',
-    'url': 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&auto=format&fit=crop&q=80',
+    'url':
+        'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&auto=format&fit=crop&q=80',
   },
   {
     'label': 'Vigilia & Oración',
-    'url': 'https://images.unsplash.com/photo-1507692049790-de58290a4334?w=800&auto=format&fit=crop&q=80',
+    'url':
+        'https://images.unsplash.com/photo-1507692049790-de58290a4334?w=800&auto=format&fit=crop&q=80',
   },
 ];
 
@@ -277,7 +283,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                             : const Color(0xFFF1F5F9),
                         border: Border(
                           bottom: BorderSide(
-                            color: theme.colorScheme.outline.withOpacity(0.2),
+                            color: theme.colorScheme.outline
+                                .withValues(alpha: 0.2),
                           ),
                         ),
                       ),
@@ -358,8 +365,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                     onPressed: () =>
                                         _openEventFormSheet(context),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          SanctuaryColors.waveNavy,
+                                      backgroundColor: SanctuaryColors.waveNavy,
                                       foregroundColor:
                                           SanctuaryColors.sunOrange,
                                       padding: const EdgeInsets.symmetric(
@@ -369,8 +375,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                       ),
                                       elevation: 0,
                                     ),
-                                    icon: const Icon(LucideIcons.plus,
-                                        size: 14),
+                                    icon:
+                                        const Icon(LucideIcons.plus, size: 14),
                                     label: Text(
                                       'Nuevo Apunte',
                                       style: GoogleFonts.inter(
@@ -419,8 +425,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
                       child: TextField(
-                        onChanged: (val) =>
-                            setState(() => _searchQuery = val),
+                        onChanged: (val) => setState(() => _searchQuery = val),
                         decoration: InputDecoration(
                           hintText:
                               'Buscar prédicas, temas o pasajes bíblicos...',
@@ -434,21 +439,22 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                 )
                               : null,
                           filled: true,
-                          fillColor: isDark
-                              ? const Color(0xFF1E293B)
-                              : Colors.white,
+                          fillColor:
+                              isDark ? const Color(0xFF1E293B) : Colors.white,
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 14, vertical: 10),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(
-                              color: theme.colorScheme.outline.withOpacity(0.3),
+                              color: theme.colorScheme.outline
+                                  .withValues(alpha: 0.3),
                             ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(
-                              color: theme.colorScheme.outline.withOpacity(0.2),
+                              color: theme.colorScheme.outline
+                                  .withValues(alpha: 0.2),
                             ),
                           ),
                         ),
@@ -478,9 +484,9 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                       horizontal: 5, vertical: 1),
                                   decoration: BoxDecoration(
                                     color: _selectedCategoryFilter == 'ALL'
-                                        ? Colors.white.withOpacity(0.25)
+                                        ? Colors.white.withValues(alpha: 0.25)
                                         : theme.colorScheme.onSurface
-                                            .withOpacity(0.1),
+                                            .withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
@@ -538,9 +544,10 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                           horizontal: 5, vertical: 1),
                                       decoration: BoxDecoration(
                                         color: isSelected
-                                            ? Colors.white.withOpacity(0.25)
+                                            ? Colors.white
+                                                .withValues(alpha: 0.25)
                                             : theme.colorScheme.onSurface
-                                                .withOpacity(0.1),
+                                                .withValues(alpha: 0.1),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Text(
@@ -577,14 +584,13 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                 color: SanctuaryColors.sunOrange,
                               ),
                             ),
-                            backgroundColor:
-                                SanctuaryColors.sunOrange.withOpacity(0.1),
+                            backgroundColor: SanctuaryColors.sunOrange
+                                .withValues(alpha: 0.1),
                             side: BorderSide(
-                              color:
-                                  SanctuaryColors.sunOrange.withOpacity(0.3),
+                              color: SanctuaryColors.sunOrange
+                                  .withValues(alpha: 0.3),
                             ),
-                            onPressed: () =>
-                                _showAddCategoryDialog(context),
+                            onPressed: () => _showAddCategoryDialog(context),
                           ),
                         ],
                       ),
@@ -607,7 +613,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                 padding: const EdgeInsets.all(18),
                                 decoration: BoxDecoration(
                                   color: SanctuaryColors.sunOrange
-                                      .withOpacity(0.12),
+                                      .withValues(alpha: 0.12),
                                   shape: BoxShape.circle,
                                 ),
                                 child: const Icon(
@@ -633,17 +639,15 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                 style: GoogleFonts.inter(
                                   fontSize: 13,
                                   color: theme.colorScheme.onSurface
-                                      .withOpacity(0.65),
+                                      .withValues(alpha: 0.65),
                                 ),
                               ),
                               const SizedBox(height: 20),
                               FilledButton.icon(
-                                onPressed: () =>
-                                    _openEventFormSheet(context),
+                                onPressed: () => _openEventFormSheet(context),
                                 style: FilledButton.styleFrom(
                                   backgroundColor: SanctuaryColors.waveNavy,
-                                  foregroundColor:
-                                      SanctuaryColors.amberGold,
+                                  foregroundColor: SanctuaryColors.amberGold,
                                 ),
                                 icon: const Icon(LucideIcons.plus, size: 16),
                                 label: const Text('Agregar Nueva Prédica'),
@@ -688,7 +692,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                 borderRadius: BorderRadius.circular(16),
                                 side: BorderSide(
                                   color: theme.colorScheme.outline
-                                      .withOpacity(0.25),
+                                      .withValues(alpha: 0.25),
                                 ),
                               ),
                               child: Column(
@@ -727,13 +731,12 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                               decoration: BoxDecoration(
                                                 color: SanctuaryColors
                                                     .emeraldGreen
-                                                    .withOpacity(0.9),
+                                                    .withValues(alpha: 0.9),
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                               ),
                                               child: Row(
-                                                mainAxisSize:
-                                                    MainAxisSize.min,
+                                                mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   const Icon(LucideIcons.ticket,
                                                       size: 12,
@@ -772,14 +775,13 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                                       horizontal: 8,
                                                       vertical: 3),
                                               decoration: BoxDecoration(
-                                                color:
-                                                    catColor.withOpacity(0.12),
+                                                color: catColor.withValues(
+                                                    alpha: 0.12),
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                               ),
                                               child: Row(
-                                                mainAxisSize:
-                                                    MainAxisSize.min,
+                                                mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   Icon(catIcon,
                                                       size: 13,
@@ -894,7 +896,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                                           color: theme
                                                               .colorScheme
                                                               .onSurface
-                                                              .withOpacity(0.7),
+                                                              .withValues(
+                                                                  alpha: 0.7),
                                                         ),
                                                       ),
                                                     ),
@@ -919,13 +922,13 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                                 decoration: BoxDecoration(
                                                   color: SanctuaryColors
                                                       .waveNavy
-                                                      .withOpacity(0.08),
+                                                      .withValues(alpha: 0.08),
                                                   borderRadius:
                                                       BorderRadius.circular(6),
                                                   border: Border.all(
                                                     color: SanctuaryColors
                                                         .waveNavy
-                                                        .withOpacity(0.2),
+                                                        .withValues(alpha: 0.2),
                                                   ),
                                                 ),
                                                 child: Row(
@@ -966,8 +969,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                                 style: GoogleFonts.inter(
                                                   fontSize: 11,
                                                   fontWeight: FontWeight.w600,
-                                                  color: SanctuaryColors
-                                                      .sunOrange,
+                                                  color:
+                                                      SanctuaryColors.sunOrange,
                                                 ),
                                               );
                                             }).toList(),
@@ -985,7 +988,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                               fontSize: 13,
                                               height: 1.5,
                                               color: theme.colorScheme.onSurface
-                                                  .withOpacity(0.8),
+                                                  .withValues(alpha: 0.8),
                                             ),
                                           ),
                                           if (item.description.length > 150)
@@ -1047,7 +1050,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                                         vertical: 6),
                                                 backgroundColor: SanctuaryColors
                                                     .waveNavy
-                                                    .withOpacity(0.1),
+                                                    .withValues(alpha: 0.1),
                                               ),
                                               icon: const Icon(
                                                   LucideIcons.presentation,
@@ -1073,9 +1076,11 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                                       LucideIcons.share2,
                                                       size: 16),
                                                   tooltip: 'Compartir apunte',
-                                                  onPressed: () =>
-                                                      _shareEvent(context, item,
-                                                          cat.name, verses),
+                                                  onPressed: () => _shareEvent(
+                                                      context,
+                                                      item,
+                                                      cat.name,
+                                                      verses),
                                                 ),
                                                 // Edit button
                                                 IconButton(
@@ -1132,9 +1137,9 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -1166,8 +1171,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
 
     final existingMeta =
         EventDetailsMetadata.fromRawString(event?.foodServiceDetails);
-    final locationController =
-        TextEditingController(text: existingMeta.location ?? kDefaultChurchLocation);
+    final locationController = TextEditingController(
+        text: existingMeta.location ?? kDefaultChurchLocation);
     final startTimeController =
         TextEditingController(text: existingMeta.startTime ?? '');
     final endTimeController =
@@ -1196,7 +1201,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
             return Container(
               height: MediaQuery.of(ctx).size.height * 0.92,
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF0F172A) : const Color(0xFFFAF8F5),
+                color:
+                    isDark ? const Color(0xFF0F172A) : const Color(0xFFFAF8F5),
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(24)),
               ),
@@ -1213,7 +1219,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                           const BorderRadius.vertical(top: Radius.circular(24)),
                       border: Border(
                         bottom: BorderSide(
-                          color: theme.colorScheme.outline.withOpacity(0.2),
+                          color:
+                              theme.colorScheme.outline.withValues(alpha: 0.2),
                         ),
                       ),
                     ),
@@ -1244,7 +1251,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                   style: GoogleFonts.inter(
                                     fontSize: 11,
                                     color: theme.colorScheme.onSurface
-                                        .withOpacity(0.6),
+                                        .withValues(alpha: 0.6),
                                   ),
                                 ),
                               ],
@@ -1256,7 +1263,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                             if (titleController.text.trim().isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text('Escribe un título para la prédica.')),
+                                    content: Text(
+                                        'Escribe un título para la prédica.')),
                               );
                               return;
                             }
@@ -1388,8 +1396,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                             selectedCategoryId = cat.id;
                                           });
                                         },
-                                        borderRadius:
-                                            BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(10),
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 10, vertical: 7),
@@ -1405,7 +1412,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                               color: isSelected
                                                   ? SanctuaryColors.waveNavy
                                                   : theme.colorScheme.outline
-                                                      .withOpacity(0.2),
+                                                      .withValues(alpha: 0.2),
                                             ),
                                           ),
                                           child: Row(
@@ -1479,7 +1486,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                     borderRadius: BorderRadius.circular(12),
                                     border: Border.all(
                                       color: theme.colorScheme.outline
-                                          .withOpacity(0.3),
+                                          .withValues(alpha: 0.3),
                                     ),
                                   ),
                                   child: Row(
@@ -1539,8 +1546,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                         decoration: const InputDecoration(
                                           labelText: 'Hora de Inicio',
                                           hintText: '10:00 AM',
-                                          prefixIcon: Icon(LucideIcons.clock,
-                                              size: 16),
+                                          prefixIcon:
+                                              Icon(LucideIcons.clock, size: 16),
                                           border: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(10)),
@@ -1555,8 +1562,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                         decoration: const InputDecoration(
                                           labelText: 'Hora de Fin',
                                           hintText: '12:00 PM',
-                                          prefixIcon: Icon(LucideIcons.clock,
-                                              size: 16),
+                                          prefixIcon:
+                                              Icon(LucideIcons.clock, size: 16),
                                           border: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(10)),
@@ -1627,7 +1634,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                           'Auditorio Central';
                                       setModalState(() {});
                                     }),
-                                    _buildPresetChip('Online / Transmisión', () {
+                                    _buildPresetChip('Online / Transmisión',
+                                        () {
                                       locationController.text =
                                           'Online / Transmisión Zoom';
                                       setModalState(() {});
@@ -1655,19 +1663,19 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                   decoration: InputDecoration(
                                     labelText: 'Enlace de Imagen (URL)',
                                     hintText: 'https://...',
-                                    prefixIcon: const Icon(LucideIcons.link,
-                                        size: 16),
-                                    suffixIcon: imageUrlController
-                                            .text.isNotEmpty
-                                        ? IconButton(
-                                            icon: const Icon(LucideIcons.x,
-                                                size: 16),
-                                            onPressed: () {
-                                              imageUrlController.clear();
-                                              setModalState(() {});
-                                            },
-                                          )
-                                        : null,
+                                    prefixIcon:
+                                        const Icon(LucideIcons.link, size: 16),
+                                    suffixIcon:
+                                        imageUrlController.text.isNotEmpty
+                                            ? IconButton(
+                                                icon: const Icon(LucideIcons.x,
+                                                    size: 16),
+                                                onPressed: () {
+                                                  imageUrlController.clear();
+                                                  setModalState(() {});
+                                                },
+                                              )
+                                            : null,
                                     border: const OutlineInputBorder(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(10)),
@@ -1722,8 +1730,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                                 fit: BoxFit.cover,
                                               ),
                                               Container(
-                                                color:
-                                                    Colors.black.withOpacity(0.4),
+                                                color: Colors.black
+                                                    .withValues(alpha: 0.4),
                                                 padding:
                                                     const EdgeInsets.all(4),
                                                 alignment:
@@ -1781,8 +1789,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                     const SizedBox(width: 8),
                                     ElevatedButton.icon(
                                       onPressed: () {
-                                        final txt = verseInputController.text
-                                            .trim();
+                                        final txt =
+                                            verseInputController.text.trim();
                                         if (txt.isNotEmpty &&
                                             !linkedVerses.contains(txt)) {
                                           setModalState(() {
@@ -1836,15 +1844,15 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                             style: const TextStyle(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w700)),
-                                        deleteIcon: const Icon(LucideIcons.x,
-                                            size: 14),
+                                        deleteIcon:
+                                            const Icon(LucideIcons.x, size: 14),
                                         onDeleted: () {
-                                          setModalState(() =>
-                                              linkedVerses.remove(v));
+                                          setModalState(
+                                              () => linkedVerses.remove(v));
                                         },
                                         backgroundColor: SanctuaryColors
                                             .waveNavy
-                                            .withOpacity(0.12),
+                                            .withValues(alpha: 0.12),
                                       );
                                     }).toList(),
                                   ),
@@ -1909,11 +1917,10 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                             style: const TextStyle(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w600)),
-                                        deleteIcon: const Icon(LucideIcons.x,
-                                            size: 14),
+                                        deleteIcon:
+                                            const Icon(LucideIcons.x, size: 14),
                                         onDeleted: () {
-                                          setModalState(
-                                              () => tags.remove(t));
+                                          setModalState(() => tags.remove(t));
                                         },
                                       );
                                     }).toList(),
@@ -1939,7 +1946,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                           TextField(
                             controller: notesController,
                             maxLines: 8,
-                            style: GoogleFonts.inter(fontSize: 13.5, height: 1.6),
+                            style:
+                                GoogleFonts.inter(fontSize: 13.5, height: 1.6),
                             decoration: const InputDecoration(
                               hintText:
                                   'Escribe aquí los puntos principales del sermón, versículos de apoyo, aplicaciones prácticas para la semana o notas del predicador...',
@@ -1977,7 +1985,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: theme.colorScheme.outline.withOpacity(0.2),
+          color: theme.colorScheme.outline.withValues(alpha: 0.2),
         ),
       ),
       child: Column(
@@ -2177,7 +2185,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                 boxShadow: isSelected
                                     ? [
                                         BoxShadow(
-                                          color: color.withOpacity(0.6),
+                                          color: color.withValues(alpha: 0.6),
                                           blurRadius: 6,
                                           spreadRadius: 2,
                                         ),
@@ -2253,9 +2261,11 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
     final buffer = StringBuffer();
     buffer.writeln('📖 *${item.title}*');
     buffer.writeln('📂 Categoría: $categoryName');
-    buffer.writeln('📅 Fecha: ${item.eventDate.toLocal().toString().split(' ')[0]}');
+    buffer.writeln(
+        '📅 Fecha: ${item.eventDate.toLocal().toString().split(' ')[0]}');
     if (meta.startTime != null) {
-      buffer.writeln('⏰ Horario: ${meta.startTime} ${meta.endTime != null ? "- ${meta.endTime}" : ""}');
+      buffer.writeln(
+          '⏰ Horario: ${meta.startTime} ${meta.endTime != null ? "- ${meta.endTime}" : ""}');
     }
     if (meta.location != null) {
       buffer.writeln('📍 Lugar: ${meta.location}');
@@ -2297,7 +2307,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -2355,6 +2365,7 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
     );
   }
 }
+
 extension IterableExtension<T> on Iterable<T> {
   Iterable<T> filter(bool Function(T element) test) => where(test);
 }

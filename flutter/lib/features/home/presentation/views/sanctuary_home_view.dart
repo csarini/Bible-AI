@@ -29,7 +29,8 @@ class SanctuaryHomeView extends ConsumerStatefulWidget {
 
 class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
   late DailyVerseData _currentVerse;
-  String _activeDevotionalTab = 'verse'; // 'verse', 'prayer' (reflection removed per request)
+  String _activeDevotionalTab =
+      'verse'; // 'verse', 'prayer' (reflection removed per request)
   String _selectedThemeFilter = 'Todos';
   bool _isSavedInBookmarks = false;
 
@@ -66,7 +67,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
       SnackBar(
         content: Row(
           children: [
-            const Icon(LucideIcons.sparkles, color: SanctuaryColors.amberGold, size: 18),
+            const Icon(LucideIcons.sparkles,
+                color: SanctuaryColors.amberGold, size: 18),
             const SizedBox(width: 8),
             Text('Nuevo versículo: ${_currentVerse.reference}'),
           ],
@@ -126,7 +128,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
           SnackBar(
             content: Row(
               children: [
-                const Icon(LucideIcons.bookmarkCheck, color: SanctuaryColors.amberGold, size: 18),
+                const Icon(LucideIcons.bookmarkCheck,
+                    color: SanctuaryColors.amberGold, size: 18),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -138,7 +141,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
             ),
             backgroundColor: SanctuaryColors.waveNavy,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             duration: const Duration(seconds: 3),
             action: SnackBarAction(
               label: 'Ver',
@@ -163,7 +167,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
       reference: _currentVerse.reference,
       text: _currentVerse.text,
       customTitle: 'Versículo del Día: ${_currentVerse.theme}',
-      personalReflection: _activeDevotionalTab == 'prayer' ? _currentVerse.prayer : null,
+      personalReflection:
+          _activeDevotionalTab == 'prayer' ? _currentVerse.prayer : null,
     );
   }
 
@@ -208,7 +213,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
           IconButton(
             icon: const Icon(LucideIcons.search),
             tooltip: 'Buscar en las Escrituras',
-            onPressed: () => widget.onNavigateTab(2), // Tab 2: Biblioteca & Búsqueda
+            onPressed: () =>
+                widget.onNavigateTab(2), // Tab 2: Biblioteca & Búsqueda
           ),
           IconButton(
             icon: const Icon(LucideIcons.settings2),
@@ -245,13 +251,17 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                           Icon(
                             LucideIcons.sparkles,
                             size: 13,
-                            color: isSelected ? Colors.white : SanctuaryColors.sunOrange,
+                            color: isSelected
+                                ? Colors.white
+                                : SanctuaryColors.sunOrange,
                           )
                         else
                           Icon(
                             LucideIcons.heartHandshake,
                             size: 13,
-                            color: isSelected ? Colors.white : SanctuaryColors.sunOrange,
+                            color: isSelected
+                                ? Colors.white
+                                : SanctuaryColors.sunOrange,
                           ),
                         const SizedBox(width: 6),
                         Text(filter),
@@ -260,7 +270,9 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                     selected: isSelected,
                     selectedColor: SanctuaryColors.waveNavy,
                     labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+                      color: isSelected
+                          ? Colors.white
+                          : theme.colorScheme.onSurface,
                       fontWeight: FontWeight.w700,
                       fontSize: 12.5,
                     ),
@@ -284,11 +296,11 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
             // =================================================================
             Card(
               elevation: 2,
-              shadowColor: Colors.black.withOpacity(0.06),
+              shadowColor: Colors.black.withValues(alpha: 0.06),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(22),
                 side: BorderSide(
-                  color: theme.colorScheme.outline.withOpacity(0.25),
+                  color: theme.colorScheme.outline.withValues(alpha: 0.25),
                 ),
               ),
               child: Padding(
@@ -303,7 +315,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
                               decoration: BoxDecoration(
                                 color: SanctuaryColors.waveNavy,
                                 borderRadius: BorderRadius.circular(20),
@@ -330,9 +343,11 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                             ),
                             const SizedBox(width: 8),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
-                                color: SanctuaryColors.sunOrange.withOpacity(0.12),
+                                color: SanctuaryColors.sunOrange
+                                    .withValues(alpha: 0.12),
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Text(
@@ -350,7 +365,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                         IconButton(
                           icon: const Icon(LucideIcons.refreshCw, size: 18),
                           tooltip: 'Cambiar versículo aleatorio',
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.7),
                           onPressed: () => _randomizeVerse(),
                         ),
                       ],
@@ -361,7 +377,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                     // Options below header: Versículo | Oración (Reflection eliminated per request)
                     Container(
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceVariant.withOpacity(0.6),
+                        color: theme.colorScheme.surfaceVariant
+                            .withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       padding: const EdgeInsets.all(3),
@@ -403,12 +420,15 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
 
                     // Reference Citation + "Continuar leyendo" to jump directly to the Reader
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceVariant.withOpacity(0.4),
+                        color: theme.colorScheme.surfaceVariant
+                            .withValues(alpha: 0.4),
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
-                          color: theme.colorScheme.outline.withOpacity(0.15),
+                          color:
+                              theme.colorScheme.outline.withValues(alpha: 0.15),
                         ),
                       ),
                       child: Row(
@@ -438,7 +458,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                             onTap: _continueReadingInReader,
                             borderRadius: BorderRadius.circular(8),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -474,12 +495,14 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                           onPressed: _shareCurrentVerse,
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(
-                              color: theme.colorScheme.outline.withOpacity(0.35),
+                              color: theme.colorScheme.outline
+                                  .withValues(alpha: 0.35),
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
                           ),
                           icon: Icon(
                             LucideIcons.share2,
@@ -507,10 +530,13 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
                           ),
                           icon: Icon(
-                            _isSavedInBookmarks ? LucideIcons.bookmarkCheck : LucideIcons.bookmark,
+                            _isSavedInBookmarks
+                                ? LucideIcons.bookmarkCheck
+                                : LucideIcons.bookmark,
                             size: 16,
                             color: Colors.white,
                           ),
@@ -574,7 +600,10 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
             fontWeight: FontWeight.w700,
             color: isSelected
                 ? Colors.white
-                : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                : Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.7),
           ),
         ),
       ),

@@ -9,7 +9,6 @@ import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/services/share_service.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
-import '../../../../shared/widgets/sanctuary_church_logo.dart';
 import '../../../saved_verses/presentation/views/sanctuary_saved_verses_view.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 import '../../data/services/getbible_service.dart';
@@ -21,7 +20,8 @@ class SanctuaryReaderView extends ConsumerStatefulWidget {
   const SanctuaryReaderView({super.key, required this.database});
 
   @override
-  ConsumerState<SanctuaryReaderView> createState() => _SanctuaryReaderViewState();
+  ConsumerState<SanctuaryReaderView> createState() =>
+      _SanctuaryReaderViewState();
 }
 
 class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
@@ -69,9 +69,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
       Future.delayed(const Duration(milliseconds: 120), () {
         if (!mounted || !_scrollController.hasClients) return;
         final maxScroll = _scrollController.position.maxScrollExtent;
-        final targetOffset = (_verses.length > 1)
-            ? (index / _verses.length) * maxScroll
-            : 0.0;
+        final targetOffset =
+            (_verses.length > 1) ? (index / _verses.length) * maxScroll : 0.0;
         _scrollController.animateTo(
           targetOffset.clamp(0.0, maxScroll),
           duration: const Duration(milliseconds: 380),
@@ -104,7 +103,9 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
         return VerseEntity(
           number: v.verse,
           text: v.text,
-          bookName: response.bookName.isNotEmpty ? response.bookName : _currentBook.name,
+          bookName: response.bookName.isNotEmpty
+              ? response.bookName
+              : _currentBook.name,
           bookId: _currentBook.id,
           chapter: v.chapter,
         );
@@ -115,7 +116,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
           _verses = verses;
           _isLoading = false;
         });
-        final targetVerse = targetVerseNumber ?? ref.read(appSelectedVerseProvider);
+        final targetVerse =
+            targetVerseNumber ?? ref.read(appSelectedVerseProvider);
         if (targetVerse != null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             _scrollToAndHighlightVerse(targetVerse);
@@ -170,7 +172,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
             return Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(24)),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Column(
@@ -204,8 +207,10 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                           leading: CircleAvatar(
                             radius: 14,
                             backgroundColor: book.isNewTestament
-                                ? SanctuaryColors.waveNavy.withOpacity(0.12)
-                                : SanctuaryColors.sunOrange.withOpacity(0.15),
+                                ? SanctuaryColors.waveNavy
+                                    .withValues(alpha: 0.12)
+                                : SanctuaryColors.sunOrange
+                                    .withValues(alpha: 0.15),
                             child: Text(
                               book.isNewTestament ? 'NT' : 'AT',
                               style: TextStyle(
@@ -220,20 +225,26 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                           title: Text(
                             book.name,
                             style: TextStyle(
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                              color: isSelected ? SanctuaryColors.waveNavy : null,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.w500,
+                              color:
+                                  isSelected ? SanctuaryColors.waveNavy : null,
                             ),
                           ),
-                          subtitle: Text('${book.totalChapters} capítulos', style: const TextStyle(fontSize: 12)),
+                          subtitle: Text('${book.totalChapters} capítulos',
+                              style: const TextStyle(fontSize: 12)),
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Wrap(
                                 spacing: 8,
                                 runSpacing: 8,
-                                children: List.generate(book.totalChapters, (cIdx) {
+                                children:
+                                    List.generate(book.totalChapters, (cIdx) {
                                   final chNum = cIdx + 1;
-                                  final isCurrentCh = isSelected && chNum == _currentChapter;
+                                  final isCurrentCh =
+                                      isSelected && chNum == _currentChapter;
 
                                   return InkWell(
                                     onTap: () {
@@ -242,8 +253,14 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                                         _currentBook = book;
                                         _currentChapter = chNum;
                                       });
-                                      ref.read(appSelectedBookProvider.notifier).state = book.id;
-                                      ref.read(appSelectedChapterProvider.notifier).state = chNum;
+                                      ref
+                                          .read(
+                                              appSelectedBookProvider.notifier)
+                                          .state = book.id;
+                                      ref
+                                          .read(appSelectedChapterProvider
+                                              .notifier)
+                                          .state = chNum;
                                       _loadChapter();
                                     },
                                     borderRadius: BorderRadius.circular(10),
@@ -254,14 +271,17 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                                       decoration: BoxDecoration(
                                         color: isCurrentCh
                                             ? SanctuaryColors.waveNavy
-                                            : SanctuaryColors.waveNavy.withOpacity(0.06),
+                                            : SanctuaryColors.waveNavy
+                                                .withValues(alpha: 0.06),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Text(
                                         '$chNum',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: isCurrentCh ? Colors.white : SanctuaryColors.waveNavy,
+                                          color: isCurrentCh
+                                              ? Colors.white
+                                              : SanctuaryColors.waveNavy,
                                         ),
                                       ),
                                     ),
@@ -284,15 +304,19 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
   }
 
   void _showAddNoteDialog(VerseEntity verse, LocalBookmarkEntry? existing) {
-    final titleController = TextEditingController(text: existing?.customTitle ?? '');
-    final noteController = TextEditingController(text: existing?.personalNote ?? '');
-    String selectedHex = existing?.colorHex ?? SanctuaryColors.colorToHex(SanctuaryColors.highlightYellow);
+    final titleController =
+        TextEditingController(text: existing?.customTitle ?? '');
+    final noteController =
+        TextEditingController(text: existing?.personalNote ?? '');
+    String selectedHex = existing?.colorHex ??
+        SanctuaryColors.colorToHex(SanctuaryColors.highlightYellow);
 
     showDialog(
       context: context,
       builder: (dialogCtx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
             'Reflexión Personal (${verse.reference})',
             style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
@@ -302,7 +326,9 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Color de resaltado:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                const Text('Color de resaltado:',
+                    style:
+                        TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 6),
                 Row(
                   children: SanctuaryColors.pastelPalette.map((col) {
@@ -318,12 +344,15 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                           color: col,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: isChosen ? SanctuaryColors.waveNavy : Colors.black26,
+                            color: isChosen
+                                ? SanctuaryColors.waveNavy
+                                : Colors.black26,
                             width: isChosen ? 2.5 : 1,
                           ),
                         ),
                         child: isChosen
-                            ? const Icon(Icons.check, size: 16, color: SanctuaryColors.waveNavy)
+                            ? const Icon(Icons.check,
+                                size: 16, color: SanctuaryColors.waveNavy)
                             : null,
                       ),
                     );
@@ -335,7 +364,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                   decoration: InputDecoration(
                     labelText: 'Título Personal (Opcional)',
                     hintText: 'Ej. Promesa de paz en la tormenta',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -345,7 +375,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                   decoration: InputDecoration(
                     labelText: 'Nota de reflexión',
                     hintText: 'Escribe lo que Dios habló a tu corazón hoy...',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
                 ),
               ],
@@ -360,7 +391,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: SanctuaryColors.waveNavy,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
               ),
               onPressed: () async {
                 final id = '${verse.bookId}_${verse.chapter}_${verse.number}';
@@ -373,8 +405,12 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                     verse: verse.number,
                     verseText: verse.text,
                     colorHex: selectedHex,
-                    customTitle: drift.Value(titleController.text.trim().isEmpty ? null : titleController.text.trim()),
-                    personalNote: drift.Value(noteController.text.trim().isEmpty ? null : noteController.text.trim()),
+                    customTitle: drift.Value(titleController.text.trim().isEmpty
+                        ? null
+                        : titleController.text.trim()),
+                    personalNote: drift.Value(noteController.text.trim().isEmpty
+                        ? null
+                        : noteController.text.trim()),
                   ),
                 );
                 Navigator.pop(dialogCtx);
@@ -396,7 +432,9 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    final allBooks = ref.watch(bibleBooksStreamProvider(widget.database)).valueOrNull ?? kBibleBooks;
+    final allBooks =
+        ref.watch(bibleBooksStreamProvider(widget.database)).valueOrNull ??
+            kBibleBooks;
 
     // Listen to external book/chapter/verse navigation requests (e.g. from Home, Search, Saved Verses)
     ref.listen<String>(appSelectedBookProvider, (previous, next) {
@@ -405,7 +443,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
           final nextChapter = ref.read(appSelectedChapterProvider);
           final nextVerse = ref.read(appSelectedVerseProvider);
           setState(() {
-            _currentBook = allBooks.firstWhere((b) => b.id == next, orElse: () => kBibleBooks.firstWhere((b) => b.id == next));
+            _currentBook = allBooks.firstWhere((b) => b.id == next,
+                orElse: () => kBibleBooks.firstWhere((b) => b.id == next));
             _currentChapter = nextChapter;
           });
           _loadChapter(nextVerse);
@@ -445,7 +484,9 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
 
         if (targetBook != _currentBook.id || targetChapter != _currentChapter) {
           setState(() {
-            _currentBook = allBooks.firstWhere((b) => b.id == targetBook, orElse: () => kBibleBooks.firstWhere((b) => b.id == targetBook));
+            _currentBook = allBooks.firstWhere((b) => b.id == targetBook,
+                orElse: () =>
+                    kBibleBooks.firstWhere((b) => b.id == targetBook));
             _currentChapter = targetChapter;
           });
           _loadChapter(targetVerse);
@@ -498,7 +539,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => SanctuarySavedVersesView(database: widget.database),
+                  builder: (_) =>
+                      SanctuarySavedVersesView(database: widget.database),
                 ),
               );
             },
@@ -512,7 +554,9 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
               _buildVerseOfTheDayCard(),
               Expanded(
                 child: _isLoading
-                    ? const Center(child: CircularProgressIndicator(color: SanctuaryColors.waveNavy))
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                            color: SanctuaryColors.waveNavy))
                     : _errorMessage != null
                         ? _buildErrorWidget()
                         : _buildVersesList(),
@@ -533,9 +577,11 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
       margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary.withOpacity(0.06),
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.12)),
+        border: Border.all(
+            color:
+                Theme.of(context).colorScheme.primary.withValues(alpha: 0.12)),
       ),
       child: Row(
         children: [
@@ -545,7 +591,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
               color: SanctuaryColors.sunOrange,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(LucideIcons.sparkles, color: Colors.white, size: 14),
+            child:
+                const Icon(LucideIcons.sparkles, color: Colors.white, size: 14),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -619,19 +666,25 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
               verseStyle = GoogleFonts.playfairDisplay(
                 fontSize: bodyFontSize,
                 height: bodyHeight,
-                color: bookmark != null ? Colors.black87 : Theme.of(context).colorScheme.onSurface,
+                color: bookmark != null
+                    ? Colors.black87
+                    : Theme.of(context).colorScheme.onSurface,
               );
             } else if (fontFamily == 'inter' || fontFamily == 'jakarta') {
               verseStyle = GoogleFonts.inter(
                 fontSize: bodyFontSize,
                 height: bodyHeight,
-                color: bookmark != null ? Colors.black87 : Theme.of(context).colorScheme.onSurface,
+                color: bookmark != null
+                    ? Colors.black87
+                    : Theme.of(context).colorScheme.onSurface,
               );
             } else {
               verseStyle = GoogleFonts.literata(
                 fontSize: bodyFontSize,
                 height: bodyHeight,
-                color: bookmark != null ? Colors.black87 : Theme.of(context).colorScheme.onSurface,
+                color: bookmark != null
+                    ? Colors.black87
+                    : Theme.of(context).colorScheme.onSurface,
               );
             }
 
@@ -640,12 +693,13 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 180),
                 margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: bookmark != null
                       ? SanctuaryColors.getHighlightColor(bookmark.colorHex)
                       : isSelected
-                          ? SanctuaryColors.waveNavy.withOpacity(0.09)
+                          ? SanctuaryColors.waveNavy.withValues(alpha: 0.09)
                           : Colors.transparent,
                   borderRadius: BorderRadius.circular(12),
                   border: isSelected
@@ -655,7 +709,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (bookmark?.customTitle != null && bookmark!.customTitle!.isNotEmpty) ...[
+                    if (bookmark?.customTitle != null &&
+                        bookmark!.customTitle!.isNotEmpty) ...[
                       Padding(
                         padding: const EdgeInsets.only(bottom: 4),
                         child: Text(
@@ -677,7 +732,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w800,
-                                color: SanctuaryColors.waveNavy.withOpacity(0.75),
+                                color: SanctuaryColors.waveNavy
+                                    .withValues(alpha: 0.75),
                               ),
                             ),
                           TextSpan(
@@ -698,7 +754,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
   }
 
   Widget _buildHighlightToolbar(bool isDark) {
-    final surfaceColor = Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface;
+    final surfaceColor = Theme.of(context).cardTheme.color ??
+        Theme.of(context).colorScheme.surface;
     return Positioned(
       bottom: 24,
       left: 16,
@@ -721,7 +778,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                     message: label,
                     child: GestureDetector(
                       onTap: () async {
-                        final id = '${_selectedVerse!.bookId}_${_selectedVerse!.chapter}_${_selectedVerse!.number}';
+                        final id =
+                            '${_selectedVerse!.bookId}_${_selectedVerse!.chapter}_${_selectedVerse!.number}';
                         await widget.database.insertOrUpdateBookmark(
                           LocalBookmarksCompanion.insert(
                             id: id,
@@ -759,7 +817,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                   IconButton(
                     icon: const Icon(LucideIcons.fileText, size: 20),
                     tooltip: 'Añadir Nota / Título',
-                    onPressed: () => _showAddNoteDialog(_selectedVerse!, _selectedBookmark),
+                    onPressed: () =>
+                        _showAddNoteDialog(_selectedVerse!, _selectedBookmark),
                   ),
                   IconButton(
                     icon: const Icon(LucideIcons.share2, size: 20),
@@ -776,10 +835,12 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                   ),
                   if (_selectedBookmark != null)
                     IconButton(
-                      icon: const Icon(LucideIcons.trash2, size: 20, color: Colors.redAccent),
+                      icon: const Icon(LucideIcons.trash2,
+                          size: 20, color: Colors.redAccent),
                       tooltip: 'Eliminar Resaltado',
                       onPressed: () async {
-                        await widget.database.deleteBookmark(_selectedBookmark!.id);
+                        await widget.database
+                            .deleteBookmark(_selectedBookmark!.id);
                         setState(() {
                           _selectedVerse = null;
                           _selectedBookmark = null;
@@ -805,7 +866,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         border: Border(
-          top: BorderSide(color: theme.colorScheme.outline.withOpacity(0.2)),
+          top: BorderSide(
+              color: theme.colorScheme.outline.withValues(alpha: 0.2)),
         ),
       ),
       child: Row(
@@ -816,7 +878,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
             onPressed: hasPrev
                 ? () {
                     setState(() => _currentChapter--);
-                    ref.read(appSelectedChapterProvider.notifier).state = _currentChapter;
+                    ref.read(appSelectedChapterProvider.notifier).state =
+                        _currentChapter;
                     _loadChapter();
                   }
                 : null,
@@ -839,7 +902,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
               decoration: BoxDecoration(
                 color: theme.colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: theme.colorScheme.outline.withOpacity(0.2)),
+                border: Border.all(
+                    color: theme.colorScheme.outline.withValues(alpha: 0.2)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -868,7 +932,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
             onPressed: hasNext
                 ? () {
                     setState(() => _currentChapter++);
-                    ref.read(appSelectedChapterProvider.notifier).state = _currentChapter;
+                    ref.read(appSelectedChapterProvider.notifier).state =
+                        _currentChapter;
                     _loadChapter();
                   }
                 : null,
