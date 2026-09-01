@@ -382,21 +382,37 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
+  Future<void> saveChaptersBatch(List<LocalBibleChaptersCompanion> chaptersList) async {
+    if (chaptersList.isEmpty) return;
+    await batch((b) {
+      b.insertAllOnConflictUpdate(localBibleChapters, chaptersList);
+    });
+  }
+
   Future<int> countStoredChapters([String? translationKey]) async {
-    final query = select(localBibleChapters);
+    final countExp = localBibleChapters.id.count();
+    final query = selectOnly(localBibleChapters)..addColumns([countExp]);
     if (translationKey != null && translationKey.isNotEmpty) {
-      query.where((t) => t.translationKey.equals(translationKey));
+      query.where(localBibleChapters.translationKey.equals(translationKey));
     }
-    final list = await query.get();
-    return list.length;
+    final result = await query.getSingle();
+    return result.read(countExp) ?? 0;
+  }
+
+  Future<bool> isBibleDataImported() async {
+    final count = await countStoredChapters();
+    // 66 books * chapters (1189) across 3 translations is ~3567 chapters
+    // If we have at least 1189 chapters stored, Bible is imported.
+    return count >= 1189;
   }
 
   Stream<int> watchStoredChaptersCount([String? translationKey]) {
-    final query = select(localBibleChapters);
+    final countExp = localBibleChapters.id.count();
+    final query = selectOnly(localBibleChapters)..addColumns([countExp]);
     if (translationKey != null && translationKey.isNotEmpty) {
-      query.where((t) => t.translationKey.equals(translationKey));
+      query.where(localBibleChapters.translationKey.equals(translationKey));
     }
-    return query.watch().map((list) => list.length);
+    return query.watchSingle().map((row) => row.read(countExp) ?? 0);
   }
 
   // ---------------------------------------------------------------------------

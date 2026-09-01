@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/providers/app_settings_providers.dart';
 import 'core/storage/app_database.dart';
 import 'core/theme/sanctuary_theme.dart';
-import 'features/reader/data/services/offline_bible_sync_service.dart';
 import 'features/shell/presentation/views/sanctuary_main_shell.dart';
+import 'features/splash/presentation/views/sanctuary_splash_screen.dart';
 import 'shared/services/home_widget_service.dart';
 
 void main() async {
@@ -19,15 +19,6 @@ void main() async {
 
   // Initialize Drift Local SQLite Database
   final database = AppDatabase();
-  try {
-    await database.ensureBibleDataSeeded();
-  } catch (e) {
-    debugPrint('Bible books seeding error: $e');
-  }
-
-  // Start background downloader for all Bible verses in non-blocking fashion
-  final syncService = OfflineBibleSyncService(database: database);
-  syncService.startBackgroundSync();
 
   runApp(
     ProviderScope(
@@ -36,13 +27,20 @@ void main() async {
   );
 }
 
-class DigitalSanctuaryApp extends ConsumerWidget {
+class DigitalSanctuaryApp extends ConsumerStatefulWidget {
   final AppDatabase database;
 
   const DigitalSanctuaryApp({super.key, required this.database});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DigitalSanctuaryApp> createState() => _DigitalSanctuaryAppState();
+}
+
+class _DigitalSanctuaryAppState extends ConsumerState<DigitalSanctuaryApp> {
+  bool _isInitialized = false;
+
+  @override
+  Widget build(BuildContext context) {
     final visualTheme = ref.watch(appVisualThemeModeProvider);
 
     ThemeData activeTheme;
@@ -69,7 +67,26 @@ class DigitalSanctuaryApp extends ConsumerWidget {
       theme: activeTheme,
       darkTheme: SanctuaryTheme.dark(),
       themeMode: themeMode,
-      home: SanctuaryMainShell(database: database),
+      home: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 500),
+        switchInCurve: Curves.easeIn,
+        switchOutCurve: Curves.easeOut,
+        child: _isInitialized
+            ? SanctuaryMainShell(
+                key: const ValueKey('sanctuary_main_shell'),
+                database: widget.database,
+              )
+            : SanctuarySplashScreen(
+                key: const ValueKey('sanctuary_splash_screen'),
+                database: widget.database,
+                onComplete: () {
+                  setState(() {
+                    _isInitialized = true;
+                  });
+                },
+              ),
+      ),
     );
   }
 }
+
