@@ -26,9 +26,12 @@ class SanctuaryChurchLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveIsDark = isDark ?? (Theme.of(context).brightness == Brightness.dark);
-    final titleColor = effectiveIsDark ? Colors.white : SanctuaryColors.waveNavy;
-    final subtitleColor = effectiveIsDark ? SanctuaryColors.sunOrange : SanctuaryColors.waveNavy;
+    final effectiveIsDark =
+        isDark ?? (Theme.of(context).brightness == Brightness.dark);
+    final titleColor =
+        effectiveIsDark ? Colors.white : SanctuaryColors.waveNavy;
+    final subtitleColor =
+        effectiveIsDark ? SanctuaryColors.sunOrange : SanctuaryColors.waveNavy;
 
     final emblem = CustomPaint(
       size: Size(size, size * 0.7),
@@ -139,7 +142,7 @@ class _ElShaddaiEmblemPainter extends CustomPainter {
     // Sunburst Radiant Gradient Paint
     final sunPaint = Paint()
       ..shader = RadialGradient(
-        center: Alignment(0.0, 0.7),
+        center: const Alignment(0.0, 0.7),
         radius: 0.8,
         colors: const [
           SanctuaryColors.sunOrange,
@@ -167,7 +170,7 @@ class _ElShaddaiEmblemPainter extends CustomPainter {
           SanctuaryColors.cyanAccent,
           Color(0xFF38BDF8),
         ],
-      ).createShader(Rect.fromLTWH(0, 0, w, h))
+      ).createShader(const Rect.fromLTWH(0, 0, w, h))
       ..style = PaintingStyle.fill;
 
     // Scale reference coordinates 500x350
