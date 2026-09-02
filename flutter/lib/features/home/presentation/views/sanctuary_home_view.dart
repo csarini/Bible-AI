@@ -191,23 +191,10 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
           tooltip: 'Menú Lateral',
           onPressed: openSanctuaryDrawer,
         ),
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SanctuaryChurchLogo(
-              size: 26,
-              variant: LogoVariant.symbol,
-              showText: false,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              '',
-              style: GoogleFonts.inter(
-                fontWeight: FontWeight.w800,
-                fontSize: 17,
-              ),
-            ),
-          ],
+        title: const SanctuaryChurchLogo(
+          size: 34,
+          variant: LogoVariant.symbol,
+          showText: false,
         ),
         actions: [
           IconButton(
@@ -220,11 +207,6 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
             icon: const Icon(LucideIcons.settings2),
             tooltip: 'Ajustes Rápidos',
             onPressed: () => QuickSettingsSheet.show(context),
-          ),
-          IconButton(
-            icon: const Icon(LucideIcons.helpCircle),
-            tooltip: 'Guía Rápida',
-            onPressed: () => CoachMarkGuideDialog.show(context),
           ),
         ],
       ),

@@ -33,15 +33,24 @@ class SanctuaryChurchLogo extends StatelessWidget {
     final subtitleColor =
         effectiveIsDark ? SanctuaryColors.sunOrange : SanctuaryColors.waveNavy;
 
-    final emblem = CustomPaint(
-      size: Size(size, size * 0.7),
-      painter: _ElShaddaiEmblemPainter(),
+    final emblem = Image.asset(
+      'assets/images/shaddai-logo.png',
+      width: size,
+      height: size * 0.65,
+      fit: BoxFit.contain,
+      filterQuality: FilterQuality.high,
+      errorBuilder: (context, error, stackTrace) {
+        return CustomPaint(
+          size: Size(size, size * 0.65),
+          painter: _ElShaddaiEmblemPainter(),
+        );
+      },
     );
 
     if (variant == LogoVariant.symbol) {
       return SizedBox(
         width: size,
-        height: size * 0.7,
+        height: size * 0.65,
         child: emblem,
       );
     }
@@ -53,7 +62,7 @@ class SanctuaryChurchLogo extends StatelessWidget {
         children: [
           SizedBox(
             width: size,
-            height: size * 0.7,
+            height: size * 0.65,
             child: emblem,
           ),
           if (showText) ...[
@@ -99,7 +108,7 @@ class SanctuaryChurchLogo extends StatelessWidget {
       children: [
         SizedBox(
           width: size,
-          height: size * 0.7,
+          height: size * 0.65,
           child: emblem,
         ),
         if (showText) ...[

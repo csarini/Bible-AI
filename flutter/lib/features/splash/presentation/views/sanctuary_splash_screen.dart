@@ -262,7 +262,7 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
                           ],
                         ),
                         child: SanctuaryChurchLogo(
-                          size: 64,
+                          size: 80,
                           variant: LogoVariant.full,
                           showText: true,
                           showSubtitle: true,
