@@ -62,20 +62,15 @@ class _DigitalSanctuaryAppState extends ConsumerState<DigitalSanctuaryApp> {
     final visualTheme = ref.watch(appVisualThemeModeProvider);
 
     ThemeData activeTheme;
-    ThemeMode themeMode;
-
     switch (visualTheme) {
       case AppVisualTheme.sepia:
         activeTheme = SanctuaryTheme.sepia();
-        themeMode = ThemeMode.light;
         break;
       case AppVisualTheme.dark:
         activeTheme = SanctuaryTheme.dark();
-        themeMode = ThemeMode.dark;
         break;
       case AppVisualTheme.light:
         activeTheme = SanctuaryTheme.light();
-        themeMode = ThemeMode.light;
         break;
     }
 
@@ -83,8 +78,8 @@ class _DigitalSanctuaryAppState extends ConsumerState<DigitalSanctuaryApp> {
       title: 'Biblia Inteligente (Digital Sanctuary)',
       debugShowCheckedModeBanner: false,
       theme: activeTheme,
-      darkTheme: SanctuaryTheme.dark(),
-      themeMode: themeMode,
+      darkTheme: activeTheme,
+      themeMode: visualTheme == AppVisualTheme.dark ? ThemeMode.dark : ThemeMode.light,
       home: AnimatedSwitcher(
         duration: const Duration(milliseconds: 500),
         switchInCurve: Curves.easeIn,

@@ -7,6 +7,7 @@ import '../../../../core/constants/daily_verses_pool.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
+import '../../../../core/theme/sanctuary_theme.dart';
 import '../../../../shared/services/share_service.dart';
 import '../../../../shared/widgets/coachmark_guide_dialog.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
@@ -183,6 +184,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final tokens = context.sanctuaryTokens;
 
     return Scaffold(
       appBar: AppBar(
@@ -255,7 +257,14 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                       ],
                     ),
                     selected: isSelected,
-                    selectedColor: SanctuaryColors.waveNavy,
+                    selectedColor: tokens.activeState,
+                    backgroundColor: tokens.surfaceElevated,
+                    side: BorderSide(
+                      color: isSelected
+                          ? tokens.activeState
+                          : theme.colorScheme.outline.withValues(alpha: 0.25),
+                      width: 1.1,
+                    ),
                     labelStyle: TextStyle(
                       color: isSelected
                           ? Colors.white
@@ -284,6 +293,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
             Card(
               elevation: 2,
               shadowColor: Colors.black.withValues(alpha: 0.06),
+              color: theme.cardTheme.color,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(22),
                 side: BorderSide(
@@ -305,7 +315,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
                               decoration: BoxDecoration(
-                                color: SanctuaryColors.waveNavy,
+                                color: tokens.activeState,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Row(
@@ -353,7 +363,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                           icon: const Icon(LucideIcons.refreshCw, size: 18),
                           tooltip: 'Cambiar versículo aleatorio',
                           color: theme.colorScheme.onSurface
-                              .withValues(alpha: 0.7),
+                              .withValues(alpha: 0.75),
                           onPressed: () => _randomizeVerse(),
                         ),
                       ],
@@ -361,19 +371,21 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
 
                     const SizedBox(height: 14),
 
-                    // Options below header: Versículo | Oración (Reflection eliminated per request)
+                    // Options below header: Versículo | Oración
                     Container(
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceVariant
-                            .withValues(alpha: 0.6),
+                        color: tokens.surfaceElevated,
                         borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: theme.colorScheme.outline.withValues(alpha: 0.2),
+                        ),
                       ),
                       padding: const EdgeInsets.all(3),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          _buildSubTabButton('Versículo', 'verse'),
-                          _buildSubTabButton('Oración', 'prayer'),
+                          _buildSubTabButton('Versículo', 'verse', tokens),
+                          _buildSubTabButton('Oración', 'prayer', tokens),
                         ],
                       ),
                     ),
@@ -410,12 +422,11 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceVariant
-                            .withValues(alpha: 0.4),
+                        color: tokens.surfaceElevated,
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
                           color:
-                              theme.colorScheme.outline.withValues(alpha: 0.15),
+                              theme.colorScheme.outline.withValues(alpha: 0.2),
                         ),
                       ),
                       child: Row(
@@ -435,7 +446,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                                 style: GoogleFonts.inter(
                                   fontWeight: FontWeight.w800,
                                   fontSize: 14,
-                                  color: SanctuaryColors.waveNavy,
+                                  color: theme.colorScheme.onSurface,
                                 ),
                               ),
                             ],
@@ -474,25 +485,25 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
 
                     const SizedBox(height: 16),
 
-                    // Actions Row: Share Button + Save to Bookmarks Button (Icon-only with institutional colors)
+                    // Actions Row: Share Button + Save to Bookmarks Button
                     Row(
                       children: [
                         const Spacer(),
 
-                        // Compartir Icon-only Button
+                        // Compartir Icon-only Button (Adapts to current theme tokens)
                         IconButton.filled(
                           onPressed: _shareCurrentVerse,
                           tooltip: 'Compartir versículo',
-                          icon: const Icon(
+                          icon: Icon(
                             LucideIcons.share2,
                             size: 18,
-                            color: SanctuaryColors.waveNavy,
+                            color: theme.colorScheme.onSurface,
                           ),
                           style: IconButton.styleFrom(
-                            backgroundColor: Colors.white,
+                            backgroundColor: tokens.surfaceElevated,
                             side: BorderSide(
-                              color: SanctuaryColors.waveNavy
-                                  .withValues(alpha: 0.25),
+                              color: theme.colorScheme.outline
+                                  .withValues(alpha: 0.3),
                               width: 1.2,
                             ),
                             shape: RoundedRectangleBorder(
@@ -504,7 +515,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                         ),
                         const SizedBox(width: 8),
 
-                        // Guardar en la Sección de Guardados Button (Icon-only with institutional colors)
+                        // Guardar en la Sección de Guardados Button (Adapts to current theme tokens)
                         IconButton.filled(
                           onPressed: _saveToBookmarks,
                           tooltip: _isSavedInBookmarks
@@ -517,17 +528,17 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                             size: 19,
                             color: _isSavedInBookmarks
                                 ? SanctuaryColors.amberGold
-                                : SanctuaryColors.waveNavy,
+                                : theme.colorScheme.onSurface,
                           ),
                           style: IconButton.styleFrom(
                             backgroundColor: _isSavedInBookmarks
-                                ? SanctuaryColors.waveNavy
-                                : Colors.white,
+                                ? tokens.activeState
+                                : tokens.surfaceElevated,
                             side: BorderSide(
                               color: _isSavedInBookmarks
                                   ? SanctuaryColors.amberGold
-                                  : SanctuaryColors.waveNavy
-                                      .withValues(alpha: 0.25),
+                                  : theme.colorScheme.outline
+                                      .withValues(alpha: 0.3),
                               width: 1.2,
                             ),
                             shape: RoundedRectangleBorder(
@@ -550,7 +561,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
     );
   }
 
-  Widget _buildSubTabButton(String title, String tabKey) {
+  Widget _buildSubTabButton(
+      String title, String tabKey, SanctuaryThemeExtension tokens) {
     final isSelected = _activeDevotionalTab == tabKey;
     return GestureDetector(
       onTap: () {
@@ -561,7 +573,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
-          color: isSelected ? SanctuaryColors.waveNavy : Colors.transparent,
+          color: isSelected ? tokens.activeState : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
@@ -574,7 +586,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                 : Theme.of(context)
                     .colorScheme
                     .onSurface
-                    .withValues(alpha: 0.7),
+                    .withValues(alpha: 0.75),
           ),
         ),
       ),

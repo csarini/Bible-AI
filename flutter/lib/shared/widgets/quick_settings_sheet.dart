@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../core/providers/app_settings_providers.dart';
 import '../../core/theme/sanctuary_colors.dart';
+import '../../core/theme/sanctuary_theme.dart';
 
 class QuickSettingsSheet extends ConsumerWidget {
   const QuickSettingsSheet({super.key});
@@ -195,6 +196,7 @@ class QuickSettingsSheet extends ConsumerWidget {
               children: [
                 Expanded(
                   child: _buildChoiceChip(
+                    context: context,
                     label: '☀️ Claro',
                     sub: 'Pergamino',
                     isSelected: visualTheme == AppVisualTheme.light,
@@ -206,6 +208,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildChoiceChip(
+                    context: context,
                     label: '📜 Sepia',
                     sub: 'Cálido',
                     isSelected: visualTheme == AppVisualTheme.sepia,
@@ -217,6 +220,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildChoiceChip(
+                    context: context,
                     label: '🌙 Oscuro',
                     sub: 'Noche',
                     isSelected: visualTheme == AppVisualTheme.dark,
@@ -237,6 +241,7 @@ class QuickSettingsSheet extends ConsumerWidget {
               children: [
                 Expanded(
                   child: _buildChoiceChip(
+                    context: context,
                     label: 'A-',
                     sub: '15px',
                     isSelected: fontSize == 'small',
@@ -247,6 +252,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildChoiceChip(
+                    context: context,
                     label: 'A',
                     sub: '17.5px',
                     isSelected: fontSize == 'medium',
@@ -257,6 +263,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildChoiceChip(
+                    context: context,
                     label: 'A+',
                     sub: '20px',
                     isSelected: fontSize == 'large',
@@ -267,6 +274,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildChoiceChip(
+                    context: context,
                     label: 'A++',
                     sub: '23px',
                     isSelected: fontSize == 'xlarge',
@@ -286,6 +294,7 @@ class QuickSettingsSheet extends ConsumerWidget {
               children: [
                 Expanded(
                   child: _buildChoiceChip(
+                    context: context,
                     label: 'Literata',
                     sub: 'Serifa Bíblica',
                     isSelected: fontFamily == 'literata' ||
@@ -298,6 +307,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildChoiceChip(
+                    context: context,
                     label: 'Playfair',
                     sub: 'Editorial',
                     isSelected: fontFamily == 'playfair',
@@ -309,6 +319,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildChoiceChip(
+                    context: context,
                     label: 'Inter',
                     sub: 'Sans Moderna',
                     isSelected:
@@ -330,6 +341,7 @@ class QuickSettingsSheet extends ConsumerWidget {
               children: [
                 Expanded(
                   child: _buildChoiceChip(
+                    context: context,
                     label: 'Compacto',
                     sub: '1.45',
                     isSelected: lineSpacing == 'compact',
@@ -341,6 +353,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildChoiceChip(
+                    context: context,
                     label: 'Cómodo',
                     sub: '1.68',
                     isSelected: lineSpacing == 'normal',
@@ -352,6 +365,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildChoiceChip(
+                    context: context,
                     label: 'Amplio',
                     sub: '1.95',
                     isSelected: lineSpacing == 'relaxed',
@@ -371,6 +385,7 @@ class QuickSettingsSheet extends ConsumerWidget {
             Column(
               children: [
                 _buildTranslationTile(
+                  context: context,
                   title: 'Reina-Valera 1909 (RVR1909)',
                   subtitle: 'Texto canónico en español clásico protestante',
                   isSelected: translation == 'valera',
@@ -379,6 +394,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 ),
                 const SizedBox(height: 6),
                 _buildTranslationTile(
+                  context: context,
                   title: 'Biblia del Oso 1569 (SSE)',
                   subtitle: 'Casiodoro de Reina, traducción histórica original',
                   isSelected: translation == 'sse',
@@ -387,6 +403,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                 ),
                 const SizedBox(height: 6),
                 _buildTranslationTile(
+                  context: context,
                   title: 'Reina Valera NT 1858 (RV 1858)',
                   subtitle: 'Nuevo Testamento, revisión histórica de 1858',
                   isSelected: translation == 'rv1858',
@@ -458,24 +475,30 @@ class QuickSettingsSheet extends ConsumerWidget {
   }
 
   Widget _buildChoiceChip({
+    required BuildContext context,
     required String label,
     required String sub,
     required bool isSelected,
     required VoidCallback onTap,
   }) {
+    final theme = Theme.of(context);
+    final tokens = context.sanctuaryTokens;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
         decoration: BoxDecoration(
-          color: isSelected ? SanctuaryColors.waveNavy : Colors.transparent,
+          color: isSelected ? tokens.activeState : tokens.surfaceElevated,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
-                ? SanctuaryColors.waveNavy
-                : Colors.grey.withValues(alpha: 0.3),
-            width: isSelected ? 2 : 1,
+                ? (tokens.activeState == SanctuaryColors.darkActive
+                    ? SanctuaryColors.amberGold
+                    : tokens.activeState)
+                : theme.colorScheme.outline.withValues(alpha: 0.25),
+            width: isSelected ? 1.8 : 1,
           ),
         ),
         child: Column(
@@ -485,7 +508,7 @@ class QuickSettingsSheet extends ConsumerWidget {
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 fontSize: 12.5,
-                color: isSelected ? Colors.white : null,
+                color: isSelected ? Colors.white : theme.colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 2),
@@ -493,7 +516,9 @@ class QuickSettingsSheet extends ConsumerWidget {
               sub,
               style: GoogleFonts.inter(
                 fontSize: 10,
-                color: isSelected ? Colors.white70 : Colors.grey,
+                color: isSelected
+                    ? Colors.white.withValues(alpha: 0.8)
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
           ],
@@ -503,11 +528,15 @@ class QuickSettingsSheet extends ConsumerWidget {
   }
 
   Widget _buildTranslationTile({
+    required BuildContext context,
     required String title,
     required String subtitle,
     required bool isSelected,
     required VoidCallback onTap,
   }) {
+    final theme = Theme.of(context);
+    final tokens = context.sanctuaryTokens;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -515,13 +544,13 @@ class QuickSettingsSheet extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? SanctuaryColors.waveNavy.withValues(alpha: 0.08)
-              : Colors.transparent,
+              ? tokens.activeState.withValues(alpha: 0.12)
+              : tokens.surfaceElevated,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
-                ? SanctuaryColors.waveNavy
-                : Colors.grey.withValues(alpha: 0.25),
+                ? tokens.activeState
+                : theme.colorScheme.outline.withValues(alpha: 0.2),
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -530,7 +559,7 @@ class QuickSettingsSheet extends ConsumerWidget {
             Icon(
               isSelected ? LucideIcons.checkCircle2 : LucideIcons.circle,
               size: 18,
-              color: isSelected ? SanctuaryColors.waveNavy : Colors.grey,
+              color: isSelected ? tokens.activeState : theme.colorScheme.onSurface.withValues(alpha: 0.4),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -542,14 +571,14 @@ class QuickSettingsSheet extends ConsumerWidget {
                     style: GoogleFonts.inter(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: isSelected ? SanctuaryColors.waveNavy : null,
+                      color: isSelected ? (tokens.activeState == SanctuaryColors.darkActive ? SanctuaryColors.amberGold : tokens.activeState) : theme.colorScheme.onSurface,
                     ),
                   ),
                   Text(
                     subtitle,
                     style: GoogleFonts.inter(
                       fontSize: 11,
-                      color: Colors.grey.shade600,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
                 ],

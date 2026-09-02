@@ -9,6 +9,7 @@ import '../../../../core/constants/bible_books.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
+import '../../../../core/theme/sanctuary_theme.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class SanctuarySearchLibraryView extends ConsumerStatefulWidget {
@@ -441,6 +442,7 @@ class _SanctuarySearchLibraryViewState
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final tokens = context.sanctuaryTokens;
     final rawQuery = _searchController.text.trim();
     final normQuery = _normalize(rawQuery);
 
@@ -566,14 +568,14 @@ class _SanctuarySearchLibraryViewState
                         padding: const EdgeInsets.symmetric(
                             horizontal: 14, vertical: 10),
                         decoration: BoxDecoration(
-                          color: SanctuaryColors.waveNavy,
+                          color: tokens.activeState,
                           borderRadius: BorderRadius.circular(14),
                           border: Border.all(
                               color: SanctuaryColors.amberGold
                                   .withValues(alpha: 0.6)),
                           boxShadow: [
                             BoxShadow(
-                              color: SanctuaryColors.waveNavy
+                              color: tokens.activeState
                                   .withValues(alpha: 0.25),
                               blurRadius: 8,
                               offset: const Offset(0, 3),
@@ -623,11 +625,11 @@ class _SanctuarySearchLibraryViewState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildTabChip('all', 'Todos (66)'),
+                      _buildTabChip('all', 'Todos (66)', tokens),
                       const SizedBox(width: 8),
-                      _buildTabChip('OT', 'Antiguo ($oldTestamentCount)'),
+                      _buildTabChip('OT', 'Antiguo ($oldTestamentCount)', tokens),
                       const SizedBox(width: 8),
-                      _buildTabChip('NT', 'Nuevo ($newTestamentCount)'),
+                      _buildTabChip('NT', 'Nuevo ($newTestamentCount)', tokens),
                     ],
                   ),
 
@@ -675,11 +677,11 @@ class _SanctuarySearchLibraryViewState
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 7.5),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: tokens.surfaceElevated,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: SanctuaryColors.waveNavy
-                                      .withValues(alpha: 0.22),
+                                  color: theme.colorScheme.outline
+                                      .withValues(alpha: 0.25),
                                   width: 1.1,
                                 ),
                                 boxShadow: [
@@ -704,7 +706,7 @@ class _SanctuarySearchLibraryViewState
                                     style: GoogleFonts.inter(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700,
-                                      color: SanctuaryColors.waveNavy,
+                                      color: theme.colorScheme.onSurface,
                                     ),
                                   ),
                                 ],
@@ -770,7 +772,7 @@ class _SanctuarySearchLibraryViewState
                                     fontSize: 10,
                                     fontWeight: FontWeight.w800,
                                     color: book.isNewTestament
-                                        ? SanctuaryColors.waveNavy
+                                        ? (tokens.activeState == SanctuaryColors.darkActive ? SanctuaryColors.cyanAccent : SanctuaryColors.waveNavy)
                                         : SanctuaryColors.sunOrange,
                                   ),
                                 ),
@@ -816,8 +818,9 @@ class _SanctuarySearchLibraryViewState
     );
   }
 
-  Widget _buildTabChip(String filterKey, String label) {
+  Widget _buildTabChip(String filterKey, String label, SanctuaryThemeExtension tokens) {
     final isSelected = _activeTabFilter == filterKey;
+    final theme = Theme.of(context);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -828,19 +831,19 @@ class _SanctuarySearchLibraryViewState
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
             color: isSelected
-                ? SanctuaryColors.waveNavy
-                : Colors.white,
+                ? tokens.activeState
+                : tokens.surfaceElevated,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isSelected
                   ? SanctuaryColors.amberGold
-                  : SanctuaryColors.waveNavy.withValues(alpha: 0.25),
+                  : theme.colorScheme.outline.withValues(alpha: 0.25),
               width: 1.2,
             ),
             boxShadow: [
               BoxShadow(
                 color: isSelected
-                    ? SanctuaryColors.waveNavy.withValues(alpha: 0.3)
+                    ? tokens.activeState.withValues(alpha: 0.3)
                     : Colors.black.withValues(alpha: 0.04),
                 blurRadius: 5,
                 offset: const Offset(0, 2),
@@ -850,7 +853,7 @@ class _SanctuarySearchLibraryViewState
           child: Text(
             label,
             style: GoogleFonts.inter(
-              color: isSelected ? SanctuaryColors.amberGold : SanctuaryColors.waveNavy,
+              color: isSelected ? Colors.white : theme.colorScheme.onSurface,
               fontWeight: FontWeight.w700,
               fontSize: 12,
             ),
@@ -884,6 +887,7 @@ class _BookChapterVersePickerSheetState
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final tokens = context.sanctuaryTokens;
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
@@ -900,7 +904,7 @@ class _BookChapterVersePickerSheetState
             height: 4,
             margin: const EdgeInsets.only(bottom: 12),
             decoration: BoxDecoration(
-              color: Colors.grey.shade400,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -925,7 +929,7 @@ class _BookChapterVersePickerSheetState
                         : 'Antiguo Testamento',
                     style: GoogleFonts.inter(
                       fontSize: 11,
-                      color: Colors.grey,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
                 ],
@@ -934,14 +938,15 @@ class _BookChapterVersePickerSheetState
               Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: theme.cardTheme.color,
+                  color: tokens.surfaceElevated,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                  border: Border.all(
+                      color: theme.colorScheme.outline.withValues(alpha: 0.2)),
                 ),
                 child: Row(
                   children: [
-                    _buildStepButton(1, 'Capítulos'),
-                    _buildStepButton(2, 'Versículos'),
+                    _buildStepButton(1, 'Capítulos', tokens),
+                    _buildStepButton(2, 'Versículos', tokens),
                   ],
                 ),
               ),
@@ -975,13 +980,13 @@ class _BookChapterVersePickerSheetState
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? SanctuaryColors.waveNavy
+                            ? tokens.activeState
                             : theme.cardTheme.color,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: isSelected
-                              ? SanctuaryColors.waveNavy
-                              : Colors.grey.withOpacity(0.25),
+                              ? tokens.activeState
+                              : theme.colorScheme.outline.withValues(alpha: 0.25),
                         ),
                       ),
                       child: Text(
@@ -1000,7 +1005,7 @@ class _BookChapterVersePickerSheetState
             FilledButton.icon(
               onPressed: () => widget.onSelectPassage(1, null),
               style: FilledButton.styleFrom(
-                backgroundColor: SanctuaryColors.waveNavy,
+                backgroundColor: tokens.activeState,
                 minimumSize: const Size.fromHeight(44),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
@@ -1047,15 +1052,18 @@ class _BookChapterVersePickerSheetState
                       decoration: BoxDecoration(
                         color: theme.cardTheme.color,
                         borderRadius: BorderRadius.circular(10),
-                        border:
-                            Border.all(color: Colors.grey.withOpacity(0.25)),
+                        border: Border.all(
+                            color: theme.colorScheme.outline
+                                .withValues(alpha: 0.25)),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('V.',
                               style: TextStyle(
-                                  fontSize: 8, color: Colors.grey.shade600)),
+                                  fontSize: 8,
+                                  color: theme.colorScheme.onSurface
+                                      .withValues(alpha: 0.6))),
                           Text('$vNum',
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 13)),
@@ -1072,14 +1080,15 @@ class _BookChapterVersePickerSheetState
     );
   }
 
-  Widget _buildStepButton(int stepNumber, String label) {
+  Widget _buildStepButton(
+      int stepNumber, String label, SanctuaryThemeExtension tokens) {
     final isCurrent = _step == stepNumber;
     return GestureDetector(
       onTap: () => setState(() => _step = stepNumber),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
-          color: isCurrent ? SanctuaryColors.waveNavy : Colors.transparent,
+          color: isCurrent ? tokens.activeState : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
@@ -1087,7 +1096,9 @@ class _BookChapterVersePickerSheetState
           style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w700,
-            color: isCurrent ? Colors.white : Colors.grey,
+            color: isCurrent
+                ? Colors.white
+                : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ),
