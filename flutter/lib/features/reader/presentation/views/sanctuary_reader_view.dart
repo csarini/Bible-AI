@@ -35,6 +35,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
   String? _errorMessage;
   List<VerseEntity> _verses = [];
 
+  int? _targetHighlightedVerse;
   VerseEntity? _selectedVerse;
   LocalBookmarkEntry? _selectedBookmark;
 
@@ -64,8 +65,11 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
     if (_verses.isEmpty) return;
     final index = _verses.indexWhere((v) => v.number == verseNumber);
     if (index != -1) {
-      final verse = _verses[index];
-      _onVerseTapped(verse);
+      setState(() {
+        _targetHighlightedVerse = verseNumber;
+        _selectedVerse = null;
+        _selectedBookmark = null;
+      });
       Future.delayed(const Duration(milliseconds: 120), () {
         if (!mounted || !_scrollController.hasClients) return;
         final maxScroll = _scrollController.position.maxScrollExtent;
@@ -86,6 +90,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
       _errorMessage = null;
       _selectedVerse = null;
       _selectedBookmark = null;
+      _targetHighlightedVerse = targetVerseNumber;
     });
 
     final translation = ref.read(appTranslationProvider);
@@ -112,12 +117,13 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
       }).toList();
 
       if (mounted) {
+        final targetVerse =
+            targetVerseNumber ?? ref.read(appSelectedVerseProvider);
         setState(() {
           _verses = verses;
           _isLoading = false;
+          _targetHighlightedVerse = targetVerse;
         });
-        final targetVerse =
-            targetVerseNumber ?? ref.read(appSelectedVerseProvider);
         if (targetVerse != null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             _scrollToAndHighlightVerse(targetVerse);
@@ -154,6 +160,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
       } else {
         _selectedVerse = verse;
         _selectedBookmark = existing;
+        _targetHighlightedVerse = null;
       }
     });
   }
@@ -551,7 +558,6 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
         children: [
           Column(
             children: [
-              _buildVerseOfTheDayCard(),
               Expanded(
                 child: _isLoading
                     ? const Center(
@@ -570,68 +576,12 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
     );
   }
 
-  Widget _buildVerseOfTheDayCard() {
-    final translation = ref.watch(appTranslationProvider).toUpperCase();
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-            color:
-                Theme.of(context).colorScheme.primary.withValues(alpha: 0.12)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: SanctuaryColors.sunOrange,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child:
-                const Icon(LucideIcons.sparkles, color: Colors.white, size: 14),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'VERSÍCULO DEL DÍA ($translation)',
-                  style: TextStyle(
-                    fontSize: 9.0,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.9,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                const Text(
-                  '«Lámpara es a mis pies tu palabra, y lumbrera a mi camino.»',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildVersesList() {
     final fontSize = ref.watch(appFontSizeProvider);
     final fontFamily = ref.watch(appFontFamilyProvider);
     final lineSpacing = ref.watch(appLineSpacingProvider);
     final showVerseNumbers = ref.watch(appShowVerseNumbersProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     double bodyFontSize = 17.0;
     if (fontSize == 'small') bodyFontSize = 15.0;
@@ -660,6 +610,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
             final verse = _verses[index];
             final bookmark = bookmarkMap[verse.number];
             final isSelected = _selectedVerse?.number == verse.number;
+            final isTargetHighlighted = _targetHighlightedVerse == verse.number;
 
             TextStyle verseStyle;
             if (fontFamily == 'playfair') {
@@ -688,6 +639,29 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
               );
             }
 
+            // Determine background & border
+            Color? bgColor;
+            Border? border;
+
+            if (bookmark != null) {
+              bgColor = SanctuaryColors.getHighlightColor(bookmark.colorHex);
+              if (isSelected) {
+                border = Border.all(color: SanctuaryColors.waveNavy, width: 2.0);
+              } else if (isTargetHighlighted) {
+                border = Border.all(color: SanctuaryColors.sunOrange, width: 2.0);
+              }
+            } else if (isSelected) {
+              bgColor = SanctuaryColors.waveNavy.withValues(alpha: 0.09);
+              border = Border.all(color: SanctuaryColors.waveNavy, width: 1.5);
+            } else if (isTargetHighlighted) {
+              bgColor = isDark
+                  ? SanctuaryColors.sunOrange.withValues(alpha: 0.16)
+                  : SanctuaryColors.amberGold.withValues(alpha: 0.22);
+              border = Border.all(
+                  color: SanctuaryColors.sunOrange.withValues(alpha: 0.8),
+                  width: 1.5);
+            }
+
             return GestureDetector(
               onTap: () => _onVerseTapped(verse),
               child: AnimatedContainer(
@@ -696,15 +670,9 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: bookmark != null
-                      ? SanctuaryColors.getHighlightColor(bookmark.colorHex)
-                      : isSelected
-                          ? SanctuaryColors.waveNavy.withValues(alpha: 0.09)
-                          : Colors.transparent,
+                  color: bgColor ?? Colors.transparent,
                   borderRadius: BorderRadius.circular(12),
-                  border: isSelected
-                      ? Border.all(color: SanctuaryColors.waveNavy, width: 1.5)
-                      : null,
+                  border: border,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -732,8 +700,10 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w800,
-                                color: SanctuaryColors.waveNavy
-                                    .withValues(alpha: 0.75),
+                                color: (isTargetHighlighted && !isSelected)
+                                    ? SanctuaryColors.sunOrange
+                                    : SanctuaryColors.waveNavy
+                                        .withValues(alpha: 0.75),
                               ),
                             ),
                           TextSpan(
