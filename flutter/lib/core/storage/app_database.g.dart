@@ -1874,10 +1874,6 @@ class FoodCourtMenusCompanion extends UpdateCompanion<FoodCourtMenuEntry> {
   }
 }
 
-// =============================================================================
-// LOCAL BIBLE BOOKS TABLE & DATA CLASS
-// =============================================================================
-
 class $LocalBibleBooksTable extends LocalBibleBooks
     with TableInfo<$LocalBibleBooksTable, BibleBookEntry> {
   @override
@@ -1975,14 +1971,18 @@ class $LocalBibleBooksTable extends LocalBibleBooks
       context.missing(_idMeta);
     }
     if (data.containsKey('translation_key')) {
-      context.handle(_translationKeyMeta,
-          translationKey.isAcceptableOrUnknown(data['translation_key']!, _translationKeyMeta));
+      context.handle(
+          _translationKeyMeta,
+          translationKey.isAcceptableOrUnknown(
+              data['translation_key']!, _translationKeyMeta));
     } else if (isInserting) {
       context.missing(_translationKeyMeta);
     }
     if (data.containsKey('book_number')) {
-      context.handle(_bookNumberMeta,
-          bookNumber.isAcceptableOrUnknown(data['book_number']!, _bookNumberMeta));
+      context.handle(
+          _bookNumberMeta,
+          bookNumber.isAcceptableOrUnknown(
+              data['book_number']!, _bookNumberMeta));
     } else if (isInserting) {
       context.missing(_bookNumberMeta);
     }
@@ -1993,25 +1993,32 @@ class $LocalBibleBooksTable extends LocalBibleBooks
       context.missing(_bookCodeMeta);
     }
     if (data.containsKey('name')) {
-      context.handle(_nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('total_chapters')) {
-      context.handle(_totalChaptersMeta,
-          totalChapters.isAcceptableOrUnknown(data['total_chapters']!, _totalChaptersMeta));
+      context.handle(
+          _totalChaptersMeta,
+          totalChapters.isAcceptableOrUnknown(
+              data['total_chapters']!, _totalChaptersMeta));
     } else if (isInserting) {
       context.missing(_totalChaptersMeta);
     }
     if (data.containsKey('is_new_testament')) {
-      context.handle(_isNewTestamentMeta,
-          isNewTestament.isAcceptableOrUnknown(data['is_new_testament']!, _isNewTestamentMeta));
+      context.handle(
+          _isNewTestamentMeta,
+          isNewTestament.isAcceptableOrUnknown(
+              data['is_new_testament']!, _isNewTestamentMeta));
     }
     if (data.containsKey('url')) {
-      context.handle(_urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
+      context.handle(
+          _urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
     }
     if (data.containsKey('sha')) {
-      context.handle(_shaMeta, sha.isAcceptableOrUnknown(data['sha']!, _shaMeta));
+      context.handle(
+          _shaMeta, sha.isAcceptableOrUnknown(data['sha']!, _shaMeta));
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -2028,8 +2035,8 @@ class $LocalBibleBooksTable extends LocalBibleBooks
     return BibleBookEntry(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      translationKey: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}translation_key'])!,
+      translationKey: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}translation_key'])!,
       bookNumber: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}book_number'])!,
       bookCode: attachedDatabase.typeMapping
@@ -2066,20 +2073,17 @@ class BibleBookEntry extends DataClass implements Insertable<BibleBookEntry> {
   final String? url;
   final String? sha;
   final DateTime createdAt;
-
-  const BibleBookEntry({
-    required this.id,
-    required this.translationKey,
-    required this.bookNumber,
-    required this.bookCode,
-    required this.name,
-    required this.totalChapters,
-    required this.isNewTestament,
-    this.url,
-    this.sha,
-    required this.createdAt,
-  });
-
+  const BibleBookEntry(
+      {required this.id,
+      required this.translationKey,
+      required this.bookNumber,
+      required this.bookCode,
+      required this.name,
+      required this.totalChapters,
+      required this.isNewTestament,
+      this.url,
+      this.sha,
+      required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2131,7 +2135,6 @@ class BibleBookEntry extends DataClass implements Insertable<BibleBookEntry> {
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
-
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
@@ -2149,18 +2152,17 @@ class BibleBookEntry extends DataClass implements Insertable<BibleBookEntry> {
     };
   }
 
-  BibleBookEntry copyWith({
-    String? id,
-    String? translationKey,
-    int? bookNumber,
-    String? bookCode,
-    String? name,
-    int? totalChapters,
-    bool? isNewTestament,
-    Value<String?> url = const Value.absent(),
-    Value<String?> sha = const Value.absent(),
-    DateTime? createdAt,
-  }) =>
+  BibleBookEntry copyWith(
+          {String? id,
+          String? translationKey,
+          int? bookNumber,
+          String? bookCode,
+          String? name,
+          int? totalChapters,
+          bool? isNewTestament,
+          Value<String?> url = const Value.absent(),
+          Value<String?> sha = const Value.absent(),
+          DateTime? createdAt}) =>
       BibleBookEntry(
         id: id ?? this.id,
         translationKey: translationKey ?? this.translationKey,
@@ -2173,6 +2175,62 @@ class BibleBookEntry extends DataClass implements Insertable<BibleBookEntry> {
         sha: sha.present ? sha.value : this.sha,
         createdAt: createdAt ?? this.createdAt,
       );
+  BibleBookEntry copyWithCompanion(LocalBibleBooksCompanion data) {
+    return BibleBookEntry(
+      id: data.id.present ? data.id.value : this.id,
+      translationKey: data.translationKey.present
+          ? data.translationKey.value
+          : this.translationKey,
+      bookNumber:
+          data.bookNumber.present ? data.bookNumber.value : this.bookNumber,
+      bookCode: data.bookCode.present ? data.bookCode.value : this.bookCode,
+      name: data.name.present ? data.name.value : this.name,
+      totalChapters: data.totalChapters.present
+          ? data.totalChapters.value
+          : this.totalChapters,
+      isNewTestament: data.isNewTestament.present
+          ? data.isNewTestament.value
+          : this.isNewTestament,
+      url: data.url.present ? data.url.value : this.url,
+      sha: data.sha.present ? data.sha.value : this.sha,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BibleBookEntry(')
+          ..write('id: $id, ')
+          ..write('translationKey: $translationKey, ')
+          ..write('bookNumber: $bookNumber, ')
+          ..write('bookCode: $bookCode, ')
+          ..write('name: $name, ')
+          ..write('totalChapters: $totalChapters, ')
+          ..write('isNewTestament: $isNewTestament, ')
+          ..write('url: $url, ')
+          ..write('sha: $sha, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, translationKey, bookNumber, bookCode,
+      name, totalChapters, isNewTestament, url, sha, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BibleBookEntry &&
+          other.id == this.id &&
+          other.translationKey == this.translationKey &&
+          other.bookNumber == this.bookNumber &&
+          other.bookCode == this.bookCode &&
+          other.name == this.name &&
+          other.totalChapters == this.totalChapters &&
+          other.isNewTestament == this.isNewTestament &&
+          other.url == this.url &&
+          other.sha == this.sha &&
+          other.createdAt == this.createdAt);
 }
 
 class LocalBibleBooksCompanion extends UpdateCompanion<BibleBookEntry> {
@@ -2187,7 +2245,6 @@ class LocalBibleBooksCompanion extends UpdateCompanion<BibleBookEntry> {
   final Value<String?> sha;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
-
   const LocalBibleBooksCompanion({
     this.id = const Value.absent(),
     this.translationKey = const Value.absent(),
@@ -2201,7 +2258,6 @@ class LocalBibleBooksCompanion extends UpdateCompanion<BibleBookEntry> {
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-
   LocalBibleBooksCompanion.insert({
     required String id,
     required String translationKey,
@@ -2209,22 +2265,71 @@ class LocalBibleBooksCompanion extends UpdateCompanion<BibleBookEntry> {
     required String bookCode,
     required String name,
     required int totalChapters,
-    Value<bool> isNewTestament = const Value.absent(),
-    Value<String?> url = const Value.absent(),
-    Value<String?> sha = const Value.absent(),
-    Value<DateTime> createdAt = const Value.absent(),
-    Value<int> rowid = const Value.absent(),
+    this.isNewTestament = const Value.absent(),
+    this.url = const Value.absent(),
+    this.sha = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : id = Value(id),
         translationKey = Value(translationKey),
         bookNumber = Value(bookNumber),
         bookCode = Value(bookCode),
         name = Value(name),
-        totalChapters = Value(totalChapters),
-        isNewTestament = isNewTestament,
-        url = url,
-        sha = sha,
-        createdAt = createdAt,
-        rowid = rowid;
+        totalChapters = Value(totalChapters);
+  static Insertable<BibleBookEntry> custom({
+    Expression<String>? id,
+    Expression<String>? translationKey,
+    Expression<int>? bookNumber,
+    Expression<String>? bookCode,
+    Expression<String>? name,
+    Expression<int>? totalChapters,
+    Expression<bool>? isNewTestament,
+    Expression<String>? url,
+    Expression<String>? sha,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (translationKey != null) 'translation_key': translationKey,
+      if (bookNumber != null) 'book_number': bookNumber,
+      if (bookCode != null) 'book_code': bookCode,
+      if (name != null) 'name': name,
+      if (totalChapters != null) 'total_chapters': totalChapters,
+      if (isNewTestament != null) 'is_new_testament': isNewTestament,
+      if (url != null) 'url': url,
+      if (sha != null) 'sha': sha,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  LocalBibleBooksCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? translationKey,
+      Value<int>? bookNumber,
+      Value<String>? bookCode,
+      Value<String>? name,
+      Value<int>? totalChapters,
+      Value<bool>? isNewTestament,
+      Value<String?>? url,
+      Value<String?>? sha,
+      Value<DateTime>? createdAt,
+      Value<int>? rowid}) {
+    return LocalBibleBooksCompanion(
+      id: id ?? this.id,
+      translationKey: translationKey ?? this.translationKey,
+      bookNumber: bookNumber ?? this.bookNumber,
+      bookCode: bookCode ?? this.bookCode,
+      name: name ?? this.name,
+      totalChapters: totalChapters ?? this.totalChapters,
+      isNewTestament: isNewTestament ?? this.isNewTestament,
+      url: url ?? this.url,
+      sha: sha ?? this.sha,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2264,11 +2369,25 @@ class LocalBibleBooksCompanion extends UpdateCompanion<BibleBookEntry> {
     }
     return map;
   }
-}
 
-// =============================================================================
-// LOCAL BIBLE TRANSLATIONS TABLE & DATA CLASS
-// =============================================================================
+  @override
+  String toString() {
+    return (StringBuffer('LocalBibleBooksCompanion(')
+          ..write('id: $id, ')
+          ..write('translationKey: $translationKey, ')
+          ..write('bookNumber: $bookNumber, ')
+          ..write('bookCode: $bookCode, ')
+          ..write('name: $name, ')
+          ..write('totalChapters: $totalChapters, ')
+          ..write('isNewTestament: $isNewTestament, ')
+          ..write('url: $url, ')
+          ..write('sha: $sha, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
 
 class $LocalBibleTranslationsTable extends LocalBibleTranslations
     with TableInfo<$LocalBibleTranslationsTable, BibleTranslationEntry> {
@@ -2318,8 +2437,7 @@ class $LocalBibleTranslationsTable extends LocalBibleTranslations
       const VerificationMeta('distributionAbbreviation');
   @override
   late final GeneratedColumn<String> distributionAbbreviation =
-      GeneratedColumn<String>(
-          'distribution_abbreviation', aliasedName, true,
+      GeneratedColumn<String>('distribution_abbreviation', aliasedName, true,
           type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _urlMeta = const VerificationMeta('url');
   @override
@@ -2351,7 +2469,6 @@ class $LocalBibleTranslationsTable extends LocalBibleTranslations
   @override
   String get actualTableName => $name;
   static const String $name = 'local_bible_translations';
-
   @override
   VerificationContext validateIntegrity(
       Insertable<BibleTranslationEntry> instance,
@@ -2364,19 +2481,24 @@ class $LocalBibleTranslationsTable extends LocalBibleTranslations
       context.missing(_idMeta);
     }
     if (data.containsKey('name')) {
-      context.handle(_nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('abbreviation')) {
-      context.handle(_abbreviationMeta,
-          abbreviation.isAcceptableOrUnknown(data['abbreviation']!, _abbreviationMeta));
+      context.handle(
+          _abbreviationMeta,
+          abbreviation.isAcceptableOrUnknown(
+              data['abbreviation']!, _abbreviationMeta));
     } else if (isInserting) {
       context.missing(_abbreviationMeta);
     }
     if (data.containsKey('description')) {
-      context.handle(_descriptionMeta,
-          description.isAcceptableOrUnknown(data['description']!, _descriptionMeta));
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
     }
     if (data.containsKey('language')) {
       context.handle(_languageMeta,
@@ -2390,10 +2512,12 @@ class $LocalBibleTranslationsTable extends LocalBibleTranslations
       context.handle(
           _distributionAbbreviationMeta,
           distributionAbbreviation.isAcceptableOrUnknown(
-              data['distribution_abbreviation']!, _distributionAbbreviationMeta));
+              data['distribution_abbreviation']!,
+              _distributionAbbreviationMeta));
     }
     if (data.containsKey('url')) {
-      context.handle(_urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
+      context.handle(
+          _urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -2447,19 +2571,16 @@ class BibleTranslationEntry extends DataClass
   final String? distributionAbbreviation;
   final String? url;
   final DateTime createdAt;
-
-  const BibleTranslationEntry({
-    required this.id,
-    required this.name,
-    required this.abbreviation,
-    this.description,
-    required this.language,
-    required this.direction,
-    this.distributionAbbreviation,
-    this.url,
-    required this.createdAt,
-  });
-
+  const BibleTranslationEntry(
+      {required this.id,
+      required this.name,
+      required this.abbreviation,
+      this.description,
+      required this.language,
+      required this.direction,
+      this.distributionAbbreviation,
+      this.url,
+      required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2472,7 +2593,8 @@ class BibleTranslationEntry extends DataClass
     map['language'] = Variable<String>(language);
     map['direction'] = Variable<String>(direction);
     if (!nullToAbsent || distributionAbbreviation != null) {
-      map['distribution_abbreviation'] = Variable<String>(distributionAbbreviation);
+      map['distribution_abbreviation'] =
+          Variable<String>(distributionAbbreviation);
     }
     if (!nullToAbsent || url != null) {
       map['url'] = Variable<String>(url);
@@ -2491,10 +2613,9 @@ class BibleTranslationEntry extends DataClass
           : Value(description),
       language: Value(language),
       direction: Value(direction),
-      distributionAbbreviation:
-          distributionAbbreviation == null && nullToAbsent
-              ? const Value.absent()
-              : Value(distributionAbbreviation),
+      distributionAbbreviation: distributionAbbreviation == null && nullToAbsent
+          ? const Value.absent()
+          : Value(distributionAbbreviation),
       url: url == null && nullToAbsent ? const Value.absent() : Value(url),
       createdAt: Value(createdAt),
     );
@@ -2516,7 +2637,6 @@ class BibleTranslationEntry extends DataClass
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
-
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
@@ -2534,17 +2654,16 @@ class BibleTranslationEntry extends DataClass
     };
   }
 
-  BibleTranslationEntry copyWith({
-    String? id,
-    String? name,
-    String? abbreviation,
-    Value<String?> description = const Value.absent(),
-    String? language,
-    String? direction,
-    Value<String?> distributionAbbreviation = const Value.absent(),
-    Value<String?> url = const Value.absent(),
-    DateTime? createdAt,
-  }) =>
+  BibleTranslationEntry copyWith(
+          {String? id,
+          String? name,
+          String? abbreviation,
+          Value<String?> description = const Value.absent(),
+          String? language,
+          String? direction,
+          Value<String?> distributionAbbreviation = const Value.absent(),
+          Value<String?> url = const Value.absent(),
+          DateTime? createdAt}) =>
       BibleTranslationEntry(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -2558,6 +2677,58 @@ class BibleTranslationEntry extends DataClass
         url: url.present ? url.value : this.url,
         createdAt: createdAt ?? this.createdAt,
       );
+  BibleTranslationEntry copyWithCompanion(
+      LocalBibleTranslationsCompanion data) {
+    return BibleTranslationEntry(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      abbreviation: data.abbreviation.present
+          ? data.abbreviation.value
+          : this.abbreviation,
+      description:
+          data.description.present ? data.description.value : this.description,
+      language: data.language.present ? data.language.value : this.language,
+      direction: data.direction.present ? data.direction.value : this.direction,
+      distributionAbbreviation: data.distributionAbbreviation.present
+          ? data.distributionAbbreviation.value
+          : this.distributionAbbreviation,
+      url: data.url.present ? data.url.value : this.url,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BibleTranslationEntry(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('abbreviation: $abbreviation, ')
+          ..write('description: $description, ')
+          ..write('language: $language, ')
+          ..write('direction: $direction, ')
+          ..write('distributionAbbreviation: $distributionAbbreviation, ')
+          ..write('url: $url, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, abbreviation, description, language,
+      direction, distributionAbbreviation, url, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BibleTranslationEntry &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.abbreviation == this.abbreviation &&
+          other.description == this.description &&
+          other.language == this.language &&
+          other.direction == this.direction &&
+          other.distributionAbbreviation == this.distributionAbbreviation &&
+          other.url == this.url &&
+          other.createdAt == this.createdAt);
 }
 
 class LocalBibleTranslationsCompanion
@@ -2572,7 +2743,6 @@ class LocalBibleTranslationsCompanion
   final Value<String?> url;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
-
   const LocalBibleTranslationsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -2585,28 +2755,72 @@ class LocalBibleTranslationsCompanion
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-
   LocalBibleTranslationsCompanion.insert({
     required String id,
     required String name,
     required String abbreviation,
-    Value<String?> description = const Value.absent(),
-    Value<String> language = const Value.absent(),
-    Value<String> direction = const Value.absent(),
-    Value<String?> distributionAbbreviation = const Value.absent(),
-    Value<String?> url = const Value.absent(),
-    Value<DateTime> createdAt = const Value.absent(),
-    Value<int> rowid = const Value.absent(),
+    this.description = const Value.absent(),
+    this.language = const Value.absent(),
+    this.direction = const Value.absent(),
+    this.distributionAbbreviation = const Value.absent(),
+    this.url = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : id = Value(id),
         name = Value(name),
-        abbreviation = Value(abbreviation),
-        description = description,
-        language = language,
-        direction = direction,
-        distributionAbbreviation = distributionAbbreviation,
-        url = url,
-        createdAt = createdAt,
-        rowid = rowid;
+        abbreviation = Value(abbreviation);
+  static Insertable<BibleTranslationEntry> custom({
+    Expression<String>? id,
+    Expression<String>? name,
+    Expression<String>? abbreviation,
+    Expression<String>? description,
+    Expression<String>? language,
+    Expression<String>? direction,
+    Expression<String>? distributionAbbreviation,
+    Expression<String>? url,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (abbreviation != null) 'abbreviation': abbreviation,
+      if (description != null) 'description': description,
+      if (language != null) 'language': language,
+      if (direction != null) 'direction': direction,
+      if (distributionAbbreviation != null)
+        'distribution_abbreviation': distributionAbbreviation,
+      if (url != null) 'url': url,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  LocalBibleTranslationsCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? name,
+      Value<String>? abbreviation,
+      Value<String?>? description,
+      Value<String>? language,
+      Value<String>? direction,
+      Value<String?>? distributionAbbreviation,
+      Value<String?>? url,
+      Value<DateTime>? createdAt,
+      Value<int>? rowid}) {
+    return LocalBibleTranslationsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      abbreviation: abbreviation ?? this.abbreviation,
+      description: description ?? this.description,
+      language: language ?? this.language,
+      direction: direction ?? this.direction,
+      distributionAbbreviation:
+          distributionAbbreviation ?? this.distributionAbbreviation,
+      url: url ?? this.url,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2644,11 +2858,24 @@ class LocalBibleTranslationsCompanion
     }
     return map;
   }
-}
 
-// =============================================================================
-// LOCAL BIBLE CHAPTERS TABLE & DATA CLASS
-// =============================================================================
+  @override
+  String toString() {
+    return (StringBuffer('LocalBibleTranslationsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('abbreviation: $abbreviation, ')
+          ..write('description: $description, ')
+          ..write('language: $language, ')
+          ..write('direction: $direction, ')
+          ..write('distributionAbbreviation: $distributionAbbreviation, ')
+          ..write('url: $url, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
 
 class $LocalBibleChaptersTable extends LocalBibleChapters
     with TableInfo<$LocalBibleChaptersTable, BibleChapterEntry> {
@@ -2679,9 +2906,10 @@ class $LocalBibleChaptersTable extends LocalBibleChapters
   late final GeneratedColumn<String> bookCode = GeneratedColumn<String>(
       'book_code', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  static const VerificationMeta _bookNameMeta =
+      const VerificationMeta('bookName');
   @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+  late final GeneratedColumn<String> bookName = GeneratedColumn<String>(
       'book_name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _chapterMeta =
@@ -2718,7 +2946,7 @@ class $LocalBibleChaptersTable extends LocalBibleChapters
         translationKey,
         bookNumber,
         bookCode,
-        name,
+        bookName,
         chapter,
         versesJson,
         verseCount,
@@ -2729,10 +2957,8 @@ class $LocalBibleChaptersTable extends LocalBibleChapters
   @override
   String get actualTableName => $name;
   static const String $name = 'local_bible_chapters';
-
   @override
-  VerificationContext validateIntegrity(
-      Insertable<BibleChapterEntry> instance,
+  VerificationContext validateIntegrity(Insertable<BibleChapterEntry> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -2742,14 +2968,18 @@ class $LocalBibleChaptersTable extends LocalBibleChapters
       context.missing(_idMeta);
     }
     if (data.containsKey('translation_key')) {
-      context.handle(_translationKeyMeta,
-          translationKey.isAcceptableOrUnknown(data['translation_key']!, _translationKeyMeta));
+      context.handle(
+          _translationKeyMeta,
+          translationKey.isAcceptableOrUnknown(
+              data['translation_key']!, _translationKeyMeta));
     } else if (isInserting) {
       context.missing(_translationKeyMeta);
     }
     if (data.containsKey('book_number')) {
-      context.handle(_bookNumberMeta,
-          bookNumber.isAcceptableOrUnknown(data['book_number']!, _bookNumberMeta));
+      context.handle(
+          _bookNumberMeta,
+          bookNumber.isAcceptableOrUnknown(
+              data['book_number']!, _bookNumberMeta));
     } else if (isInserting) {
       context.missing(_bookNumberMeta);
     }
@@ -2760,9 +2990,10 @@ class $LocalBibleChaptersTable extends LocalBibleChapters
       context.missing(_bookCodeMeta);
     }
     if (data.containsKey('book_name')) {
-      context.handle(_nameMeta, name.isAcceptableOrUnknown(data['book_name']!, _nameMeta));
+      context.handle(_bookNameMeta,
+          bookName.isAcceptableOrUnknown(data['book_name']!, _bookNameMeta));
     } else if (isInserting) {
-      context.missing(_nameMeta);
+      context.missing(_bookNameMeta);
     }
     if (data.containsKey('chapter')) {
       context.handle(_chapterMeta,
@@ -2771,14 +3002,18 @@ class $LocalBibleChaptersTable extends LocalBibleChapters
       context.missing(_chapterMeta);
     }
     if (data.containsKey('verses_json')) {
-      context.handle(_versesJsonMeta,
-          versesJson.isAcceptableOrUnknown(data['verses_json']!, _versesJsonMeta));
+      context.handle(
+          _versesJsonMeta,
+          versesJson.isAcceptableOrUnknown(
+              data['verses_json']!, _versesJsonMeta));
     } else if (isInserting) {
       context.missing(_versesJsonMeta);
     }
     if (data.containsKey('verse_count')) {
-      context.handle(_verseCountMeta,
-          verseCount.isAcceptableOrUnknown(data['verse_count']!, _verseCountMeta));
+      context.handle(
+          _verseCountMeta,
+          verseCount.isAcceptableOrUnknown(
+              data['verse_count']!, _verseCountMeta));
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -2795,13 +3030,13 @@ class $LocalBibleChaptersTable extends LocalBibleChapters
     return BibleChapterEntry(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      translationKey: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}translation_key'])!,
+      translationKey: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}translation_key'])!,
       bookNumber: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}book_number'])!,
       bookCode: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}book_code'])!,
-      name: attachedDatabase.typeMapping
+      bookName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}book_name'])!,
       chapter: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}chapter'])!,
@@ -2820,29 +3055,27 @@ class $LocalBibleChaptersTable extends LocalBibleChapters
   }
 }
 
-class BibleChapterEntry extends DataClass implements Insertable<BibleChapterEntry> {
+class BibleChapterEntry extends DataClass
+    implements Insertable<BibleChapterEntry> {
   final String id;
   final String translationKey;
   final int bookNumber;
   final String bookCode;
-  final String name;
+  final String bookName;
   final int chapter;
   final String versesJson;
   final int verseCount;
   final DateTime createdAt;
-
-  const BibleChapterEntry({
-    required this.id,
-    required this.translationKey,
-    required this.bookNumber,
-    required this.bookCode,
-    required this.name,
-    required this.chapter,
-    required this.versesJson,
-    required this.verseCount,
-    required this.createdAt,
-  });
-
+  const BibleChapterEntry(
+      {required this.id,
+      required this.translationKey,
+      required this.bookNumber,
+      required this.bookCode,
+      required this.bookName,
+      required this.chapter,
+      required this.versesJson,
+      required this.verseCount,
+      required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2850,7 +3083,7 @@ class BibleChapterEntry extends DataClass implements Insertable<BibleChapterEntr
     map['translation_key'] = Variable<String>(translationKey);
     map['book_number'] = Variable<int>(bookNumber);
     map['book_code'] = Variable<String>(bookCode);
-    map['book_name'] = Variable<String>(name);
+    map['book_name'] = Variable<String>(bookName);
     map['chapter'] = Variable<int>(chapter);
     map['verses_json'] = Variable<String>(versesJson);
     map['verse_count'] = Variable<int>(verseCount);
@@ -2864,7 +3097,7 @@ class BibleChapterEntry extends DataClass implements Insertable<BibleChapterEntr
       translationKey: Value(translationKey),
       bookNumber: Value(bookNumber),
       bookCode: Value(bookCode),
-      name: Value(name),
+      bookName: Value(bookName),
       chapter: Value(chapter),
       versesJson: Value(versesJson),
       verseCount: Value(verseCount),
@@ -2880,14 +3113,13 @@ class BibleChapterEntry extends DataClass implements Insertable<BibleChapterEntr
       translationKey: serializer.fromJson<String>(json['translationKey']),
       bookNumber: serializer.fromJson<int>(json['bookNumber']),
       bookCode: serializer.fromJson<String>(json['bookCode']),
-      name: serializer.fromJson<String>(json['name']),
+      bookName: serializer.fromJson<String>(json['bookName']),
       chapter: serializer.fromJson<int>(json['chapter']),
       versesJson: serializer.fromJson<String>(json['versesJson']),
       verseCount: serializer.fromJson<int>(json['verseCount']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
-
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
@@ -2896,13 +3128,86 @@ class BibleChapterEntry extends DataClass implements Insertable<BibleChapterEntr
       'translationKey': serializer.toJson<String>(translationKey),
       'bookNumber': serializer.toJson<int>(bookNumber),
       'bookCode': serializer.toJson<String>(bookCode),
-      'name': serializer.toJson<String>(name),
+      'bookName': serializer.toJson<String>(bookName),
       'chapter': serializer.toJson<int>(chapter),
       'versesJson': serializer.toJson<String>(versesJson),
       'verseCount': serializer.toJson<int>(verseCount),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
+
+  BibleChapterEntry copyWith(
+          {String? id,
+          String? translationKey,
+          int? bookNumber,
+          String? bookCode,
+          String? bookName,
+          int? chapter,
+          String? versesJson,
+          int? verseCount,
+          DateTime? createdAt}) =>
+      BibleChapterEntry(
+        id: id ?? this.id,
+        translationKey: translationKey ?? this.translationKey,
+        bookNumber: bookNumber ?? this.bookNumber,
+        bookCode: bookCode ?? this.bookCode,
+        bookName: bookName ?? this.bookName,
+        chapter: chapter ?? this.chapter,
+        versesJson: versesJson ?? this.versesJson,
+        verseCount: verseCount ?? this.verseCount,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  BibleChapterEntry copyWithCompanion(LocalBibleChaptersCompanion data) {
+    return BibleChapterEntry(
+      id: data.id.present ? data.id.value : this.id,
+      translationKey: data.translationKey.present
+          ? data.translationKey.value
+          : this.translationKey,
+      bookNumber:
+          data.bookNumber.present ? data.bookNumber.value : this.bookNumber,
+      bookCode: data.bookCode.present ? data.bookCode.value : this.bookCode,
+      bookName: data.bookName.present ? data.bookName.value : this.bookName,
+      chapter: data.chapter.present ? data.chapter.value : this.chapter,
+      versesJson:
+          data.versesJson.present ? data.versesJson.value : this.versesJson,
+      verseCount:
+          data.verseCount.present ? data.verseCount.value : this.verseCount,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BibleChapterEntry(')
+          ..write('id: $id, ')
+          ..write('translationKey: $translationKey, ')
+          ..write('bookNumber: $bookNumber, ')
+          ..write('bookCode: $bookCode, ')
+          ..write('bookName: $bookName, ')
+          ..write('chapter: $chapter, ')
+          ..write('versesJson: $versesJson, ')
+          ..write('verseCount: $verseCount, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, translationKey, bookNumber, bookCode,
+      bookName, chapter, versesJson, verseCount, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BibleChapterEntry &&
+          other.id == this.id &&
+          other.translationKey == this.translationKey &&
+          other.bookNumber == this.bookNumber &&
+          other.bookCode == this.bookCode &&
+          other.bookName == this.bookName &&
+          other.chapter == this.chapter &&
+          other.versesJson == this.versesJson &&
+          other.verseCount == this.verseCount &&
+          other.createdAt == this.createdAt);
 }
 
 class LocalBibleChaptersCompanion extends UpdateCompanion<BibleChapterEntry> {
@@ -2910,47 +3215,92 @@ class LocalBibleChaptersCompanion extends UpdateCompanion<BibleChapterEntry> {
   final Value<String> translationKey;
   final Value<int> bookNumber;
   final Value<String> bookCode;
-  final Value<String> name;
+  final Value<String> bookName;
   final Value<int> chapter;
   final Value<String> versesJson;
   final Value<int> verseCount;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
-
   const LocalBibleChaptersCompanion({
     this.id = const Value.absent(),
     this.translationKey = const Value.absent(),
     this.bookNumber = const Value.absent(),
     this.bookCode = const Value.absent(),
-    this.name = const Value.absent(),
+    this.bookName = const Value.absent(),
     this.chapter = const Value.absent(),
     this.versesJson = const Value.absent(),
     this.verseCount = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-
   LocalBibleChaptersCompanion.insert({
     required String id,
     required String translationKey,
     required int bookNumber,
     required String bookCode,
-    required String name,
+    required String bookName,
     required int chapter,
     required String versesJson,
-    Value<int> verseCount = const Value.absent(),
-    Value<DateTime> createdAt = const Value.absent(),
-    Value<int> rowid = const Value.absent(),
+    this.verseCount = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : id = Value(id),
         translationKey = Value(translationKey),
         bookNumber = Value(bookNumber),
         bookCode = Value(bookCode),
-        name = Value(name),
+        bookName = Value(bookName),
         chapter = Value(chapter),
-        versesJson = Value(versesJson),
-        verseCount = verseCount,
-        createdAt = createdAt,
-        rowid = rowid;
+        versesJson = Value(versesJson);
+  static Insertable<BibleChapterEntry> custom({
+    Expression<String>? id,
+    Expression<String>? translationKey,
+    Expression<int>? bookNumber,
+    Expression<String>? bookCode,
+    Expression<String>? bookName,
+    Expression<int>? chapter,
+    Expression<String>? versesJson,
+    Expression<int>? verseCount,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (translationKey != null) 'translation_key': translationKey,
+      if (bookNumber != null) 'book_number': bookNumber,
+      if (bookCode != null) 'book_code': bookCode,
+      if (bookName != null) 'book_name': bookName,
+      if (chapter != null) 'chapter': chapter,
+      if (versesJson != null) 'verses_json': versesJson,
+      if (verseCount != null) 'verse_count': verseCount,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  LocalBibleChaptersCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? translationKey,
+      Value<int>? bookNumber,
+      Value<String>? bookCode,
+      Value<String>? bookName,
+      Value<int>? chapter,
+      Value<String>? versesJson,
+      Value<int>? verseCount,
+      Value<DateTime>? createdAt,
+      Value<int>? rowid}) {
+    return LocalBibleChaptersCompanion(
+      id: id ?? this.id,
+      translationKey: translationKey ?? this.translationKey,
+      bookNumber: bookNumber ?? this.bookNumber,
+      bookCode: bookCode ?? this.bookCode,
+      bookName: bookName ?? this.bookName,
+      chapter: chapter ?? this.chapter,
+      versesJson: versesJson ?? this.versesJson,
+      verseCount: verseCount ?? this.verseCount,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2967,8 +3317,8 @@ class LocalBibleChaptersCompanion extends UpdateCompanion<BibleChapterEntry> {
     if (bookCode.present) {
       map['book_code'] = Variable<String>(bookCode.value);
     }
-    if (name.present) {
-      map['book_name'] = Variable<String>(name.value);
+    if (bookName.present) {
+      map['book_name'] = Variable<String>(bookName.value);
     }
     if (chapter.present) {
       map['chapter'] = Variable<int>(chapter.value);
@@ -2987,6 +3337,647 @@ class LocalBibleChaptersCompanion extends UpdateCompanion<BibleChapterEntry> {
     }
     return map;
   }
+
+  @override
+  String toString() {
+    return (StringBuffer('LocalBibleChaptersCompanion(')
+          ..write('id: $id, ')
+          ..write('translationKey: $translationKey, ')
+          ..write('bookNumber: $bookNumber, ')
+          ..write('bookCode: $bookCode, ')
+          ..write('bookName: $bookName, ')
+          ..write('chapter: $chapter, ')
+          ..write('versesJson: $versesJson, ')
+          ..write('verseCount: $verseCount, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $LocalUsersTable extends LocalUsers
+    with TableInfo<$LocalUsersTable, LocalUserEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LocalUsersTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _authTypeMeta =
+      const VerificationMeta('authType');
+  @override
+  late final GeneratedColumn<String> authType = GeneratedColumn<String>(
+      'auth_type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _emailMeta = const VerificationMeta('email');
+  @override
+  late final GeneratedColumn<String> email = GeneratedColumn<String>(
+      'email', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _remoteUserIdMeta =
+      const VerificationMeta('remoteUserId');
+  @override
+  late final GeneratedColumn<String> remoteUserId = GeneratedColumn<String>(
+      'remote_user_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _displayNameMeta =
+      const VerificationMeta('displayName');
+  @override
+  late final GeneratedColumn<String> displayName = GeneratedColumn<String>(
+      'display_name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  static const VerificationMeta _lastSeenAtMeta =
+      const VerificationMeta('lastSeenAt');
+  @override
+  late final GeneratedColumn<DateTime> lastSeenAt = GeneratedColumn<DateTime>(
+      'last_seen_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, authType, email, remoteUserId, displayName, createdAt, lastSeenAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'local_users';
+  @override
+  VerificationContext validateIntegrity(Insertable<LocalUserEntry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('auth_type')) {
+      context.handle(_authTypeMeta,
+          authType.isAcceptableOrUnknown(data['auth_type']!, _authTypeMeta));
+    } else if (isInserting) {
+      context.missing(_authTypeMeta);
+    }
+    if (data.containsKey('email')) {
+      context.handle(
+          _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
+    }
+    if (data.containsKey('remote_user_id')) {
+      context.handle(
+          _remoteUserIdMeta,
+          remoteUserId.isAcceptableOrUnknown(
+              data['remote_user_id']!, _remoteUserIdMeta));
+    }
+    if (data.containsKey('display_name')) {
+      context.handle(
+          _displayNameMeta,
+          displayName.isAcceptableOrUnknown(
+              data['display_name']!, _displayNameMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('last_seen_at')) {
+      context.handle(
+          _lastSeenAtMeta,
+          lastSeenAt.isAcceptableOrUnknown(
+              data['last_seen_at']!, _lastSeenAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  LocalUserEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LocalUserEntry(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      authType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}auth_type'])!,
+      email: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}email']),
+      remoteUserId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}remote_user_id']),
+      displayName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}display_name']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      lastSeenAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}last_seen_at'])!,
+    );
+  }
+
+  @override
+  $LocalUsersTable createAlias(String alias) {
+    return $LocalUsersTable(attachedDatabase, alias);
+  }
+}
+
+class LocalUserEntry extends DataClass implements Insertable<LocalUserEntry> {
+  final String id;
+  final String authType;
+  final String? email;
+  final String? remoteUserId;
+  final String? displayName;
+  final DateTime createdAt;
+  final DateTime lastSeenAt;
+  const LocalUserEntry(
+      {required this.id,
+      required this.authType,
+      this.email,
+      this.remoteUserId,
+      this.displayName,
+      required this.createdAt,
+      required this.lastSeenAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['auth_type'] = Variable<String>(authType);
+    if (!nullToAbsent || email != null) {
+      map['email'] = Variable<String>(email);
+    }
+    if (!nullToAbsent || remoteUserId != null) {
+      map['remote_user_id'] = Variable<String>(remoteUserId);
+    }
+    if (!nullToAbsent || displayName != null) {
+      map['display_name'] = Variable<String>(displayName);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['last_seen_at'] = Variable<DateTime>(lastSeenAt);
+    return map;
+  }
+
+  LocalUsersCompanion toCompanion(bool nullToAbsent) {
+    return LocalUsersCompanion(
+      id: Value(id),
+      authType: Value(authType),
+      email:
+          email == null && nullToAbsent ? const Value.absent() : Value(email),
+      remoteUserId: remoteUserId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(remoteUserId),
+      displayName: displayName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(displayName),
+      createdAt: Value(createdAt),
+      lastSeenAt: Value(lastSeenAt),
+    );
+  }
+
+  factory LocalUserEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LocalUserEntry(
+      id: serializer.fromJson<String>(json['id']),
+      authType: serializer.fromJson<String>(json['authType']),
+      email: serializer.fromJson<String?>(json['email']),
+      remoteUserId: serializer.fromJson<String?>(json['remoteUserId']),
+      displayName: serializer.fromJson<String?>(json['displayName']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      lastSeenAt: serializer.fromJson<DateTime>(json['lastSeenAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'authType': serializer.toJson<String>(authType),
+      'email': serializer.toJson<String?>(email),
+      'remoteUserId': serializer.toJson<String?>(remoteUserId),
+      'displayName': serializer.toJson<String?>(displayName),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'lastSeenAt': serializer.toJson<DateTime>(lastSeenAt),
+    };
+  }
+
+  LocalUserEntry copyWith(
+          {String? id,
+          String? authType,
+          Value<String?> email = const Value.absent(),
+          Value<String?> remoteUserId = const Value.absent(),
+          Value<String?> displayName = const Value.absent(),
+          DateTime? createdAt,
+          DateTime? lastSeenAt}) =>
+      LocalUserEntry(
+        id: id ?? this.id,
+        authType: authType ?? this.authType,
+        email: email.present ? email.value : this.email,
+        remoteUserId:
+            remoteUserId.present ? remoteUserId.value : this.remoteUserId,
+        displayName: displayName.present ? displayName.value : this.displayName,
+        createdAt: createdAt ?? this.createdAt,
+        lastSeenAt: lastSeenAt ?? this.lastSeenAt,
+      );
+  LocalUserEntry copyWithCompanion(LocalUsersCompanion data) {
+    return LocalUserEntry(
+      id: data.id.present ? data.id.value : this.id,
+      authType: data.authType.present ? data.authType.value : this.authType,
+      email: data.email.present ? data.email.value : this.email,
+      remoteUserId: data.remoteUserId.present
+          ? data.remoteUserId.value
+          : this.remoteUserId,
+      displayName:
+          data.displayName.present ? data.displayName.value : this.displayName,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      lastSeenAt:
+          data.lastSeenAt.present ? data.lastSeenAt.value : this.lastSeenAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LocalUserEntry(')
+          ..write('id: $id, ')
+          ..write('authType: $authType, ')
+          ..write('email: $email, ')
+          ..write('remoteUserId: $remoteUserId, ')
+          ..write('displayName: $displayName, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('lastSeenAt: $lastSeenAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, authType, email, remoteUserId, displayName, createdAt, lastSeenAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LocalUserEntry &&
+          other.id == this.id &&
+          other.authType == this.authType &&
+          other.email == this.email &&
+          other.remoteUserId == this.remoteUserId &&
+          other.displayName == this.displayName &&
+          other.createdAt == this.createdAt &&
+          other.lastSeenAt == this.lastSeenAt);
+}
+
+class LocalUsersCompanion extends UpdateCompanion<LocalUserEntry> {
+  final Value<String> id;
+  final Value<String> authType;
+  final Value<String?> email;
+  final Value<String?> remoteUserId;
+  final Value<String?> displayName;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> lastSeenAt;
+  final Value<int> rowid;
+  const LocalUsersCompanion({
+    this.id = const Value.absent(),
+    this.authType = const Value.absent(),
+    this.email = const Value.absent(),
+    this.remoteUserId = const Value.absent(),
+    this.displayName = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.lastSeenAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  LocalUsersCompanion.insert({
+    required String id,
+    required String authType,
+    this.email = const Value.absent(),
+    this.remoteUserId = const Value.absent(),
+    this.displayName = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.lastSeenAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        authType = Value(authType);
+  static Insertable<LocalUserEntry> custom({
+    Expression<String>? id,
+    Expression<String>? authType,
+    Expression<String>? email,
+    Expression<String>? remoteUserId,
+    Expression<String>? displayName,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? lastSeenAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (authType != null) 'auth_type': authType,
+      if (email != null) 'email': email,
+      if (remoteUserId != null) 'remote_user_id': remoteUserId,
+      if (displayName != null) 'display_name': displayName,
+      if (createdAt != null) 'created_at': createdAt,
+      if (lastSeenAt != null) 'last_seen_at': lastSeenAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  LocalUsersCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? authType,
+      Value<String?>? email,
+      Value<String?>? remoteUserId,
+      Value<String?>? displayName,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? lastSeenAt,
+      Value<int>? rowid}) {
+    return LocalUsersCompanion(
+      id: id ?? this.id,
+      authType: authType ?? this.authType,
+      email: email ?? this.email,
+      remoteUserId: remoteUserId ?? this.remoteUserId,
+      displayName: displayName ?? this.displayName,
+      createdAt: createdAt ?? this.createdAt,
+      lastSeenAt: lastSeenAt ?? this.lastSeenAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (authType.present) {
+      map['auth_type'] = Variable<String>(authType.value);
+    }
+    if (email.present) {
+      map['email'] = Variable<String>(email.value);
+    }
+    if (remoteUserId.present) {
+      map['remote_user_id'] = Variable<String>(remoteUserId.value);
+    }
+    if (displayName.present) {
+      map['display_name'] = Variable<String>(displayName.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (lastSeenAt.present) {
+      map['last_seen_at'] = Variable<DateTime>(lastSeenAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LocalUsersCompanion(')
+          ..write('id: $id, ')
+          ..write('authType: $authType, ')
+          ..write('email: $email, ')
+          ..write('remoteUserId: $remoteUserId, ')
+          ..write('displayName: $displayName, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('lastSeenAt: $lastSeenAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $UserPreferencesTable extends UserPreferences
+    with TableInfo<$UserPreferencesTable, UserPreferenceEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UserPreferencesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _keyMeta = const VerificationMeta('key');
+  @override
+  late final GeneratedColumn<String> key = GeneratedColumn<String>(
+      'key', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
+  late final GeneratedColumn<String> value = GeneratedColumn<String>(
+      'value', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [userId, key, value];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'user_preferences';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<UserPreferenceEntry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('key')) {
+      context.handle(
+          _keyMeta, key.isAcceptableOrUnknown(data['key']!, _keyMeta));
+    } else if (isInserting) {
+      context.missing(_keyMeta);
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+          _valueMeta, value.isAcceptableOrUnknown(data['value']!, _valueMeta));
+    } else if (isInserting) {
+      context.missing(_valueMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {userId, key};
+  @override
+  UserPreferenceEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserPreferenceEntry(
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
+      key: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}key'])!,
+      value: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}value'])!,
+    );
+  }
+
+  @override
+  $UserPreferencesTable createAlias(String alias) {
+    return $UserPreferencesTable(attachedDatabase, alias);
+  }
+}
+
+class UserPreferenceEntry extends DataClass
+    implements Insertable<UserPreferenceEntry> {
+  final String userId;
+  final String key;
+  final String value;
+  const UserPreferenceEntry(
+      {required this.userId, required this.key, required this.value});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['user_id'] = Variable<String>(userId);
+    map['key'] = Variable<String>(key);
+    map['value'] = Variable<String>(value);
+    return map;
+  }
+
+  UserPreferencesCompanion toCompanion(bool nullToAbsent) {
+    return UserPreferencesCompanion(
+      userId: Value(userId),
+      key: Value(key),
+      value: Value(value),
+    );
+  }
+
+  factory UserPreferenceEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UserPreferenceEntry(
+      userId: serializer.fromJson<String>(json['userId']),
+      key: serializer.fromJson<String>(json['key']),
+      value: serializer.fromJson<String>(json['value']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'userId': serializer.toJson<String>(userId),
+      'key': serializer.toJson<String>(key),
+      'value': serializer.toJson<String>(value),
+    };
+  }
+
+  UserPreferenceEntry copyWith({String? userId, String? key, String? value}) =>
+      UserPreferenceEntry(
+        userId: userId ?? this.userId,
+        key: key ?? this.key,
+        value: value ?? this.value,
+      );
+  UserPreferenceEntry copyWithCompanion(UserPreferencesCompanion data) {
+    return UserPreferenceEntry(
+      userId: data.userId.present ? data.userId.value : this.userId,
+      key: data.key.present ? data.key.value : this.key,
+      value: data.value.present ? data.value.value : this.value,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserPreferenceEntry(')
+          ..write('userId: $userId, ')
+          ..write('key: $key, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(userId, key, value);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UserPreferenceEntry &&
+          other.userId == this.userId &&
+          other.key == this.key &&
+          other.value == this.value);
+}
+
+class UserPreferencesCompanion extends UpdateCompanion<UserPreferenceEntry> {
+  final Value<String> userId;
+  final Value<String> key;
+  final Value<String> value;
+  final Value<int> rowid;
+  const UserPreferencesCompanion({
+    this.userId = const Value.absent(),
+    this.key = const Value.absent(),
+    this.value = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  UserPreferencesCompanion.insert({
+    required String userId,
+    required String key,
+    required String value,
+    this.rowid = const Value.absent(),
+  })  : userId = Value(userId),
+        key = Value(key),
+        value = Value(value);
+  static Insertable<UserPreferenceEntry> custom({
+    Expression<String>? userId,
+    Expression<String>? key,
+    Expression<String>? value,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (userId != null) 'user_id': userId,
+      if (key != null) 'key': key,
+      if (value != null) 'value': value,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  UserPreferencesCompanion copyWith(
+      {Value<String>? userId,
+      Value<String>? key,
+      Value<String>? value,
+      Value<int>? rowid}) {
+    return UserPreferencesCompanion(
+      userId: userId ?? this.userId,
+      key: key ?? this.key,
+      value: value ?? this.value,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (key.present) {
+      map['key'] = Variable<String>(key.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<String>(value.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserPreferencesCompanion(')
+          ..write('userId: $userId, ')
+          ..write('key: $key, ')
+          ..write('value: $value, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
 }
 
 abstract class _$AppDatabase extends GeneratedDatabase {
@@ -2997,11 +3988,15 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $EventCategoriesTable(this);
   late final $UserEventsTable userEvents = $UserEventsTable(this);
   late final $FoodCourtMenusTable foodCourtMenus = $FoodCourtMenusTable(this);
-  late final $LocalBibleBooksTable localBibleBooks = $LocalBibleBooksTable(this);
+  late final $LocalBibleBooksTable localBibleBooks =
+      $LocalBibleBooksTable(this);
   late final $LocalBibleTranslationsTable localBibleTranslations =
       $LocalBibleTranslationsTable(this);
   late final $LocalBibleChaptersTable localBibleChapters =
       $LocalBibleChaptersTable(this);
+  late final $LocalUsersTable localUsers = $LocalUsersTable(this);
+  late final $UserPreferencesTable userPreferences =
+      $UserPreferencesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3013,7 +4008,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         foodCourtMenus,
         localBibleBooks,
         localBibleTranslations,
-        localBibleChapters
+        localBibleChapters,
+        localUsers,
+        userPreferences
       ];
 }
 
@@ -3799,6 +4796,858 @@ class $$FoodCourtMenusTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+typedef $$LocalBibleBooksTableCreateCompanionBuilder = LocalBibleBooksCompanion
+    Function({
+  required String id,
+  required String translationKey,
+  required int bookNumber,
+  required String bookCode,
+  required String name,
+  required int totalChapters,
+  Value<bool> isNewTestament,
+  Value<String?> url,
+  Value<String?> sha,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+typedef $$LocalBibleBooksTableUpdateCompanionBuilder = LocalBibleBooksCompanion
+    Function({
+  Value<String> id,
+  Value<String> translationKey,
+  Value<int> bookNumber,
+  Value<String> bookCode,
+  Value<String> name,
+  Value<int> totalChapters,
+  Value<bool> isNewTestament,
+  Value<String?> url,
+  Value<String?> sha,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+
+class $$LocalBibleBooksTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $LocalBibleBooksTable,
+    BibleBookEntry,
+    $$LocalBibleBooksTableFilterComposer,
+    $$LocalBibleBooksTableOrderingComposer,
+    $$LocalBibleBooksTableCreateCompanionBuilder,
+    $$LocalBibleBooksTableUpdateCompanionBuilder> {
+  $$LocalBibleBooksTableTableManager(
+      _$AppDatabase db, $LocalBibleBooksTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$LocalBibleBooksTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$LocalBibleBooksTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> translationKey = const Value.absent(),
+            Value<int> bookNumber = const Value.absent(),
+            Value<String> bookCode = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<int> totalChapters = const Value.absent(),
+            Value<bool> isNewTestament = const Value.absent(),
+            Value<String?> url = const Value.absent(),
+            Value<String?> sha = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LocalBibleBooksCompanion(
+            id: id,
+            translationKey: translationKey,
+            bookNumber: bookNumber,
+            bookCode: bookCode,
+            name: name,
+            totalChapters: totalChapters,
+            isNewTestament: isNewTestament,
+            url: url,
+            sha: sha,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String translationKey,
+            required int bookNumber,
+            required String bookCode,
+            required String name,
+            required int totalChapters,
+            Value<bool> isNewTestament = const Value.absent(),
+            Value<String?> url = const Value.absent(),
+            Value<String?> sha = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LocalBibleBooksCompanion.insert(
+            id: id,
+            translationKey: translationKey,
+            bookNumber: bookNumber,
+            bookCode: bookCode,
+            name: name,
+            totalChapters: totalChapters,
+            isNewTestament: isNewTestament,
+            url: url,
+            sha: sha,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $$LocalBibleBooksTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $LocalBibleBooksTable> {
+  $$LocalBibleBooksTableFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get translationKey => $state.composableBuilder(
+      column: $state.table.translationKey,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get bookNumber => $state.composableBuilder(
+      column: $state.table.bookNumber,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get bookCode => $state.composableBuilder(
+      column: $state.table.bookCode,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get totalChapters => $state.composableBuilder(
+      column: $state.table.totalChapters,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get isNewTestament => $state.composableBuilder(
+      column: $state.table.isNewTestament,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get url => $state.composableBuilder(
+      column: $state.table.url,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get sha => $state.composableBuilder(
+      column: $state.table.sha,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$LocalBibleBooksTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $LocalBibleBooksTable> {
+  $$LocalBibleBooksTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get translationKey => $state.composableBuilder(
+      column: $state.table.translationKey,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get bookNumber => $state.composableBuilder(
+      column: $state.table.bookNumber,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get bookCode => $state.composableBuilder(
+      column: $state.table.bookCode,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get totalChapters => $state.composableBuilder(
+      column: $state.table.totalChapters,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get isNewTestament => $state.composableBuilder(
+      column: $state.table.isNewTestament,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get url => $state.composableBuilder(
+      column: $state.table.url,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get sha => $state.composableBuilder(
+      column: $state.table.sha,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+typedef $$LocalBibleTranslationsTableCreateCompanionBuilder
+    = LocalBibleTranslationsCompanion Function({
+  required String id,
+  required String name,
+  required String abbreviation,
+  Value<String?> description,
+  Value<String> language,
+  Value<String> direction,
+  Value<String?> distributionAbbreviation,
+  Value<String?> url,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+typedef $$LocalBibleTranslationsTableUpdateCompanionBuilder
+    = LocalBibleTranslationsCompanion Function({
+  Value<String> id,
+  Value<String> name,
+  Value<String> abbreviation,
+  Value<String?> description,
+  Value<String> language,
+  Value<String> direction,
+  Value<String?> distributionAbbreviation,
+  Value<String?> url,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+
+class $$LocalBibleTranslationsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $LocalBibleTranslationsTable,
+    BibleTranslationEntry,
+    $$LocalBibleTranslationsTableFilterComposer,
+    $$LocalBibleTranslationsTableOrderingComposer,
+    $$LocalBibleTranslationsTableCreateCompanionBuilder,
+    $$LocalBibleTranslationsTableUpdateCompanionBuilder> {
+  $$LocalBibleTranslationsTableTableManager(
+      _$AppDatabase db, $LocalBibleTranslationsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$LocalBibleTranslationsTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$LocalBibleTranslationsTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String> abbreviation = const Value.absent(),
+            Value<String?> description = const Value.absent(),
+            Value<String> language = const Value.absent(),
+            Value<String> direction = const Value.absent(),
+            Value<String?> distributionAbbreviation = const Value.absent(),
+            Value<String?> url = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LocalBibleTranslationsCompanion(
+            id: id,
+            name: name,
+            abbreviation: abbreviation,
+            description: description,
+            language: language,
+            direction: direction,
+            distributionAbbreviation: distributionAbbreviation,
+            url: url,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String name,
+            required String abbreviation,
+            Value<String?> description = const Value.absent(),
+            Value<String> language = const Value.absent(),
+            Value<String> direction = const Value.absent(),
+            Value<String?> distributionAbbreviation = const Value.absent(),
+            Value<String?> url = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LocalBibleTranslationsCompanion.insert(
+            id: id,
+            name: name,
+            abbreviation: abbreviation,
+            description: description,
+            language: language,
+            direction: direction,
+            distributionAbbreviation: distributionAbbreviation,
+            url: url,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $$LocalBibleTranslationsTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $LocalBibleTranslationsTable> {
+  $$LocalBibleTranslationsTableFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get abbreviation => $state.composableBuilder(
+      column: $state.table.abbreviation,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get description => $state.composableBuilder(
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get language => $state.composableBuilder(
+      column: $state.table.language,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get direction => $state.composableBuilder(
+      column: $state.table.direction,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get distributionAbbreviation =>
+      $state.composableBuilder(
+          column: $state.table.distributionAbbreviation,
+          builder: (column, joinBuilders) =>
+              ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get url => $state.composableBuilder(
+      column: $state.table.url,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$LocalBibleTranslationsTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $LocalBibleTranslationsTable> {
+  $$LocalBibleTranslationsTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get abbreviation => $state.composableBuilder(
+      column: $state.table.abbreviation,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get description => $state.composableBuilder(
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get language => $state.composableBuilder(
+      column: $state.table.language,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get direction => $state.composableBuilder(
+      column: $state.table.direction,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get distributionAbbreviation =>
+      $state.composableBuilder(
+          column: $state.table.distributionAbbreviation,
+          builder: (column, joinBuilders) =>
+              ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get url => $state.composableBuilder(
+      column: $state.table.url,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+typedef $$LocalBibleChaptersTableCreateCompanionBuilder
+    = LocalBibleChaptersCompanion Function({
+  required String id,
+  required String translationKey,
+  required int bookNumber,
+  required String bookCode,
+  required String bookName,
+  required int chapter,
+  required String versesJson,
+  Value<int> verseCount,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+typedef $$LocalBibleChaptersTableUpdateCompanionBuilder
+    = LocalBibleChaptersCompanion Function({
+  Value<String> id,
+  Value<String> translationKey,
+  Value<int> bookNumber,
+  Value<String> bookCode,
+  Value<String> bookName,
+  Value<int> chapter,
+  Value<String> versesJson,
+  Value<int> verseCount,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+
+class $$LocalBibleChaptersTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $LocalBibleChaptersTable,
+    BibleChapterEntry,
+    $$LocalBibleChaptersTableFilterComposer,
+    $$LocalBibleChaptersTableOrderingComposer,
+    $$LocalBibleChaptersTableCreateCompanionBuilder,
+    $$LocalBibleChaptersTableUpdateCompanionBuilder> {
+  $$LocalBibleChaptersTableTableManager(
+      _$AppDatabase db, $LocalBibleChaptersTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$LocalBibleChaptersTableFilterComposer(ComposerState(db, table)),
+          orderingComposer: $$LocalBibleChaptersTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> translationKey = const Value.absent(),
+            Value<int> bookNumber = const Value.absent(),
+            Value<String> bookCode = const Value.absent(),
+            Value<String> bookName = const Value.absent(),
+            Value<int> chapter = const Value.absent(),
+            Value<String> versesJson = const Value.absent(),
+            Value<int> verseCount = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LocalBibleChaptersCompanion(
+            id: id,
+            translationKey: translationKey,
+            bookNumber: bookNumber,
+            bookCode: bookCode,
+            bookName: bookName,
+            chapter: chapter,
+            versesJson: versesJson,
+            verseCount: verseCount,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String translationKey,
+            required int bookNumber,
+            required String bookCode,
+            required String bookName,
+            required int chapter,
+            required String versesJson,
+            Value<int> verseCount = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LocalBibleChaptersCompanion.insert(
+            id: id,
+            translationKey: translationKey,
+            bookNumber: bookNumber,
+            bookCode: bookCode,
+            bookName: bookName,
+            chapter: chapter,
+            versesJson: versesJson,
+            verseCount: verseCount,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $$LocalBibleChaptersTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $LocalBibleChaptersTable> {
+  $$LocalBibleChaptersTableFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get translationKey => $state.composableBuilder(
+      column: $state.table.translationKey,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get bookNumber => $state.composableBuilder(
+      column: $state.table.bookNumber,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get bookCode => $state.composableBuilder(
+      column: $state.table.bookCode,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get bookName => $state.composableBuilder(
+      column: $state.table.bookName,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get chapter => $state.composableBuilder(
+      column: $state.table.chapter,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get versesJson => $state.composableBuilder(
+      column: $state.table.versesJson,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get verseCount => $state.composableBuilder(
+      column: $state.table.verseCount,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$LocalBibleChaptersTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $LocalBibleChaptersTable> {
+  $$LocalBibleChaptersTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get translationKey => $state.composableBuilder(
+      column: $state.table.translationKey,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get bookNumber => $state.composableBuilder(
+      column: $state.table.bookNumber,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get bookCode => $state.composableBuilder(
+      column: $state.table.bookCode,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get bookName => $state.composableBuilder(
+      column: $state.table.bookName,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get chapter => $state.composableBuilder(
+      column: $state.table.chapter,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get versesJson => $state.composableBuilder(
+      column: $state.table.versesJson,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get verseCount => $state.composableBuilder(
+      column: $state.table.verseCount,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+typedef $$LocalUsersTableCreateCompanionBuilder = LocalUsersCompanion Function({
+  required String id,
+  required String authType,
+  Value<String?> email,
+  Value<String?> remoteUserId,
+  Value<String?> displayName,
+  Value<DateTime> createdAt,
+  Value<DateTime> lastSeenAt,
+  Value<int> rowid,
+});
+typedef $$LocalUsersTableUpdateCompanionBuilder = LocalUsersCompanion Function({
+  Value<String> id,
+  Value<String> authType,
+  Value<String?> email,
+  Value<String?> remoteUserId,
+  Value<String?> displayName,
+  Value<DateTime> createdAt,
+  Value<DateTime> lastSeenAt,
+  Value<int> rowid,
+});
+
+class $$LocalUsersTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $LocalUsersTable,
+    LocalUserEntry,
+    $$LocalUsersTableFilterComposer,
+    $$LocalUsersTableOrderingComposer,
+    $$LocalUsersTableCreateCompanionBuilder,
+    $$LocalUsersTableUpdateCompanionBuilder> {
+  $$LocalUsersTableTableManager(_$AppDatabase db, $LocalUsersTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$LocalUsersTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$LocalUsersTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> authType = const Value.absent(),
+            Value<String?> email = const Value.absent(),
+            Value<String?> remoteUserId = const Value.absent(),
+            Value<String?> displayName = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> lastSeenAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LocalUsersCompanion(
+            id: id,
+            authType: authType,
+            email: email,
+            remoteUserId: remoteUserId,
+            displayName: displayName,
+            createdAt: createdAt,
+            lastSeenAt: lastSeenAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String authType,
+            Value<String?> email = const Value.absent(),
+            Value<String?> remoteUserId = const Value.absent(),
+            Value<String?> displayName = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> lastSeenAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LocalUsersCompanion.insert(
+            id: id,
+            authType: authType,
+            email: email,
+            remoteUserId: remoteUserId,
+            displayName: displayName,
+            createdAt: createdAt,
+            lastSeenAt: lastSeenAt,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $$LocalUsersTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $LocalUsersTable> {
+  $$LocalUsersTableFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get authType => $state.composableBuilder(
+      column: $state.table.authType,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get email => $state.composableBuilder(
+      column: $state.table.email,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get remoteUserId => $state.composableBuilder(
+      column: $state.table.remoteUserId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get displayName => $state.composableBuilder(
+      column: $state.table.displayName,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get lastSeenAt => $state.composableBuilder(
+      column: $state.table.lastSeenAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$LocalUsersTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $LocalUsersTable> {
+  $$LocalUsersTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get authType => $state.composableBuilder(
+      column: $state.table.authType,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get email => $state.composableBuilder(
+      column: $state.table.email,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get remoteUserId => $state.composableBuilder(
+      column: $state.table.remoteUserId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get displayName => $state.composableBuilder(
+      column: $state.table.displayName,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get lastSeenAt => $state.composableBuilder(
+      column: $state.table.lastSeenAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+typedef $$UserPreferencesTableCreateCompanionBuilder = UserPreferencesCompanion
+    Function({
+  required String userId,
+  required String key,
+  required String value,
+  Value<int> rowid,
+});
+typedef $$UserPreferencesTableUpdateCompanionBuilder = UserPreferencesCompanion
+    Function({
+  Value<String> userId,
+  Value<String> key,
+  Value<String> value,
+  Value<int> rowid,
+});
+
+class $$UserPreferencesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $UserPreferencesTable,
+    UserPreferenceEntry,
+    $$UserPreferencesTableFilterComposer,
+    $$UserPreferencesTableOrderingComposer,
+    $$UserPreferencesTableCreateCompanionBuilder,
+    $$UserPreferencesTableUpdateCompanionBuilder> {
+  $$UserPreferencesTableTableManager(
+      _$AppDatabase db, $UserPreferencesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$UserPreferencesTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$UserPreferencesTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> userId = const Value.absent(),
+            Value<String> key = const Value.absent(),
+            Value<String> value = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              UserPreferencesCompanion(
+            userId: userId,
+            key: key,
+            value: value,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String userId,
+            required String key,
+            required String value,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              UserPreferencesCompanion.insert(
+            userId: userId,
+            key: key,
+            value: value,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $$UserPreferencesTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $UserPreferencesTable> {
+  $$UserPreferencesTableFilterComposer(super.$state);
+  ColumnFilters<String> get userId => $state.composableBuilder(
+      column: $state.table.userId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get key => $state.composableBuilder(
+      column: $state.table.key,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get value => $state.composableBuilder(
+      column: $state.table.value,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$UserPreferencesTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $UserPreferencesTable> {
+  $$UserPreferencesTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get userId => $state.composableBuilder(
+      column: $state.table.userId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get key => $state.composableBuilder(
+      column: $state.table.key,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get value => $state.composableBuilder(
+      column: $state.table.value,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
@@ -3810,4 +5659,15 @@ class $AppDatabaseManager {
       $$UserEventsTableTableManager(_db, _db.userEvents);
   $$FoodCourtMenusTableTableManager get foodCourtMenus =>
       $$FoodCourtMenusTableTableManager(_db, _db.foodCourtMenus);
+  $$LocalBibleBooksTableTableManager get localBibleBooks =>
+      $$LocalBibleBooksTableTableManager(_db, _db.localBibleBooks);
+  $$LocalBibleTranslationsTableTableManager get localBibleTranslations =>
+      $$LocalBibleTranslationsTableTableManager(
+          _db, _db.localBibleTranslations);
+  $$LocalBibleChaptersTableTableManager get localBibleChapters =>
+      $$LocalBibleChaptersTableTableManager(_db, _db.localBibleChapters);
+  $$LocalUsersTableTableManager get localUsers =>
+      $$LocalUsersTableTableManager(_db, _db.localUsers);
+  $$UserPreferencesTableTableManager get userPreferences =>
+      $$UserPreferencesTableTableManager(_db, _db.userPreferences);
 }

@@ -22,6 +22,58 @@ final appLineSpacingProvider = StateProvider<String>(
     (ref) => 'normal'); // 'compact', 'normal', 'relaxed', 'spacious'
 final appShowVerseNumbersProvider = StateProvider<bool>((ref) => true);
 
+const appSettingThemeKey = 'theme';
+const appSettingTranslationKey = 'translation';
+const appSettingFontSizeKey = 'fontSize';
+const appSettingFontFamilyKey = 'fontFamily';
+const appSettingLineSpacingKey = 'lineSpacing';
+const appSettingShowVerseNumbersKey = 'showVerseNumbers';
+
+class AppSettingsController {
+  final AppDatabase database;
+  final String userId;
+
+  const AppSettingsController({required this.database, required this.userId});
+
+  Future<void> setTheme(WidgetRef ref, AppVisualTheme value) async {
+    ref.read(appVisualThemeModeProvider.notifier).state = value;
+    await _save(appSettingThemeKey, value.name);
+  }
+
+  Future<void> setTranslation(WidgetRef ref, String value) async {
+    ref.read(appTranslationProvider.notifier).state = value;
+    await _save(appSettingTranslationKey, value);
+  }
+
+  Future<void> setFontSize(WidgetRef ref, String value) async {
+    ref.read(appFontSizeProvider.notifier).state = value;
+    await _save(appSettingFontSizeKey, value);
+  }
+
+  Future<void> setFontFamily(WidgetRef ref, String value) async {
+    ref.read(appFontFamilyProvider.notifier).state = value;
+    await _save(appSettingFontFamilyKey, value);
+  }
+
+  Future<void> setLineSpacing(WidgetRef ref, String value) async {
+    ref.read(appLineSpacingProvider.notifier).state = value;
+    await _save(appSettingLineSpacingKey, value);
+  }
+
+  Future<void> setShowVerseNumbers(WidgetRef ref, bool value) async {
+    ref.read(appShowVerseNumbersProvider.notifier).state = value;
+    await _save(appSettingShowVerseNumbersKey, value.toString());
+  }
+
+  Future<void> _save(String key, String value) {
+    return database.saveUserPreference(userId: userId, key: key, value: value);
+  }
+}
+
+final appSettingsControllerProvider = Provider<AppSettingsController>(
+  (ref) => throw StateError('AppSettingsController no ha sido inicializado'),
+);
+
 // Active navigation and bible coordinates
 final appSelectedBookProvider = StateProvider<String>((ref) => 'MAT');
 final appSelectedChapterProvider = StateProvider<int>((ref) => 1);

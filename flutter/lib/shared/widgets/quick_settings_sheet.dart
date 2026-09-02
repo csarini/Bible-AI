@@ -212,8 +212,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     sub: 'Pergamino',
                     isSelected: visualTheme == AppVisualTheme.light,
                     onTap: () => ref
-                        .read(appVisualThemeModeProvider.notifier)
-                        .state = AppVisualTheme.light,
+                        .read(appSettingsControllerProvider)
+                        .setTheme(ref, AppVisualTheme.light),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -224,8 +224,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     sub: 'Cálido',
                     isSelected: visualTheme == AppVisualTheme.sepia,
                     onTap: () => ref
-                        .read(appVisualThemeModeProvider.notifier)
-                        .state = AppVisualTheme.sepia,
+                        .read(appSettingsControllerProvider)
+                        .setTheme(ref, AppVisualTheme.sepia),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -236,8 +236,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     sub: 'Noche',
                     isSelected: visualTheme == AppVisualTheme.dark,
                     onTap: () => ref
-                        .read(appVisualThemeModeProvider.notifier)
-                        .state = AppVisualTheme.dark,
+                        .read(appSettingsControllerProvider)
+                        .setTheme(ref, AppVisualTheme.dark),
                   ),
                 ),
               ],
@@ -256,8 +256,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'A-',
                     sub: '15px',
                     isSelected: fontSize == 'small',
-                    onTap: () =>
-                        ref.read(appFontSizeProvider.notifier).state = 'small',
+                    onTap: () => ref
+                        .read(appSettingsControllerProvider)
+                        .setFontSize(ref, 'small'),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -267,8 +268,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'A',
                     sub: '17.5px',
                     isSelected: fontSize == 'medium',
-                    onTap: () =>
-                        ref.read(appFontSizeProvider.notifier).state = 'medium',
+                    onTap: () => ref
+                        .read(appSettingsControllerProvider)
+                        .setFontSize(ref, 'medium'),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -278,8 +280,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'A+',
                     sub: '20px',
                     isSelected: fontSize == 'large',
-                    onTap: () =>
-                        ref.read(appFontSizeProvider.notifier).state = 'large',
+                    onTap: () => ref
+                        .read(appSettingsControllerProvider)
+                        .setFontSize(ref, 'large'),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -289,8 +292,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                     label: 'A++',
                     sub: '23px',
                     isSelected: fontSize == 'xlarge',
-                    onTap: () =>
-                        ref.read(appFontSizeProvider.notifier).state = 'xlarge',
+                    onTap: () => ref
+                        .read(appSettingsControllerProvider)
+                        .setFontSize(ref, 'xlarge'),
                   ),
                 ),
               ],
@@ -311,8 +315,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     isSelected: fontFamily == 'literata' ||
                         fontFamily == 'merriweather',
                     onTap: () => ref
-                        .read(appFontFamilyProvider.notifier)
-                        .state = 'literata',
+                        .read(appSettingsControllerProvider)
+                        .setFontFamily(ref, 'literata'),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -323,8 +327,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     sub: 'Editorial',
                     isSelected: fontFamily == 'playfair',
                     onTap: () => ref
-                        .read(appFontFamilyProvider.notifier)
-                        .state = 'playfair',
+                        .read(appSettingsControllerProvider)
+                        .setFontFamily(ref, 'playfair'),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -336,8 +340,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     isSelected:
                         fontFamily == 'inter' || fontFamily == 'jakarta',
                     onTap: () => ref
-                        .read(appFontFamilyProvider.notifier)
-                        .state = 'inter',
+                        .read(appSettingsControllerProvider)
+                        .setFontFamily(ref, 'inter'),
                   ),
                 ),
               ],
@@ -357,8 +361,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     sub: '1.45',
                     isSelected: lineSpacing == 'compact',
                     onTap: () => ref
-                        .read(appLineSpacingProvider.notifier)
-                        .state = 'compact',
+                        .read(appSettingsControllerProvider)
+                        .setLineSpacing(ref, 'compact'),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -369,8 +373,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     sub: '1.68',
                     isSelected: lineSpacing == 'normal',
                     onTap: () => ref
-                        .read(appLineSpacingProvider.notifier)
-                        .state = 'normal',
+                        .read(appSettingsControllerProvider)
+                        .setLineSpacing(ref, 'normal'),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -381,8 +385,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     sub: '1.95',
                     isSelected: lineSpacing == 'relaxed',
                     onTap: () => ref
-                        .read(appLineSpacingProvider.notifier)
-                        .state = 'relaxed',
+                        .read(appSettingsControllerProvider)
+                        .setLineSpacing(ref, 'relaxed'),
                   ),
                 ),
               ],
@@ -400,8 +404,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                   title: 'Reina-Valera 1909 (RVR1909)',
                   subtitle: 'Texto canónico en español clásico protestante',
                   isSelected: translation == 'valera',
-                  onTap: () => ref.read(appTranslationProvider.notifier).state =
-                      'valera',
+                  onTap: () => ref
+                      .read(appSettingsControllerProvider)
+                      .setTranslation(ref, 'valera'),
                 ),
                 const SizedBox(height: 6),
                 _buildTranslationTile(
@@ -409,8 +414,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                   title: 'Biblia del Oso 1569 (SSE)',
                   subtitle: 'Casiodoro de Reina, traducción histórica original',
                   isSelected: translation == 'sse',
-                  onTap: () =>
-                      ref.read(appTranslationProvider.notifier).state = 'sse',
+                  onTap: () => ref
+                      .read(appSettingsControllerProvider)
+                      .setTranslation(ref, 'sse'),
                 ),
                 const SizedBox(height: 6),
                 _buildTranslationTile(
@@ -418,8 +424,9 @@ class QuickSettingsSheet extends ConsumerWidget {
                   title: 'Reina Valera NT 1858 (RV 1858)',
                   subtitle: 'Nuevo Testamento, revisión histórica de 1858',
                   isSelected: translation == 'rv1858',
-                  onTap: () => ref.read(appTranslationProvider.notifier).state =
-                      'rv1858',
+                  onTap: () => ref
+                      .read(appSettingsControllerProvider)
+                      .setTranslation(ref, 'rv1858'),
                 ),
               ],
             ),
@@ -464,8 +471,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     value: showVerseNumbers,
                     activeColor: SanctuaryColors.sunOrange,
                     onChanged: (val) => ref
-                        .read(appShowVerseNumbersProvider.notifier)
-                        .state = val,
+                        .read(appSettingsControllerProvider)
+                        .setShowVerseNumbers(ref, val),
                   ),
                 ],
               ),

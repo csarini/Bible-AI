@@ -278,8 +278,8 @@ class SanctuaryMainShell extends ConsumerWidget {
                             label: 'Claro',
                             isSelected: visualTheme == AppVisualTheme.light,
                             onTap: () => ref
-                                .read(appVisualThemeModeProvider.notifier)
-                                .state = AppVisualTheme.light,
+                                .read(appSettingsControllerProvider)
+                                .setTheme(ref, AppVisualTheme.light),
                           ),
                         ),
                         const SizedBox(width: 3),
@@ -289,8 +289,8 @@ class SanctuaryMainShell extends ConsumerWidget {
                             label: 'Sepia',
                             isSelected: visualTheme == AppVisualTheme.sepia,
                             onTap: () => ref
-                                .read(appVisualThemeModeProvider.notifier)
-                                .state = AppVisualTheme.sepia,
+                                .read(appSettingsControllerProvider)
+                                .setTheme(ref, AppVisualTheme.sepia),
                           ),
                         ),
                         const SizedBox(width: 3),
@@ -300,8 +300,8 @@ class SanctuaryMainShell extends ConsumerWidget {
                             label: 'Oscuro',
                             isSelected: visualTheme == AppVisualTheme.dark,
                             onTap: () => ref
-                                .read(appVisualThemeModeProvider.notifier)
-                                .state = AppVisualTheme.dark,
+                                .read(appSettingsControllerProvider)
+                                .setTheme(ref, AppVisualTheme.dark),
                           ),
                         ),
                       ],

@@ -16,15 +16,18 @@ part 'app_database.g.dart';
 @DataClassName('BibleBookEntry')
 class LocalBibleBooks extends Table {
   TextColumn get id => text()(); // e.g. 'valera_1', 'sse_40'
-  TextColumn get translationKey => text().named('translation_key')(); // 'valera', 'sse', 'rv1858'
+  TextColumn get translationKey =>
+      text().named('translation_key')(); // 'valera', 'sse', 'rv1858'
   IntColumn get bookNumber => integer().named('book_number')(); // 1..66
   TextColumn get bookCode => text().named('book_code')(); // 'GEN', 'MAT', etc.
   TextColumn get name => text()(); // 'Génesis', 'San Mateo'
   IntColumn get totalChapters => integer().named('total_chapters')();
-  BoolColumn get isNewTestament => boolean().withDefault(const Constant(false)).named('is_new_testament')();
+  BoolColumn get isNewTestament =>
+      boolean().withDefault(const Constant(false)).named('is_new_testament')();
   TextColumn get url => text().nullable()();
   TextColumn get sha => text().nullable()();
-  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime).named('created_at')();
+  DateTimeColumn get createdAt =>
+      dateTime().withDefault(currentDateAndTime).named('created_at')();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -38,9 +41,11 @@ class LocalBibleTranslations extends Table {
   TextColumn get description => text().nullable()();
   TextColumn get language => text().withDefault(const Constant('Spanish'))();
   TextColumn get direction => text().withDefault(const Constant('LTR'))();
-  TextColumn get distributionAbbreviation => text().nullable().named('distribution_abbreviation')();
+  TextColumn get distributionAbbreviation =>
+      text().nullable().named('distribution_abbreviation')();
   TextColumn get url => text().nullable()();
-  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime).named('created_at')();
+  DateTimeColumn get createdAt =>
+      dateTime().withDefault(currentDateAndTime).named('created_at')();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -57,8 +62,10 @@ class LocalBookmarks extends Table {
   TextColumn get colorHex => text().named('color_hex')();
   TextColumn get customTitle => text().nullable().named('custom_title')();
   TextColumn get personalNote => text().nullable().named('personal_note')();
-  BoolColumn get isSynced => boolean().withDefault(const Constant(false)).named('is_synced')();
-  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime).named('created_at')();
+  BoolColumn get isSynced =>
+      boolean().withDefault(const Constant(false)).named('is_synced')();
+  DateTimeColumn get createdAt =>
+      dateTime().withDefault(currentDateAndTime).named('created_at')();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -70,7 +77,8 @@ class EventCategories extends Table {
   TextColumn get name => text()();
   TextColumn get colorHex => text().named('color_hex')();
   TextColumn get iconName => text().named('icon_name')();
-  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime).named('created_at')();
+  DateTimeColumn get createdAt =>
+      dateTime().withDefault(currentDateAndTime).named('created_at')();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -79,16 +87,23 @@ class EventCategories extends Table {
 @DataClassName('UserEventEntry')
 class UserEvents extends Table {
   TextColumn get id => text()();
-  TextColumn get categoryId => text().named('category_id').references(EventCategories, #id)();
+  TextColumn get categoryId =>
+      text().named('category_id').references(EventCategories, #id)();
   TextColumn get title => text()();
   TextColumn get description => text()();
-  TextColumn get linkedVersesJson => text().withDefault(const Constant('[]')).named('linked_verses_json')();
+  TextColumn get linkedVersesJson =>
+      text().withDefault(const Constant('[]')).named('linked_verses_json')();
   DateTimeColumn get eventDate => dateTime().named('event_date')();
-  BoolColumn get hasFoodService => boolean().withDefault(const Constant(false)).named('has_food_service')();
-  TextColumn get foodServiceDetails => text().nullable().named('food_service_details')();
-  BoolColumn get hasChildCare => boolean().withDefault(const Constant(false)).named('has_child_care')();
-  BoolColumn get hasBookSales => boolean().withDefault(const Constant(false)).named('has_book_sales')();
-  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime).named('created_at')();
+  BoolColumn get hasFoodService =>
+      boolean().withDefault(const Constant(false)).named('has_food_service')();
+  TextColumn get foodServiceDetails =>
+      text().nullable().named('food_service_details')();
+  BoolColumn get hasChildCare =>
+      boolean().withDefault(const Constant(false)).named('has_child_care')();
+  BoolColumn get hasBookSales =>
+      boolean().withDefault(const Constant(false)).named('has_book_sales')();
+  DateTimeColumn get createdAt =>
+      dateTime().withDefault(currentDateAndTime).named('created_at')();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -97,13 +112,16 @@ class UserEvents extends Table {
 @DataClassName('FoodCourtMenuEntry')
 class FoodCourtMenus extends Table {
   TextColumn get id => text()();
-  TextColumn get churchId => text().withDefault(const Constant('default_church')).named('church_id')();
+  TextColumn get churchId =>
+      text().withDefault(const Constant('default_church')).named('church_id')();
   TextColumn get title => text()();
   TextColumn get description => text()();
   RealColumn get price => real()();
   TextColumn get shift => text()(); // 'day', 'night', 'both'
-  BoolColumn get isAvailable => boolean().withDefault(const Constant(true)).named('is_available')();
-  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime).named('created_at')();
+  BoolColumn get isAvailable =>
+      boolean().withDefault(const Constant(true)).named('is_available')();
+  DateTimeColumn get createdAt =>
+      dateTime().withDefault(currentDateAndTime).named('created_at')();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -118,11 +136,39 @@ class LocalBibleChapters extends Table {
   TextColumn get bookName => text().named('book_name')();
   IntColumn get chapter => integer()();
   TextColumn get versesJson => text().named('verses_json')();
-  IntColumn get verseCount => integer().withDefault(const Constant(0)).named('verse_count')();
-  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime).named('created_at')();
+  IntColumn get verseCount =>
+      integer().withDefault(const Constant(0)).named('verse_count')();
+  DateTimeColumn get createdAt =>
+      dateTime().withDefault(currentDateAndTime).named('created_at')();
 
   @override
   Set<Column> get primaryKey => {id};
+}
+
+@DataClassName('LocalUserEntry')
+class LocalUsers extends Table {
+  TextColumn get id => text()();
+  TextColumn get authType => text().named('auth_type')();
+  TextColumn get email => text().nullable()();
+  TextColumn get remoteUserId => text().nullable().named('remote_user_id')();
+  TextColumn get displayName => text().nullable().named('display_name')();
+  DateTimeColumn get createdAt =>
+      dateTime().withDefault(currentDateAndTime).named('created_at')();
+  DateTimeColumn get lastSeenAt =>
+      dateTime().withDefault(currentDateAndTime).named('last_seen_at')();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DataClassName('UserPreferenceEntry')
+class UserPreferences extends Table {
+  TextColumn get userId => text().named('user_id')();
+  TextColumn get key => text()();
+  TextColumn get value => text()();
+
+  @override
+  Set<Column> get primaryKey => {userId, key};
 }
 
 // =============================================================================
@@ -137,48 +183,97 @@ class LocalBibleChapters extends Table {
   LocalBibleBooks,
   LocalBibleTranslations,
   LocalBibleChapters,
+  LocalUsers,
+  UserPreferences,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-    onCreate: (Migrator m) async {
-      await m.createAll();
-      // Baseline Church Categories
-      await batch((b) {
-        b.insertAll(eventCategories, [
-          EventCategoriesCompanion.insert(
-            id: 'cat_predica',
-            name: 'Prédicas Dominicales',
-            colorHex: '#002147',
-            iconName: 'book-open',
-          ),
-          EventCategoriesCompanion.insert(
-            id: 'cat_devocional',
-            name: 'Devocionales & Oración',
-            colorHex: '#00A3E0',
-            iconName: 'sun',
-          ),
-          EventCategoriesCompanion.insert(
-            id: 'cat_matrimonios',
-            name: 'Reunión de Matrimonios',
-            colorHex: '#F47B20',
-            iconName: 'heart',
-          ),
-          EventCategoriesCompanion.insert(
-            id: 'cat_jovenes',
-            name: 'Reunión de Jóvenes',
-            colorHex: '#10B981',
-            iconName: 'users',
-          ),
-        ]);
-      });
-    },
-  );
+        onCreate: (Migrator m) async {
+          await m.createAll();
+          // Baseline Church Categories
+          await batch((b) {
+            b.insertAll(eventCategories, [
+              EventCategoriesCompanion.insert(
+                id: 'cat_predica',
+                name: 'Prédicas Dominicales',
+                colorHex: '#002147',
+                iconName: 'book-open',
+              ),
+              EventCategoriesCompanion.insert(
+                id: 'cat_devocional',
+                name: 'Devocionales & Oración',
+                colorHex: '#00A3E0',
+                iconName: 'sun',
+              ),
+              EventCategoriesCompanion.insert(
+                id: 'cat_matrimonios',
+                name: 'Reunión de Matrimonios',
+                colorHex: '#F47B20',
+                iconName: 'heart',
+              ),
+              EventCategoriesCompanion.insert(
+                id: 'cat_jovenes',
+                name: 'Reunión de Jóvenes',
+                colorHex: '#10B981',
+                iconName: 'users',
+              ),
+            ]);
+          });
+        },
+        onUpgrade: (Migrator m, int from, int to) async {
+          if (from < 2) {
+            await m.createTable(localUsers);
+            await m.createTable(userPreferences);
+          }
+        },
+      );
+
+  Future<LocalUserEntry?> getUser(String id) {
+    return (select(localUsers)..where((t) => t.id.equals(id)))
+        .getSingleOrNull();
+  }
+
+  Future<LocalUserEntry?> getGuestUser() {
+    return (select(localUsers)..where((t) => t.authType.equals('guest')))
+        .getSingleOrNull();
+  }
+
+  Future<void> saveUser(LocalUsersCompanion user) async {
+    await into(localUsers).insertOnConflictUpdate(user);
+  }
+
+  Future<void> touchUser(String id) async {
+    await (update(localUsers)..where((t) => t.id.equals(id))).write(
+      LocalUsersCompanion(lastSeenAt: Value(DateTime.now())),
+    );
+  }
+
+  Future<Map<String, String>> getUserPreferences(String userId) async {
+    final entries = await (select(userPreferences)
+          ..where((t) => t.userId.equals(userId)))
+        .get();
+    return {for (final entry in entries) entry.key: entry.value};
+  }
+
+  Future<void> saveUserPreference({
+    required String userId,
+    required String key,
+    required String value,
+  }) async {
+    await into(userPreferences).insertOnConflictUpdate(
+      UserPreferencesCompanion.insert(
+        userId: userId,
+        key: key,
+        value: value,
+      ),
+    );
+  }
 
   // ---------------------------------------------------------------------------
   // BIBLE BOOKS & TRANSLATIONS CRUD & SEEDING
@@ -203,7 +298,8 @@ class AppDatabase extends _$AppDatabase {
         .get();
   }
 
-  Future<BibleBookEntry?> getBookByCode(String translationKey, String bookCode) {
+  Future<BibleBookEntry?> getBookByCode(
+      String translationKey, String bookCode) {
     return (select(localBibleBooks)
           ..where((t) =>
               t.translationKey.equals(translationKey) &
@@ -211,7 +307,8 @@ class AppDatabase extends _$AppDatabase {
         .getSingleOrNull();
   }
 
-  Future<BibleBookEntry?> getBookByNumber(String translationKey, int bookNumber) {
+  Future<BibleBookEntry?> getBookByNumber(
+      String translationKey, int bookNumber) {
     return (select(localBibleBooks)
           ..where((t) =>
               t.translationKey.equals(translationKey) &
@@ -240,7 +337,8 @@ class AppDatabase extends _$AppDatabase {
 
       // 1. Seed Translations Catalog from assets/data/translations_catalog.json
       try {
-        final catalogString = await rootBundle.loadString('assets/data/translations_catalog.json');
+        final catalogString = await rootBundle
+            .loadString('assets/data/translations_catalog.json');
         final catalogJson = json.decode(catalogString) as Map<String, dynamic>;
 
         final translationsList = <LocalBibleTranslationsCompanion>[];
@@ -253,7 +351,8 @@ class AppDatabase extends _$AppDatabase {
               description: Value(val['description'] as String?),
               language: Value(val['language'] as String? ?? 'Spanish'),
               direction: Value(val['direction'] as String? ?? 'LTR'),
-              distributionAbbreviation: Value(val['distribution_abbreviation'] as String?),
+              distributionAbbreviation:
+                  Value(val['distribution_abbreviation'] as String?),
               url: Value(val['url'] as String?),
             ));
           }
@@ -261,7 +360,8 @@ class AppDatabase extends _$AppDatabase {
 
         if (translationsList.isNotEmpty) {
           await batch((b) {
-            b.insertAllOnConflictUpdate(localBibleTranslations, translationsList);
+            b.insertAllOnConflictUpdate(
+                localBibleTranslations, translationsList);
           });
         }
       } catch (e) {
@@ -374,7 +474,7 @@ class AppDatabase extends _$AppDatabase {
         translationKey: translationKey,
         bookNumber: bookNumber,
         bookCode: bookCode,
-        name: bookName,
+        bookName: bookName,
         chapter: chapter,
         versesJson: versesJson,
         verseCount: Value(verseCount),
@@ -382,7 +482,8 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  Future<void> saveChaptersBatch(List<LocalBibleChaptersCompanion> chaptersList) async {
+  Future<void> saveChaptersBatch(
+      List<LocalBibleChaptersCompanion> chaptersList) async {
     if (chaptersList.isEmpty) return;
     await batch((b) {
       b.insertAllOnConflictUpdate(localBibleChapters, chaptersList);
@@ -420,29 +521,38 @@ class AppDatabase extends _$AppDatabase {
   // ---------------------------------------------------------------------------
   Future<List<LocalBookmarkEntry>> getAllBookmarks() {
     return (select(localBookmarks)
-          ..orderBy([(t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)]))
+          ..orderBy([
+            (t) =>
+                OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)
+          ]))
         .get();
   }
 
   Stream<List<LocalBookmarkEntry>> watchAllBookmarks() {
     return (select(localBookmarks)
-          ..orderBy([(t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)]))
+          ..orderBy([
+            (t) =>
+                OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)
+          ]))
         .watch();
   }
 
-  Stream<List<LocalBookmarkEntry>> watchBookmarksForChapter(String bookId, int chapter) {
+  Stream<List<LocalBookmarkEntry>> watchBookmarksForChapter(
+      String bookId, int chapter) {
     return (select(localBookmarks)
           ..where((t) => t.bookId.equals(bookId) & t.chapter.equals(chapter)))
         .watch();
   }
 
-  Future<List<LocalBookmarkEntry>> getBookmarksForChapter(String bookId, int chapter) {
+  Future<List<LocalBookmarkEntry>> getBookmarksForChapter(
+      String bookId, int chapter) {
     return (select(localBookmarks)
           ..where((t) => t.bookId.equals(bookId) & t.chapter.equals(chapter)))
         .get();
   }
 
-  Future<LocalBookmarkEntry?> getBookmark(String bookId, int chapter, int verse) {
+  Future<LocalBookmarkEntry?> getBookmark(
+      String bookId, int chapter, int verse) {
     return (select(localBookmarks)
           ..where((t) =>
               t.bookId.equals(bookId) &
@@ -489,7 +599,10 @@ class AppDatabase extends _$AppDatabase {
 
   Future<int> deleteBookmarkByVerse(String bookId, int chapter, int verse) {
     return (delete(localBookmarks)
-          ..where((t) => t.bookId.equals(bookId) & t.chapter.equals(chapter) & t.verse.equals(verse)))
+          ..where((t) =>
+              t.bookId.equals(bookId) &
+              t.chapter.equals(chapter) &
+              t.verse.equals(verse)))
         .go();
   }
 
@@ -497,11 +610,15 @@ class AppDatabase extends _$AppDatabase {
   // EVENT CATEGORIES CRUD
   // ---------------------------------------------------------------------------
   Stream<List<EventCategoryEntry>> watchAllCategories() {
-    return (select(eventCategories)..orderBy([(t) => OrderingTerm(expression: t.name)])).watch();
+    return (select(eventCategories)
+          ..orderBy([(t) => OrderingTerm(expression: t.name)]))
+        .watch();
   }
 
   Future<List<EventCategoryEntry>> getAllCategories() {
-    return (select(eventCategories)..orderBy([(t) => OrderingTerm(expression: t.name)])).get();
+    return (select(eventCategories)
+          ..orderBy([(t) => OrderingTerm(expression: t.name)]))
+        .get();
   }
 
   Future<int> insertCategory(EventCategoriesCompanion entry) {
@@ -517,14 +634,20 @@ class AppDatabase extends _$AppDatabase {
   // ---------------------------------------------------------------------------
   Stream<List<UserEventEntry>> watchAllEvents() {
     return (select(userEvents)
-          ..orderBy([(t) => OrderingTerm(expression: t.eventDate, mode: OrderingMode.desc)]))
+          ..orderBy([
+            (t) =>
+                OrderingTerm(expression: t.eventDate, mode: OrderingMode.desc)
+          ]))
         .watch();
   }
 
   Stream<List<UserEventEntry>> watchEventsByCategory(String categoryId) {
     return (select(userEvents)
           ..where((t) => t.categoryId.equals(categoryId))
-          ..orderBy([(t) => OrderingTerm(expression: t.eventDate, mode: OrderingMode.desc)]))
+          ..orderBy([
+            (t) =>
+                OrderingTerm(expression: t.eventDate, mode: OrderingMode.desc)
+          ]))
         .watch();
   }
 
@@ -542,7 +665,10 @@ class AppDatabase extends _$AppDatabase {
   Stream<List<FoodCourtMenuEntry>> watchAvailableMenus() {
     return (select(foodCourtMenus)
           ..where((t) => t.isAvailable.equals(true))
-          ..orderBy([(t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)]))
+          ..orderBy([
+            (t) =>
+                OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)
+          ]))
         .watch();
   }
 

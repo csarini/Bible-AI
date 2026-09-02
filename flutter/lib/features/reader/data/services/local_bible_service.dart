@@ -120,15 +120,14 @@ class LocalBibleService {
       );
 
       if (localEntry != null && localEntry.versesJson.isNotEmpty) {
-        final decodedList =
-            json.decode(localEntry.versesJson) as List<dynamic>;
+        final decodedList = json.decode(localEntry.versesJson) as List<dynamic>;
         final verses = decodedList
             .map((v) => LocalBibleVerseDto.fromJson(v as Map<String, dynamic>))
             .toList();
 
         if (verses.isNotEmpty) {
-          final resolvedBookName = localEntry.name.isNotEmpty
-              ? localEntry.name
+          final resolvedBookName = localEntry.bookName.isNotEmpty
+              ? localEntry.bookName
               : (bookName ?? 'Libro $bookNumber');
 
           return LocalBibleChapterResponse(
@@ -143,7 +142,8 @@ class LocalBibleService {
         }
       }
     } catch (e) {
-      debugPrint('Local SQLite query error for $cleanTranslation $bookNumber:$chapterNumber: $e');
+      debugPrint(
+          'Local SQLite query error for $cleanTranslation $bookNumber:$chapterNumber: $e');
     }
 
     // 2. OFFLINE ASSET JSON FALLBACK (If not yet imported in SQLite)
@@ -182,7 +182,8 @@ class LocalBibleService {
       final jsonString = await rootBundle.loadString(assetPath);
       final bookMap = json.decode(jsonString) as Map<String, dynamic>;
 
-      final loadedBookName = bookMap['name'] as String? ?? bookName ?? 'Libro $bookNumber';
+      final loadedBookName =
+          bookMap['name'] as String? ?? bookName ?? 'Libro $bookNumber';
       final chapters = bookMap['chapters'] as List<dynamic>? ?? [];
 
       // Find the requested chapter
@@ -200,7 +201,8 @@ class LocalBibleService {
           return LocalBibleVerseDto(
             chapter: chapterNumber,
             verse: v['verse'] as int? ?? 1,
-            name: v['name'] as String? ?? '$loadedBookName $chapterNumber:${v['verse']}',
+            name: v['name'] as String? ??
+                '$loadedBookName $chapterNumber:${v['verse']}',
             text: (v['text'] as String? ?? '').trim(),
           );
         }).toList();

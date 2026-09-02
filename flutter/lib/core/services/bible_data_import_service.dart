@@ -41,7 +41,8 @@ class BibleDataImportService {
     // -------------------------------------------------------------------------
     onProgress(0.03, 'Cargando traducciones canónicas...');
     try {
-      final catalogString = await rootBundle.loadString('assets/data/translations_catalog.json');
+      final catalogString =
+          await rootBundle.loadString('assets/data/translations_catalog.json');
       final catalogJson = json.decode(catalogString) as Map<String, dynamic>;
 
       final translationsList = <LocalBibleTranslationsCompanion>[];
@@ -54,7 +55,8 @@ class BibleDataImportService {
             description: Value(val['description'] as String?),
             language: Value(val['language'] as String? ?? 'Spanish'),
             direction: Value(val['direction'] as String? ?? 'LTR'),
-            distributionAbbreviation: Value(val['distribution_abbreviation'] as String?),
+            distributionAbbreviation:
+                Value(val['distribution_abbreviation'] as String?),
             url: Value(val['url'] as String?),
           ));
         }
@@ -62,7 +64,8 @@ class BibleDataImportService {
 
       if (translationsList.isNotEmpty) {
         await database.batch((b) {
-          b.insertAllOnConflictUpdate(database.localBibleTranslations, translationsList);
+          b.insertAllOnConflictUpdate(
+              database.localBibleTranslations, translationsList);
         });
       }
     } catch (e) {
@@ -123,9 +126,24 @@ class BibleDataImportService {
     // 3. IMPORT CHAPTERS & VERSES FROM JSON ASSETS FOR ALL TRANSLATIONS
     // -------------------------------------------------------------------------
     final translationConfigs = [
-      (key: 'valera', name: 'Reina Valera (1909)', folder: 'valera_json', prefix: 'valera'),
-      (key: 'sse', name: 'Sagradas Escrituras (1569)', folder: 'sse_json', prefix: 'sse'),
-      (key: 'rv1858', name: 'Reina Valera NT (1858)', folder: 'rv1858_json', prefix: 'rv1858'),
+      (
+        key: 'valera',
+        name: 'Reina Valera (1909)',
+        folder: 'valera_json',
+        prefix: 'valera'
+      ),
+      (
+        key: 'sse',
+        name: 'Sagradas Escrituras (1569)',
+        folder: 'sse_json',
+        prefix: 'sse'
+      ),
+      (
+        key: 'rv1858',
+        name: 'Reina Valera NT (1858)',
+        folder: 'rv1858_json',
+        prefix: 'rv1858'
+      ),
     ];
 
     const int totalBooksPerTranslation = 66;
@@ -134,7 +152,8 @@ class BibleDataImportService {
 
     for (final config in translationConfigs) {
       for (int bookNr = 1; bookNr <= totalBooksPerTranslation; bookNr++) {
-        final filePath = 'assets/data/${config.folder}/${config.prefix}_$bookNr.json';
+        final filePath =
+            'assets/data/${config.folder}/${config.prefix}_$bookNr.json';
 
         try {
           final jsonString = await rootBundle.loadString(filePath);
@@ -167,7 +186,7 @@ class BibleDataImportService {
                   translationKey: config.key,
                   bookNumber: bookNr,
                   bookCode: meta.code,
-                  name: bookName,
+                  bookName: bookName,
                   chapter: chNum,
                   versesJson: json.encode(versesData),
                   verseCount: Value(versesData.length),

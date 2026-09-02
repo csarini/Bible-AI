@@ -92,7 +92,8 @@ class OfflineBibleSyncService {
   Future<void> _initInitialStatus() async {
     final count = await database.countStoredChapters();
     final isComplete = count >= 1189;
-    final pct = (count / totalBibleChaptersAllTranslations * 100.0).clamp(0.0, 100.0);
+    final pct =
+        (count / totalBibleChaptersAllTranslations * 100.0).clamp(0.0, 100.0);
 
     _updateStatus(_currentStatus.copyWith(
       downloadedChapters: count,
@@ -153,8 +154,7 @@ class OfflineBibleSyncService {
           try {
             final jsonString = await rootBundle.loadString(filePath);
             final bookMap = json.decode(jsonString) as Map<String, dynamic>;
-            final bookName =
-                bookMap['name'] as String? ?? 'Libro $bookNr';
+            final bookName = bookMap['name'] as String? ?? 'Libro $bookNr';
             final meta = kCanonicalBookMetadata[bookNr] ??
                 (code: 'BK$bookNr', chapters: 1, isNT: bookNr >= 40);
 
@@ -163,15 +163,13 @@ class OfflineBibleSyncService {
               activeChapter: 1,
             ));
 
-            final chaptersList =
-                bookMap['chapters'] as List<dynamic>? ?? [];
+            final chaptersList = bookMap['chapters'] as List<dynamic>? ?? [];
             final chaptersToInsert = <LocalBibleChaptersCompanion>[];
 
             for (final chItem in chaptersList) {
               if (chItem is Map<String, dynamic>) {
                 final chNum = chItem['chapter'] as int? ?? 1;
-                final rawVerses =
-                    chItem['verses'] as List<dynamic>? ?? [];
+                final rawVerses = chItem['verses'] as List<dynamic>? ?? [];
 
                 final versesData = rawVerses.map((v) {
                   return {
@@ -188,7 +186,7 @@ class OfflineBibleSyncService {
                     translationKey: config.key,
                     bookNumber: bookNr,
                     bookCode: meta.code,
-                    name: bookName,
+                    bookName: bookName,
                     chapter: chNum,
                     versesJson: json.encode(versesData),
                     verseCount: Value(versesData.length),
@@ -241,13 +239,15 @@ class OfflineBibleSyncService {
 
   void pause() {
     _isPaused = true;
-    _updateStatus(_currentStatus.copyWith(isPaused: true, isDownloading: false));
+    _updateStatus(
+        _currentStatus.copyWith(isPaused: true, isDownloading: false));
   }
 
   void resume() {
     if (_isPaused) {
       _isPaused = false;
-      _updateStatus(_currentStatus.copyWith(isPaused: false, isDownloading: true));
+      _updateStatus(
+          _currentStatus.copyWith(isPaused: false, isDownloading: true));
     } else if (!_isRunning) {
       startBackgroundSync();
     }

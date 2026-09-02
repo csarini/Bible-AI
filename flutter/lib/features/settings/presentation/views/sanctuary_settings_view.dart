@@ -115,8 +115,8 @@ class SanctuarySettingsView extends ConsumerWidget {
             const SizedBox(width: 8),
             Text(
               'Restaurar Respaldo JSON',
-              style: GoogleFonts.inter(
-                  fontWeight: FontWeight.w800, fontSize: 16),
+              style:
+                  GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 16),
             ),
           ],
         ),
@@ -275,8 +275,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                         subtitle: 'Pergamino',
                         isSelected: visualTheme == AppVisualTheme.light,
                         onTap: () => ref
-                            .read(appVisualThemeModeProvider.notifier)
-                            .state = AppVisualTheme.light,
+                            .read(appSettingsControllerProvider)
+                            .setTheme(ref, AppVisualTheme.light),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -287,8 +287,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                         subtitle: 'Cálido',
                         isSelected: visualTheme == AppVisualTheme.sepia,
                         onTap: () => ref
-                            .read(appVisualThemeModeProvider.notifier)
-                            .state = AppVisualTheme.sepia,
+                            .read(appSettingsControllerProvider)
+                            .setTheme(ref, AppVisualTheme.sepia),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -299,8 +299,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                         subtitle: 'Noche',
                         isSelected: visualTheme == AppVisualTheme.dark,
                         onTap: () => ref
-                            .read(appVisualThemeModeProvider.notifier)
-                            .state = AppVisualTheme.dark,
+                            .read(appSettingsControllerProvider)
+                            .setTheme(ref, AppVisualTheme.dark),
                       ),
                     ),
                   ],
@@ -326,8 +326,9 @@ class SanctuarySettingsView extends ConsumerWidget {
                   abbreviation: 'RVR1909',
                   description: 'Texto canónico en español clásico protestante.',
                   isSelected: translation == 'valera',
-                  onTap: () => ref.read(appTranslationProvider.notifier).state =
-                      'valera',
+                  onTap: () => ref
+                      .read(appSettingsControllerProvider)
+                      .setTranslation(ref, 'valera'),
                 ),
                 const Divider(height: 20),
                 _buildTranslationRow(
@@ -337,8 +338,9 @@ class SanctuarySettingsView extends ConsumerWidget {
                   description:
                       'Casiodoro de Reina, traducción histórica original.',
                   isSelected: translation == 'sse',
-                  onTap: () =>
-                      ref.read(appTranslationProvider.notifier).state = 'sse',
+                  onTap: () => ref
+                      .read(appSettingsControllerProvider)
+                      .setTranslation(ref, 'sse'),
                 ),
                 const Divider(height: 20),
                 _buildTranslationRow(
@@ -347,8 +349,9 @@ class SanctuarySettingsView extends ConsumerWidget {
                   abbreviation: 'RV 1858',
                   description: 'Nuevo Testamento, revisión histórica de 1858.',
                   isSelected: translation == 'rv1858',
-                  onTap: () => ref.read(appTranslationProvider.notifier).state =
-                      'rv1858',
+                  onTap: () => ref
+                      .read(appSettingsControllerProvider)
+                      .setTranslation(ref, 'rv1858'),
                 ),
               ],
             ),
