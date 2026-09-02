@@ -474,6 +474,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                     // Actions Row: Share Button + Save to Bookmarks Button (Icon-only with institutional colors)
                     Row(
                       children: [
+                        const Spacer(),
+
                         // Compartir Icon-only Button
                         IconButton.outlined(
                           onPressed: _shareCurrentVerse,
@@ -496,10 +498,9 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                             minimumSize: const Size(44, 44),
                           ),
                         ),
-                        const SizedBox(width: 10),
 
                         // Guardar en la Sección de Guardados Button (Icon-only with institutional colors)
-                        IconButton.filled(
+                        IconButton.outlined(
                           onPressed: _saveToBookmarks,
                           tooltip: _isSavedInBookmarks
                               ? 'Guardado en notas'
@@ -509,36 +510,19 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                                 ? LucideIcons.bookmarkCheck
                                 : LucideIcons.bookmark,
                             size: 19,
-                            color: _isSavedInBookmarks
-                                ? Colors.white
-                                : SanctuaryColors.amberGold,
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.85),
                           ),
                           style: IconButton.styleFrom(
-                            backgroundColor: _isSavedInBookmarks
-                                ? SanctuaryColors.emeraldGreen
-                                : SanctuaryColors.waveNavy,
+                            side: BorderSide(
+                              color: theme.colorScheme.outline
+                                  .withValues(alpha: 0.35),
+                            ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             padding: const EdgeInsets.all(10),
                             minimumSize: const Size(44, 44),
-                          ),
-                        ),
-
-                        const Spacer(),
-
-                        // Shortcut to open Saved Verses tab
-                        IconButton.filledTonal(
-                          onPressed: () => widget.onNavigateTab(3),
-                          tooltip: 'Ver Guardados & Notas',
-                          icon: Icon(
-                            LucideIcons.folderHeart,
-                            size: 18,
-                            color: theme.colorScheme.primary,
-                          ),
-                          style: IconButton.styleFrom(
-                            padding: const EdgeInsets.all(8),
-                            minimumSize: const Size(36, 36),
                           ),
                         ),
                       ],
