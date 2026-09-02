@@ -455,6 +455,34 @@ class AppDatabase extends _$AppDatabase {
     return into(localBookmarks).insertOnConflictUpdate(entry);
   }
 
+  Future<int> saveBookmark({
+    required String bookId,
+    String? bookName,
+    required int chapter,
+    required int verse,
+    required String verseText,
+    String colorHex = '#FED65B',
+    String? customTitle,
+    String? personalNote,
+  }) {
+    final id = '${bookId}_${chapter}_$verse';
+    final resolvedBookName = bookName ?? bookId;
+    return into(localBookmarks).insertOnConflictUpdate(
+      LocalBookmarksCompanion(
+        id: Value(id),
+        bookId: Value(bookId),
+        bookName: Value(resolvedBookName),
+        chapter: Value(chapter),
+        verse: Value(verse),
+        verseText: Value(verseText),
+        colorHex: Value(colorHex),
+        customTitle: Value(customTitle),
+        personalNote: Value(personalNote),
+        createdAt: Value(DateTime.now()),
+      ),
+    );
+  }
+
   Future<int> deleteBookmark(String id) {
     return (delete(localBookmarks)..where((t) => t.id.equals(id))).go();
   }
