@@ -141,19 +141,16 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
     loadChapter();
   }, [loadChapter]);
 
-  // Ensure scroll and selection trigger when target verse is provided
+  // Ensure scroll and highlight trigger when target verse is provided
   useEffect(() => {
     if (highlightedVerseNumber && verses.length > 0 && !loading) {
-      const verseObj = verses.find((v) => v.verse === highlightedVerseNumber);
-      if (verseObj) {
-        setSelectedVerse(verseObj);
-      }
+      setSelectedVerse(null);
       const scrollTimer = setTimeout(() => {
         const el = document.getElementById(`verse-row-${highlightedVerseNumber}`);
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-      }, 150);
+      }, 180);
       return () => clearTimeout(scrollTimer);
     }
   }, [highlightedVerseNumber, verses, loading]);

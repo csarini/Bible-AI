@@ -30,11 +30,6 @@ export const BottomNavBar: React.FC<BottomNavBarProps> = ({
       icon: BookOpen
     },
     {
-      id: 'maps' as ActiveTab,
-      label: 'Mapas',
-      icon: Compass
-    },
-    {
       id: 'library' as ActiveTab,
       label: 'Buscar',
       icon: Library

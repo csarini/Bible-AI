@@ -34,6 +34,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
   bool _isLoading = true;
   String? _errorMessage;
   List<VerseEntity> _verses = [];
+  final Map<int, GlobalKey> _verseKeys = {};
 
   int? _targetHighlightedVerse;
   VerseEntity? _selectedVerse;
@@ -61,36 +62,64 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
     super.dispose();
   }
 
-  void _scrollToAndHighlightVerse(int verseNumber) {
+  void _scrollToAndHighlightVerse(int verseNumber, {int retryCount = 0}) {
     if (_verses.isEmpty) return;
     final index = _verses.indexWhere((v) => v.number == verseNumber);
-    if (index != -1) {
-      setState(() {
-        _targetHighlightedVerse = verseNumber;
-        _selectedVerse = null;
-        _selectedBookmark = null;
-      });
-      Future.delayed(const Duration(milliseconds: 120), () {
-        if (!mounted || !_scrollController.hasClients) return;
-        final maxScroll = _scrollController.position.maxScrollExtent;
-        final targetOffset =
-            (_verses.length > 1) ? (index / _verses.length) * maxScroll : 0.0;
-        _scrollController.animateTo(
-          targetOffset.clamp(0.0, maxScroll),
+    if (index == -1) return;
+
+    setState(() {
+      _targetHighlightedVerse = verseNumber;
+      _selectedVerse = null;
+      _selectedBookmark = null;
+    });
+
+    void performScroll() {
+      if (!mounted) return;
+      final key = _verseKeys[verseNumber];
+      final targetContext = key?.currentContext;
+
+      if (targetContext != null) {
+        Scrollable.ensureVisible(
+          targetContext,
           duration: const Duration(milliseconds: 380),
-          curve: Curves.easeInOut,
+          curve: Curves.easeInOutCubic,
+          alignment: 0.22,
         );
-      });
+      } else if (_scrollController.hasClients) {
+        final maxScroll = _scrollController.position.maxScrollExtent;
+        if (maxScroll > 0) {
+          final estOffset = (_verses.length > 1)
+              ? (index / _verses.length) * maxScroll
+              : 0.0;
+          _scrollController.jumpTo(estOffset.clamp(0.0, maxScroll));
+        }
+        if (retryCount < 4) {
+          Future.delayed(const Duration(milliseconds: 90), () {
+            if (mounted) {
+              _scrollToAndHighlightVerse(verseNumber,
+                  retryCount: retryCount + 1);
+            }
+          });
+        }
+      }
+    }
+
+    if (retryCount == 0) {
+      Future.delayed(const Duration(milliseconds: 100), performScroll);
+    } else {
+      performScroll();
     }
   }
 
   Future<void> _loadChapter([int? targetVerseNumber]) async {
+    final targetVerse = targetVerseNumber ?? ref.read(appSelectedVerseProvider);
+    _verseKeys.clear();
     setState(() {
       _isLoading = true;
       _errorMessage = null;
       _selectedVerse = null;
       _selectedBookmark = null;
-      _targetHighlightedVerse = targetVerseNumber;
+      _targetHighlightedVerse = targetVerse;
     });
 
     final translation = ref.read(appTranslationProvider);
@@ -117,16 +146,22 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
       }).toList();
 
       if (mounted) {
-        final targetVerse =
-            targetVerseNumber ?? ref.read(appSelectedVerseProvider);
+        final verseToScroll = _targetHighlightedVerse ??
+            targetVerse ??
+            ref.read(appSelectedVerseProvider);
         setState(() {
           _verses = verses;
           _isLoading = false;
-          _targetHighlightedVerse = targetVerse;
+          _targetHighlightedVerse = verseToScroll;
         });
-        if (targetVerse != null) {
+
+        if (verseToScroll != null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            _scrollToAndHighlightVerse(targetVerse);
+            Future.delayed(const Duration(milliseconds: 150), () {
+              if (mounted) {
+                _scrollToAndHighlightVerse(verseToScroll);
+              }
+            });
           });
         } else if (_scrollController.hasClients) {
           _scrollController.animateTo(
@@ -471,7 +506,9 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
 
     ref.listen<int?>(appSelectedVerseProvider, (previous, next) {
       if (next != null) {
-        if (_verses.isNotEmpty) {
+        if (_isLoading) {
+          _targetHighlightedVerse = next;
+        } else if (_verses.isNotEmpty) {
           _scrollToAndHighlightVerse(next);
         }
       }
@@ -497,10 +534,12 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
             _currentChapter = targetChapter;
           });
           _loadChapter(targetVerse);
-        } else if (targetVerse != null && _verses.isNotEmpty) {
-          Future.delayed(const Duration(milliseconds: 80), () {
-            if (mounted) _scrollToAndHighlightVerse(targetVerse);
-          });
+        } else if (targetVerse != null) {
+          if (_isLoading) {
+            _targetHighlightedVerse = targetVerse;
+          } else if (_verses.isNotEmpty) {
+            _scrollToAndHighlightVerse(targetVerse);
+          }
         }
       }
     });
@@ -662,7 +701,11 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                   width: 1.5);
             }
 
+            final verseKey =
+                _verseKeys.putIfAbsent(verse.number, () => GlobalKey());
+
             return GestureDetector(
+              key: verseKey,
               onTap: () => _onVerseTapped(verse),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 180),

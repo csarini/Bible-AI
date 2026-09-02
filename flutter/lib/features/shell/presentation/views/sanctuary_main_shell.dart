@@ -71,7 +71,7 @@ class SanctuaryMainShell extends ConsumerWidget {
       SanctuarySettingsView(database: database),
     ];
 
-    // Bottom Navigation Bar mapping for primary 5 destinations
+    // Bottom Navigation Bar mapping for primary 4 destinations
     int bottomNavIndex = 0;
     if (currentTab == 0)
       bottomNavIndex = 0;
@@ -81,10 +81,8 @@ class SanctuaryMainShell extends ConsumerWidget {
       bottomNavIndex = 2;
     else if (currentTab == 3)
       bottomNavIndex = 3;
-    else if (currentTab == 4)
-      bottomNavIndex = 4;
     else
-      bottomNavIndex = 0; // Default when viewing sub-tabs
+      bottomNavIndex = 0; // Default when viewing sub-tabs (Maps, Pulpit, AI, Settings)
 
     return Scaffold(
       key: sanctuaryScaffoldKey,
@@ -134,12 +132,6 @@ class SanctuaryMainShell extends ConsumerWidget {
             ),
             label: 'Guardados',
             tooltip: 'Versículos y Notas Guardadas',
-          ),
-          const NavigationDestination(
-            icon: Icon(LucideIcons.map, size: 20),
-            selectedIcon: Icon(LucideIcons.map, size: 20),
-            label: 'Mapas',
-            tooltip: 'Mapas Bíblicos Interactivos',
           ),
         ],
       ),
