@@ -22,6 +22,11 @@ class QuickSettingsSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
 
+    // Obtenemos el espacio del sistema inferior (barra de gestos/botones del móvil)
+    final double systemBottomPadding = MediaQuery.of(context).padding.bottom;
+    final double finalBottomPadding =
+        (systemBottomPadding > 0 ? systemBottomPadding : 16.0) + 24.0;
+
     final visualTheme = ref.watch(appVisualThemeModeProvider);
     final translation = ref.watch(appTranslationProvider);
     final fontSize = ref.watch(appFontSizeProvider);
@@ -65,7 +70,13 @@ class QuickSettingsSheet extends ConsumerWidget {
         color: theme.colorScheme.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+      // Se reemplaza el padding fijo por uno adaptativo en la parte inferior
+      padding: EdgeInsets.only(
+        left: 20,
+        top: 12,
+        right: 20,
+        bottom: finalBottomPadding,
+      ),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,25 +438,27 @@ class QuickSettingsSheet extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Mostrar números de versículo',
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13.5,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Mostrar números de versículo',
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13.5,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Facilita la ubicación de pasajes y referencias',
-                        style: GoogleFonts.inter(
-                          fontSize: 11,
-                          color: theme.colorScheme.onSurface
-                              .withValues(alpha: 0.6),
+                        Text(
+                          'Facilita la ubicación de pasajes y referencias',
+                          style: GoogleFonts.inter(
+                            fontSize: 11,
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.6),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Switch(
                     value: showVerseNumbers,
@@ -559,7 +572,9 @@ class QuickSettingsSheet extends ConsumerWidget {
             Icon(
               isSelected ? LucideIcons.checkCircle2 : LucideIcons.circle,
               size: 18,
-              color: isSelected ? tokens.activeState : theme.colorScheme.onSurface.withValues(alpha: 0.4),
+              color: isSelected
+                  ? tokens.activeState
+                  : theme.colorScheme.onSurface.withValues(alpha: 0.4),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -571,7 +586,11 @@ class QuickSettingsSheet extends ConsumerWidget {
                     style: GoogleFonts.inter(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: isSelected ? (tokens.activeState == SanctuaryColors.darkActive ? SanctuaryColors.amberGold : tokens.activeState) : theme.colorScheme.onSurface,
+                      color: isSelected
+                          ? (tokens.activeState == SanctuaryColors.darkActive
+                              ? SanctuaryColors.amberGold
+                              : tokens.activeState)
+                          : theme.colorScheme.onSurface,
                     ),
                   ),
                   Text(
