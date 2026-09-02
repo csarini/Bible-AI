@@ -74,15 +74,123 @@ export const SearchView: React.FC<SearchViewProps> = ({
   const oldTestament = allBooks.filter(b => b.testament === 'OT');
   const newTestament = allBooks.filter(b => b.testament === 'NT');
 
-  const filteredOT = oldTestament.filter(b =>
-    b.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
-    b.category.toLowerCase().includes(searchFilter.toLowerCase())
-  );
+  const normalize = (input: string) => {
+    return input
+      .toLowerCase()
+      .replaceAll('á', 'a')
+      .replaceAll('é', 'e')
+      .replaceAll('í', 'i')
+      .replaceAll('ó', 'o')
+      .replaceAll('ú', 'u')
+      .replaceAll('ü', 'u')
+      .replaceAll('ñ', 'n')
+      .replace(/\s+/g, ' ')
+      .trim();
+  };
 
-  const filteredNT = newTestament.filter(b =>
-    b.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
-    b.category.toLowerCase().includes(searchFilter.toLowerCase())
-  );
+  const aliases: Record<string, string> = {
+    'mateo': 'MAT', 'san mateo': 'MAT', 's. mateo': 'MAT', 's mateo': 'MAT', 'mat': 'MAT', 'mt': 'MAT',
+    'marcos': 'MRK', 'san marcos': 'MRK', 's. marcos': 'MRK', 's marcos': 'MRK', 'mrk': 'MRK', 'mc': 'MRK',
+    'lucas': 'LUK', 'san lucas': 'LUK', 's. lucas': 'LUK', 's lucas': 'LUK', 'luk': 'LUK', 'lc': 'LUK',
+    'juan': 'JHN', 'san juan': 'JHN', 's. juan': 'JHN', 's juan': 'JHN', 'jhn': 'JHN', 'jn': 'JHN',
+    'hechos': 'ACT', 'hechos de los apostoles': 'ACT', 'hch': 'ACT', 'act': 'ACT',
+    'romanos': 'ROM', 'rom': 'ROM', 'ro': 'ROM',
+    '1 corintios': '1CO', '1corintios': '1CO', '1 cor': '1CO', '1cor': '1CO', '1co': '1CO', '1 co': '1CO',
+    '2 corintios': '2CO', '2corintios': '2CO', '2 cor': '2CO', '2cor': '2CO', '2co': '2CO', '2 co': '2CO',
+    'galatas': 'GAL', 'gal': 'GAL', 'efesios': 'EPH', 'efe': 'EPH', 'eph': 'EPH',
+    'filipenses': 'PHP', 'fil': 'PHP', 'php': 'PHP', 'colosenses': 'COL', 'col': 'COL',
+    '1 tesalonicenses': '1TH', '1tesalonicenses': '1TH', '1 tes': '1TH', '1tes': '1TH', '1th': '1TH', '1 th': '1TH',
+    '2 tesalonicenses': '2TH', '2tesalonicenses': '2TH', '2 tes': '2TH', '2tes': '2TH', '2th': '2TH', '2 th': '2TH',
+    '1 timoteo': '1TI', '1timoteo': '1TI', '1 tim': '1TI', '1tim': '1TI', '1ti': '1TI', '1 ti': '1TI',
+    '2 timoteo': '2TI', '2timoteo': '2TI', '2 tim': '2TI', '2tim': '2TI', '2ti': '2TI', '2 ti': '2TI',
+    'tito': 'TIT', 'tit': 'TIT', 'filemon': 'PHM', 'phm': 'PHM', 'flm': 'PHM',
+    'hebreos': 'HEB', 'heb': 'HEB', 'santiago': 'JAS', 'stg': 'JAS', 'jas': 'JAS',
+    '1 pedro': '1PE', '1pedro': '1PE', '1 ped': '1PE', '1ped': '1PE', '1pe': '1PE', '1 pe': '1PE',
+    '2 pedro': '2PE', '2pedro': '2PE', '2 ped': '2PE', '2ped': '2PE', '2pe': '2PE', '2 pe': '2PE',
+    '1 juan': '1JN', '1juan': '1JN', '1 jn': '1JN', '1jn': '1JN', '1 j': '1JN', '1j': '1JN',
+    '2 juan': '2JN', '2juan': '2JN', '2 jn': '2JN', '2jn': '2JN', '2 j': '2JN', '2j': '2JN',
+    '3 juan': '3JN', '3juan': '3JN', '3 jn': '3JN', '3jn': '3JN', '3 j': '3JN', '3j': '3JN',
+    'judas': 'JUD', 'jud': 'JUD', 'jds': 'JUD', 'apocalipsis': 'REV', 'apoc': 'REV', 'apo': 'REV', 'rev': 'REV', 'revelacion': 'REV',
+    'genesis': 'GEN', 'gen': 'GEN', 'gn': 'GEN', 'exodo': 'EXO', 'exo': 'EXO', 'ex': 'EXO',
+    'levitico': 'LEV', 'lev': 'LEV', 'lv': 'LEV', 'numeros': 'NUM', 'num': 'NUM', 'nm': 'NUM',
+    'deuteronomio': 'DEU', 'deu': 'DEU', 'dt': 'DEU', 'josue': 'JOS', 'jos': 'JOS',
+    'jueces': 'JDG', 'jue': 'JDG', 'jdc': 'JDG', 'rut': 'RUT', 'rt': 'RUT',
+    '1 samuel': '1SA', '1samuel': '1SA', '1 sam': '1SA', '1sam': '1SA', '1sa': '1SA', '1 sa': '1SA',
+    '2 samuel': '2SA', '2samuel': '2SA', '2 sam': '2SA', '2sam': '2SA', '2sa': '2SA', '2 sa': '2SA',
+    '1 reyes': '1KI', '1reyes': '1KI', '1 rey': '1KI', '1rey': '1KI', '1ki': '1KI', '1 ki': '1KI',
+    '2 reyes': '2KI', '2reyes': '2KI', '2 rey': '2KI', '2rey': '2KI', '2ki': '2KI', '2 ki': '2KI',
+    '1 cronicas': '1CH', '1cronicas': '1CH', '1 cro': '1CH', '1cro': '1CH', '1ch': '1CH', '1 ch': '1CH',
+    '2 cronicas': '2CH', '2cronicas': '2CH', '2 cro': '2CH', '2cro': '2CH', '2ch': '2CH', '2 ch': '2CH',
+    'esdras': 'EZR', 'ezr': 'EZR', 'nehemias': 'NEH', 'neh': 'NEH', 'ester': 'EST', 'est': 'EST',
+    'job': 'JOB', 'jb': 'JOB', 'salmos': 'PSA', 'salmo': 'PSA', 'sal': 'PSA', 'psa': 'PSA', 'ps': 'PSA',
+    'proverbios': 'PRO', 'proverbio': 'PRO', 'prov': 'PRO', 'pro': 'PRO', 'prv': 'PRO',
+    'eclesiastes': 'ECC', 'ecl': 'ECC', 'ec': 'ECC', 'cantares': 'SNG', 'cantar': 'SNG', 'cantar de los cantares': 'SNG', 'cant': 'SNG', 'sng': 'SNG',
+    'isaias': 'ISA', 'isa': 'ISA', 'is': 'ISA', 'jeremias': 'JER', 'jer': 'JER', 'jr': 'JER',
+    'lamentaciones': 'LAM', 'lam': 'LAM', 'ezequiel': 'EZK', 'ezk': 'EZK', 'eze': 'EZK',
+    'daniel': 'DAN', 'dan': 'DAN', 'dn': 'DAN', 'oseas': 'HOS', 'hos': 'HOS', 'os': 'HOS',
+    'joel': 'JOL', 'jol': 'JOL', 'jl': 'JOL', 'amos': 'AMO', 'amo': 'AMO', 'am': 'AMO',
+    'abdias': 'OBA', 'oba': 'OBA', 'ob': 'OBA', 'jonas': 'JON', 'jon': 'JON',
+    'miqueas': 'MIC', 'mic': 'MIC', 'miq': 'MIC', 'nahum': 'NAM', 'nam': 'NAM', 'nah': 'NAM',
+    'habacuc': 'HAB', 'hab': 'HAB', 'sofonias': 'ZEP', 'zep': 'ZEP', 'sof': 'ZEP',
+    'hageo': 'HAG', 'hag': 'HAG', 'hg': 'HAG', 'zacarias': 'ZEC', 'zec': 'ZEC', 'zac': 'ZEC',
+    'malaquias': 'MAL', 'mal': 'MAL'
+  };
+
+  const findMatchingBook = (bookQuery: string) => {
+    const q = normalize(bookQuery);
+    if (!q) return null;
+
+    if (aliases[q]) {
+      const aliasId = aliases[q];
+      const match = allBooks.find(b => b.id.toUpperCase() === aliasId);
+      if (match) return match;
+    }
+
+    return allBooks.find(b => {
+      const normName = normalize(b.name);
+      const normNameWithoutSan = normName.replace(/^san\s+/, '');
+      const normAbbr = normalize(b.abbreviation);
+      const normId = normalize(b.id);
+      return (
+        normName === q ||
+        normNameWithoutSan === q ||
+        normAbbr === q ||
+        normId === q ||
+        normName.startsWith(q) ||
+        normNameWithoutSan.startsWith(q)
+      );
+    });
+  };
+
+  const normFilter = normalize(searchFilter);
+
+  const filteredOT = oldTestament.filter(b => {
+    if (!normFilter) return true;
+    const normName = normalize(b.name);
+    const normNameWithoutSan = normName.replace(/^san\s+/, '');
+    const normAbbr = normalize(b.abbreviation);
+    const normCat = normalize(b.category);
+    return (
+      normName.includes(normFilter) ||
+      normNameWithoutSan.includes(normFilter) ||
+      normAbbr.includes(normFilter) ||
+      normCat.includes(normFilter)
+    );
+  });
+
+  const filteredNT = newTestament.filter(b => {
+    if (!normFilter) return true;
+    const normName = normalize(b.name);
+    const normNameWithoutSan = normName.replace(/^san\s+/, '');
+    const normAbbr = normalize(b.abbreviation);
+    const normCat = normalize(b.category);
+    return (
+      normName.includes(normFilter) ||
+      normNameWithoutSan.includes(normFilter) ||
+      normAbbr.includes(normFilter) ||
+      normCat.includes(normFilter)
+    );
+  });
 
   // Load verses when selected book or chapter changes
   useEffect(() => {
@@ -146,34 +254,38 @@ export const SearchView: React.FC<SearchViewProps> = ({
 
   const handleRecentClick = (term: string) => {
     setSearchFilter(term);
-    onPerformSearchText(term);
+    const directMatch = parseDirectReference(term);
+    if (directMatch) {
+      onSelectBookAndChapter(directMatch.book.id, directMatch.chapter, directMatch.verse);
+      return;
+    }
 
-    // If query matches a book name, open its chapter selector
-    const matched = allBooks.find(
-      b => b.name.toLowerCase().includes(term.toLowerCase())
-    );
+    const matched = findMatchingBook(term);
     if (matched) {
       handleBookClick(matched);
+    } else {
+      onPerformSearchText(term);
     }
   };
 
-  // Quick direct jump detector for inputs like "Juan 3:16" or "Mateo 4"
+  // Quick direct jump detector for inputs like "Juan 3:16", "Mateo 5", "Salmos 23"
   const parseDirectReference = (text: string) => {
     const trimmed = text.trim();
     if (!trimmed) return null;
-    const match = trimmed.match(/^([1-3]?\s?[A-Za-zÁÉÍÓÚáéíóúñ]+)\s+(\d+)(?::(\d+))?$/i);
+    const match = trimmed.match(/^([1-3]?\s?[A-Za-zÁÉÍÓÚáéíóúñÜü\.]+)\s*(\d+)?(?:\s*[:,\.]\s*(\d+))?$/i);
     if (match) {
-      const bookQuery = match[1].trim().toLowerCase();
-      const chapterNum = parseInt(match[2], 10);
+      const bookPart = match[1]?.trim() || '';
+      const chapterNum = match[2] ? parseInt(match[2], 10) : 1;
       const verseNum = match[3] ? parseInt(match[3], 10) : undefined;
-      const foundBook = allBooks.find(b =>
-        b.name.toLowerCase() === bookQuery ||
-        b.name.toLowerCase().startsWith(bookQuery) ||
-        b.abbreviation.toLowerCase() === bookQuery
-      );
-      if (foundBook && chapterNum > 0 && chapterNum <= foundBook.chaptersCount) {
-        return { book: foundBook, chapter: chapterNum, verse: verseNum };
+      const foundBook = findMatchingBook(bookPart);
+      if (foundBook) {
+        const safeChapter = Math.min(Math.max(1, chapterNum), foundBook.chaptersCount);
+        return { book: foundBook, chapter: safeChapter, verse: verseNum };
       }
+    }
+    const single = findMatchingBook(trimmed);
+    if (single) {
+      return { book: single, chapter: 1, verse: undefined };
     }
     return null;
   };
