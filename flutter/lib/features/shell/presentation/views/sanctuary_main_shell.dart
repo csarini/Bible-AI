@@ -86,7 +86,8 @@ class SanctuaryMainShell extends ConsumerWidget {
     } else if (currentTab == 3) {
       bottomNavIndex = 3; // Guardados
     } else {
-      bottomNavIndex = 0; // Default when viewing sub-tabs (Maps, Pulpit, AI, Settings)
+      bottomNavIndex =
+          0; // Default when viewing sub-tabs (Maps, Pulpit, AI, Settings)
     }
 
     return Scaffold(
@@ -345,13 +346,6 @@ class SanctuaryMainShell extends ConsumerWidget {
                     title: 'Notas',
                     badge: bookmarksCount > 0 ? '$bookmarksCount' : null,
                   ),
-                  _buildDrawerItem(
-                    ref,
-                    context,
-                    index: 5,
-                    icon: LucideIcons.calendar,
-                    title: 'Prédicas & Eventos',
-                  ),
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -369,93 +363,102 @@ class SanctuaryMainShell extends ConsumerWidget {
                     index: 6,
                     icon: LucideIcons.sparkles,
                     title: 'Mentor Teológico IA',
-                    badge: 'IA',
+                    badge: 'demo',
                     badgeColor: Theme.of(context).colorScheme.primary,
-                  ),
-                  _buildDrawerItem(
-                    ref,
-                    context,
-                    index: 7,
-                    icon: LucideIcons.settings,
-                    title: 'Configuración',
                   ),
                 ],
               ),
             ),
 
             // Drawer Footer Quick Actions (Icon-focused & Compact to save space)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                border: Border(
-                  top: BorderSide(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .outline
-                        .withValues(alpha: 0.2),
+            Builder(
+              builder: (context) {
+                final double bottomPadding =
+                    MediaQuery.of(context).padding.bottom;
+                final double finalBottomPadding =
+                    (bottomPadding > 0 ? bottomPadding : 12.0) + 8.0;
+
+                return Container(
+                  padding: EdgeInsets.only(
+                    left: 12,
+                    right: 12,
+                    top: 10,
+                    bottom: finalBottomPadding,
                   ),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        CoachMarkGuideDialog.show(context);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 8),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        side: BorderSide(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .outline
-                                .withValues(alpha: 0.3)),
-                      ),
-                      icon: const Icon(LucideIcons.helpCircle, size: 16),
-                      label: Text(
-                        'Guía',
-                        style: GoogleFonts.inter(
-                            fontSize: 12, fontWeight: FontWeight.w600),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    border: Border(
+                      top: BorderSide(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .outline
+                            .withValues(alpha: 0.2),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: FilledButton.tonalIcon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        FeedbackDialog.show(context);
-                      },
-                      style: FilledButton.styleFrom(
-                        backgroundColor: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withValues(alpha: 0.14),
-                        foregroundColor: Theme.of(context).colorScheme.primary,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 8),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        elevation: 0,
-                      ),
-                      icon: const Icon(LucideIcons.messageSquarePlus, size: 16),
-                      label: Text(
-                        'Feedback',
-                        style: GoogleFonts.inter(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            CoachMarkGuideDialog.show(context);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 8),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            side: BorderSide(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outline
+                                    .withValues(alpha: 0.3)),
+                          ),
+                          icon: const Icon(LucideIcons.helpCircle, size: 16),
+                          label: Text(
+                            'Guía',
+                            style: GoogleFonts.inter(
+                                fontSize: 12, fontWeight: FontWeight.w600),
+                          ),
                         ),
                       ),
-                    ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: FilledButton.tonalIcon(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            FeedbackDialog.show(context);
+                          },
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withValues(alpha: 0.14),
+                            foregroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 8),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            elevation: 0,
+                          ),
+                          icon: const Icon(LucideIcons.messageSquarePlus,
+                              size: 16),
+                          label: Text(
+                            'Feedback',
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                );
+              },
+            )
           ],
         ),
       ),
