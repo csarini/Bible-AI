@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../constants/bible_books.dart';
 import '../storage/app_database.dart';
 import '../../features/reader/data/services/offline_bible_sync_service.dart';
@@ -15,10 +16,10 @@ final appTranslationProvider =
     StateProvider<String>((ref) => 'valera'); // 'valera', 'sse', 'rv1858'
 final appFontSizeProvider = StateProvider<String>(
     (ref) => 'medium'); // 'small', 'medium', 'large', 'xlarge'
-final appFontFamilyProvider = StateProvider<String>(
-    (ref) => 'literata'); // 'literata' (Serifa Bíblica), 'playfair' (Editorial), 'inter' (Sans Moderna)
-final appLineSpacingProvider =
-    StateProvider<String>((ref) => 'normal'); // 'compact', 'normal', 'relaxed', 'spacious'
+final appFontFamilyProvider = StateProvider<String>((ref) =>
+    'literata'); // 'literata' (Serifa Bíblica), 'playfair' (Editorial), 'inter' (Sans Moderna)
+final appLineSpacingProvider = StateProvider<String>(
+    (ref) => 'normal'); // 'compact', 'normal', 'relaxed', 'spacious'
 final appShowVerseNumbersProvider = StateProvider<bool>((ref) => true);
 
 // Active navigation and bible coordinates
@@ -46,7 +47,12 @@ final bibleBooksStreamProvider =
 
 // Offline Bible Chapters Sync Status Stream Provider
 final offlineSyncStatusStreamProvider =
-    StreamProvider.family<OfflineSyncStatus, OfflineBibleSyncService>((ref, service) {
+    StreamProvider.family<OfflineSyncStatus, OfflineBibleSyncService>(
+        (ref, service) {
   return service.statusStream;
 });
 
+final appVersionProvider = FutureProvider<String>((ref) async {
+  final packageInfo = await PackageInfo.fromPlatform();
+  return 'v${packageInfo.version} (+${packageInfo.buildNumber})';
+});

@@ -370,13 +370,16 @@ class SanctuaryMainShell extends ConsumerWidget {
               ),
             ),
 
-            // Drawer Footer Quick Actions (Icon-focused & Compact to save space)
+            // Drawer Footer Quick Actions (Con versión extraída del pubspec.yaml)
             Builder(
               builder: (context) {
                 final double bottomPadding =
                     MediaQuery.of(context).padding.bottom;
                 final double finalBottomPadding =
                     (bottomPadding > 0 ? bottomPadding : 12.0) + 8.0;
+
+                // Leemos la versión dinámicamente desde el provider
+                final versionAsync = ref.watch(appVersionProvider);
 
                 return Container(
                   padding: EdgeInsets.only(
@@ -396,63 +399,88 @@ class SanctuaryMainShell extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  child: Row(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            CoachMarkGuideDialog.show(context);
-                          },
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 8),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            side: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .outline
-                                    .withValues(alpha: 0.3)),
-                          ),
-                          icon: const Icon(LucideIcons.helpCircle, size: 16),
-                          label: Text(
-                            'Guía',
-                            style: GoogleFonts.inter(
-                                fontSize: 12, fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: FilledButton.tonalIcon(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            FeedbackDialog.show(context);
-                          },
-                          style: FilledButton.styleFrom(
-                            backgroundColor: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withValues(alpha: 0.14),
-                            foregroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 8),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            elevation: 0,
-                          ),
-                          icon: const Icon(LucideIcons.messageSquarePlus,
-                              size: 16),
-                          label: Text(
-                            'Feedback',
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
+                      // Botones Guía y Feedback
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                CoachMarkGuideDialog.show(context);
+                              },
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 8),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                side: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .outline
+                                        .withValues(alpha: 0.3)),
+                              ),
+                              icon:
+                                  const Icon(LucideIcons.helpCircle, size: 16),
+                              label: Text(
+                                'Guía',
+                                style: GoogleFonts.inter(
+                                    fontSize: 12, fontWeight: FontWeight.w600),
+                              ),
                             ),
                           ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: FilledButton.tonalIcon(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                FeedbackDialog.show(context);
+                              },
+                              style: FilledButton.styleFrom(
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withValues(alpha: 0.14),
+                                foregroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 8),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                elevation: 0,
+                              ),
+                              icon: const Icon(LucideIcons.messageSquarePlus,
+                                  size: 16),
+                              label: Text(
+                                'Feedback',
+                                style: GoogleFonts.inter(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      // Muestra la versión automáticamente (ej. v1.0.0 (+1))
+                      versionAsync.when(
+                        data: (versionText) => Text(
+                          versionText,
+                          style: GoogleFonts.inter(
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.45),
+                            letterSpacing: 0.3,
+                          ),
                         ),
+                        loading: () => const SizedBox(height: 12),
+                        error: (_, __) => const SizedBox.shrink(),
                       ),
                     ],
                   ),
