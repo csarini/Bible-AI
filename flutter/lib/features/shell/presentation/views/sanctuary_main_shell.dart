@@ -71,18 +71,23 @@ class SanctuaryMainShell extends ConsumerWidget {
       SanctuarySettingsView(database: database),
     ];
 
-    // Bottom Navigation Bar mapping for primary 4 destinations
+    // Bottom Navigation Bar mapping for primary destinations:
+    // 0: Inicio -> Tab 0
+    // 1: Libros -> Tab 2
+    // 2: Lectura -> Tab 1
+    // 3: Guardados -> Tab 3
     int bottomNavIndex = 0;
-    if (currentTab == 0)
+    if (currentTab == 0) {
       bottomNavIndex = 0;
-    else if (currentTab == 1)
-      bottomNavIndex = 1;
-    else if (currentTab == 2)
-      bottomNavIndex = 2;
-    else if (currentTab == 3)
-      bottomNavIndex = 3;
-    else
+    } else if (currentTab == 2) {
+      bottomNavIndex = 1; // Libros
+    } else if (currentTab == 1) {
+      bottomNavIndex = 2; // Lectura
+    } else if (currentTab == 3) {
+      bottomNavIndex = 3; // Guardados
+    } else {
       bottomNavIndex = 0; // Default when viewing sub-tabs (Maps, Pulpit, AI, Settings)
+    }
 
     return Scaffold(
       key: sanctuaryScaffoldKey,
@@ -92,8 +97,18 @@ class SanctuaryMainShell extends ConsumerWidget {
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: bottomNavIndex,
-        onDestinationSelected: (index) {
-          ref.read(selectedTabProvider.notifier).state = index;
+        onDestinationSelected: (navIndex) {
+          int targetTab = 0;
+          if (navIndex == 0) {
+            targetTab = 0; // Inicio
+          } else if (navIndex == 1) {
+            targetTab = 2; // Libros
+          } else if (navIndex == 2) {
+            targetTab = 1; // Lectura
+          } else if (navIndex == 3) {
+            targetTab = 3; // Guardados
+          }
+          ref.read(selectedTabProvider.notifier).state = targetTab;
         },
         height: 64,
         elevation: 0,
@@ -106,16 +121,16 @@ class SanctuaryMainShell extends ConsumerWidget {
             tooltip: 'Inicio Devocional',
           ),
           const NavigationDestination(
-            icon: Icon(LucideIcons.bookOpen, size: 20),
-            selectedIcon: Icon(LucideIcons.bookOpen, size: 20),
-            label: 'Lector',
-            tooltip: 'Lectura Bíblica',
-          ),
-          const NavigationDestination(
             icon: Icon(LucideIcons.library, size: 20),
             selectedIcon: Icon(LucideIcons.library, size: 20),
-            label: 'Biblioteca',
+            label: 'Libros',
             tooltip: '66 Libros y Búsqueda',
+          ),
+          const NavigationDestination(
+            icon: Icon(LucideIcons.bookOpen, size: 20),
+            selectedIcon: Icon(LucideIcons.bookOpen, size: 20),
+            label: 'Lectura',
+            tooltip: 'Lector Bíblico',
           ),
           NavigationDestination(
             icon: Badge(

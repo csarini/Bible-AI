@@ -191,6 +191,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
           tooltip: 'Menú Lateral',
           onPressed: openSanctuaryDrawer,
         ),
+        centerTitle: false,
+        titleSpacing: 0,
         title: const SanctuaryChurchLogo(
           size: 34,
           variant: LogoVariant.symbol,
@@ -469,66 +471,57 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
 
                     const SizedBox(height: 16),
 
-                    // Actions Row: Share Button + Save to Bookmarks Button
+                    // Actions Row: Share Button + Save to Bookmarks Button (Icon-only with institutional colors)
                     Row(
                       children: [
-                        // Compartir Icon-focused Button
-                        OutlinedButton.icon(
+                        // Compartir Icon-only Button
+                        IconButton.outlined(
                           onPressed: _shareCurrentVerse,
-                          style: OutlinedButton.styleFrom(
+                          tooltip: 'Compartir versículo',
+                          icon: Icon(
+                            LucideIcons.share2,
+                            size: 18,
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.85),
+                          ),
+                          style: IconButton.styleFrom(
                             side: BorderSide(
                               color: theme.colorScheme.outline
                                   .withValues(alpha: 0.35),
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 8),
-                          ),
-                          icon: Icon(
-                            LucideIcons.share2,
-                            size: 16,
-                            color: theme.colorScheme.primary,
-                          ),
-                          label: Text(
-                            'Compartir',
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12.5,
-                              color: theme.colorScheme.onSurface,
-                            ),
+                            padding: const EdgeInsets.all(10),
+                            minimumSize: const Size(44, 44),
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 10),
 
-                        // Guardar en la Sección de Guardados Button
-                        FilledButton.icon(
+                        // Guardar en la Sección de Guardados Button (Icon-only with institutional colors)
+                        IconButton.filled(
                           onPressed: _saveToBookmarks,
-                          style: FilledButton.styleFrom(
-                            backgroundColor: _isSavedInBookmarks
-                                ? SanctuaryColors.emeraldGreen
-                                : theme.colorScheme.primary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 8),
-                          ),
+                          tooltip: _isSavedInBookmarks
+                              ? 'Guardado en notas'
+                              : 'Guardar versículo',
                           icon: Icon(
                             _isSavedInBookmarks
                                 ? LucideIcons.bookmarkCheck
                                 : LucideIcons.bookmark,
-                            size: 16,
-                            color: Colors.white,
+                            size: 19,
+                            color: _isSavedInBookmarks
+                                ? Colors.white
+                                : SanctuaryColors.amberGold,
                           ),
-                          label: Text(
-                            _isSavedInBookmarks ? 'Guardado' : 'Guardar',
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12.5,
-                              color: Colors.white,
+                          style: IconButton.styleFrom(
+                            backgroundColor: _isSavedInBookmarks
+                                ? SanctuaryColors.emeraldGreen
+                                : SanctuaryColors.waveNavy,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
+                            padding: const EdgeInsets.all(10),
+                            minimumSize: const Size(44, 44),
                           ),
                         ),
 

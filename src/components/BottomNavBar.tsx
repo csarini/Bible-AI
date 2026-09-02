@@ -25,14 +25,14 @@ export const BottomNavBar: React.FC<BottomNavBarProps> = ({
       icon: Home
     },
     {
+      id: 'library' as ActiveTab,
+      label: 'Libros',
+      icon: Library
+    },
+    {
       id: 'scripture' as ActiveTab,
       label: 'Lectura',
       icon: BookOpen
-    },
-    {
-      id: 'library' as ActiveTab,
-      label: 'Buscar',
-      icon: Library
     },
     {
       id: 'saved' as ActiveTab,

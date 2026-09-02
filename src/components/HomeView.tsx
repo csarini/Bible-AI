@@ -350,7 +350,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               <span className="hidden md:inline">{isPlayingAudio ? 'Pausar' : 'Audio'}</span>
             </button>
 
-            {/* Save Bookmark */}
+            {/* Save Bookmark - Institutional Colors */}
             <button
               type="button"
               onClick={() =>
@@ -362,12 +362,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   currentDailyVerse.verse
                 )
               }
-              className="p-2 sm:px-3 sm:py-2 rounded-2xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-inherit/30 text-inherit text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
-              title="Guardar versículo en tu santuario"
+              className="p-2 sm:p-2.5 rounded-2xl bg-[#0B2B68] hover:bg-[#071F4D] text-[#FED65B] border border-[#FED65B]/30 text-xs font-bold transition-all flex items-center justify-center cursor-pointer shadow-xs active:scale-95"
+              title="Guardar versículo en tus notas"
               aria-label="Guardar versículo"
             >
-              <Bookmark className="w-4 h-4 text-[#F47B20]" />
-              <span className="hidden md:inline">Guardar</span>
+              <Bookmark className="w-4 h-4 text-[#FED65B]" />
             </button>
 
             {/* AI Mentor */}
@@ -382,15 +381,14 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   text: currentDailyVerse.text
                 })
               }
-              className="p-2 sm:px-3 sm:py-2 rounded-2xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-inherit/30 text-inherit text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+              className="p-2 sm:p-2.5 rounded-2xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-inherit/30 text-inherit text-xs font-bold transition-all flex items-center justify-center cursor-pointer"
               title="Consultar análisis teológico con Mentor IA"
               aria-label="Mentor IA"
             >
               <Sparkles className="w-4 h-4 text-[#F47B20]" />
-              <span className="hidden md:inline">Mentor IA</span>
             </button>
 
-            {/* Share */}
+            {/* Share - Icon Only */}
             <button
               type="button"
               onClick={() =>
@@ -401,12 +399,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   reflection: currentDailyVerse.reflection
                 })
               }
-              className="p-2 sm:px-3 sm:py-2 rounded-2xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-inherit/30 text-inherit text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
-              title="Compartir versículo e imagen"
+              className="p-2 sm:p-2.5 rounded-2xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-inherit/30 text-inherit text-xs font-bold transition-all flex items-center justify-center cursor-pointer"
+              title="Compartir versículo"
               aria-label="Compartir versículo"
             >
               <Share2 className="w-4 h-4 text-[#F47B20]" />
-              <span className="hidden md:inline">Compartir</span>
             </button>
           </div>
         </div>
