@@ -85,6 +85,8 @@ class SanctuaryMainShell extends ConsumerWidget {
       bottomNavIndex = 2; // Lectura
     } else if (currentTab == 3) {
       bottomNavIndex = 3; // Guardados
+    } else if (currentTab == 6) {
+      bottomNavIndex = 4; // Mentor IA
     } else {
       bottomNavIndex =
           0; // Default when viewing sub-tabs (Maps, Pulpit, AI, Settings)
@@ -108,6 +110,8 @@ class SanctuaryMainShell extends ConsumerWidget {
             targetTab = 1; // Lectura
           } else if (navIndex == 3) {
             targetTab = 3; // Guardados
+          } else if (navIndex == 4) {
+            targetTab = 6; // Mentor Teológico IA
           }
           ref.read(selectedTabProvider.notifier).state = targetTab;
         },
@@ -148,6 +152,13 @@ class SanctuaryMainShell extends ConsumerWidget {
             ),
             label: 'Guardados',
             tooltip: 'Versículos y Notas Guardadas',
+          ),
+          // Nuevo acceso rápido al Mentor IA
+          const NavigationDestination(
+            icon: Icon(LucideIcons.sparkles, size: 20),
+            selectedIcon: Icon(LucideIcons.sparkles, size: 20),
+            label: 'Mentor IA',
+            tooltip: 'Asistente Teológico con IA',
           ),
         ],
       ),
