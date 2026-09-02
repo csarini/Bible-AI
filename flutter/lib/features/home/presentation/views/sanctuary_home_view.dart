@@ -201,7 +201,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
             ),
             const SizedBox(width: 8),
             Text(
-              'Santuario Digital',
+              '',
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w800,
                 fontSize: 17,

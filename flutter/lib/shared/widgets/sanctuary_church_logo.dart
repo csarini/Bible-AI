@@ -170,7 +170,7 @@ class _ElShaddaiEmblemPainter extends CustomPainter {
           SanctuaryColors.cyanAccent,
           Color(0xFF38BDF8),
         ],
-      ).createShader(const Rect.fromLTWH(0, 0, w, h))
+      ).createShader(Rect.fromLTWH(0, 0, w, h))
       ..style = PaintingStyle.fill;
 
     // Scale reference coordinates 500x350
