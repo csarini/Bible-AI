@@ -35,9 +35,9 @@ const List<DailyVerseData> kDailyVersesPool = [
     bookName: 'Filipenses',
     chapter: 4,
     verse: 6,
-    reference: 'Filipenses 4:6-7',
+    reference: 'Filipenses 4:6',
     text:
-        'Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias. Y la paz de Dios, que sobrepasa todo entendimiento, guardará vuestros corazones y vuestros pensamientos en Cristo Jesús.',
+        'Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias.',
     theme: 'Paz',
     prayer:
         'Señor Jesús, hoy rindo ante Tu presencia cada preocupación e incertidumbre. Llena mi corazón de Tu paz perfecta que sobrepasa todo entendimiento humano. Amén.',
@@ -63,9 +63,9 @@ const List<DailyVerseData> kDailyVersesPool = [
     bookName: 'Isaías',
     chapter: 40,
     verse: 31,
-    reference: 'Isaías 40:29-31',
+    reference: 'Isaías 40:31',
     text:
-        'Él da esfuerzo al cansado, y multiplica las fuerzas al que no tiene ningunas... los que esperan a Jehová tendrán nuevas fuerzas; levantarán alas como las águilas.',
+        'Pero los que esperan a Jehová tendrán nuevas fuerzas; levantarán alas como las águilas; correrán, y no se cansarán; caminarán, y no se fatigarán.',
     theme: 'Fortaleza',
     prayer:
         'Amado Dios, cuando mis fuerzas decaigan, recuérdame que Tu poder se perfecciona en mi debilidad. Levanto mis ojos a Ti y recibo nuevo vigor hoy. Amén.',
@@ -77,9 +77,9 @@ const List<DailyVerseData> kDailyVersesPool = [
     bookName: '1 Corintios',
     chapter: 13,
     verse: 4,
-    reference: '1 Corintios 13:4-7',
+    reference: '1 Corintios 13:4',
     text:
-        'El amor es sufrido, es benigno; el amor no tiene envidia, el amor no es jactancioso, no se envanece; no hace nada indebido, no busca lo suyo, no se irrita, no guarda rencor.',
+        'El amor es sufrido, es benigno; el amor no tiene envidia, el amor no es jactancioso, no se envanece;',
     theme: 'Amor',
     prayer:
         'Señor, derrama Tu amor en mi corazón para que pueda perdonar, servir y edificar a quienes me rodean, siendo un instrumento genuino de Tu gracia. Amén.',
@@ -146,9 +146,9 @@ const List<DailyVerseData> kDailyVersesPool = [
     bookName: 'Proverbios',
     chapter: 3,
     verse: 5,
-    reference: 'Proverbios 3:5-6',
+    reference: 'Proverbios 3:5',
     text:
-        'Fíate de Jehová de todo tu corazón, y no te apoyes en tu propia prudencia. Reconócelo en todos tus caminos, y él enderezará tus veredas.',
+        'Fíate de Jehová de todo tu corazón, y no te apoyes en tu propia prudencia.',
     theme: 'Confianza',
     prayer:
         'Dios misericordioso, entrego mis anhelos e incertidumbres a Tu soberana sabiduría y dirección. Amén.',
@@ -188,9 +188,9 @@ const List<DailyVerseData> kDailyVersesPool = [
     bookName: 'Salmos',
     chapter: 23,
     verse: 1,
-    reference: 'Salmos 23:1-3',
+    reference: 'Salmos 23:1',
     text:
-        'Jehová es mi pastor; nada me faltará. En lugares de delicados pastos me hará descansar; junto a aguas de reposo me pastoreará. Confortará mi alma.',
+        'Jehová es mi pastor; nada me faltará.',
     theme: 'Protección',
     prayer:
         'Señor Jesús, gracias por ser mi pastor fiel. En Ti confío, en Ti encuentro refrigerio y reposo. Amén.',

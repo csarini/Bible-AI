@@ -193,10 +193,13 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
         ),
         centerTitle: false,
         titleSpacing: 0,
-        title: const SanctuaryChurchLogo(
-          size: 34,
-          variant: LogoVariant.symbol,
-          showText: false,
+        title: const Align(
+          alignment: Alignment.centerLeft,
+          child: SanctuaryChurchLogo(
+            size: 34,
+            variant: LogoVariant.symbol,
+            showText: false,
+          ),
         ),
         actions: [
           IconButton(
@@ -477,19 +480,20 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                         const Spacer(),
 
                         // Compartir Icon-only Button
-                        IconButton.outlined(
+                        IconButton.filled(
                           onPressed: _shareCurrentVerse,
                           tooltip: 'Compartir versículo',
-                          icon: Icon(
+                          icon: const Icon(
                             LucideIcons.share2,
                             size: 18,
-                            color: theme.colorScheme.onSurface
-                                .withValues(alpha: 0.85),
+                            color: SanctuaryColors.waveNavy,
                           ),
                           style: IconButton.styleFrom(
+                            backgroundColor: Colors.white,
                             side: BorderSide(
-                              color: theme.colorScheme.outline
-                                  .withValues(alpha: 0.35),
+                              color: SanctuaryColors.waveNavy
+                                  .withValues(alpha: 0.25),
+                              width: 1.2,
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -498,9 +502,10 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                             minimumSize: const Size(44, 44),
                           ),
                         ),
+                        const SizedBox(width: 8),
 
                         // Guardar en la Sección de Guardados Button (Icon-only with institutional colors)
-                        IconButton.outlined(
+                        IconButton.filled(
                           onPressed: _saveToBookmarks,
                           tooltip: _isSavedInBookmarks
                               ? 'Guardado en notas'
@@ -510,16 +515,23 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                                 ? LucideIcons.bookmarkCheck
                                 : LucideIcons.bookmark,
                             size: 19,
-                            color: theme.colorScheme.onSurface
-                                .withValues(alpha: 0.85),
+                            color: _isSavedInBookmarks
+                                ? SanctuaryColors.amberGold
+                                : SanctuaryColors.waveNavy,
                           ),
                           style: IconButton.styleFrom(
+                            backgroundColor: _isSavedInBookmarks
+                                ? SanctuaryColors.waveNavy
+                                : Colors.white,
                             side: BorderSide(
-                              color: theme.colorScheme.outline
-                                  .withValues(alpha: 0.35),
+                              color: _isSavedInBookmarks
+                                  ? SanctuaryColors.amberGold
+                                  : SanctuaryColors.waveNavy
+                                      .withValues(alpha: 0.25),
+                              width: 1.2,
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                             padding: const EdgeInsets.all(10),
                             minimumSize: const Size(44, 44),

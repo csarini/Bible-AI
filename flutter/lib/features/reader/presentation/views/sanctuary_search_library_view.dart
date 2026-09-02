@@ -1,7 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../../../core/constants/bible_books.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
@@ -29,12 +32,52 @@ class _SanctuarySearchLibraryViewState
   String _activeTabFilter = 'all'; // 'all', 'OT', 'NT'
   final List<String> _recentSearches = [
     'Juan 3:16',
-    'Salmos 23',
+    'Salmos 23:1',
     'Romanos 8:28',
     'Filipenses 4:13',
-    'Mateo 5',
-    'Génesis 1'
+    'Mateo 5:1',
+    'Génesis 1:1'
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRecentSearches();
+  }
+
+  Future<void> _loadRecentSearches() async {
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final file = File('${dir.path}/sanctuary_recent_searches.json');
+      if (await file.exists()) {
+        final content = await file.readAsString();
+        final List<dynamic> jsonList = jsonDecode(content);
+        if (jsonList.isNotEmpty) {
+          setState(() {
+            _recentSearches.clear();
+            _recentSearches.addAll(jsonList.map((e) => e.toString()));
+          });
+        }
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _saveRecentSearch(String term) async {
+    final clean = term.trim();
+    if (clean.isEmpty) return;
+    setState(() {
+      _recentSearches.removeWhere((item) => item.toLowerCase() == clean.toLowerCase());
+      _recentSearches.insert(0, clean);
+      if (_recentSearches.length > 8) {
+        _recentSearches.removeLast();
+      }
+    });
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final file = File('${dir.path}/sanctuary_recent_searches.json');
+      await file.writeAsString(jsonEncode(_recentSearches));
+    } catch (_) {}
+  }
 
   @override
   void dispose() {
@@ -467,9 +510,17 @@ class _SanctuarySearchLibraryViewState
                     controller: _searchController,
                     onChanged: (_) => setState(() {}),
                     onSubmitted: (val) {
+                      final clean = val.trim();
+                      if (clean.isEmpty) return;
+                      _saveRecentSearch(clean);
                       if (directRef != null) {
                         widget.onSelectPassage(directRef.book.id,
                             directRef.chapter, directRef.verse);
+                      } else {
+                        final bookMatch = _findMatchingBook(clean, allBooks);
+                        if (bookMatch != null) {
+                          _openChapterVersePicker(bookMatch);
+                        }
                       }
                     },
                     decoration: InputDecoration(
@@ -501,11 +552,15 @@ class _SanctuarySearchLibraryViewState
                   if (directRef != null) ...[
                     const SizedBox(height: 10),
                     InkWell(
-                      onTap: () => widget.onSelectPassage(
-                        directRef.book.id,
-                        directRef.chapter,
-                        directRef.verse,
-                      ),
+                      onTap: () {
+                        final term = '${directRef.book.name} ${directRef.chapter}${directRef.verse != null ? ':${directRef.verse}' : ''}';
+                        _saveRecentSearch(term);
+                        widget.onSelectPassage(
+                          directRef.book.id,
+                          directRef.chapter,
+                          directRef.verse,
+                        );
+                      },
                       borderRadius: BorderRadius.circular(14),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -600,12 +655,19 @@ class _SanctuarySearchLibraryViewState
                           child: InkWell(
                             onTap: () {
                               _searchController.text = term;
+                              _saveRecentSearch(term);
                               setState(() {});
                               final refMatch =
                                   _parseDirectReference(term, allBooks);
                               if (refMatch != null) {
                                 widget.onSelectPassage(refMatch.book.id,
                                     refMatch.chapter, refMatch.verse);
+                              } else {
+                                final bMatch =
+                                    _findMatchingBook(term, allBooks);
+                                if (bMatch != null) {
+                                  _openChapterVersePicker(bMatch);
+                                }
                               }
                             },
                             borderRadius: BorderRadius.circular(12),
@@ -613,19 +675,18 @@ class _SanctuarySearchLibraryViewState
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 7.5),
                               decoration: BoxDecoration(
-                                color: SanctuaryColors.waveNavy,
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: SanctuaryColors.amberGold
-                                      .withValues(alpha: 0.35),
-                                  width: 1,
+                                  color: SanctuaryColors.waveNavy
+                                      .withValues(alpha: 0.22),
+                                  width: 1.1,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: SanctuaryColors.waveNavy
-                                        .withValues(alpha: 0.15),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
+                                    color: Colors.black.withValues(alpha: 0.04),
+                                    blurRadius: 3,
+                                    offset: const Offset(0, 1),
                                   ),
                                 ],
                               ),
@@ -635,15 +696,15 @@ class _SanctuarySearchLibraryViewState
                                   const Icon(
                                     LucideIcons.book,
                                     size: 13,
-                                    color: SanctuaryColors.amberGold,
+                                    color: SanctuaryColors.sunOrange,
                                   ),
                                   const SizedBox(width: 6),
                                   Text(
                                     term,
                                     style: GoogleFonts.inter(
                                       fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      color: SanctuaryColors.waveNavy,
                                     ),
                                   ),
                                 ],
@@ -767,20 +828,20 @@ class _SanctuarySearchLibraryViewState
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
             color: isSelected
-                ? SanctuaryColors.amberGold
-                : SanctuaryColors.waveNavy,
+                ? SanctuaryColors.waveNavy
+                : Colors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isSelected
                   ? SanctuaryColors.amberGold
-                  : SanctuaryColors.amberGold.withValues(alpha: 0.35),
+                  : SanctuaryColors.waveNavy.withValues(alpha: 0.25),
               width: 1.2,
             ),
             boxShadow: [
               BoxShadow(
                 color: isSelected
-                    ? SanctuaryColors.amberGold.withValues(alpha: 0.35)
-                    : SanctuaryColors.waveNavy.withValues(alpha: 0.15),
+                    ? SanctuaryColors.waveNavy.withValues(alpha: 0.3)
+                    : Colors.black.withValues(alpha: 0.04),
                 blurRadius: 5,
                 offset: const Offset(0, 2),
               ),
@@ -789,7 +850,7 @@ class _SanctuarySearchLibraryViewState
           child: Text(
             label,
             style: GoogleFonts.inter(
-              color: isSelected ? SanctuaryColors.waveNavy : Colors.white,
+              color: isSelected ? SanctuaryColors.amberGold : SanctuaryColors.waveNavy,
               fontWeight: FontWeight.w700,
               fontSize: 12,
             ),

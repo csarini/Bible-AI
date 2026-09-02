@@ -266,7 +266,7 @@ export const StorageService = {
   },
 
   getRecentSearches(): string[] {
-    const defaults = ['Sermón del Monte', 'Amor ágape', 'Proverbios sobre sabiduría'];
+    const defaults = ['Juan 3:16', 'Salmos 23:1', 'Romanos 8:28', 'Filipenses 4:13', 'Mateo 5:1', 'Génesis 1:1'];
     try {
       const data = localStorage.getItem(RECENT_SEARCHES_KEY);
       if (!data) return defaults;

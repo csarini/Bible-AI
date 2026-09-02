@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Book, Sparkles, BookOpen, ChevronRight, X, ArrowLeft, Check, Compass, Layers } from 'lucide-react';
 import { fetchBibleChapter } from '../data/bibleData';
 import { getLocalBooksSync } from '../services/bibleDatabaseService';
+import { StorageService } from '../services/storageService';
 import { BibleBook, BibleVerse } from '../types';
 
 interface SearchViewProps {
@@ -14,7 +15,7 @@ interface SearchViewProps {
 
 export const SearchView: React.FC<SearchViewProps> = ({
   onSelectBookAndChapter,
-  recentSearches,
+  recentSearches: propRecentSearches,
   onPerformSearchText,
   currentTheme = 'light',
   currentTranslation = 'valera'
@@ -22,23 +23,35 @@ export const SearchView: React.FC<SearchViewProps> = ({
   const isDark = currentTheme === 'dark';
   const isSepia = currentTheme === 'sepia';
 
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
+    return propRecentSearches && propRecentSearches.length > 0
+      ? propRecentSearches
+      : StorageService.getRecentSearches();
+  });
+
+  const saveRecentSearch = (term: string) => {
+    if (!term || !term.trim()) return;
+    const updated = StorageService.addRecentSearch(term.trim());
+    setRecentSearches(updated);
+  };
+
   const headerTitleColor = isDark ? 'text-white' : isSepia ? 'text-[#3B2D1F]' : 'text-[#000666]';
   const subtextColor = isDark ? 'text-white/60' : isSepia ? 'text-[#705335]' : 'text-[#767683]';
   const bookCardBg = isDark
     ? 'bg-[#131722] border-white/10 text-white hover:bg-[#1C2337] hover:border-[#FED65B]'
     : isSepia
     ? 'bg-[#FAF6EF] border-[#705335]/20 text-[#3B2D1F] hover:bg-[#FFFFFF] hover:border-[#705335]'
-    : 'bg-[#F0EEE9] border-[#C6C5D4]/80 text-[#000666] hover:bg-[#FFFFFF] hover:border-[#FED65B]';
+    : 'bg-white border-[#0B2B68]/15 text-[#000666] hover:bg-[#F0F4FA] hover:border-[#FED65B] shadow-2xs';
   const bookCardSelected = isDark
     ? 'bg-[#1C2337] border-[#FED65B] ring-2 ring-[#FED65B] text-white'
     : isSepia
     ? 'bg-[#EAE0D0] border-[#705335] ring-2 ring-[#705335] text-[#3B2D1F]'
-    : 'bg-[#E4E2DD] border-[#FED65B] ring-2 ring-[#FED65B] text-[#000666]';
+    : 'bg-[#0B2B68] text-[#FED65B] border-[#FED65B] ring-2 ring-[#FED65B]';
   const tabInactiveBg = isDark
-    ? 'bg-[#1C2337] text-white/70 hover:bg-[#252E46]'
+    ? 'bg-[#1C2337] text-white/80 border border-white/20 hover:bg-[#252E46]'
     : isSepia
-    ? 'bg-[#FAF6EF] text-[#705335] hover:bg-[#EAE0D0]'
-    : 'bg-[#F0EEE9] text-[#454652] hover:bg-[#EAE8E3]';
+    ? 'bg-[#FAF6EF] text-[#705335] border border-[#705335]/25 hover:bg-white'
+    : 'bg-white text-[#0B2B68] border border-[#0B2B68]/20 hover:bg-[#F0F4FA] font-medium shadow-2xs';
   const sectionBg = isDark
     ? 'bg-[#131722] border-white/10'
     : isSepia
@@ -53,7 +66,7 @@ export const SearchView: React.FC<SearchViewProps> = ({
     ? 'bg-[#1C2337] border-white/15 text-white hover:bg-[#252E46]'
     : isSepia
     ? 'bg-[#FFFFFF] border-[#705335]/20 text-[#3B2D1F] hover:bg-[#FAF6EF]'
-    : 'bg-[#FFFFFF] border-[#C6C5D4] text-[#000666] hover:bg-[#FED65B]/60';
+    : 'bg-white border-[#0B2B68]/15 text-[#0B2B68] hover:bg-[#FED65B]/40 font-medium shadow-2xs';
   const [searchFilter, setSearchFilter] = useState('');
   const [activeTabFilter, setActiveTabFilter] = useState<'all' | 'OT' | 'NT'>('all');
   
@@ -227,6 +240,7 @@ export const SearchView: React.FC<SearchViewProps> = ({
 
   // When clicking on a book card
   const handleBookClick = (book: BibleBook) => {
+    saveRecentSearch(book.name);
     setSelectedBook(book);
     setSelectedChapter(1);
     setSelectorStep('chapters');
@@ -242,18 +256,21 @@ export const SearchView: React.FC<SearchViewProps> = ({
   // When clicking to read the whole chapter
   const handleReadFullChapter = (chNum?: number) => {
     const targetChapter = chNum || selectedChapter;
+    saveRecentSearch(`${selectedBook.name} ${targetChapter}`);
     setIsSelectorModalOpen(false);
     onSelectBookAndChapter(selectedBook.id, targetChapter);
   };
 
   // When clicking a specific verse number
   const handleVerseSelect = (verseNum: number) => {
+    saveRecentSearch(`${selectedBook.name} ${selectedChapter}:${verseNum}`);
     setIsSelectorModalOpen(false);
     onSelectBookAndChapter(selectedBook.id, selectedChapter, verseNum);
   };
 
   const handleRecentClick = (term: string) => {
     setSearchFilter(term);
+    saveRecentSearch(term);
     const directMatch = parseDirectReference(term);
     if (directMatch) {
       onSelectBookAndChapter(directMatch.book.id, directMatch.chapter, directMatch.verse);
@@ -306,8 +323,10 @@ export const SearchView: React.FC<SearchViewProps> = ({
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 if (directRef) {
+                  saveRecentSearch(searchFilter.trim());
                   onSelectBookAndChapter(directRef.book.id, directRef.chapter, directRef.verse);
                 } else if (searchFilter.trim()) {
+                  saveRecentSearch(searchFilter.trim());
                   onPerformSearchText(searchFilter.trim());
                 }
               }
@@ -347,7 +366,10 @@ export const SearchView: React.FC<SearchViewProps> = ({
               </span>
             </div>
             <button
-              onClick={() => onSelectBookAndChapter(directRef.book.id, directRef.chapter, directRef.verse)}
+              onClick={() => {
+                saveRecentSearch(`${directRef.book.name} ${directRef.chapter}${directRef.verse ? `:${directRef.verse}` : ''}`);
+                onSelectBookAndChapter(directRef.book.id, directRef.chapter, directRef.verse);
+              }}
               className="bg-[#0B2B68] text-[#FED65B] text-xs font-semibold px-4 py-1.5 rounded-full hover:bg-[#0B2B68]/90 transition-all cursor-pointer"
             >
               Abrir Pasaje →
@@ -406,14 +428,14 @@ export const SearchView: React.FC<SearchViewProps> = ({
                 onClick={() => handleRecentClick(term)}
                 className={`font-body-ui text-xs px-3.5 py-1.5 rounded-full border transition-all cursor-pointer shadow-2xs flex items-center gap-1.5 ${
                   isDark
-                    ? 'bg-[#131722] text-white border-white/15 hover:bg-[#1C2337]'
+                    ? 'bg-[#131722] text-white border-white/15 hover:bg-[#0B2B68] hover:text-[#FED65B] hover:border-[#FED65B]'
                     : isSepia
-                    ? 'bg-[#FAF6EF] text-[#3B2D1F] border-[#705335]/20 hover:bg-white'
-                    : 'bg-[#F0EEE9] text-[#0B2B68] border-[#C6C5D4] hover:bg-[#FED65B]/30 hover:border-[#FED65B]'
+                    ? 'bg-[#FAF6EF] text-[#3B2D1F] border-[#705335]/20 hover:bg-[#0B2B68] hover:text-[#FED65B]'
+                    : 'bg-white text-[#0B2B68] border-[#0B2B68]/20 hover:bg-[#0B2B68] hover:text-[#FED65B] hover:border-[#FED65B]'
                 }`}
               >
-                <Book className="w-3 h-3 text-[#F25C05]" />
-                {term}
+                <Book className="w-3.5 h-3.5 text-[#F25C05]" />
+                <span className="font-semibold">{term}</span>
               </button>
             ))}
           </div>
