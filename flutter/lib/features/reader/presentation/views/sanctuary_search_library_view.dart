@@ -380,6 +380,381 @@ class _SanctuarySearchLibraryViewState
     return null;
   }
 
+  void _openChapterVersePicker(BibleBookInfo book) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => _BookChapterVersePickerSheet(
+        book: book,
+        onSelectPassage: (ch, verse) {
+          Navigator.pop(ctx);
+          widget.onSelectPassage(book.id, ch, verse);
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final rawQuery = _searchController.text.trim();
+    final normQuery = _normalize(rawQuery);
+
+    final allBooks = widget.database != null
+        ? (ref.watch(bibleBooksStreamProvider(widget.database!)).valueOrNull ??
+            kBibleBooks)
+        : kBibleBooks;
+
+    final directRef = _parseDirectReference(rawQuery, allBooks);
+
+    final filteredBooks = allBooks.where((book) {
+      final normName = _normalize(book.name);
+      final normNameWithoutSan = normName.replaceFirst('san ', '');
+      final normAbbr = _normalize(book.abbreviation);
+      final normId = _normalize(book.id);
+
+      final matchesQuery = normQuery.isEmpty ||
+          normName.contains(normQuery) ||
+          normNameWithoutSan.contains(normQuery) ||
+          normAbbr.contains(normQuery) ||
+          normId == normQuery;
+
+      if (_activeTabFilter == 'OT') {
+        return matchesQuery && !book.isNewTestament;
+      } else if (_activeTabFilter == 'NT') {
+        return matchesQuery && book.isNewTestament;
+      }
+      return matchesQuery;
+    }).toList();
+
+    final oldTestamentCount = allBooks.where((b) => !b.isNewTestament).length;
+    final newTestamentCount = allBooks.where((b) => b.isNewTestament).length;
+
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(LucideIcons.menu),
+          tooltip: 'Menú Lateral',
+          onPressed: openSanctuaryDrawer,
+        ),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(LucideIcons.library,
+                size: 20, color: SanctuaryColors.sunOrange),
+            const SizedBox(width: 8),
+            Text(
+              'Biblioteca Bíblica (66 Libros)',
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w700,
+                fontSize: 17,
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Search Input
+                  TextField(
+                    controller: _searchController,
+                    onChanged: (_) => setState(() {}),
+                    onSubmitted: (val) {
+                      if (directRef != null) {
+                        widget.onSelectPassage(directRef.book.id,
+                            directRef.chapter, directRef.verse);
+                      }
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(LucideIcons.search, size: 18),
+                      hintText:
+                          'Buscar libro o cita (ej: Juan 3:16, Mateo 4, Salmos)',
+                      hintStyle: GoogleFonts.inter(fontSize: 13),
+                      filled: true,
+                      fillColor: theme.cardTheme.color,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                            color: theme.colorScheme.outline
+                                .withValues(alpha: 0.3)),
+                      ),
+                      suffixIcon: _searchController.text.isNotEmpty
+                          ? IconButton(
+                              icon: const Icon(LucideIcons.x, size: 16),
+                              onPressed: () {
+                                _searchController.clear();
+                                setState(() {});
+                              },
+                            )
+                          : null,
+                    ),
+                  ),
+
+                  // Direct Reference Jump Card
+                  if (directRef != null) ...[
+                    const SizedBox(height: 10),
+                    InkWell(
+                      onTap: () => widget.onSelectPassage(
+                        directRef.book.id,
+                        directRef.chapter,
+                        directRef.verse,
+                      ),
+                      borderRadius: BorderRadius.circular(14),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: SanctuaryColors.waveNavy,
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                              color: SanctuaryColors.amberGold
+                                  .withValues(alpha: 0.6)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: SanctuaryColors.waveNavy
+                                  .withValues(alpha: 0.25),
+                              blurRadius: 8,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(LucideIcons.bookOpen,
+                                color: SanctuaryColors.amberGold, size: 20),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                'Ir directo a ${directRef.book.name} ${directRef.chapter}${directRef.verse != null ? ':${directRef.verse}' : ''}',
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 13.5,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: SanctuaryColors.sunOrange,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                'Abrir →',
+                                style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 11.5,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+
+                  const SizedBox(height: 14),
+
+                  // Filter Tabs in Institutional Navy Palette
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildTabChip('all', 'Todos (66)'),
+                      const SizedBox(width: 8),
+                      _buildTabChip('OT', 'Antiguo ($oldTestamentCount)'),
+                      const SizedBox(width: 8),
+                      _buildTabChip('NT', 'Nuevo ($newTestamentCount)'),
+                    ],
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  // Recent searches in Institutional Palette
+                  if (rawQuery.isEmpty) ...[
+                    Text(
+                      'BÚSQUEDAS FRECUENTES',
+                      style: GoogleFonts.inter(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.8,
+                        color: theme.colorScheme.onSurface
+                            .withValues(alpha: 0.65),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: _recentSearches.map((term) {
+                        return Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              _searchController.text = term;
+                              setState(() {});
+                              final refMatch =
+                                  _parseDirectReference(term, allBooks);
+                              if (refMatch != null) {
+                                widget.onSelectPassage(refMatch.book.id,
+                                    refMatch.chapter, refMatch.verse);
+                              }
+                            },
+                            borderRadius: BorderRadius.circular(12),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 7.5),
+                              decoration: BoxDecoration(
+                                color: SanctuaryColors.waveNavy,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: SanctuaryColors.amberGold
+                                      .withValues(alpha: 0.35),
+                                  width: 1,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: SanctuaryColors.waveNavy
+                                        .withValues(alpha: 0.15),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    LucideIcons.book,
+                                    size: 13,
+                                    color: SanctuaryColors.amberGold,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    term,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ],
+              ),
+            ),
+          ),
+
+          // Books Grid
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1.6,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final book = filteredBooks[index];
+                  return InkWell(
+                    onTap: () => _openChapterVersePicker(book),
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: theme.cardTheme.color,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                            color: theme.colorScheme.outline
+                                .withValues(alpha: 0.25)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: book.isNewTestament
+                                      ? SanctuaryColors.waveNavy
+                                          .withValues(alpha: 0.12)
+                                      : SanctuaryColors.sunOrange
+                                          .withValues(alpha: 0.15),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  book.abbreviation,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w800,
+                                    color: book.isNewTestament
+                                        ? SanctuaryColors.waveNavy
+                                        : SanctuaryColors.sunOrange,
+                                  ),
+                                ),
+                              ),
+                              const Icon(LucideIcons.chevronRight,
+                                  size: 14, color: Colors.grey),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                book.name,
+                                style: GoogleFonts.playfairDisplay(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                '${book.totalChapters} Capítulos',
+                                style: GoogleFonts.inter(
+                                  fontSize: 11,
+                                  color: theme.colorScheme.onSurface
+                                      .withValues(alpha: 0.6),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                childCount: filteredBooks.length,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildTabChip(String filterKey, String label) {
     final isSelected = _activeTabFilter == filterKey;
     return Material(
