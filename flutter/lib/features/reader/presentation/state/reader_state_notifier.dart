@@ -27,7 +27,8 @@ class ScriptureVerseUiModel {
     this.bookmark,
   });
 
-  ScriptureVerseUiModel copyWith({LocalBookmarkEntry? bookmark, bool clearBookmark = false}) {
+  ScriptureVerseUiModel copyWith(
+      {LocalBookmarkEntry? bookmark, bool clearBookmark = false}) {
     return ScriptureVerseUiModel(
       chapter: chapter,
       verse: verse,
@@ -93,7 +94,8 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
   })  : _localBibleService = bibleService,
         _database = database,
         super(const ReaderState()) {
-    loadChapter(bookNumber: 1, bookName: 'Génesis', bookId: 'GEN', chapterNumber: 1);
+    loadChapter(
+        bookNumber: 1, bookName: 'Génesis', bookId: 'GEN', chapterNumber: 1);
   }
 
   /// Loads a chapter directly from local SQLite database and dynamically attaches local highlights & notes.
@@ -125,7 +127,8 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
       );
 
       // 2. Fetch local bookmarks for this chapter
-      final localBookmarks = await _database.getBookmarksForChapter(bookId, chapterNumber);
+      final localBookmarks =
+          await _database.getBookmarksForChapter(bookId, chapterNumber);
       final bookmarkMap = {for (var b in localBookmarks) b.verse: b};
 
       // 3. Map to UI Model
@@ -150,14 +153,16 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
     } catch (e) {
       state = state.copyWith(
         status: ReaderStatus.error,
-        errorMessage: 'Error al consultar las Escrituras en la base de datos local: $e',
+        errorMessage:
+            'Error al consultar las Escrituras en la base de datos local: $e',
       );
     }
   }
 
   void _listenToBookmarks(String bookId, int chapter) {
     _bookmarksSubscription?.cancel();
-    _bookmarksSubscription = _database.watchBookmarksForChapter(bookId, chapter).listen((bookmarks) {
+    _bookmarksSubscription =
+        _database.watchBookmarksForChapter(bookId, chapter).listen((bookmarks) {
       final bookmarkMap = {for (var b in bookmarks) b.verse: b};
       final updatedVerses = state.verses.map((verse) {
         return verse.copyWith(
@@ -212,10 +217,9 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
   /// Pins this verse as the Daily Sanctuary Widget & Quick Card
   Future<void> pinAsWidgetVerse(ScriptureVerseUiModel verse) async {
     final ref = '${state.currentBookName} ${verse.chapter}:${verse.verse}';
-    await HomeWidgetService.updateDailyVerse(
+    await HomeWidgetService.updateVerseOfTheDay(
+      reference: ref,
       verseText: verse.text,
-      verseReference: ref,
-      category: 'Santuario',
     );
   }
 
@@ -225,17 +229,3 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
     super.dispose();
   }
 }
-
-final readerNotifierProvider =
-    StateNotifierProvider<ReaderNotifier, ReaderState>((ref) {
-  final db = ref.watch(appDatabaseProvider);
-  return ReaderNotifier(
-    bibleService: LocalBibleService(database: db),
-    database: db,
-  );
-});
-
-// Provider for app database
-final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  throw UnimplementedError('appDatabaseProvider must be overridden in ProviderScope');
-});
