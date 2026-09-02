@@ -3,7 +3,7 @@ import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../shared/services/home_widget_service.dart';
-import '../../data/services/getbible_service.dart';
+import '../../data/services/local_bible_service.dart';
 
 enum ReaderStatus { initial, loading, loaded, error }
 
@@ -83,20 +83,20 @@ class ReaderState {
 }
 
 class ReaderNotifier extends StateNotifier<ReaderState> {
-  final GetBibleService _getBibleService;
+  final LocalBibleService _localBibleService;
   final AppDatabase _database;
   StreamSubscription? _bookmarksSubscription;
 
   ReaderNotifier({
-    required GetBibleService getBibleService,
+    required LocalBibleService bibleService,
     required AppDatabase database,
-  })  : _getBibleService = getBibleService,
+  })  : _localBibleService = bibleService,
         _database = database,
         super(const ReaderState()) {
     loadChapter(bookNumber: 1, bookName: 'Génesis', bookId: 'GEN', chapterNumber: 1);
   }
 
-  /// Loads a chapter from GetBible.net v2 and dynamically attaches local highlights & notes.
+  /// Loads a chapter directly from local SQLite database and dynamically attaches local highlights & notes.
   Future<void> loadChapter({
     required int bookNumber,
     required String bookName,
@@ -115,11 +115,13 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
     );
 
     try {
-      // 1. Fetch remote chapter text
-      final remoteData = await _getBibleService.fetchChapter(
+      // 1. Fetch chapter text directly from local SQLite
+      final localData = await _localBibleService.fetchChapter(
         translationKey: translation,
         bookNumber: bookNumber,
         chapterNumber: chapterNumber,
+        bookCode: bookId,
+        bookName: bookName,
       );
 
       // 2. Fetch local bookmarks for this chapter
@@ -127,7 +129,7 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
       final bookmarkMap = {for (var b in localBookmarks) b.verse: b};
 
       // 3. Map to UI Model
-      final uiVerses = remoteData.verses.map((dto) {
+      final uiVerses = localData.verses.map((dto) {
         return ScriptureVerseUiModel(
           chapter: dto.chapter,
           verse: dto.verse,
@@ -139,77 +141,81 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
 
       state = state.copyWith(
         status: ReaderStatus.loaded,
-        currentBookName: remoteData.bookName.isNotEmpty ? remoteData.bookName : bookName,
         verses: uiVerses,
+        errorMessage: null,
       );
 
-      // 4. Update the Lock Screen Widget with the first verse of the loaded chapter
-      if (uiVerses.isNotEmpty) {
-        await HomeWidgetService.updateVerseOfTheDay(
-          reference: '${state.currentBookName} $chapterNumber:1',
-          verseText: uiVerses.first.text,
-        );
-      }
-
-      // 5. Watch for real-time local bookmark changes
-      _observeLocalBookmarks(bookId, chapterNumber);
+      // Listen for bookmark changes on this chapter
+      _listenToBookmarks(bookId, chapterNumber);
     } catch (e) {
       state = state.copyWith(
         status: ReaderStatus.error,
-        errorMessage: e.toString(),
+        errorMessage: 'Error al consultar las Escrituras en la base de datos local: $e',
       );
     }
   }
 
-  void _observeLocalBookmarks(String bookId, int chapterNumber) {
+  void _listenToBookmarks(String bookId, int chapter) {
     _bookmarksSubscription?.cancel();
-    _bookmarksSubscription = _database
-        .watchBookmarksForChapter(bookId, chapterNumber)
-        .listen((bookmarks) {
+    _bookmarksSubscription = _database.watchBookmarksForChapter(bookId, chapter).listen((bookmarks) {
       final bookmarkMap = {for (var b in bookmarks) b.verse: b};
-      final updated = state.verses.map((v) {
-        return v.copyWith(
-          bookmark: bookmarkMap[v.verse],
-          clearBookmark: !bookmarkMap.containsKey(v.verse),
+      final updatedVerses = state.verses.map((verse) {
+        return verse.copyWith(
+          bookmark: bookmarkMap[verse.verse],
+          clearBookmark: !bookmarkMap.containsKey(verse.verse),
         );
       }).toList();
-
-      state = state.copyWith(verses: updated);
+      state = state.copyWith(verses: updatedVerses);
     });
   }
 
-  /// Saves or updates a highlight, title, and personal note for a specific verse.
-  Future<void> saveHighlightAndReflection({
-    required int verseNumber,
-    required String verseText,
+  /// Toggles a highlight color or adds a new bookmark in local SQLite
+  Future<void> toggleHighlight({
+    required ScriptureVerseUiModel verse,
     required String colorHex,
-    String? customTitle,
-    String? personalNote,
   }) async {
-    final id = '${state.currentBookId}_${state.currentChapter}_$verseNumber';
+    final existing = verse.bookmark;
+    if (existing != null && existing.colorHex == colorHex) {
+      // Remove highlight if same color tapped again
+      await _database.deleteBookmark(existing.id);
+    } else {
+      // Save or update highlight
+      await _database.saveBookmark(
+        bookId: state.currentBookId,
+        chapter: verse.chapter,
+        verse: verse.verse,
+        verseText: verse.text,
+        colorHex: colorHex,
+        customTitle: existing?.customTitle,
+        personalNote: existing?.personalNote,
+      );
+    }
+  }
 
-    await _database.insertOrUpdateBookmark(
-      LocalBookmarksCompanion(
-        id: Value(id),
-        bookId: Value(state.currentBookId),
-        bookName: Value(state.currentBookName),
-        chapter: Value(state.currentChapter),
-        verse: Value(verseNumber),
-        verseText: Value(verseText),
-        colorHex: Value(colorHex),
-        customTitle: Value(customTitle),
-        personalNote: Value(personalNote),
-        isSynced: const Value(false),
-      ),
+  /// Saves a personal study note onto the selected verse in local SQLite
+  Future<void> saveNote({
+    required ScriptureVerseUiModel verse,
+    required String noteText,
+    String? customTitle,
+  }) async {
+    await _database.saveBookmark(
+      bookId: state.currentBookId,
+      chapter: verse.chapter,
+      verse: verse.verse,
+      verseText: verse.text,
+      colorHex: verse.highlightColor ?? '#FED65B',
+      customTitle: customTitle,
+      personalNote: noteText.trim().isEmpty ? null : noteText.trim(),
     );
   }
 
-  /// Removes a highlight and personal note from a verse.
-  Future<void> removeHighlight(int verseNumber) async {
-    await _database.deleteBookmarkByVerse(
-      state.currentBookId,
-      state.currentChapter,
-      verseNumber,
+  /// Pins this verse as the Daily Sanctuary Widget & Quick Card
+  Future<void> pinAsWidgetVerse(ScriptureVerseUiModel verse) async {
+    final ref = '${state.currentBookName} ${verse.chapter}:${verse.verse}';
+    await HomeWidgetService.updateDailyVerse(
+      verseText: verse.text,
+      verseReference: ref,
+      category: 'Santuario',
     );
   }
 
@@ -219,3 +225,17 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
     super.dispose();
   }
 }
+
+final readerNotifierProvider =
+    StateNotifierProvider<ReaderNotifier, ReaderState>((ref) {
+  final db = ref.watch(appDatabaseProvider);
+  return ReaderNotifier(
+    bibleService: LocalBibleService(database: db),
+    database: db,
+  );
+});
+
+// Provider for app database
+final appDatabaseProvider = Provider<AppDatabase>((ref) {
+  throw UnimplementedError('appDatabaseProvider must be overridden in ProviderScope');
+});

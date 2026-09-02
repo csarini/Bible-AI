@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart' show rootBundle;
+import '../../../../core/constants/bible_books.dart';
 import '../../../../core/storage/app_database.dart';
 
 // =============================================================================
-// OFFLINE SYNC STATUS MODEL
+// OFFLINE SYNC / LOCAL IMPORT STATUS MODEL
 // =============================================================================
 
 class OfflineSyncStatus {
@@ -23,7 +24,7 @@ class OfflineSyncStatus {
   const OfflineSyncStatus({
     this.isDownloading = false,
     this.isPaused = false,
-    this.totalChapters = 1189,
+    this.totalChapters = 3567,
     this.downloadedChapters = 0,
     this.progressPercent = 0.0,
     this.isComplete = false,
@@ -61,13 +62,13 @@ class OfflineSyncStatus {
 }
 
 // =============================================================================
-// BACKGROUND BIBLE SYNC & DOWNLOADER SERVICE
+// LOCAL BIBLE SYNC & PERSISTENCE VERIFIER SERVICE
+// (Imports directly from local JSON assets into SQLite - No external API calls)
 // =============================================================================
 
 class OfflineBibleSyncService {
   final AppDatabase database;
-  final http.Client _client;
-  static const int totalBibleChaptersPerTranslation = 1189;
+  static const int totalBibleChaptersAllTranslations = 3567; // 1189 * 3
 
   bool _isCancelled = false;
   bool _isPaused = false;
@@ -80,8 +81,7 @@ class OfflineBibleSyncService {
 
   OfflineBibleSyncService({
     required this.database,
-    http.Client? client,
-  }) : _client = client ?? http.Client() {
+  }) {
     _initInitialStatus();
   }
 
@@ -90,8 +90,8 @@ class OfflineBibleSyncService {
 
   Future<void> _initInitialStatus() async {
     final count = await database.countStoredChapters();
-    final isComplete = count >= totalBibleChaptersPerTranslation;
-    final pct = (count / totalBibleChaptersPerTranslation * 100.0).clamp(0.0, 100.0);
+    final isComplete = count >= 1189;
+    final pct = (count / totalBibleChaptersAllTranslations * 100.0).clamp(0.0, 100.0);
 
     _updateStatus(_currentStatus.copyWith(
       downloadedChapters: count,
@@ -107,7 +107,7 @@ class OfflineBibleSyncService {
     }
   }
 
-  /// Starts or resumes the background download of all versions
+  /// Starts or resumes the background synchronization from local JSON assets to SQLite
   Future<void> startBackgroundSync({String? specificTranslation}) async {
     if (_isRunning && !_isPaused) return;
 
@@ -115,48 +115,105 @@ class OfflineBibleSyncService {
     _isPaused = false;
     _isRunning = true;
 
-    final targetTranslations = specificTranslation != null
-        ? [specificTranslation]
-        : ['valera', 'rv1858', 'sse'];
+    final translationConfigs = specificTranslation != null
+        ? [
+            (
+              key: specificTranslation,
+              folder: '${specificTranslation}_json',
+              prefix: specificTranslation
+            )
+          ]
+        : [
+            (key: 'valera', folder: 'valera_json', prefix: 'valera'),
+            (key: 'sse', folder: 'sse_json', prefix: 'sse'),
+            (key: 'rv1858', folder: 'rv1858_json', prefix: 'rv1858'),
+          ];
 
     try {
-      for (final transKey in targetTranslations) {
+      for (final config in translationConfigs) {
         if (_isCancelled) break;
-
-        final books = await database.getBooksByTranslation(transKey);
-        if (books.isEmpty) continue;
 
         _updateStatus(_currentStatus.copyWith(
           isDownloading: true,
           isPaused: false,
-          activeTranslation: transKey,
+          activeTranslation: config.key,
         ));
 
-        for (final book in books) {
+        for (int bookNr = 1; bookNr <= 66; bookNr++) {
           if (_isCancelled) break;
           while (_isPaused) {
             await Future.delayed(const Duration(milliseconds: 300));
             if (_isCancelled) break;
           }
 
-          _updateStatus(_currentStatus.copyWith(
-            activeBookName: book.name,
-            activeChapter: 1,
-          ));
+          final filePath =
+              'assets/data/${config.folder}/${config.prefix}_$bookNr.json';
 
-          await _downloadAndSaveBook(book, transKey);
+          try {
+            final jsonString = await rootBundle.loadString(filePath);
+            final bookMap = json.decode(jsonString) as Map<String, dynamic>;
+            final bookName =
+                bookMap['name'] as String? ?? 'Libro $bookNr';
+            final meta = kCanonicalBookMetadata[bookNr] ??
+                (code: 'BK$bookNr', chapters: 1, isNT: bookNr >= 40);
 
-          final count = await database.countStoredChapters(transKey);
-          final pct = (count / totalBibleChaptersPerTranslation * 100.0).clamp(0.0, 100.0);
+            _updateStatus(_currentStatus.copyWith(
+              activeBookName: bookName,
+              activeChapter: 1,
+            ));
+
+            final chaptersList =
+                bookMap['chapters'] as List<dynamic>? ?? [];
+            final chaptersToInsert = <LocalBibleChaptersCompanion>[];
+
+            for (final chItem in chaptersList) {
+              if (chItem is Map<String, dynamic>) {
+                final chNum = chItem['chapter'] as int? ?? 1;
+                final rawVerses =
+                    chItem['verses'] as List<dynamic>? ?? [];
+
+                final versesData = rawVerses.map((v) {
+                  return {
+                    'chapter': chNum,
+                    'verse': v['verse'] ?? 1,
+                    'name': v['name'] ?? '',
+                    'text': (v['text'] as String? ?? '').trim(),
+                  };
+                }).toList();
+
+                if (versesData.isNotEmpty) {
+                  chaptersToInsert.add(LocalBibleChaptersCompanion.insert(
+                    id: '${config.key}_${bookNr}_$chNum',
+                    translationKey: config.key,
+                    bookNumber: bookNr,
+                    bookCode: meta.code,
+                    name: bookName,
+                    chapter: chNum,
+                    versesJson: json.encode(versesData),
+                    verseCount: Value(versesData.length),
+                  ));
+                }
+              }
+            }
+
+            if (chaptersToInsert.isNotEmpty) {
+              await database.saveChaptersBatch(chaptersToInsert);
+            }
+          } catch (e) {
+            debugPrint('Local sync error for $filePath: $e');
+          }
+
+          final count = await database.countStoredChapters();
+          final pct = (count / totalBibleChaptersAllTranslations * 100.0)
+              .clamp(0.0, 100.0);
 
           _updateStatus(_currentStatus.copyWith(
             downloadedChapters: count,
             progressPercent: pct,
-            isComplete: count >= totalBibleChaptersPerTranslation,
+            isComplete: count >= 1189,
           ));
 
-          // Small delay to prevent network congestion
-          await Future.delayed(const Duration(milliseconds: 40));
+          await Future.delayed(const Duration(milliseconds: 10));
         }
       }
 
@@ -171,111 +228,13 @@ class OfflineBibleSyncService {
         isComplete: true,
       ));
     } catch (e) {
-      debugPrint('Background sync error: $e');
+      debugPrint('Background local sync error: $e');
       _updateStatus(_currentStatus.copyWith(
         isDownloading: false,
         lastError: e.toString(),
       ));
     } finally {
       _isRunning = false;
-    }
-  }
-
-  /// Downloads an entire book using its URL or chapter by chapter
-  Future<void> _downloadAndSaveBook(BibleBookEntry book, String translationKey) async {
-    final bookUrl = book.url ?? 'https://api.getbible.net/v2/$translationKey/${book.bookNumber}.json';
-
-    try {
-      final response = await _client.get(
-        Uri.parse(bookUrl),
-        headers: {'Accept': 'application/json'},
-      ).timeout(const Duration(seconds: 15));
-
-      if (response.statusCode == 200) {
-        final decoded = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-        final chaptersList = decoded['chapters'] as List<dynamic>?;
-
-        if (chaptersList != null && chaptersList.isNotEmpty) {
-          for (final chItem in chaptersList) {
-            if (_isCancelled) break;
-            if (chItem is Map<String, dynamic>) {
-              final chNum = chItem['chapter'] as int? ?? 1;
-              final rawVerses = chItem['verses'] as List<dynamic>? ?? [];
-
-              final versesData = rawVerses.map((v) {
-                return {
-                  'chapter': chNum,
-                  'verse': v['verse'] ?? 1,
-                  'name': v['name'] ?? '',
-                  'text': (v['text'] as String? ?? '').trim(),
-                };
-              }).toList();
-
-              if (versesData.isNotEmpty) {
-                await database.saveChapter(
-                  translationKey: translationKey,
-                  bookNumber: book.bookNumber,
-                  bookCode: book.bookCode,
-                  bookName: decoded['name'] as String? ?? book.name,
-                  chapter: chNum,
-                  versesJson: json.encode(versesData),
-                  verseCount: versesData.length,
-                );
-              }
-            }
-          }
-          return; // Successfully saved full book!
-        }
-      }
-    } catch (e) {
-      debugPrint('Full book download fallback for ${book.name} ($translationKey): $e');
-    }
-
-    // Fallback: download chapter by chapter if full book endpoint wasn't available
-    for (int ch = 1; ch <= book.totalChapters; ch++) {
-      if (_isCancelled) break;
-      while (_isPaused) {
-        await Future.delayed(const Duration(milliseconds: 300));
-        if (_isCancelled) break;
-      }
-
-      final alreadyExists = await database.hasChapter(translationKey, book.bookNumber, ch);
-      if (alreadyExists) continue;
-
-      try {
-        final chUri = Uri.parse('https://api.getbible.net/v2/$translationKey/${book.bookNumber}/$ch.json');
-        final chRes = await _client.get(chUri, headers: {'Accept': 'application/json'}).timeout(const Duration(seconds: 8));
-
-        if (chRes.statusCode == 200) {
-          final decoded = json.decode(utf8.decode(chRes.bodyBytes)) as Map<String, dynamic>;
-          final rawVerses = decoded['verses'] as List<dynamic>? ?? [];
-
-          final versesData = rawVerses.map((v) {
-            return {
-              'chapter': ch,
-              'verse': v['verse'] ?? 1,
-              'name': v['name'] ?? '',
-              'text': (v['text'] as String? ?? '').trim(),
-            };
-          }).toList();
-
-          if (versesData.isNotEmpty) {
-            await database.saveChapter(
-              translationKey: translationKey,
-              bookNumber: book.bookNumber,
-              bookCode: book.bookCode,
-              bookName: decoded['book_name'] as String? ?? book.name,
-              chapter: ch,
-              versesJson: json.encode(versesData),
-              verseCount: versesData.length,
-            );
-          }
-        }
-      } catch (_) {
-        // Continue to next chapter
-      }
-
-      await Future.delayed(const Duration(milliseconds: 20));
     }
   }
 

@@ -1,5 +1,5 @@
 import '../entities/verse_entity.dart';
-import '../../data/services/getbible_service.dart';
+import '../../data/services/local_bible_service.dart';
 
 abstract class ScriptureRepository {
   Future<List<VerseEntity>> getChapter({
@@ -12,10 +12,10 @@ abstract class ScriptureRepository {
 }
 
 class ScriptureRepositoryImpl implements ScriptureRepository {
-  final GetBibleService _service;
+  final LocalBibleService _service;
 
-  ScriptureRepositoryImpl({GetBibleService? service})
-      : _service = service ?? GetBibleService();
+  ScriptureRepositoryImpl({required LocalBibleService service})
+      : _service = service;
 
   @override
   Future<List<VerseEntity>> getChapter({
@@ -29,6 +29,8 @@ class ScriptureRepositoryImpl implements ScriptureRepository {
       translationKey: translation,
       chapterNumber: chapter,
       bookNumber: bookNumber,
+      bookName: bookName,
+      bookCode: bookId,
     );
     return response.verses
         .map((verse) => VerseEntity(
