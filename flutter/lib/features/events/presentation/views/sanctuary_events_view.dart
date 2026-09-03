@@ -484,42 +484,75 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         children: [
                           // "Todos" Chip
-                          ChoiceChip(
-                            label: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(LucideIcons.sparkles, size: 13),
-                                const SizedBox(width: 4),
-                                const Text('Todos'),
-                                const SizedBox(width: 6),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 1),
-                                  decoration: BoxDecoration(
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () =>
+                                  setState(() => _selectedCategoryFilter = 'ALL'),
+                              borderRadius: BorderRadius.circular(20),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: _selectedCategoryFilter == 'ALL'
+                                      ? SanctuaryColors.waveNavy
+                                      : theme.colorScheme.surface,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
                                     color: _selectedCategoryFilter == 'ALL'
-                                        ? Colors.white.withValues(alpha: 0.25)
-                                        : theme.colorScheme.onSurface
-                                            .withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Text(
-                                    '${allEvents.length}',
-                                    style: const TextStyle(fontSize: 10),
+                                        ? SanctuaryColors.waveNavy
+                                        : theme.colorScheme.outline
+                                            .withValues(alpha: 0.25),
+                                    width: 1.1,
                                   ),
                                 ),
-                              ],
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      LucideIcons.sparkles,
+                                      size: 13,
+                                      color: _selectedCategoryFilter == 'ALL'
+                                          ? Colors.white
+                                          : theme.colorScheme.onSurface,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      'Todos',
+                                      style: TextStyle(
+                                        color: _selectedCategoryFilter == 'ALL'
+                                            ? Colors.white
+                                            : theme.colorScheme.onSurface,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 1),
+                                      decoration: BoxDecoration(
+                                        color: _selectedCategoryFilter == 'ALL'
+                                            ? Colors.white.withValues(alpha: 0.25)
+                                            : theme.colorScheme.onSurface
+                                                .withValues(alpha: 0.1),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(
+                                        '${allEvents.length}',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: _selectedCategoryFilter == 'ALL'
+                                              ? Colors.white
+                                              : theme.colorScheme.onSurface,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                            selected: _selectedCategoryFilter == 'ALL',
-                            selectedColor: SanctuaryColors.waveNavy,
-                            labelStyle: TextStyle(
-                              color: _selectedCategoryFilter == 'ALL'
-                                  ? Colors.white
-                                  : theme.colorScheme.onSurface,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12,
-                            ),
-                            onSelected: (_) =>
-                                setState(() => _selectedCategoryFilter = 'ALL'),
                           ),
                           const SizedBox(width: 8),
 
@@ -535,52 +568,86 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
 
                             return Padding(
                               padding: const EdgeInsets.only(right: 8),
-                              child: ChoiceChip(
-                                label: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        color: catColor,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Icon(catIcon, size: 13),
-                                    const SizedBox(width: 4),
-                                    Text(cat.name),
-                                    const SizedBox(width: 6),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 5, vertical: 1),
-                                      decoration: BoxDecoration(
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () => setState(
+                                      () => _selectedCategoryFilter = cat.id),
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: isSelected
+                                          ? SanctuaryColors.waveNavy
+                                          : theme.colorScheme.surface,
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
                                         color: isSelected
-                                            ? Colors.white
-                                                .withValues(alpha: 0.25)
-                                            : theme.colorScheme.onSurface
-                                                .withValues(alpha: 0.1),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Text(
-                                        '$count',
-                                        style: const TextStyle(fontSize: 10),
+                                            ? SanctuaryColors.waveNavy
+                                            : theme.colorScheme.outline
+                                                .withValues(alpha: 0.25),
+                                        width: 1.1,
                                       ),
                                     ),
-                                  ],
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          width: 8,
+                                          height: 8,
+                                          decoration: BoxDecoration(
+                                            color: catColor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Icon(
+                                          catIcon,
+                                          size: 13,
+                                          color: isSelected
+                                              ? Colors.white
+                                              : theme.colorScheme.onSurface,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          cat.name,
+                                          style: TextStyle(
+                                            color: isSelected
+                                                ? Colors.white
+                                                : theme.colorScheme.onSurface,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 1),
+                                          decoration: BoxDecoration(
+                                            color: isSelected
+                                                ? Colors.white
+                                                    .withValues(alpha: 0.25)
+                                                : theme.colorScheme.onSurface
+                                                    .withValues(alpha: 0.1),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Text(
+                                            '$count',
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: isSelected
+                                                  ? Colors.white
+                                                  : theme.colorScheme.onSurface,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                                selected: isSelected,
-                                selectedColor: SanctuaryColors.waveNavy,
-                                labelStyle: TextStyle(
-                                  color: isSelected
-                                      ? Colors.white
-                                      : theme.colorScheme.onSurface,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 12,
-                                ),
-                                onSelected: (_) => setState(
-                                    () => _selectedCategoryFilter = cat.id),
                               ),
                             );
                           }),

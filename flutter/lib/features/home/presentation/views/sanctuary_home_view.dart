@@ -224,7 +224,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
           children: [
             // Filter Topics Horizontal Row
             SizedBox(
-              height: 40,
+              height: 38,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: _themeFilters.length,
@@ -232,54 +232,69 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                 itemBuilder: (context, index) {
                   final filter = _themeFilters[index];
                   final isSelected = filter == _selectedThemeFilter;
-                  return ChoiceChip(
-                    label: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (filter == 'Todos')
-                          Icon(
-                            LucideIcons.sparkles,
-                            size: 13,
-                            color: isSelected
-                                ? Colors.white
-                                : SanctuaryColors.sunOrange,
-                          )
-                        else
-                          Icon(
-                            LucideIcons.heartHandshake,
-                            size: 13,
-                            color: isSelected
-                                ? Colors.white
-                                : SanctuaryColors.sunOrange,
-                          ),
-                        const SizedBox(width: 6),
-                        Text(filter),
-                      ],
-                    ),
-                    selected: isSelected,
-                    selectedColor: tokens.activeState,
-                    backgroundColor: tokens.surfaceElevated,
-                    side: BorderSide(
-                      color: isSelected
-                          ? tokens.activeState
-                          : theme.colorScheme.outline.withValues(alpha: 0.25),
-                      width: 1.1,
-                    ),
-                    labelStyle: TextStyle(
-                      color: isSelected
-                          ? Colors.white
-                          : theme.colorScheme.onSurface,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 12.5,
-                    ),
-                    onSelected: (selected) {
-                      if (selected) {
+                  return Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
                         setState(() {
                           _selectedThemeFilter = filter;
                         });
                         _randomizeVerse(theme: filter);
-                      }
-                    },
+                      },
+                      borderRadius: BorderRadius.circular(20),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 7),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? tokens.activeState
+                              : tokens.surfaceElevated,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: isSelected
+                                ? tokens.activeState
+                                : theme.colorScheme.outline.withValues(alpha: 0.25),
+                            width: 1.1,
+                          ),
+                          boxShadow: isSelected
+                              ? [
+                                  BoxShadow(
+                                    color: tokens.activeState
+                                        .withValues(alpha: 0.25),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ]
+                              : null,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              filter == 'Todos'
+                                  ? LucideIcons.sparkles
+                                  : LucideIcons.heartHandshake,
+                              size: 13,
+                              color: isSelected
+                                  ? Colors.white
+                                  : SanctuaryColors.sunOrange,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              filter,
+                              style: GoogleFonts.inter(
+                                color: isSelected
+                                    ? Colors.white
+                                    : theme.colorScheme.onSurface,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   );
                 },
               ),
@@ -313,37 +328,32 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Flexible(
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 5),
-                                  decoration: BoxDecoration(
-                                    color: tokens.activeState,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(
-                                        LucideIcons.sun,
-                                        size: 14,
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                  color: tokens.activeState,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      LucideIcons.sun,
+                                      size: 14,
+                                      color: SanctuaryColors.amberGold,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      'Versículo del Día',
+                                      maxLines: 1,
+                                      style: GoogleFonts.inter(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12,
                                         color: SanctuaryColors.amberGold,
                                       ),
-                                      const SizedBox(width: 6),
-                                      Flexible(
-                                        child: Text(
-                                          'Versículo del Día',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w800,
-                                            fontSize: 12,
-                                            color: SanctuaryColors.amberGold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               const SizedBox(width: 8),

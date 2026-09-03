@@ -39,6 +39,11 @@ export const BottomNavBar: React.FC<BottomNavBarProps> = ({
       label: 'Guardados',
       icon: Bookmark,
       badge: savedCount > 0 ? savedCount : null
+    },
+    {
+      id: 'ai-mentor' as ActiveTab,
+      label: 'Mentor IA',
+      icon: Sparkles
     }
   ];
 
