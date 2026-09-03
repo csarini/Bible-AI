@@ -294,37 +294,45 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 2),
-                                    decoration: BoxDecoration(
-                                      color: SanctuaryColors.waveNavy,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Text(
-                                      'BITÁCORA ECLESIAL',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 9.5,
-                                        fontWeight: FontWeight.w800,
-                                        color: Colors.white,
-                                        letterSpacing: 0.8,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: SanctuaryColors.waveNavy,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        'BITÁCORA ECLESIAL',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 9.5,
+                                          fontWeight: FontWeight.w800,
+                                          color: Colors.white,
+                                          letterSpacing: 0.8,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'Prédicas & Eventos',
-                                    style: GoogleFonts.playfairDisplay(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w800,
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Prédicas & Eventos',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.playfairDisplay(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w800,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
+                              const SizedBox(width: 8),
                               Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (allEvents.isNotEmpty)
                                     ElevatedButton.icon(
@@ -354,13 +362,16 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                           size: 13),
                                       label: Text(
                                         'Iniciar',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.inter(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w800,
                                         ),
                                       ),
                                     ),
-                                  const SizedBox(width: 6),
+                                  if (allEvents.isNotEmpty)
+                                    const SizedBox(width: 6),
                                   ElevatedButton.icon(
                                     onPressed: () =>
                                         _openEventFormSheet(context),
@@ -379,6 +390,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                         const Icon(LucideIcons.plus, size: 14),
                                     label: Text(
                                       'Nuevo Apunte',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.inter(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700,
@@ -390,8 +403,10 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                             ],
                           ),
                           const SizedBox(height: 10),
-                          // Stats row
-                          Row(
+                          // Stats row wrapped safely
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 6,
                             children: [
                               _buildStatBadge(
                                 icon: LucideIcons.mic,
@@ -399,14 +414,12 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                 color: SanctuaryColors.waveNavy,
                                 theme: theme,
                               ),
-                              const SizedBox(width: 8),
                               _buildStatBadge(
                                 icon: LucideIcons.folderPlus,
                                 label: '${categories.length} categorías',
                                 color: SanctuaryColors.sunOrange,
                                 theme: theme,
                               ),
-                              const SizedBox(width: 8),
                               _buildStatBadge(
                                 icon: LucideIcons.bookOpen,
                                 label: '$totalVerses citas',
@@ -769,37 +782,51 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8,
-                                                      vertical: 3),
-                                              decoration: BoxDecoration(
-                                                color: catColor.withValues(
-                                                    alpha: 0.12),
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Icon(catIcon,
-                                                      size: 13,
-                                                      color: catColor),
-                                                  const SizedBox(width: 5),
-                                                  Text(
-                                                    cat.name,
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 11.5,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      color: catColor,
-                                                    ),
+                                            Expanded(
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                          horizontal: 8,
+                                                          vertical: 3),
+                                                  decoration: BoxDecoration(
+                                                    color: catColor.withValues(
+                                                        alpha: 0.12),
+                                                    borderRadius:
+                                                        BorderRadius.circular(8),
                                                   ),
-                                                ],
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Icon(catIcon,
+                                                          size: 13,
+                                                          color: catColor),
+                                                      const SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          cat.name,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                              GoogleFonts.inter(
+                                                            fontSize: 11.5,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            color: catColor,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
                                             ),
+                                            const SizedBox(width: 8),
                                             Row(
+                                              mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 const Icon(LucideIcons.calendar,
                                                     size: 13,
@@ -811,6 +838,9 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                                       .toLocal()
                                                       .toString()
                                                       .split(' ')[0],
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: GoogleFonts.inter(
                                                     fontSize: 12,
                                                     fontWeight: FontWeight.w700,
@@ -1032,46 +1062,60 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             // Pulpit mode button
-                                            FilledButton.tonalIcon(
-                                              onPressed: () {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        PulpitPresentationView(
-                                                      event: item,
+                                            Flexible(
+                                              child: FilledButton.tonalIcon(
+                                                onPressed: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          PulpitPresentationView(
+                                                        event: item,
+                                                      ),
                                                     ),
+                                                  );
+                                                },
+                                                style: FilledButton.styleFrom(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 6),
+                                                  backgroundColor:
+                                                      SanctuaryColors.waveNavy
+                                                          .withValues(
+                                                              alpha: 0.1),
+                                                ),
+                                                icon: const Icon(
+                                                    LucideIcons.presentation,
+                                                    size: 13,
+                                                    color: SanctuaryColors
+                                                        .waveNavy),
+                                                label: Text(
+                                                  'Modo Púlpito',
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 11.5,
+                                                    fontWeight: FontWeight.w800,
+                                                    color: SanctuaryColors
+                                                        .waveNavy,
                                                   ),
-                                                );
-                                              },
-                                              style: FilledButton.styleFrom(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 6),
-                                                backgroundColor: SanctuaryColors
-                                                    .waveNavy
-                                                    .withValues(alpha: 0.1),
-                                              ),
-                                              icon: const Icon(
-                                                  LucideIcons.presentation,
-                                                  size: 13,
-                                                  color:
-                                                      SanctuaryColors.waveNavy),
-                                              label: Text(
-                                                'Modo Púlpito',
-                                                style: GoogleFonts.inter(
-                                                  fontSize: 11.5,
-                                                  fontWeight: FontWeight.w800,
-                                                  color:
-                                                      SanctuaryColors.waveNavy,
                                                 ),
                                               ),
                                             ),
-
+                                            const SizedBox(width: 6),
                                             Row(
+                                              mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 // Share button
                                                 IconButton(
+                                                  visualDensity:
+                                                      VisualDensity.compact,
+                                                  padding: EdgeInsets.zero,
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                          minWidth: 34,
+                                                          minHeight: 34),
                                                   icon: const Icon(
                                                       LucideIcons.share2,
                                                       size: 16),
@@ -1084,6 +1128,13 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                                 ),
                                                 // Edit button
                                                 IconButton(
+                                                  visualDensity:
+                                                      VisualDensity.compact,
+                                                  padding: EdgeInsets.zero,
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                          minWidth: 34,
+                                                          minHeight: 34),
                                                   icon: const Icon(
                                                       LucideIcons.edit3,
                                                       size: 16),
@@ -1095,6 +1146,13 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                                                 ),
                                                 // Delete button
                                                 IconButton(
+                                                  visualDensity:
+                                                      VisualDensity.compact,
+                                                  padding: EdgeInsets.zero,
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                          minWidth: 34,
+                                                          minHeight: 34),
                                                   icon: const Icon(
                                                       LucideIcons.trash2,
                                                       size: 16,
@@ -1227,37 +1285,48 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(LucideIcons.arrowLeft, size: 20),
-                              onPressed: () => Navigator.of(ctx).pop(),
-                            ),
-                            const SizedBox(width: 4),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  event != null
-                                      ? 'Editar Apunte / Prédica'
-                                      : 'Nueva Prédica o Devocional',
-                                  style: GoogleFonts.inter(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 16,
-                                  ),
+                        Expanded(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(LucideIcons.arrowLeft, size: 20),
+                                onPressed: () => Navigator.of(ctx).pop(),
+                              ),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      event != null
+                                          ? 'Editar Apunte / Prédica'
+                                          : 'Nueva Prédica o Devocional',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.inter(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Bitácora litúrgica eclesial',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.inter(
+                                        fontSize: 11,
+                                        color: theme.colorScheme.onSurface
+                                            .withValues(alpha: 0.6),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  'Bitácora litúrgica eclesial',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 11,
-                                    color: theme.colorScheme.onSurface
-                                        .withValues(alpha: 0.6),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
+                        const SizedBox(width: 8),
                         FilledButton.icon(
                           onPressed: () async {
                             if (titleController.text.trim().isEmpty) {

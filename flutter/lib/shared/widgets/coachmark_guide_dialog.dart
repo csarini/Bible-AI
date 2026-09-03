@@ -1,63 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../core/theme/sanctuary_colors.dart';
 
 class GuideStep {
   final String title;
   final String description;
   final IconData icon;
+  final Color color;
   final String tag;
-  final int targetIndex; // Índice correspondiente en selectedTabProvider
 
   const GuideStep({
     required this.title,
     required this.description,
     required this.icon,
+    required this.color,
     required this.tag,
-    required this.targetIndex,
   });
 }
 
 const List<GuideStep> kGuideSteps = [
   GuideStep(
-    title: '1. Inicio & Devocionales',
+    title: '1. Inicio & Devocional Diario',
     description:
-        'Accede al versículo del día, planes devocionales diarios, oraciones temáticas y resumen espiritual de tu jornada.',
+        'Encuentra versículos diarios seleccionados por temática (Paz, Esperanza, Fortaleza, Sabiduría) con reflexiones espirituales, oraciones guiadas y audio TTS.',
     icon: LucideIcons.home,
+    color: SanctuaryColors.sunOrange,
     tag: 'ESPIRITUALIDAD',
-    targetIndex: 0,
   ),
   GuideStep(
-    title: '2. Búsqueda & Biblioteca (66 Libros)',
+    title: '2. Lector Bíblico & Versículos',
     description:
-        'Explora los 66 libros del Antiguo y Nuevo Testamento. Escribe referencias directas (ej. "Juan 3:16") para saltar al texto al instante.',
-    icon: LucideIcons.library,
-    tag: 'NAVEGACIÓN',
-    targetIndex: 2,
-  ),
-  GuideStep(
-    title: '3. Lectura Inmersiva',
-    description:
-        'Experiencia de lectura inmersiva con selección de tipografías, tamaño de letra, interlineado y resaltador de versículos.',
+        'Lee los 66 libros canónicos con ajuste de tamaño de letra, fuentes (Merriweather, Playfair, Jakarta), interlineado, resaltador multicolor y notas personales.',
     icon: LucideIcons.bookOpen,
+    color: SanctuaryColors.waveNavy,
     tag: 'CANON BÍBLICO',
-    targetIndex: 1,
   ),
   GuideStep(
-    title: '4. Notas & Versículos Guardados',
+    title: '3. Biblioteca & Búsqueda Rápida',
     description:
-        'Organiza tus versículos marcados, marcadores de lectura y apuntes personales en un solo lugar estructurado.',
-    icon: LucideIcons.bookmark,
-    tag: 'ESTUDIO PERSONAL',
-    targetIndex: 3,
+        'Filtra rápidamente por Antiguo y Nuevo Testamento. Escribe referencias directas como "Juan 3:16" o "Mateo 4" para saltar al versículo al instante.',
+    icon: LucideIcons.search,
+    color: SanctuaryColors.cyanAccent,
+    tag: 'NAVEGACIÓN',
   ),
   GuideStep(
-    title: '5. Mentor Teológico IA',
+    title: '4. Mapas Bíblicos Interactivos',
     description:
-        'Asistente bíblico con inteligencia artificial para responder consultas doctrinales, contextos históricos y pasajes paralelos.',
+        'Explora los 4 viajes misioneros del apóstol Pablo, la ruta del Éxodo por el Mar Rojo y el Monte Sinaí con detalles geográficos e históricos.',
+    icon: LucideIcons.map,
+    color: SanctuaryColors.waveNavy,
+    tag: 'GEOGRAFÍA BÍBLICA',
+  ),
+  GuideStep(
+    title: '5. Prédicas & Modo Púlpito HD',
+    description:
+        'Diseñado para pastores y predicadores: vista de alto contraste para proyección, temporizador de mensaje, notas de sermón y control de tipografía grande.',
+    icon: LucideIcons.mic,
+    color: SanctuaryColors.brandPurple,
+    tag: 'MINISTERIO',
+  ),
+  GuideStep(
+    title: '6. Mentor Teológico IA',
+    description:
+        'Consulta dudas doctrinales, contexto histórico y pasajes paralelos con asistencia de IA responsable basada estrictamente en las Sagradas Escrituras.',
     icon: LucideIcons.sparkles,
-    tag: 'INTELIGENCIA ARTIFICIAL',
-    targetIndex: 6,
+    color: Color(0xFF10B981),
+    tag: 'ESTUDIO BÍBLICO',
+  ),
+  GuideStep(
+    title: '7. Ajustes, 3 Temas & Respaldo JSON',
+    description:
+        'Alterna al instante entre modo Claro (Pergamino), Sepia (Cálido) y Oscuro (Noche). Exporta e importa copias de seguridad de todas tus notas en formato JSON.',
+    icon: LucideIcons.settings,
+    color: Color(0xFF705335),
+    tag: 'PERSONALIZACIÓN',
   ),
 ];
 
@@ -84,7 +101,6 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final primaryColor = theme.colorScheme.primary;
     final step = kGuideSteps[_currentStepIndex];
     final isLastStep = _currentStepIndex == kGuideSteps.length - 1;
 
@@ -99,7 +115,7 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header con Categoría y Progreso
+            // Header
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -107,7 +123,7 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: primaryColor.withValues(alpha: 0.12),
+                    color: step.color.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -116,7 +132,7 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.8,
-                      color: primaryColor,
+                      color: step.color,
                     ),
                   ),
                 ),
@@ -133,29 +149,30 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
 
             const SizedBox(height: 18),
 
-            // Tarjeta del Paso Actual
+            // Step Visual Card
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: primaryColor.withValues(alpha: 0.08),
+                color: step.color.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: primaryColor.withValues(alpha: 0.2)),
+                border: Border.all(color: step.color.withValues(alpha: 0.2)),
               ),
               child: Row(
                 children: [
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: primaryColor,
+                      color: step.color,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Icon(step.icon,
-                        size: 28, color: theme.colorScheme.onPrimary),
+                    child: Icon(step.icon, size: 28, color: Colors.white),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
                     child: Text(
                       step.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
@@ -169,7 +186,7 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
 
             const SizedBox(height: 16),
 
-            // Descripción
+            // Description
             Text(
               step.description,
               style: GoogleFonts.inter(
@@ -181,7 +198,7 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
 
             const SizedBox(height: 22),
 
-            // Indicadores de Puntos
+            // Step Indicators Dots
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(kGuideSteps.length, (index) {
@@ -193,8 +210,8 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
                   height: 7,
                   decoration: BoxDecoration(
                     color: isCurrent
-                        ? primaryColor
-                        : theme.colorScheme.outline.withValues(alpha: 0.3),
+                        ? SanctuaryColors.waveNavy
+                        : Colors.grey.shade300,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 );
@@ -203,27 +220,30 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
 
             const SizedBox(height: 20),
 
-            // Botones de Navegación
+            // Actions (Previous / Next / Finish)
             Row(
               children: [
                 if (_currentStepIndex > 0)
                   TextButton(
                     onPressed: () => setState(() => _currentStepIndex--),
-                    child: const Text('Anterior'),
+                    child: const Text(
+                      'Anterior',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   )
                 else
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text('Omitir'),
+                    child: const Text(
+                      'Omitir',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 const Spacer(),
                 FilledButton.icon(
                   onPressed: () {
-                    // Si se pasó una función para cambiar de pantalla al finalizar
-                    if (widget.onNavigateToSection != null) {
-                      widget.onNavigateToSection!(step.targetIndex);
-                    }
-
                     if (isLastStep) {
                       Navigator.pop(context);
                     } else {
@@ -231,8 +251,7 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
                     }
                   },
                   style: FilledButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    foregroundColor: theme.colorScheme.onPrimary,
+                    backgroundColor: SanctuaryColors.waveNavy,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 18, vertical: 12),
                     shape: RoundedRectangleBorder(
@@ -241,7 +260,11 @@ class _CoachMarkGuideDialogState extends State<CoachMarkGuideDialog> {
                   icon: Icon(
                       isLastStep ? LucideIcons.check : LucideIcons.arrowRight,
                       size: 16),
-                  label: Text(isLastStep ? '¡Entendido!' : 'Siguiente'),
+                  label: Text(
+                    isLastStep ? '¡Comenzar!' : 'Siguiente',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),

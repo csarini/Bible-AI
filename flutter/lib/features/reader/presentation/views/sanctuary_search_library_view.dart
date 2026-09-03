@@ -590,6 +590,8 @@ class _SanctuarySearchLibraryViewState
                             Expanded(
                               child: Text(
                                 'Ir directo a ${directRef.book.name} ${directRef.chapter}${directRef.verse != null ? ':${directRef.verse}' : ''}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.inter(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 13.5,
@@ -622,13 +624,13 @@ class _SanctuarySearchLibraryViewState
                   const SizedBox(height: 14),
 
                   // Filter Tabs in Institutional Navy Palette
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 8,
+                    runSpacing: 8,
                     children: [
                       _buildTabChip('all', 'Todos (66)', tokens),
-                      const SizedBox(width: 8),
                       _buildTabChip('OT', 'Antiguo ($oldTestamentCount)', tokens),
-                      const SizedBox(width: 8),
                       _buildTabChip('NT', 'Nuevo ($newTestamentCount)', tokens),
                     ],
                   ),
@@ -701,12 +703,16 @@ class _SanctuarySearchLibraryViewState
                                     color: SanctuaryColors.sunOrange,
                                   ),
                                   const SizedBox(width: 6),
-                                  Text(
-                                    term,
-                                    style: GoogleFonts.inter(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                      color: theme.colorScheme.onSurface,
+                                  Flexible(
+                                    child: Text(
+                                      term,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.inter(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                        color: theme.colorScheme.onSurface,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -913,27 +919,34 @@ class _BookChapterVersePickerSheetState
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.book.name,
-                    style: GoogleFonts.playfairDisplay(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.book.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.playfairDisplay(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    widget.book.isNewTestament
-                        ? 'Nuevo Testamento'
-                        : 'Antiguo Testamento',
-                    style: GoogleFonts.inter(
-                      fontSize: 11,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    Text(
+                      widget.book.isNewTestament
+                          ? 'Nuevo Testamento'
+                          : 'Antiguo Testamento',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               // Step Switcher
               Container(
                 padding: const EdgeInsets.all(4),
@@ -1018,13 +1031,18 @@ class _BookChapterVersePickerSheetState
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Capítulo $_selectedChapter: Selecciona un versículo',
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12.5,
+                Expanded(
+                  child: Text(
+                    'Capítulo $_selectedChapter: Selecciona un versículo',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12.5,
+                    ),
                   ),
                 ),
+                const SizedBox(width: 6),
                 TextButton.icon(
                   onPressed: () =>
                       widget.onSelectPassage(_selectedChapter, null),

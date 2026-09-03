@@ -372,14 +372,15 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                     style:
                         TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 6),
-                Row(
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
                   children: SanctuaryColors.pastelPalette.map((col) {
                     final hex = SanctuaryColors.colorToHex(col);
                     final isChosen = selectedHex == hex;
                     return GestureDetector(
                       onTap: () => setDialogState(() => selectedHex = hex),
                       child: Container(
-                        margin: const EdgeInsets.only(right: 8),
                         width: 32,
                         height: 32,
                         decoration: BoxDecoration(
@@ -559,11 +560,15 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  '${_currentBook.name} $_currentChapter',
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 16.5,
+                Flexible(
+                  child: Text(
+                    '${_currentBook.name} $_currentChapter',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16.5,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -783,58 +788,73 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // Pastel colors selector
-              Row(
-                children: SanctuaryColors.pastelPalette.map((color) {
-                  final hex = SanctuaryColors.colorToHex(color);
-                  final label = SanctuaryColors.getHighlightLabel(hex);
-                  return Tooltip(
-                    message: label,
-                    child: GestureDetector(
-                      onTap: () async {
-                        final id =
-                            '${_selectedVerse!.bookId}_${_selectedVerse!.chapter}_${_selectedVerse!.number}';
-                        await widget.database.insertOrUpdateBookmark(
-                          LocalBookmarksCompanion.insert(
-                            id: id,
-                            bookId: _selectedVerse!.bookId,
-                            bookName: _selectedVerse!.bookName,
-                            chapter: _selectedVerse!.chapter,
-                            verse: _selectedVerse!.number,
-                            verseText: _selectedVerse!.text,
-                            colorHex: hex,
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: SanctuaryColors.pastelPalette.map((color) {
+                      final hex = SanctuaryColors.colorToHex(color);
+                      final label = SanctuaryColors.getHighlightLabel(hex);
+                      return Tooltip(
+                        message: label,
+                        child: GestureDetector(
+                          onTap: () async {
+                            final id =
+                                '${_selectedVerse!.bookId}_${_selectedVerse!.chapter}_${_selectedVerse!.number}';
+                            await widget.database.insertOrUpdateBookmark(
+                              LocalBookmarksCompanion.insert(
+                                id: id,
+                                bookId: _selectedVerse!.bookId,
+                                bookName: _selectedVerse!.bookName,
+                                chapter: _selectedVerse!.chapter,
+                                verse: _selectedVerse!.number,
+                                verseText: _selectedVerse!.text,
+                                colorHex: hex,
+                              ),
+                            );
+                            setState(() {
+                              _selectedVerse = null;
+                              _selectedBookmark = null;
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 3),
+                            width: 28,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              color: color,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.black26),
+                            ),
                           ),
-                        );
-                        setState(() {
-                          _selectedVerse = null;
-                          _selectedBookmark = null;
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 3),
-                        width: 28,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          color: color,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.black26),
                         ),
-                      ),
-                    ),
-                  );
-                }).toList(),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
               const SizedBox(width: 6),
               // Note & Share & Trash Actions
               Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    icon: const Icon(LucideIcons.fileText, size: 20),
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                    constraints:
+                        const BoxConstraints(minWidth: 36, minHeight: 36),
+                    icon: const Icon(LucideIcons.fileText, size: 19),
                     tooltip: 'Añadir Nota / Título',
                     onPressed: () =>
                         _showAddNoteDialog(_selectedVerse!, _selectedBookmark),
                   ),
                   IconButton(
-                    icon: const Icon(LucideIcons.share2, size: 20),
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                    constraints:
+                        const BoxConstraints(minWidth: 36, minHeight: 36),
+                    icon: const Icon(LucideIcons.share2, size: 19),
                     tooltip: 'Compartir Versículo',
                     onPressed: () {
                       ShareService.shareScripture(
@@ -848,8 +868,12 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                   ),
                   if (_selectedBookmark != null)
                     IconButton(
+                      visualDensity: VisualDensity.compact,
+                      padding: EdgeInsets.zero,
+                      constraints:
+                          const BoxConstraints(minWidth: 36, minHeight: 36),
                       icon: const Icon(LucideIcons.trash2,
-                          size: 20, color: Colors.redAccent),
+                          size: 19, color: Colors.redAccent),
                       tooltip: 'Eliminar Resaltado',
                       onPressed: () async {
                         await widget.database
@@ -905,37 +929,43 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
           ),
 
           // Central Quick Book & Chapter Selector
-          InkWell(
-            onTap: () {
-              _openBookChapterPicker(allBooks);
-            },
-            borderRadius: BorderRadius.circular(20),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                    color: theme.colorScheme.outline.withValues(alpha: 0.2)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '${_currentBook.name} $_currentChapter/${_currentBook.totalChapters}',
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 13,
-                      color: theme.colorScheme.onSurface,
+          Flexible(
+            child: InkWell(
+              onTap: () {
+                _openBookChapterPicker(allBooks);
+              },
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                      color: theme.colorScheme.outline.withValues(alpha: 0.2)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        '${_currentBook.name} $_currentChapter/${_currentBook.totalChapters}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 4),
-                  Icon(
-                    LucideIcons.chevronDown,
-                    size: 14,
-                    color: theme.colorScheme.primary,
-                  ),
-                ],
+                    const SizedBox(width: 4),
+                    Icon(
+                      LucideIcons.chevronDown,
+                      size: 14,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

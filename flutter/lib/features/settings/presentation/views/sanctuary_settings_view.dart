@@ -55,10 +55,14 @@ class SanctuarySettingsView extends ConsumerWidget {
               const Icon(LucideIcons.checkCircle2,
                   color: Color(0xFF10B981), size: 22),
               const SizedBox(width: 8),
-              Text(
-                'Copia JSON Exportada',
-                style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w800, fontSize: 16),
+              Expanded(
+                child: Text(
+                  'Copia JSON Exportada',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w800, fontSize: 16),
+                ),
               ),
             ],
           ),
@@ -113,10 +117,14 @@ class SanctuarySettingsView extends ConsumerWidget {
             const Icon(LucideIcons.upload,
                 color: SanctuaryColors.sunOrange, size: 22),
             const SizedBox(width: 8),
-            Text(
-              'Restaurar Respaldo JSON',
-              style:
-                  GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 16),
+            Expanded(
+              child: Text(
+                'Restaurar Respaldo JSON',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style:
+                    GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 16),
+              ),
             ),
           ],
         ),
@@ -414,26 +422,36 @@ class SanctuarySettingsView extends ConsumerWidget {
                       child: OutlinedButton.icon(
                         onPressed: () => _exportBackupJson(context),
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 8),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12)),
                         ),
-                        icon: const Icon(LucideIcons.download, size: 16),
-                        label: const Text('Exportar JSON'),
+                        icon: const Icon(LucideIcons.download, size: 15),
+                        label: const Text(
+                          'Exportar JSON',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: FilledButton.icon(
                         onPressed: () => _showImportJsonDialog(context),
                         style: FilledButton.styleFrom(
                           backgroundColor: SanctuaryColors.sunOrange,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 8),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12)),
                         ),
-                        icon: const Icon(LucideIcons.upload, size: 16),
-                        label: const Text('Restaurar JSON'),
+                        icon: const Icon(LucideIcons.upload, size: 15),
+                        label: const Text(
+                          'Restaurar JSON',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                   ],
@@ -532,6 +550,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                     children: [
                       Text(
                         'Iglesia Cristiana El-Shaddai',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
@@ -541,6 +561,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                       const SizedBox(height: 2),
                       Text(
                         'Santuario Digital v1.2.0 • Edificación y Discipulado Bíblico',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(
                           fontSize: 11,
                           color: theme.colorScheme.onSurface.withOpacity(0.65),
@@ -582,11 +604,15 @@ class SanctuarySettingsView extends ConsumerWidget {
               children: [
                 Icon(icon, size: 18, color: iconColor),
                 const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: GoogleFonts.inter(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                Expanded(
+                  child: Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.inter(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ],
@@ -685,11 +711,15 @@ class SanctuarySettingsView extends ConsumerWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        title,
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13.5,
+                      Flexible(
+                        child: Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13.5,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 8),

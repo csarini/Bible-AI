@@ -151,11 +151,15 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
             const Icon(LucideIcons.sparkles,
                 size: 20, color: Color(0xFF10B981)),
             const SizedBox(width: 8),
-            Text(
-              'Mentor Teológico IA',
-              style: GoogleFonts.inter(
-                fontWeight: FontWeight.w700,
-                fontSize: 17,
+            Flexible(
+              child: Text(
+                'Mentor Teológico IA',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 17,
+                ),
               ),
             ),
           ],
@@ -189,6 +193,8 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                 const SizedBox(width: 4),
                 Text(
                   '$remaining/$_dailyLimit hoy',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w800,
                     fontSize: 11,
@@ -224,6 +230,8 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                 Expanded(
                   child: Text(
                     'Modo Prueba: 2 consultas/día (reinicio automático a medianoche)',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.inter(
                       fontSize: 11.5,
                       fontWeight: FontWeight.w700,
@@ -330,10 +338,14 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                     child: CircularProgressIndicator(strokeWidth: 2),
                   ),
                   const SizedBox(width: 10),
-                  Text(
-                    'Analizando textos originales y contexto...',
-                    style: GoogleFonts.inter(
-                        fontSize: 12, color: SanctuaryColors.sunOrange),
+                  Flexible(
+                    child: Text(
+                      'Analizando textos originales y contexto...',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.inter(
+                          fontSize: 12, color: SanctuaryColors.sunOrange),
+                    ),
                   ),
                 ],
               ),

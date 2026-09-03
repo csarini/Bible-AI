@@ -144,6 +144,7 @@ class SanctuaryTheme {
       cardTheme: CardThemeData(
         color: SanctuaryColors.lightSurface,
         elevation: 0,
+        clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: const BorderSide(color: SanctuaryColors.lightBorder),
@@ -317,6 +318,7 @@ class SanctuaryTheme {
       cardTheme: CardThemeData(
         color: SanctuaryColors.sepiaSurface,
         elevation: 0,
+        clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: const BorderSide(color: SanctuaryColors.sepiaBorder),
@@ -489,6 +491,7 @@ class SanctuaryTheme {
       cardTheme: CardThemeData(
         color: SanctuaryColors.darkSurface,
         elevation: 0,
+        clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: const BorderSide(color: SanctuaryColors.darkBorder),

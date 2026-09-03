@@ -309,54 +309,67 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              decoration: BoxDecoration(
-                                color: tokens.activeState,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    LucideIcons.sun,
-                                    size: 14,
-                                    color: SanctuaryColors.amberGold,
+                        Expanded(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                    color: tokens.activeState,
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    'Versículo del Día',
-                                    style: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 12,
-                                      color: SanctuaryColors.amberGold,
-                                    ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        LucideIcons.sun,
+                                        size: 14,
+                                        color: SanctuaryColors.amberGold,
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Flexible(
+                                        child: Text(
+                                          'Versículo del Día',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.inter(
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 12,
+                                            color: SanctuaryColors.amberGold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: SanctuaryColors.sunOrange
-                                    .withValues(alpha: 0.12),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Text(
-                                _currentVerse.theme,
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 11.5,
-                                  color: SanctuaryColors.sunOrange,
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: SanctuaryColors.sunOrange
+                                        .withValues(alpha: 0.12),
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Text(
+                                    _currentVerse.theme,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 11.5,
+                                      color: SanctuaryColors.sunOrange,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         // Randomize Button
                         IconButton(
@@ -433,49 +446,63 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Showing current verse reference
-                          Row(
-                            children: [
-                              const Icon(
-                                LucideIcons.bookOpen,
-                                size: 16,
-                                color: SanctuaryColors.sunOrange,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                _currentVerse.reference,
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 14,
-                                  color: theme.colorScheme.onSurface,
+                          Expanded(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  LucideIcons.bookOpen,
+                                  size: 16,
+                                  color: SanctuaryColors.sunOrange,
                                 ),
-                              ),
-                            ],
-                          ),
-                          // "Continuar leyendo" Text Action
-                          InkWell(
-                            onTap: _continueReadingInReader,
-                            borderRadius: BorderRadius.circular(8),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'Continuar leyendo',
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    _currentVerse.reference,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.inter(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w700,
-                                      color: SanctuaryColors.sunOrange,
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 14,
+                                      color: theme.colorScheme.onSurface,
                                     ),
                                   ),
-                                  const SizedBox(width: 4),
-                                  const Icon(
-                                    LucideIcons.arrowRight,
-                                    size: 15,
-                                    color: SanctuaryColors.sunOrange,
-                                  ),
-                                ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          // "Continuar leyendo" Text Action
+                          Flexible(
+                            child: InkWell(
+                              onTap: _continueReadingInReader,
+                              borderRadius: BorderRadius.circular(8),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        'Continuar leyendo',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w700,
+                                          color: SanctuaryColors.sunOrange,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    const Icon(
+                                      LucideIcons.arrowRight,
+                                      size: 15,
+                                      color: SanctuaryColors.sunOrange,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

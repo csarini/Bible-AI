@@ -232,6 +232,9 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(userPreferences);
           }
         },
+        beforeOpen: (details) async {
+          await customStatement('PRAGMA foreign_keys = ON');
+        },
       );
 
   Future<LocalUserEntry?> getUser(String id) {
@@ -586,8 +589,8 @@ class AppDatabase extends _$AppDatabase {
         verse: Value(verse),
         verseText: Value(verseText),
         colorHex: Value(colorHex),
-        customTitle: Value(customTitle),
-        personalNote: Value(personalNote),
+        customTitle: Value<String?>(customTitle),
+        personalNote: Value<String?>(personalNote),
         createdAt: Value(DateTime.now()),
       ),
     );
@@ -678,6 +681,63 @@ class AppDatabase extends _$AppDatabase {
 
   Future<int> deleteMenu(String id) {
     return (delete(foodCourtMenus)..where((t) => t.id.equals(id))).go();
+  }
+
+  // ---------------------------------------------------------------------------
+  // APP SETTINGS & USER PREFERENCES (PERSISTED IN SQLITE)
+  // ---------------------------------------------------------------------------
+  Future<void> initSettingsTable() async {
+    await customStatement('''
+      CREATE TABLE IF NOT EXISTS app_settings (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+      );
+    ''');
+  }
+
+  Future<void> saveSetting(String key, String value) async {
+    try {
+      await initSettingsTable();
+      await customStatement('''
+        INSERT INTO app_settings (key, value) VALUES (?, ?)
+        ON CONFLICT(key) DO UPDATE SET value = excluded.value;
+      ''', [key, value]);
+    } catch (e) {
+      // Fallback in case table or migration needs creation
+      await customStatement('CREATE TABLE IF NOT EXISTS app_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);');
+      await customStatement('REPLACE INTO app_settings (key, value) VALUES (?, ?);', [key, value]);
+    }
+  }
+
+  Future<String?> getSetting(String key) async {
+    try {
+      await initSettingsTable();
+      final result = await customSelect(
+        'SELECT value FROM app_settings WHERE key = ? LIMIT 1;',
+        variables: [Variable.withString(key)],
+      ).getSingleOrNull();
+      return result?.data['value'] as String?;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Map<String, String>> getAllSettings() async {
+    try {
+      await initSettingsTable();
+      final results = await customSelect('SELECT key, value FROM app_settings;').get();
+      final map = <String, String>{};
+      for (final row in results) {
+        final k = row.data['key'] as String?;
+        final v = row.data['value'] as String?;
+        if (k != null && v != null) {
+          map[k] = v;
+        }
+      }
+      return map;
+    } catch (e) {
+      return {};
+    }
   }
 }
 

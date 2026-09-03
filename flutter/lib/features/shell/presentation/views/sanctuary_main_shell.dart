@@ -231,6 +231,8 @@ class SanctuaryMainShell extends ConsumerWidget {
                           children: [
                             Text(
                               'El-Shaddai',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.playfairDisplay(
                                 color: visualTheme == AppVisualTheme.light
                                     ? Colors.white
@@ -242,6 +244,8 @@ class SanctuaryMainShell extends ConsumerWidget {
                             ),
                             Text(
                               'DIOS TODOPODEROSO',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.inter(
                                 color: visualTheme == AppVisualTheme.light
                                     ? SanctuaryColors.amberGold
@@ -253,6 +257,8 @@ class SanctuaryMainShell extends ConsumerWidget {
                             ),
                             Text(
                               'Santuario Digital',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.inter(
                                 color: visualTheme == AppVisualTheme.light
                                     ? Colors.white.withValues(alpha: 0.7)
@@ -437,6 +443,8 @@ class SanctuaryMainShell extends ConsumerWidget {
                                   const Icon(LucideIcons.helpCircle, size: 16),
                               label: Text(
                                 'Guía',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.inter(
                                     fontSize: 12, fontWeight: FontWeight.w600),
                               ),
@@ -466,6 +474,8 @@ class SanctuaryMainShell extends ConsumerWidget {
                                   size: 16),
                               label: Text(
                                 'Feedback',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.inter(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
@@ -529,12 +539,16 @@ class SanctuaryMainShell extends ConsumerWidget {
               color: isSelected ? Colors.white : Colors.white70,
             ),
             const SizedBox(width: 4),
-            Text(
-              label,
-              style: GoogleFonts.inter(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: isSelected ? Colors.white : Colors.white70,
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: isSelected ? Colors.white : Colors.white70,
+                ),
               ),
             ),
           ],
@@ -576,6 +590,8 @@ class SanctuaryMainShell extends ConsumerWidget {
         ),
         title: Text(
           title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: GoogleFonts.inter(
             fontSize: 13.5,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,

@@ -37,6 +37,8 @@ class _SanctuarySavedVersesViewState extends ConsumerState<SanctuarySavedVersesV
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
             'Editar ${bookmark.bookName} ${bookmark.chapter}:${bookmark.verse}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           content: SingleChildScrollView(
@@ -48,14 +50,15 @@ class _SanctuarySavedVersesViewState extends ConsumerState<SanctuarySavedVersesV
                     style:
                         TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 6),
-                Row(
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
                   children: SanctuaryColors.pastelPalette.map((col) {
                     final hex = SanctuaryColors.colorToHex(col);
                     final isChosen = selectedHex == hex;
                     return GestureDetector(
                       onTap: () => setDialogState(() => selectedHex = hex),
                       child: Container(
-                        margin: const EdgeInsets.only(right: 8),
                         width: 32,
                         height: 32,
                         decoration: BoxDecoration(
@@ -149,7 +152,11 @@ class _SanctuarySavedVersesViewState extends ConsumerState<SanctuarySavedVersesV
                 tooltip: 'Menú Lateral',
                 onPressed: openSanctuaryDrawer,
               ),
-        title: const Text('Santuario de Guardados'),
+        title: const Text(
+          'Santuario de Guardados',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       body: Column(
         children: [
@@ -281,31 +288,48 @@ class _SanctuarySavedVersesViewState extends ConsumerState<SanctuarySavedVersesV
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: highlightColor,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      '${item.bookName} ${item.chapter}:${item.verse}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                        color: Colors.black87,
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: highlightColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          '${item.bookName} ${item.chapter}:${item.verse}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: Colors.black87,
+                          ),
+                        ),
                       ),
                     ),
                   ),
+                  const SizedBox(width: 6),
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        icon: const Icon(LucideIcons.edit2, size: 18),
+                        visualDensity: VisualDensity.compact,
+                        padding: EdgeInsets.zero,
+                        constraints:
+                            const BoxConstraints(minWidth: 36, minHeight: 36),
+                        icon: const Icon(LucideIcons.edit2, size: 17),
                         tooltip: 'Editar Nota / Color',
                         onPressed: () => _editBookmark(item),
                       ),
                       IconButton(
-                        icon: const Icon(LucideIcons.share2, size: 18),
+                        visualDensity: VisualDensity.compact,
+                        padding: EdgeInsets.zero,
+                        constraints:
+                            const BoxConstraints(minWidth: 36, minHeight: 36),
+                        icon: const Icon(LucideIcons.share2, size: 17),
                         tooltip: 'Compartir',
                         onPressed: () {
                           ShareService.shareScripture(
@@ -319,8 +343,12 @@ class _SanctuarySavedVersesViewState extends ConsumerState<SanctuarySavedVersesV
                         },
                       ),
                       IconButton(
+                        visualDensity: VisualDensity.compact,
+                        padding: EdgeInsets.zero,
+                        constraints:
+                            const BoxConstraints(minWidth: 36, minHeight: 36),
                         icon: const Icon(LucideIcons.trash2,
-                            size: 18, color: Colors.redAccent),
+                            size: 17, color: Colors.redAccent),
                         tooltip: 'Eliminar',
                         onPressed: () => widget.database.deleteBookmark(item.id),
                       ),

@@ -356,20 +356,29 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            currentRoute.period,
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 11,
-                              color: currentRoute.themeColor,
+                          Flexible(
+                            child: Text(
+                              currentRoute.period,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 11,
+                                color: currentRoute.themeColor,
+                              ),
                             ),
                           ),
-                          Text(
-                            currentRoute.scriptureReference,
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 11,
-                              color: currentRoute.themeColor,
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: Text(
+                              currentRoute.scriptureReference,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 11,
+                                color: currentRoute.themeColor,
+                              ),
                             ),
                           ),
                         ],
@@ -445,12 +454,16 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                                   ),
                                 ),
                               ),
-                              Text(
-                                '${currentWaypoint.latitude.toStringAsFixed(2)}° N, ${currentWaypoint.longitude.toStringAsFixed(2)}° E',
-                                style: GoogleFonts.inter(
-                                  fontSize: 11,
-                                  color: Colors.white70,
-                                  fontWeight: FontWeight.w600,
+                              Flexible(
+                                child: Text(
+                                  '${currentWaypoint.latitude.toStringAsFixed(2)}° N, ${currentWaypoint.longitude.toStringAsFixed(2)}° E',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 11,
+                                    color: Colors.white70,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ],
@@ -557,14 +570,18 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                                   ),
                                 ),
                                 const SizedBox(width: 6),
-                                Text(
-                                  currentWaypoint.scripture,
-                                  style: GoogleFonts.inter(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 13,
-                                    color: SanctuaryColors.sunOrange,
-                                  ),
-                                ),
+                                Expanded(
+                                 child: Text(
+                                   currentWaypoint.scripture,
+                                   maxLines: 1,
+                                   overflow: TextOverflow.ellipsis,
+                                   style: GoogleFonts.inter(
+                                     fontWeight: FontWeight.w800,
+                                     fontSize: 13,
+                                     color: SanctuaryColors.sunOrange,
+                                   ),
+                                 ),
+                               ),
                               ],
                             ),
                             const SizedBox(height: 12),

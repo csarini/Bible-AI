@@ -114,6 +114,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     children: [
                       Text(
                         'Ajustes de Lectura Bíblica',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w800,
                           fontSize: 16,
@@ -121,6 +123,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                       ),
                       Text(
                         'Personaliza la tipografía, tamaño y aspecto visual',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(
                           fontSize: 11.5,
                           color: theme.colorScheme.onSurface
@@ -154,21 +158,30 @@ class QuickSettingsSheet extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'VISTA PREVIA EN VIVO',
-                        style: GoogleFonts.inter(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.8,
-                          color: SanctuaryColors.sunOrange,
+                      Flexible(
+                        child: Text(
+                          'VISTA PREVIA EN VIVO',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.8,
+                            color: SanctuaryColors.sunOrange,
+                          ),
                         ),
                       ),
-                      Text(
-                        'S. Juan 1:1 (${translation.toUpperCase()})',
-                        style: GoogleFonts.inter(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          color: SanctuaryColors.waveNavy,
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          'S. Juan 1:1 (${translation.toUpperCase()})',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: SanctuaryColors.waveNavy,
+                          ),
                         ),
                       ),
                     ],
@@ -451,6 +464,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                       children: [
                         Text(
                           'Mostrar números de versículo',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.inter(
                             fontWeight: FontWeight.w700,
                             fontSize: 13.5,
@@ -458,6 +473,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                         ),
                         Text(
                           'Facilita la ubicación de pasajes y referencias',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.inter(
                             fontSize: 11,
                             color: theme.colorScheme.onSurface
@@ -525,6 +542,8 @@ class QuickSettingsSheet extends ConsumerWidget {
           children: [
             Text(
               label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 fontSize: 12.5,
@@ -534,6 +553,8 @@ class QuickSettingsSheet extends ConsumerWidget {
             const SizedBox(height: 2),
             Text(
               sub,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.inter(
                 fontSize: 10,
                 color: isSelected
@@ -590,6 +611,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                 children: [
                   Text(
                     title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.inter(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
@@ -602,6 +625,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                   ),
                   Text(
                     subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.inter(
                       fontSize: 11,
                       color: theme.colorScheme.onSurface.withValues(alpha: 0.6),

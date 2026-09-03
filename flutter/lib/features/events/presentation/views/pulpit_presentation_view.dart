@@ -108,6 +108,8 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
         ),
         title: Text(
           'Modo Presentación (Púlpito)',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: GoogleFonts.inter(
             fontSize: 16,
             fontWeight: FontWeight.w700,
@@ -117,8 +119,8 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
         actions: [
           // Stopwatch pill
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            margin: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            margin: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
               color: SanctuaryColors.sunOrange.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
@@ -129,13 +131,13 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Icon(LucideIcons.clock,
-                    size: 14, color: SanctuaryColors.sunOrange),
-                const SizedBox(width: 6),
+                    size: 13, color: SanctuaryColors.sunOrange),
+                const SizedBox(width: 4),
                 Text(
                   _formatTimer(_secondsElapsed),
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w800,
-                    fontSize: 13,
+                    fontSize: 12,
                     color: SanctuaryColors.sunOrange,
                   ),
                 ),
@@ -148,20 +150,24 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
                   },
                   child: Icon(
                     _isTimerRunning ? LucideIcons.pause : LucideIcons.play,
-                    size: 14,
+                    size: 13,
                     color: SanctuaryColors.sunOrange,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
 
           // Theme contrast toggle
           IconButton(
+            visualDensity: VisualDensity.compact,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
             icon: Icon(
               _isHighContrastDark ? LucideIcons.sun : LucideIcons.moon,
               color: textColor,
+              size: 18,
             ),
             onPressed: () {
               setState(() {
@@ -173,7 +179,10 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
 
           // Font size adjustments
           IconButton(
-            icon: Icon(LucideIcons.minus, size: 16, color: textColor),
+            visualDensity: VisualDensity.compact,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 30, minHeight: 30),
+            icon: Icon(LucideIcons.minus, size: 15, color: textColor),
             onPressed: () {
               if (_fontSize > 14) {
                 setState(() => _fontSize -= 2);
@@ -182,7 +191,10 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
             tooltip: 'Reducir letra',
           ),
           IconButton(
-            icon: Icon(LucideIcons.plus, size: 16, color: textColor),
+            visualDensity: VisualDensity.compact,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 30, minHeight: 30),
+            icon: Icon(LucideIcons.plus, size: 15, color: textColor),
             onPressed: () {
               if (_fontSize < 36) {
                 setState(() => _fontSize += 2);
@@ -256,12 +268,16 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
                       const Icon(LucideIcons.mapPin,
                           size: 14, color: SanctuaryColors.sunOrange),
                       const SizedBox(width: 6),
-                      Text(
-                        location,
-                        style: GoogleFonts.inter(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: subColor,
+                      Flexible(
+                        child: Text(
+                          location,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: subColor,
+                          ),
                         ),
                       ),
                     ],
@@ -293,12 +309,16 @@ class _PulpitPresentationViewState extends State<PulpitPresentationView> {
                         const Icon(LucideIcons.bookOpen,
                             size: 13, color: SanctuaryColors.electricCyan),
                         const SizedBox(width: 6),
-                        Text(
-                          v,
-                          style: GoogleFonts.inter(
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w700,
-                            color: SanctuaryColors.electricCyan,
+                        Flexible(
+                          child: Text(
+                            v,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.inter(
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.w700,
+                              color: SanctuaryColors.electricCyan,
+                            ),
                           ),
                         ),
                       ],
