@@ -10,6 +10,7 @@ import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../core/theme/sanctuary_theme.dart';
+import '../../../../shared/widgets/quick_settings_sheet.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class SanctuarySearchLibraryView extends ConsumerStatefulWidget {
@@ -498,6 +499,13 @@ class _SanctuarySearchLibraryViewState
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(LucideIcons.settings2),
+            tooltip: 'Ajustes Rápidos',
+            onPressed: () => QuickSettingsSheet.show(context),
+          ),
+        ],
       ),
       body: CustomScrollView(
         slivers: [

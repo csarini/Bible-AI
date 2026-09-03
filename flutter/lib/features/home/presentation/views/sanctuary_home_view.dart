@@ -205,12 +205,6 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(LucideIcons.search),
-            tooltip: 'Buscar en las Escrituras',
-            onPressed: () =>
-                widget.onNavigateTab(2), // Tab 2: Biblioteca & Búsqueda
-          ),
-          IconButton(
             icon: const Icon(LucideIcons.settings2),
             tooltip: 'Ajustes Rápidos',
             onPressed: () => QuickSettingsSheet.show(context),

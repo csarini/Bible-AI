@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Bookmark, Search, BookOpen, SlidersHorizontal } from 'lucide-react';
+import { Menu, BookOpen, SlidersHorizontal } from 'lucide-react';
 import { ActiveTab } from '../types';
 import { ChurchLogo } from './ChurchLogo';
 
@@ -7,7 +7,7 @@ interface TopAppBarProps {
   onToggleDrawer: () => void;
   activeTab: ActiveTab;
   onNavigateTab: (tab: ActiveTab) => void;
-  savedCount: number;
+  savedCount?: number;
   currentBookName?: string;
   currentChapter?: number;
   currentTheme?: 'light' | 'sepia' | 'dark';
@@ -19,7 +19,7 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
   onToggleDrawer,
   activeTab,
   onNavigateTab,
-  savedCount,
+  savedCount = 0,
   currentBookName = 'Mateo',
   currentChapter = 4,
   currentTheme = 'light',
@@ -109,45 +109,8 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
         )}
       </div>
 
-      {/* Right Action Icons: Search, Bookmarks, and Settings/Preferences */}
+      {/* Right Action Icons: Settings/Preferences */}
       <div className="flex items-center gap-1 sm:gap-2">
-        {/* Search in Bible */}
-        <button
-          id="top-search-btn"
-          onClick={() => onNavigateTab('library')}
-          aria-label="Buscar libros y versículos"
-          className={`p-2 sm:px-3 sm:py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
-            activeTab === 'library'
-              ? 'bg-[#0B2B68] text-[#FED65B] shadow-xs'
-              : iconBtnHover
-          }`}
-          title="Buscar en la Biblia"
-        >
-          <Search className="w-5 h-5 sm:w-4 sm:h-4" />
-          <span className="hidden md:inline text-xs font-semibold">Buscar</span>
-        </button>
-
-        {/* Saved Bookmarks */}
-        <button
-          id="top-bookmarks-btn"
-          onClick={() => onNavigateTab('saved')}
-          aria-label="Versículos guardados"
-          className={`p-2 sm:px-3 sm:py-1.5 rounded-full transition-all relative cursor-pointer flex items-center gap-1.5 ${
-            activeTab === 'saved'
-              ? 'bg-[#0B2B68] text-[#FED65B] shadow-xs'
-              : iconBtnHover
-          }`}
-          title="Mis Versículos Guardados"
-        >
-          <Bookmark className="w-5 h-5 sm:w-4 sm:h-4" />
-          <span className="hidden md:inline text-xs font-semibold">Guardados</span>
-          {savedCount > 0 && (
-            <span className="md:static absolute top-1 right-1 w-4 h-4 md:w-auto md:h-auto md:px-1.5 md:py-0.2 bg-[#F47B20] text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-xs border border-white md:border-0">
-              {savedCount}
-            </span>
-          )}
-        </button>
-
         {/* Configuration / Reading Settings Icon Button */}
         {onOpenSettings && (
           <button

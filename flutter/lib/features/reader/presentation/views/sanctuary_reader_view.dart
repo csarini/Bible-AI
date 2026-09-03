@@ -583,19 +583,6 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
             tooltip: 'Ajustes Rápidos de Lectura',
             onPressed: () => QuickSettingsSheet.show(context),
           ),
-          IconButton(
-            icon: const Icon(LucideIcons.bookmark),
-            tooltip: 'Santuario de Guardados',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) =>
-                      SanctuarySavedVersesView(database: widget.database),
-                ),
-              );
-            },
-          ),
         ],
       ),
       body: Stack(
@@ -844,8 +831,18 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                     padding: EdgeInsets.zero,
                     constraints:
                         const BoxConstraints(minWidth: 36, minHeight: 36),
-                    icon: const Icon(LucideIcons.fileText, size: 19),
-                    tooltip: 'Añadir Nota / Título',
+                    icon: Icon(
+                      _selectedBookmark != null
+                          ? LucideIcons.bookmarkCheck
+                          : LucideIcons.bookmark,
+                      size: 19,
+                      color: _selectedBookmark != null
+                          ? SanctuaryColors.sunOrange
+                          : null,
+                    ),
+                    tooltip: _selectedBookmark != null
+                        ? 'Editar Guardado'
+                        : 'Guardar Versículo',
                     onPressed: () =>
                         _showAddNoteDialog(_selectedVerse!, _selectedBookmark),
                   ),

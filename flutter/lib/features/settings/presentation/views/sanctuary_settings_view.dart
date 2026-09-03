@@ -254,6 +254,13 @@ class SanctuarySettingsView extends ConsumerWidget {
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(LucideIcons.settings2),
+            tooltip: 'Ajustes Rápidos',
+            onPressed: () => QuickSettingsSheet.show(context),
+          ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),

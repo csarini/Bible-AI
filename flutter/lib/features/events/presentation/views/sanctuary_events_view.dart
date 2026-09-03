@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
+import '../../../../shared/widgets/quick_settings_sheet.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 import 'pulpit_presentation_view.dart';
 
@@ -230,6 +231,12 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
                 color: SanctuaryColors.waveNavy),
             tooltip: 'Nuevo Apunte / Prédica',
             onPressed: () => _openEventFormSheet(context),
+          ),
+          // QuickSettings button
+          IconButton(
+            icon: const Icon(LucideIcons.settings2),
+            tooltip: 'Ajustes Rápidos',
+            onPressed: () => QuickSettingsSheet.show(context),
           ),
         ],
       ),

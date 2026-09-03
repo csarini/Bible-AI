@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
+import '../../../../shared/widgets/quick_settings_sheet.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class BiblicalRoute {
@@ -290,6 +291,13 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(LucideIcons.settings2),
+            tooltip: 'Ajustes Rápidos',
+            onPressed: () => QuickSettingsSheet.show(context),
+          ),
+        ],
       ),
       body: Column(
         children: [
