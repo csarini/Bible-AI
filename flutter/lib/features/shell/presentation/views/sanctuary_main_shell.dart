@@ -360,7 +360,7 @@ class SanctuaryMainShell extends ConsumerWidget {
                     context,
                     index: 3,
                     icon: LucideIcons.bookmark,
-                    title: 'Notas',
+                    title: 'Guardados',
                     badge: bookmarksCount > 0 ? '$bookmarksCount' : null,
                   ),
                   Padding(

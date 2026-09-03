@@ -105,6 +105,8 @@ class SanctuaryTheme {
       useMaterial3: true,
       brightness: Brightness.light,
       scaffoldBackgroundColor: SanctuaryColors.lightBackground,
+      splashColor: SanctuaryColors.waveNavy.withValues(alpha: 0.08),
+      highlightColor: Colors.transparent,
       colorScheme: const ColorScheme.light(
         primary: SanctuaryColors.waveNavy,
         secondary: SanctuaryColors.sunOrange,
@@ -195,10 +197,23 @@ class SanctuaryTheme {
       chipTheme: ChipThemeData(
         backgroundColor: SanctuaryColors.lightSurfaceElevated,
         selectedColor: SanctuaryColors.waveNavy,
+        secondarySelectedColor: SanctuaryColors.waveNavy,
+        disabledColor:
+            SanctuaryColors.lightSurfaceElevated.withValues(alpha: 0.5),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         side: const BorderSide(color: SanctuaryColors.lightBorder),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        labelStyle:
-            GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+        labelStyle: GoogleFonts.inter(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: SanctuaryColors.lightTextPrimary,
+        ),
+        secondaryLabelStyle: GoogleFonts.inter(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+        brightness: Brightness.light,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -246,13 +261,15 @@ class SanctuaryTheme {
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected))
+          if (states.contains(WidgetState.selected)) {
             return SanctuaryColors.sunOrange;
+          }
           return SanctuaryColors.lightTextSecondary;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected))
+          if (states.contains(WidgetState.selected)) {
             return SanctuaryColors.sunOrange.withValues(alpha: 0.35);
+          }
           return SanctuaryColors.lightSurfaceElevated;
         }),
       ),
@@ -278,6 +295,8 @@ class SanctuaryTheme {
       useMaterial3: true,
       brightness: Brightness.light,
       scaffoldBackgroundColor: SanctuaryColors.sepiaBackground,
+      splashColor: SanctuaryColors.sepiaActive.withValues(alpha: 0.1),
+      highlightColor: Colors.transparent,
       colorScheme: const ColorScheme.light(
         primary: SanctuaryColors.sepiaActive,
         secondary: SanctuaryColors.sunOrange,
@@ -369,10 +388,23 @@ class SanctuaryTheme {
       chipTheme: ChipThemeData(
         backgroundColor: SanctuaryColors.sepiaSurfaceElevated,
         selectedColor: SanctuaryColors.sepiaActive,
+        secondarySelectedColor: SanctuaryColors.sepiaActive,
+        disabledColor:
+            SanctuaryColors.sepiaSurfaceElevated.withValues(alpha: 0.5),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         side: const BorderSide(color: SanctuaryColors.sepiaBorder),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        labelStyle:
-            GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+        labelStyle: GoogleFonts.inter(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: SanctuaryColors.sepiaTextPrimary,
+        ),
+        secondaryLabelStyle: GoogleFonts.inter(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+        brightness: Brightness.light,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -420,13 +452,15 @@ class SanctuaryTheme {
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected))
+          if (states.contains(WidgetState.selected)) {
             return SanctuaryColors.sepiaActive;
+          }
           return SanctuaryColors.sepiaTextSecondary;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected))
+          if (states.contains(WidgetState.selected)) {
             return SanctuaryColors.sepiaActive.withValues(alpha: 0.35);
+          }
           return SanctuaryColors.sepiaSurfaceElevated;
         }),
       ),
@@ -452,6 +486,8 @@ class SanctuaryTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: SanctuaryColors.darkBackground,
+      splashColor: SanctuaryColors.darkActive.withValues(alpha: 0.15),
+      highlightColor: Colors.transparent,
       colorScheme: const ColorScheme.dark(
         primary: SanctuaryColors.sunOrange,
         secondary: SanctuaryColors.cyanAccent,
@@ -541,11 +577,24 @@ class SanctuaryTheme {
       ),
       chipTheme: ChipThemeData(
         backgroundColor: SanctuaryColors.darkSurfaceElevated,
-        selectedColor: SanctuaryColors.sunOrange,
+        selectedColor: SanctuaryColors.darkActive,
+        secondarySelectedColor: SanctuaryColors.darkActive,
+        disabledColor:
+            SanctuaryColors.darkSurfaceElevated.withValues(alpha: 0.5),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         side: const BorderSide(color: SanctuaryColors.darkBorder),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        labelStyle:
-            GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+        labelStyle: GoogleFonts.inter(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: SanctuaryColors.darkTextPrimary,
+        ),
+        secondaryLabelStyle: GoogleFonts.inter(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+        brightness: Brightness.dark,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -593,13 +642,15 @@ class SanctuaryTheme {
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected))
+          if (states.contains(WidgetState.selected)) {
             return SanctuaryColors.sunOrange;
+          }
           return SanctuaryColors.darkTextSecondary;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected))
+          if (states.contains(WidgetState.selected)) {
             return SanctuaryColors.sunOrange.withValues(alpha: 0.35);
+          }
           return SanctuaryColors.darkSurfaceElevated;
         }),
       ),

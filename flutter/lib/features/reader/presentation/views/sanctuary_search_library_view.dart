@@ -68,7 +68,8 @@ class _SanctuarySearchLibraryViewState
     final clean = term.trim();
     if (clean.isEmpty) return;
     setState(() {
-      _recentSearches.removeWhere((item) => item.toLowerCase() == clean.toLowerCase());
+      _recentSearches
+          .removeWhere((item) => item.toLowerCase() == clean.toLowerCase());
       _recentSearches.insert(0, clean);
       if (_recentSearches.length > 8) {
         _recentSearches.removeLast();
@@ -487,11 +488,14 @@ class _SanctuarySearchLibraryViewState
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(LucideIcons.library,
-                size: 20, color: SanctuaryColors.sunOrange),
+            const Icon(
+              LucideIcons.library, // O LucideIcons.bookOpen
+              size: 20,
+              color: SanctuaryColors.sunOrange,
+            ),
             const SizedBox(width: 8),
             Text(
-              'Biblioteca Bíblica (66 Libros)',
+              'Biblioteca Bíblica',
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 fontSize: 17,
@@ -563,7 +567,8 @@ class _SanctuarySearchLibraryViewState
                     const SizedBox(height: 10),
                     InkWell(
                       onTap: () {
-                        final term = '${directRef.book.name} ${directRef.chapter}${directRef.verse != null ? ':${directRef.verse}' : ''}';
+                        final term =
+                            '${directRef.book.name} ${directRef.chapter}${directRef.verse != null ? ':${directRef.verse}' : ''}';
                         _saveRecentSearch(term);
                         widget.onSelectPassage(
                           directRef.book.id,
@@ -583,8 +588,7 @@ class _SanctuarySearchLibraryViewState
                                   .withValues(alpha: 0.6)),
                           boxShadow: [
                             BoxShadow(
-                              color: tokens.activeState
-                                  .withValues(alpha: 0.25),
+                              color: tokens.activeState.withValues(alpha: 0.25),
                               blurRadius: 8,
                               offset: const Offset(0, 3),
                             ),
@@ -638,7 +642,8 @@ class _SanctuarySearchLibraryViewState
                     runSpacing: 8,
                     children: [
                       _buildTabChip('all', 'Todos (66)', tokens),
-                      _buildTabChip('OT', 'Antiguo ($oldTestamentCount)', tokens),
+                      _buildTabChip(
+                          'OT', 'Antiguo ($oldTestamentCount)', tokens),
                       _buildTabChip('NT', 'Nuevo ($newTestamentCount)', tokens),
                     ],
                   ),
@@ -653,8 +658,8 @@ class _SanctuarySearchLibraryViewState
                         fontSize: 10.5,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 0.8,
-                        color: theme.colorScheme.onSurface
-                            .withValues(alpha: 0.65),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.65),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -786,7 +791,10 @@ class _SanctuarySearchLibraryViewState
                                     fontSize: 10,
                                     fontWeight: FontWeight.w800,
                                     color: book.isNewTestament
-                                        ? (tokens.activeState == SanctuaryColors.darkActive ? SanctuaryColors.cyanAccent : SanctuaryColors.waveNavy)
+                                        ? (tokens.activeState ==
+                                                SanctuaryColors.darkActive
+                                            ? SanctuaryColors.cyanAccent
+                                            : SanctuaryColors.waveNavy)
                                         : SanctuaryColors.sunOrange,
                                   ),
                                 ),
@@ -832,7 +840,8 @@ class _SanctuarySearchLibraryViewState
     );
   }
 
-  Widget _buildTabChip(String filterKey, String label, SanctuaryThemeExtension tokens) {
+  Widget _buildTabChip(
+      String filterKey, String label, SanctuaryThemeExtension tokens) {
     final isSelected = _activeTabFilter == filterKey;
     final theme = Theme.of(context);
     return Material(
@@ -844,9 +853,7 @@ class _SanctuarySearchLibraryViewState
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
-            color: isSelected
-                ? tokens.activeState
-                : tokens.surfaceElevated,
+            color: isSelected ? tokens.activeState : tokens.surfaceElevated,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isSelected
@@ -948,7 +955,8 @@ class _BookChapterVersePickerSheetState
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.inter(
                         fontSize: 11,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                   ],
@@ -1007,7 +1015,8 @@ class _BookChapterVersePickerSheetState
                         border: Border.all(
                           color: isSelected
                               ? tokens.activeState
-                              : theme.colorScheme.outline.withValues(alpha: 0.25),
+                              : theme.colorScheme.outline
+                                  .withValues(alpha: 0.25),
                         ),
                       ),
                       child: Text(
@@ -1124,7 +1133,10 @@ class _BookChapterVersePickerSheetState
             fontWeight: FontWeight.w700,
             color: isCurrent
                 ? Colors.white
-                : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                : Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.6),
           ),
         ),
       ),

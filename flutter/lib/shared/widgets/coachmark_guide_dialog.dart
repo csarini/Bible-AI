@@ -21,60 +21,44 @@ class GuideStep {
 
 const List<GuideStep> kGuideSteps = [
   GuideStep(
-    title: '1. Inicio & Devocional Diario',
+    title: '1. Inicio',
     description:
-        'Encuentra versículos diarios seleccionados por temática (Paz, Esperanza, Fortaleza, Sabiduría) con reflexiones espirituales, oraciones guiadas y audio TTS.',
+        'Consulta el versículo del día, cambia la temática y guarda una reflexión para volver a ella más adelante.',
     icon: LucideIcons.home,
     color: SanctuaryColors.sunOrange,
-    tag: 'ESPIRITUALIDAD',
+    tag: 'INICIO',
   ),
   GuideStep(
-    title: '2. Lector Bíblico & Versículos',
+    title: '2. Libros',
     description:
-        'Lee los 66 libros canónicos con ajuste de tamaño de letra, fuentes (Merriweather, Playfair, Jakarta), interlineado, resaltador multicolor y notas personales.',
+        'Explora los 66 libros de la Biblia y busca un libro, capítulo o referencia para abrirlo directamente.',
+    icon: LucideIcons.library,
+    color: SanctuaryColors.waveNavy,
+    tag: 'LIBROS',
+  ),
+  GuideStep(
+    title: '3. Lectura',
+    description:
+        'Lee el capítulo seleccionado, ajusta tamaño, tipografía e interlineado, y resalta versículos con tus notas personales.',
     icon: LucideIcons.bookOpen,
-    color: SanctuaryColors.waveNavy,
-    tag: 'CANON BÍBLICO',
-  ),
-  GuideStep(
-    title: '3. Biblioteca & Búsqueda Rápida',
-    description:
-        'Filtra rápidamente por Antiguo y Nuevo Testamento. Escribe referencias directas como "Juan 3:16" o "Mateo 4" para saltar al versículo al instante.',
-    icon: LucideIcons.search,
     color: SanctuaryColors.cyanAccent,
-    tag: 'NAVEGACIÓN',
+    tag: 'LECTURA',
   ),
   GuideStep(
-    title: '4. Mapas Bíblicos Interactivos',
+    title: '4. Guardados',
     description:
-        'Explora los 4 viajes misioneros del apóstol Pablo, la ruta del Éxodo por el Mar Rojo y el Monte Sinaí con detalles geográficos e históricos.',
-    icon: LucideIcons.map,
-    color: SanctuaryColors.waveNavy,
-    tag: 'GEOGRAFÍA BÍBLICA',
-  ),
-  GuideStep(
-    title: '5. Prédicas & Modo Púlpito HD',
-    description:
-        'Diseñado para pastores y predicadores: vista de alto contraste para proyección, temporizador de mensaje, notas de sermón y control de tipografía grande.',
-    icon: LucideIcons.mic,
+        'Encuentra tus versículos resaltados, filtra por color, busca por texto y edita tus títulos o reflexiones.',
+    icon: LucideIcons.bookmark,
     color: SanctuaryColors.brandPurple,
-    tag: 'MINISTERIO',
+    tag: 'GUARDADOS',
   ),
   GuideStep(
-    title: '6. Mentor Teológico IA',
+    title: '5. Mentor Teológico IA',
     description:
-        'Consulta dudas doctrinales, contexto histórico y pasajes paralelos con asistencia de IA responsable basada estrictamente en las Sagradas Escrituras.',
+        'Realiza consultas de estudio bíblico sobre doctrina, contexto histórico y pasajes relacionados. Esta función está en fase de prueba.',
     icon: LucideIcons.sparkles,
     color: Color(0xFF10B981),
-    tag: 'ESTUDIO BÍBLICO',
-  ),
-  GuideStep(
-    title: '7. Ajustes, 3 Temas & Respaldo JSON',
-    description:
-        'Alterna al instante entre modo Claro (Pergamino), Sepia (Cálido) y Oscuro (Noche). Exporta e importa copias de seguridad de todas tus notas en formato JSON.',
-    icon: LucideIcons.settings,
-    color: Color(0xFF705335),
-    tag: 'PERSONALIZACIÓN',
+    tag: 'FASE DE PRUEBA',
   ),
 ];
 
