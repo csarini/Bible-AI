@@ -34,35 +34,31 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
     'Divinidad',
   ];
 
-  /// Convierte cualquier código Hexadecimal a un objeto Color de Flutter seguro
-  Color _parseColor(String rawHex,
-      {Color fallback = SanctuaryColors.waveNavy}) {
-    final clean = rawHex.replaceAll('#', '').trim().toUpperCase();
-    if (clean.length == 6) {
-      return Color(int.parse('FF$clean', radix: 16));
-    } else if (clean.length == 8) {
-      return Color(int.parse(clean, radix: 16));
-    }
-    return fallback;
-  }
-
-  Color _getFilterColor(String filterName) {
+  /// Resolves the color representation for a given category filter using official SanctuaryColors pastel tokens.
+  Color _getFilterCategoryColor(String filterName, BuildContext context) {
     switch (filterName) {
       case 'Promesas':
-        return _parseColor('FFF2B2'); // Amarillo
+        // Highlight Token: Favoritos / Promesas (Pastel Yellow)
+        return SanctuaryColors.highlightYellow;
       case 'Vida':
-        return _parseColor('D2F5D7'); // Verde
+        // Highlight Token: Vida / Crecimiento (Pastel Green)
+        return SanctuaryColors.highlightGreen;
       case 'Paz':
-        return _parseColor('D3E7FF'); // Azul
+        // Highlight Token: Paz / Sabiduría (Pastel Blue)
+        return SanctuaryColors.highlightBlue;
       case 'Aviso':
-        return _parseColor('FFDFCC'); // Naranja suave
+        // Highlight Token: Advertencia / Importante (Pastel Orange)
+        return SanctuaryColors.highlightOrange;
       case 'Divinidad':
-        return _parseColor('E9E4FF'); // Púrpura
+        // Highlight Token: Divinidad / Realeza (Pastel Purple)
+        return SanctuaryColors.highlightPurple;
       default:
-        return SanctuaryColors.waveNavy;
+        // Default category fallback uses the primary brand color from Theme
+        return Theme.of(context).colorScheme.primary;
     }
   }
 
+  /// Filters bookmark entries based on the selected tag category.
   bool _matchesFilter(LocalBookmarkEntry bookmark) {
     if (_selectedFilter == 'Todos') return true;
     if (_selectedFilter == 'Notas') {
@@ -71,17 +67,23 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
     }
 
     final hex = bookmark.colorHex.replaceAll('#', '').toUpperCase();
+    final yellowHex = SanctuaryColors.colorToHex(SanctuaryColors.highlightYellow).replaceAll('#', '');
+    final greenHex = SanctuaryColors.colorToHex(SanctuaryColors.highlightGreen).replaceAll('#', '');
+    final blueHex = SanctuaryColors.colorToHex(SanctuaryColors.highlightBlue).replaceAll('#', '');
+    final orangeHex = SanctuaryColors.colorToHex(SanctuaryColors.highlightOrange).replaceAll('#', '');
+    final purpleHex = SanctuaryColors.colorToHex(SanctuaryColors.highlightPurple).replaceAll('#', '');
+
     switch (_selectedFilter) {
       case 'Promesas':
-        return hex == 'FFF2B2';
+        return hex == yellowHex;
       case 'Vida':
-        return hex == 'D2F5D7';
+        return hex == greenHex;
       case 'Paz':
-        return hex == 'D3E7FF';
+        return hex == blueHex;
       case 'Aviso':
-        return hex == 'FFDFCC';
+        return hex == orangeHex;
       case 'Divinidad':
-        return hex == 'E9E4FF';
+        return hex == purpleHex;
       default:
         return true;
     }
@@ -89,12 +91,19 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
 
   @override
   Widget build(BuildContext context) {
+    // Access the current semantic colorScheme and textTheme from Theme.of(context)
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final primaryActiveColor = theme.colorScheme.primary;
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
 
     return Scaffold(
+      // Uses Theme.of(context).scaffoldBackgroundColor automatically
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
+        // Themed surface background and elevation
+        backgroundColor: colorScheme.surface,
+        foregroundColor: colorScheme.onSurface,
+        elevation: 0,
         leading: IconButton(
           icon: const Icon(LucideIcons.menu),
           tooltip: 'Menú Lateral',
@@ -103,14 +112,14 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(LucideIcons.bookmark,
-                size: 20, color: SanctuaryColors.sunOrange),
+            // Replaced hardcoded SanctuaryColors.sunOrange with semantic colorScheme.secondary
+            Icon(LucideIcons.bookmark, size: 20, color: colorScheme.secondary),
             const SizedBox(width: 8),
             Text(
               'Guardados & Notas',
-              style: GoogleFonts.inter(
+              style: (textTheme.titleMedium ?? GoogleFonts.inter()).copyWith(
                 fontWeight: FontWeight.w700,
-                fontSize: 17,
+                color: colorScheme.onSurface,
               ),
             ),
           ],
@@ -143,40 +152,53 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
 
           return CustomScrollView(
             slivers: [
-              // Buscador
+              // Search Bar
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
                   child: TextField(
                     onChanged: (val) => setState(() => _searchQuery = val),
+                    style: (textTheme.bodyMedium ?? GoogleFonts.inter()).copyWith(
+                      color: colorScheme.onSurface,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Buscar en mis versículos o notas...',
-                      hintStyle: GoogleFonts.inter(fontSize: 13),
-                      prefixIcon: const Icon(LucideIcons.search, size: 18),
+                      hintStyle: (textTheme.bodySmall ?? GoogleFonts.inter()).copyWith(
+                        // Replaced raw grey with theme-derived onSurface variant
+                        color: colorScheme.onSurface.withValues(alpha: 0.6),
+                        fontSize: 13,
+                      ),
+                      prefixIcon: Icon(LucideIcons.search, size: 18, color: colorScheme.onSurface.withValues(alpha: 0.6)),
                       suffixIcon: _searchQuery.isNotEmpty
                           ? IconButton(
-                              icon: const Icon(LucideIcons.x, size: 16),
-                              onPressed: () =>
-                                  setState(() => _searchQuery = ''),
+                              icon: Icon(LucideIcons.x, size: 16, color: colorScheme.onSurface.withValues(alpha: 0.6)),
+                              onPressed: () => setState(() => _searchQuery = ''),
                             )
                           : null,
                       filled: true,
-                      fillColor:
-                          isDark ? const Color(0xFF1E293B) : Colors.white,
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 10),
+                      // Replaced hardcoded Color(0xFF1E293B) and Colors.white with semantic colorScheme.surface
+                      fillColor: colorScheme.surface,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
+                        // Replaced raw borders with colorScheme.outline token
                         borderSide: BorderSide(
-                          color:
-                              theme.colorScheme.outline.withValues(alpha: 0.3),
+                          color: colorScheme.outline.withValues(alpha: 0.3),
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
+                        // Replaced raw borders with colorScheme.outline token
                         borderSide: BorderSide(
-                          color:
-                              theme.colorScheme.outline.withValues(alpha: 0.2),
+                          color: colorScheme.outline.withValues(alpha: 0.2),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        // Uses primary brand token on focus
+                        borderSide: BorderSide(
+                          color: colorScheme.primary,
+                          width: 1.5,
                         ),
                       ),
                     ),
@@ -184,7 +206,7 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                 ),
               ),
 
-              // Filtros
+              // Filter Chips
               SliverToBoxAdapter(
                 child: SizedBox(
                   height: 40,
@@ -195,67 +217,64 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                     itemBuilder: (context, index) {
                       final filterName = _filters[index];
                       final isSelected = _selectedFilter == filterName;
-                      final chipColor = _getFilterColor(filterName);
+                      // Derived strictly from SanctuaryColors tokens via helper
+                      final chipColor = _getFilterCategoryColor(filterName, context);
 
                       return Padding(
                         padding: const EdgeInsets.only(right: 6),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () {
-                              setState(() => _selectedFilter = filterName);
-                            },
-                            borderRadius: BorderRadius.circular(20),
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 180),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
-                              decoration: BoxDecoration(
+                        child: InkWell(
+                          onTap: () {
+                            setState(() => _selectedFilter = filterName);
+                          },
+                          borderRadius: BorderRadius.circular(20),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 180),
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              // Active background uses colorScheme.primary, inactive uses colorScheme.surface
+                              color: isSelected
+                                  ? colorScheme.primary
+                                  : colorScheme.surface,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                // Active border uses colorScheme.primary, inactive uses colorScheme.outline
                                 color: isSelected
-                                    ? primaryActiveColor
-                                    : theme.colorScheme.surface,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: isSelected
-                                      ? primaryActiveColor
-                                      : theme.colorScheme.outline
-                                          .withValues(alpha: 0.25),
-                                  width: 1.1,
-                                ),
+                                    ? colorScheme.primary
+                                    : colorScheme.outline.withValues(alpha: 0.25),
+                                width: 1.1,
                               ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  if (filterName != 'Todos' &&
-                                      filterName != 'Notas') ...[
-                                    Container(
-                                      width: 10,
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                        color: chipColor,
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            color: Colors.black26, width: 0.8),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (filterName != 'Todos' && filterName != 'Notas') ...[
+                                  Container(
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      color: chipColor,
+                                      shape: BoxShape.circle,
+                                      // Replaced Colors.black26 with colorScheme.outline
+                                      border: Border.all(
+                                        color: colorScheme.outline.withValues(alpha: 0.35),
+                                        width: 0.8,
                                       ),
                                     ),
-                                    const SizedBox(width: 6),
-                                  ],
-                                  Text(
-                                    filterName,
-                                    style: GoogleFonts.inter(
-                                      color: isSelected
-                                          ? theme.colorScheme.onPrimary
-                                          : theme.colorScheme.onSurface,
-                                      fontWeight: isSelected
-                                          ? FontWeight.w700
-                                          : FontWeight.w500,
-                                      fontSize: 12,
-                                    ),
                                   ),
+                                  const SizedBox(width: 6),
                                 ],
-                              ),
+                                Text(
+                                  filterName,
+                                  style: (textTheme.labelMedium ?? GoogleFonts.inter()).copyWith(
+                                    // Text color adapts to contrast with active/inactive chip background
+                                    color: isSelected
+                                        ? colorScheme.onPrimary
+                                        : colorScheme.onSurface,
+                                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -267,7 +286,7 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
 
               const SliverToBoxAdapter(child: SizedBox(height: 10)),
 
-              // Lista de Versículos Guardados
+              // Empty State
               if (filteredBookmarks.isEmpty)
                 SliverFillRemaining(
                   hasScrollBody: false,
@@ -280,14 +299,15 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                           Container(
                             padding: const EdgeInsets.all(18),
                             decoration: BoxDecoration(
-                              color: SanctuaryColors.sunOrange
-                                  .withValues(alpha: 0.12),
+                              // Replaced hardcoded sunOrange with theme.colorScheme.secondary token
+                              color: colorScheme.secondary.withValues(alpha: 0.12),
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(
+                            child: Icon(
                               LucideIcons.bookmarkCheck,
                               size: 40,
-                              color: SanctuaryColors.sunOrange,
+                              // Replaced hardcoded sunOrange with theme.colorScheme.secondary token
+                              color: colorScheme.secondary,
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -295,19 +315,19 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                             _searchQuery.isNotEmpty
                                 ? 'No hay resultados para "$_searchQuery"'
                                 : 'Sin versículos en este filtro',
-                            style: GoogleFonts.inter(
+                            style: (textTheme.titleMedium ?? GoogleFonts.inter()).copyWith(
                               fontWeight: FontWeight.w700,
-                              fontSize: 16,
+                              color: colorScheme.onSurface,
                             ),
                           ),
                           const SizedBox(height: 6),
                           Text(
                             'Resalta versículos en la lectura para verlos organizados aquí.',
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.inter(
+                            style: (textTheme.bodySmall ?? GoogleFonts.inter()).copyWith(
+                              // Replaced raw grey with theme colorScheme.onSurface with alpha
+                              color: colorScheme.onSurface.withValues(alpha: 0.65),
                               fontSize: 13,
-                              color: theme.colorScheme.onSurface
-                                  .withValues(alpha: 0.65),
                             ),
                           ),
                         ],
@@ -316,23 +336,27 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                   ),
                 )
               else
+                // Bookmark Cards List
                 SliverPadding(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 80),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         final item = filteredBookmarks[index];
-                        final bookmarkColor = _parseColor(item.colorHex);
+                        // Strictly enforced rule 5: Use SanctuaryColors.getHighlightColor
+                        final bookmarkColor = SanctuaryColors.getHighlightColor(item.colorHex);
 
                         return Card(
                           margin: const EdgeInsets.only(bottom: 12),
                           elevation: 0,
                           clipBehavior: Clip.antiAlias,
+                          // Card background defaults to colorScheme.surface
+                          color: colorScheme.surface,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
+                            // Replaced raw borders with colorScheme.outline
                             side: BorderSide(
-                              color: theme.colorScheme.outline
-                                  .withValues(alpha: 0.25),
+                              color: colorScheme.outline.withValues(alpha: 0.25),
                             ),
                           ),
                           child: InkWell(
@@ -348,8 +372,7 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         children: [
@@ -359,29 +382,33 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                                             decoration: BoxDecoration(
                                               color: bookmarkColor,
                                               shape: BoxShape.circle,
+                                              // Replaced Colors.black26 with colorScheme.outline
                                               border: Border.all(
-                                                  color: Colors.black26,
-                                                  width: 0.8),
+                                                color: colorScheme.outline.withValues(alpha: 0.35),
+                                                width: 0.8,
+                                              ),
                                             ),
                                           ),
                                           const SizedBox(width: 8),
                                           Text(
                                             '${item.bookName} ${item.chapter}:${item.verse}',
-                                            style: GoogleFonts.inter(
+                                            style: (textTheme.titleSmall ?? GoogleFonts.inter()).copyWith(
                                               fontWeight: FontWeight.w800,
-                                              fontSize: 14,
-                                              color:
-                                                  theme.colorScheme.onSurface,
+                                              color: colorScheme.onSurface,
                                             ),
                                           ),
                                         ],
                                       ),
                                       IconButton(
-                                        icon: const Icon(LucideIcons.trash2,
-                                            size: 16, color: Colors.redAccent),
+                                        // Replaced Colors.redAccent with semantic colorScheme.error
+                                        icon: Icon(
+                                          LucideIcons.trash2,
+                                          size: 16,
+                                          color: colorScheme.error,
+                                        ),
+                                        tooltip: 'Eliminar marcador',
                                         onPressed: () async {
-                                          await widget.database
-                                              .deleteBookmark(item.id);
+                                          await widget.database.deleteBookmark(item.id);
                                         },
                                       ),
                                     ],
@@ -392,7 +419,7 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                                     style: GoogleFonts.literata(
                                       fontSize: 14.5,
                                       height: 1.5,
-                                      color: theme.colorScheme.onSurface,
+                                      color: colorScheme.onSurface,
                                     ),
                                   ),
                                   if (item.personalNote != null &&
@@ -402,27 +429,29 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
                                       width: double.infinity,
                                       padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(
-                                        color: theme
-                                            .colorScheme.surfaceContainerHighest
-                                            .withValues(alpha: 0.5),
+                                        // Replaced container with semantic surface + outline border
+                                        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
                                         borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: colorScheme.outline.withValues(alpha: 0.15),
+                                        ),
                                       ),
                                       child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          const Icon(LucideIcons.fileText,
-                                              size: 14,
-                                              color: SanctuaryColors.sunOrange),
+                                          // Replaced hardcoded sunOrange with semantic colorScheme.secondary
+                                          Icon(
+                                            LucideIcons.fileText,
+                                            size: 14,
+                                            color: colorScheme.secondary,
+                                          ),
                                           const SizedBox(width: 8),
                                           Expanded(
                                             child: Text(
                                               item.personalNote!,
-                                              style: GoogleFonts.inter(
+                                              style: (textTheme.bodySmall ?? GoogleFonts.inter()).copyWith(
+                                                color: colorScheme.onSurface.withValues(alpha: 0.85),
                                                 fontSize: 12,
-                                                color: theme
-                                                    .colorScheme.onSurface
-                                                    .withValues(alpha: 0.85),
                                               ),
                                             ),
                                           ),
@@ -447,3 +476,4 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
     );
   }
 }
+
