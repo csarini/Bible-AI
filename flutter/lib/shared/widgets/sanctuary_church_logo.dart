@@ -34,7 +34,7 @@ class SanctuaryChurchLogo extends StatelessWidget {
         effectiveIsDark ? SanctuaryColors.sunOrange : SanctuaryColors.waveNavy;
 
     final emblem = Image.asset(
-      'assets/images/shaddai-logo.png',
+      'assets/images/shaddai-emblem.png',
       width: size,
       height: size * 0.65,
       fit: BoxFit.contain,

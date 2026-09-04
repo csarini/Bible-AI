@@ -20,52 +20,19 @@
       <stop offset="60%" stop-color="#1EB8F6" />
       <stop offset="100%" stop-color="#38BDF8" />
     </linearGradient>
-  </defs>
-
-  <!-- Background rounded canvas -->
-  <rect width="512" height="512" rx="100" fill="url(#bgGrad)" />
-
-  <!-- Centered Logo Group scaled to fit 512x512 -->
-  <g transform="translate(36, 40) scale(0.88)">
-    <!-- Sunburst Rays with White Cross Negative Space -->
+  </defs><rect x="6" y="6" width="500" height="500" rx="110" fill="url(#bgGrad)" stroke="#EADCCB" stroke-width="4"/>
+  <g transform="translate(256, 256) scale(0.78) translate(-250, -225)">
     <g id="el-shaddai-sunburst" fill="url(#sunRayGrad)">
-      <!-- Ray 1 (Bottom Left) -->
       <path d="M 22 178 C 30 152 48 128 72 108 L 198 168 C 145 186 90 196 22 178 Z" />
-      <!-- Ray 2 (Mid Left) -->
       <path d="M 85 96 C 114 74 150 56 190 44 L 230 156 C 185 160 142 170 102 186 Z" />
-      <!-- Ray 3 (Top Left - Flanking Cross Left) -->
       <path d="M 205 39 C 218 36 232 34 246 33 L 246 76 L 218 76 L 218 94 L 246 94 L 246 200 C 235 198 224 195 212 190 Z" />
-      <!-- Ray 4 (Top Right - Flanking Cross Right) -->
       <path d="M 254 33 C 268 34 282 36 295 39 L 288 190 C 276 195 265 198 254 200 L 254 94 L 282 94 L 282 76 L 254 76 Z" />
-      <!-- Ray 5 (Mid Right) -->
       <path d="M 310 44 C 350 56 386 74 415 96 L 398 186 C 358 170 315 160 270 156 Z" />
-      <!-- Ray 6 (Bottom Right) -->
       <path d="M 428 108 C 452 128 470 152 478 178 C 410 196 355 186 302 168 Z" />
     </g>
-
-    <!-- Cross Center Light Effect -->
-    <path
-      d="M 246 33 L 254 33 L 254 76 L 282 76 L 282 94 L 254 94 L 254 202 L 246 202 L 246 94 L 218 94 L 218 76 L 246 76 Z"
-      fill="white"
-      fill-opacity="0.95"
-    />
-
-    <!-- Navy Wave Ribbon -->
-    <path
-      d="M 6 172 C 32 234 116 266 220 236 C 316 208 412 216 494 262 C 456 270 376 244 286 248 C 172 254 72 284 6 172 Z"
-      fill="url(#navyWaveGrad)"
-    />
-
-    <!-- Cyan Accent Ribbon -->
-    <path
-      d="M 112 284 C 196 294 300 276 392 268 C 444 264 472 274 488 296 C 454 306 392 288 316 292 C 228 296 160 294 112 284 Z"
-      fill="url(#cyanWaveGrad)"
-    />
-
-    <!-- Text: El-Shaddai -->
-    <text x="250" y="385" font-family="'Playfair Display', Georgia, serif" font-size="56" font-style="italic" font-weight="900" fill="#243372" text-anchor="middle">El-Shaddai</text>
-    
-    <!-- Text: DIOS TODOPODEROSO -->
-    <text x="250" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="19" font-weight="900" letter-spacing="6" fill="#1E2A66" text-anchor="middle">DIOS TODOPODEROSO</text>
-  </g>
-</svg>
+    <path d="M 246 33 L 254 33 L 254 76 L 282 76 L 282 94 L 254 94 L 254 202 L 246 202 L 246 94 L 218 94 L 218 76 L 246 76 Z" fill="white" fill-opacity="0.98" />
+    <path d="M 6 172 C 32 234 116 266 220 236 C 316 208 412 216 494 262 C 456 270 376 244 286 248 C 172 254 72 284 6 172 Z" fill="url(#navyWaveGrad)" />
+    <path d="M 112 284 C 196 294 300 276 392 268 C 444 264 472 274 488 296 C 454 306 392 288 316 292 C 228 296 160 294 112 284 Z" fill="url(#cyanWaveGrad)" />
+    <text x="250" y="378" font-family="'Playfair Display', Georgia, serif" font-size="56" font-style="italic" font-weight="900" fill="#243372" text-anchor="middle">El-Shaddai</text>
+    <text x="250" y="418" font-family="system-ui, -apple-system, sans-serif" font-size="19" font-weight="900" letter-spacing="6" fill="#1E2A66" text-anchor="middle">DIOS TODOPODEROSO</text>
+  </g></svg>

@@ -144,14 +144,12 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
                 ],
               );
 
-    final cardBgColor = isDark
-        ? const Color(0xFF131722).withValues(alpha: 0.90)
-        : isSepia
-            ? const Color(0xFFFAF6EF).withValues(alpha: 0.90)
-            : Colors.white.withValues(alpha: 0.90);
+    final cardBgColor = isSepia
+        ? const Color(0xFFFAF6EF).withValues(alpha: 0.94)
+        : Colors.white.withValues(alpha: 0.94);
 
     final cardBorderColor = isDark
-        ? const Color(0xFF3B49A8).withValues(alpha: 0.40)
+        ? const Color(0xFFFED65B).withValues(alpha: 0.35)
         : isSepia
             ? const Color(0xFF705335).withValues(alpha: 0.20)
             : SanctuaryColors.waveNavy.withValues(alpha: 0.12);
@@ -266,7 +264,7 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
                           variant: LogoVariant.full,
                           showText: true,
                           showSubtitle: true,
-                          isDark: isDark,
+                          isDark: false,
                         ),
                       ),
                       const SizedBox(height: 32),
