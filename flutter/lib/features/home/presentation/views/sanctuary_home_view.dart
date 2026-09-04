@@ -198,7 +198,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
         title: const Align(
           alignment: Alignment.centerLeft,
           child: SanctuaryChurchLogo(
-            size: 34,
+            size: 38,
             variant: LogoVariant.symbol,
             showText: false,
           ),

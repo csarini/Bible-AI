@@ -218,7 +218,7 @@ class SanctuaryMainShell extends ConsumerWidget {
                           ),
                         ),
                         child: SanctuaryChurchLogo(
-                          size: 36,
+                          size: 40,
                           variant: LogoVariant.symbol,
                           showText: false,
                           isDark: visualTheme != AppVisualTheme.light,
