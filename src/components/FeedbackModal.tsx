@@ -44,7 +44,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   const isDark = currentTheme === 'dark';
   const isSepia = currentTheme === 'sepia';
 
-  const recipientEmail = 'cmedinavera@gmail.com';
+  const recipientEmail = 'soporte@elshaddai.org';
 
   // System diagnostic info
   const systemInfo = {

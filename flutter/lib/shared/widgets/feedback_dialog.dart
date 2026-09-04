@@ -23,61 +23,48 @@ class FeedbackDialog extends ConsumerStatefulWidget {
 
 class _FeedbackDialogState extends ConsumerState<FeedbackDialog> {
   String _feedbackType = 'bug'; // 'bug', 'suggestion', 'general'
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
   bool _copied = false;
 
   @override
   void dispose() {
-    _titleController.dispose();
-    _descriptionController.dispose();
-    _nameController.dispose();
-    _emailController.dispose();
+    _messageController.dispose();
     super.dispose();
   }
 
   String _getSubject() {
     final typeLabel = _feedbackType == 'bug'
-        ? '[Bug / Error]'
+        ? 'Error'
         : _feedbackType == 'suggestion'
-            ? '[Sugerencia]'
-            : '[Consulta / Comentario]';
-    final cleanTitle = _titleController.text.trim().isEmpty
-        ? 'Nuevo reporte desde la App Flutter'
-        : _titleController.text.trim();
-    return 'Bug/Sugerencias: $typeLabel $cleanTitle';
+            ? 'Idea'
+            : 'Consulta';
+    return 'Feedback El-Shaddai [$typeLabel]';
   }
 
   String _getBodyText() {
     final visualTheme = ref.read(appVisualThemeModeProvider);
     final translation = ref.read(appTranslationProvider);
 
-    return '''--- REPORTE DE USUARIO - SANTUARIO DIGITAL EL-SHADDAI (FLUTTER) ---
-Tipo: ${_feedbackType == 'bug' ? 'Reporte de Error / Bug' : _feedbackType == 'suggestion' ? 'Sugerencia de Mejora' : 'Consulta General'}
-Fecha: ${DateTime.now().toLocal().toString()}
-Remitente: ${_nameController.text.trim().isEmpty ? 'Anónimo' : _nameController.text.trim()} ${_emailController.text.trim().isNotEmpty ? '(${_emailController.text.trim()})' : ''}
+    return '''--- FEEDBACK SANTUARIO DIGITAL EL-SHADDAI ---
+Tipo: ${_feedbackType == 'bug' ? 'Error / Bug' : _feedbackType == 'suggestion' ? 'Sugerencia / Idea' : 'Consulta General'}
+Fecha: ${DateTime.now().toLocal().toString().split('.')[0]}
 
-ASUNTO:
-${_titleController.text.trim().isEmpty ? '(Sin asunto especificado)' : _titleController.text.trim()}
+MENSAJE:
+${_messageController.text.trim()}
 
-DESCRIPCIÓN / DETALLES:
-${_descriptionController.text.trim().isEmpty ? '(Sin descripción)' : _descriptionController.text.trim()}
-
---- INFORMACIÓN TÉCNICA DEL DISPOSITIVO ---
+--- DATOS TÉCNICOS ---
 Versión Bíblica: ${translation.toUpperCase()}
 Tema: ${visualTheme.name}
 Plataforma: Flutter Nativo
-------------------------------------------------------------''';
+--------------------------------------------''';
   }
 
   Future<void> _sendFeedback() async {
-    if (_descriptionController.text.trim().isEmpty) {
+    final text = _messageController.text.trim();
+    if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content:
-              Text('Por favor escribe una descripción del error o sugerencia.'),
+          content: Text('Escribe tu comentario o sugerencia'),
           backgroundColor: Colors.redAccent,
         ),
       );
@@ -96,16 +83,27 @@ Plataforma: Flutter Nativo
   }
 
   Future<void> _copyToClipboard() async {
-    final fullText = 'Asunto: ${_getSubject()}\n\n${_getBodyText()}';
+    final text = _messageController.text.trim();
+    if (text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Escribe un mensaje antes de copiar'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+      return;
+    }
+
+    final fullText = '${_getSubject()}\n\n${_getBodyText()}';
     await Clipboard.setData(ClipboardData(text: fullText));
     setState(() => _copied = true);
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-              '¡Mensaje copiado al portapapeles! Puedes pegarlo en tu correo o mensaje.'),
+          content: Text('¡Copiado al portapapeles!'),
           backgroundColor: SanctuaryColors.waveNavy,
+          duration: Duration(seconds: 2),
         ),
       );
     }
@@ -116,356 +114,241 @@ Plataforma: Flutter Nativo
     final theme = Theme.of(context);
 
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       backgroundColor: theme.scaffoldBackgroundColor,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       child: Container(
-        constraints: const BoxConstraints(maxWidth: 480),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: SanctuaryColors.sunOrange.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: const Icon(LucideIcons.messageSquare,
-                        color: SanctuaryColors.sunOrange, size: 22),
+        constraints: const BoxConstraints(maxWidth: 380),
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Header: Icon + Title + Close Button
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: SanctuaryColors.sunOrange.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Sugerencias y Errores',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 16.5,
-                          ),
-                        ),
-                        Text(
-                          'Ayúdanos a mejorar el Santuario Digital',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.inter(
-                            fontSize: 11.5,
-                            color: theme.colorScheme.onSurface
-                                .withValues(alpha: 0.65),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(LucideIcons.x, size: 18),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              // Category Selector
-              Text(
-                '1. ¿Qué deseas enviar?',
-                style: GoogleFonts.inter(
-                    fontSize: 12, fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildTypeOption(
-                      type: 'bug',
-                      label: 'Error (Bug)',
-                      icon: LucideIcons.bug,
-                      color: const Color(0xFFE11D48),
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: _buildTypeOption(
-                      type: 'suggestion',
-                      label: 'Sugerencia',
-                      icon: LucideIcons.lightbulb,
-                      color: SanctuaryColors.sunOrange,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: _buildTypeOption(
-                      type: 'general',
-                      label: 'Consulta',
-                      icon: LucideIcons.helpCircle,
-                      color: SanctuaryColors.waveNavy,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              // Title input
-              Text(
-                '2. Resumen / Título',
-                style: GoogleFonts.inter(
-                    fontSize: 12, fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 6),
-              TextField(
-                controller: _titleController,
-                decoration: InputDecoration(
-                  hintText:
-                      'Ej. No se escucha el audio, Error al guardar versículo...',
-                  hintStyle:
-                      GoogleFonts.inter(fontSize: 12, color: Colors.grey),
-                  filled: true,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                        color:
-                            theme.colorScheme.outline.withValues(alpha: 0.3)),
+                  child: const Icon(
+                    LucideIcons.messageSquareHeart,
+                    color: SanctuaryColors.sunOrange,
+                    size: 20,
                   ),
                 ),
-                style: GoogleFonts.inter(fontSize: 13),
-              ),
-
-              const SizedBox(height: 14),
-
-              // Description input
-              Text(
-                '3. Descripción detallada *',
-                style: GoogleFonts.inter(
-                    fontSize: 12, fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 6),
-              TextField(
-                controller: _descriptionController,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  hintText:
-                      'Describe qué ocurrió, qué esperabas que pasara o cuál es tu propuesta...',
-                  hintStyle:
-                      GoogleFonts.inter(fontSize: 12, color: Colors.grey),
-                  filled: true,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                        color:
-                            theme.colorScheme.outline.withValues(alpha: 0.3)),
-                  ),
-                ),
-                style: GoogleFonts.inter(fontSize: 13),
-              ),
-
-              const SizedBox(height: 14),
-
-              // Sender Details (Optional)
-              Text(
-                '4. Tus Datos (Opcional)',
-                style: GoogleFonts.inter(
-                    fontSize: 12, fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 6),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        hintText: 'Tu Nombre',
-                        hintStyle:
-                            GoogleFonts.inter(fontSize: 12, color: Colors.grey),
-                        filled: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                              color: theme.colorScheme.outline
-                                  .withValues(alpha: 0.3)),
-                        ),
-                      ),
-                      style: GoogleFonts.inter(fontSize: 12.5),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Feedback',
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16,
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        hintText: 'Tu Correo (para responderte)',
-                        hintStyle:
-                            GoogleFonts.inter(fontSize: 12, color: Colors.grey),
-                        filled: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                              color: theme.colorScheme.outline
-                                  .withValues(alpha: 0.3)),
-                        ),
-                      ),
-                      style: GoogleFonts.inter(fontSize: 12.5),
-                    ),
+                ),
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(LucideIcons.x, size: 18),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                  tooltip: 'Cerrar',
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 14),
+
+            // Category Selector: Minimalist Icon Buttons
+            Row(
+              children: [
+                Expanded(
+                  child: _buildIconButton(
+                    type: 'bug',
+                    label: 'Error',
+                    icon: LucideIcons.bug,
+                    color: const Color(0xFFE11D48),
                   ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              // Destination banner
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: SanctuaryColors.waveNavy.withValues(alpha: 0.06),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                      color: SanctuaryColors.waveNavy.withValues(alpha: 0.15)),
                 ),
-                child: Row(
-                  children: [
-                    const Icon(LucideIcons.mail,
-                        size: 18, color: SanctuaryColors.waveNavy),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Destinatario del soporte:',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.inter(
-                                fontSize: 10, color: Colors.grey.shade600),
-                          ),
-                          Text(
-                            'cmedinavera@gmail.com',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: SanctuaryColors.waveNavy,
-                            ),
-                          ),
-                        ],
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildIconButton(
+                    type: 'suggestion',
+                    label: 'Idea',
+                    icon: LucideIcons.lightbulb,
+                    color: SanctuaryColors.sunOrange,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildIconButton(
+                    type: 'general',
+                    label: 'Mensaje',
+                    icon: LucideIcons.messageCircle,
+                    color: SanctuaryColors.waveNavy,
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 12),
+
+            // Message TextField
+            TextField(
+              controller: _messageController,
+              maxLines: 4,
+              textInputAction: TextInputAction.newline,
+              decoration: InputDecoration(
+                hintText: _feedbackType == 'bug'
+                    ? '¿Qué error ocurrió?...'
+                    : _feedbackType == 'suggestion'
+                        ? '¿Qué idea o mejora propones?...'
+                        : 'Escribe tu consulta o mensaje...',
+                hintStyle: GoogleFonts.inter(
+                  fontSize: 12.5,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                ),
+                filled: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide(
+                    color: theme.colorScheme.outline.withValues(alpha: 0.2),
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide(
+                    color: theme.colorScheme.outline.withValues(alpha: 0.2),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(
+                    color: SanctuaryColors.sunOrange,
+                    width: 1.5,
+                  ),
+                ),
+              ),
+              style: GoogleFonts.inter(fontSize: 13),
+            ),
+
+            const SizedBox(height: 14),
+
+            // Action Buttons: Icon-forward
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _copyToClipboard,
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      side: BorderSide(
+                        color: theme.colorScheme.outline.withValues(alpha: 0.25),
                       ),
                     ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Action Buttons
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: _copyToClipboard,
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                      ),
-                      icon: Icon(
-                        _copied ? LucideIcons.check : LucideIcons.copy,
-                        size: 16,
+                    icon: Icon(
+                      _copied ? LucideIcons.check : LucideIcons.copy,
+                      size: 16,
+                      color: _copied ? const Color(0xFF10B981) : null,
+                    ),
+                    label: Text(
+                      _copied ? 'Copiado' : 'Copiar',
+                      style: GoogleFonts.inter(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w700,
                         color: _copied ? const Color(0xFF10B981) : null,
                       ),
-                      label: Text(
-                        _copied ? '¡Copiado!' : 'Copiar Texto',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w700,
-                          color: _copied ? const Color(0xFF10B981) : null,
-                        ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  flex: 2,
+                  child: FilledButton.icon(
+                    onPressed: _sendFeedback,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: SanctuaryColors.sunOrange,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    icon: const Icon(LucideIcons.send, size: 16),
+                    label: Text(
+                      'Enviar',
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    flex: 2,
-                    child: FilledButton.icon(
-                      onPressed: _sendFeedback,
-                      style: FilledButton.styleFrom(
-                        backgroundColor: SanctuaryColors.sunOrange,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                      ),
-                      icon: const Icon(LucideIcons.send, size: 16),
-                      label: Text(
-                        'Enviar / Compartir',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.inter(fontWeight: FontWeight.w800),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildTypeOption({
+  Widget _buildIconButton({
     required String type,
     required String label,
     required IconData icon,
     required Color color,
   }) {
     final isSelected = _feedbackType == type;
+    final theme = Theme.of(context);
+
     return InkWell(
       onTap: () => setState(() => _feedbackType = type),
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         decoration: BoxDecoration(
-          color:
-              isSelected ? color.withValues(alpha: 0.12) : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
+          color: isSelected
+              ? color.withValues(alpha: 0.12)
+              : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
                 ? color
-                : Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
-            width: isSelected ? 2 : 1,
+                : theme.colorScheme.outline.withValues(alpha: 0.15),
+            width: isSelected ? 1.8 : 1,
           ),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 18, color: isSelected ? color : Colors.grey),
+            Icon(
+              icon,
+              size: 20,
+              color: isSelected
+                  ? color
+                  : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+            ),
             const SizedBox(height: 4),
             Text(
               label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.inter(
                 fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
-                color: isSelected ? color : null,
+                color: isSelected
+                    ? color
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
-              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
