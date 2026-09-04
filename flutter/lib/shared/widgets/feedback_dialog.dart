@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/providers/app_settings_providers.dart';
 import '../../core/theme/sanctuary_colors.dart';
 
@@ -22,6 +23,7 @@ class FeedbackDialog extends ConsumerStatefulWidget {
 }
 
 class _FeedbackDialogState extends ConsumerState<FeedbackDialog> {
+  static const _feedbackEmail = 'cmedinavera.developer@gmail.com';
   String _feedbackType = 'bug'; // 'bug', 'suggestion', 'general'
   final TextEditingController _messageController = TextEditingController();
   bool _copied = false;
@@ -73,10 +75,18 @@ Plataforma: Flutter Nativo
 
     final fullText = '${_getSubject()}\n\n${_getBodyText()}';
     try {
-      await Share.share(
-        fullText,
-        subject: _getSubject(),
+      final emailUri = Uri(
+        scheme: 'mailto',
+        path: _feedbackEmail,
+        queryParameters: {
+          'subject': _getSubject(),
+          'body': fullText,
+        },
       );
+
+      if (!await launchUrl(emailUri, mode: LaunchMode.externalApplication)) {
+        await Share.share(fullText, subject: _getSubject());
+      }
     } catch (_) {
       await _copyToClipboard();
     }
@@ -153,7 +163,8 @@ Plataforma: Flutter Nativo
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(LucideIcons.x, size: 18),
                   padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                  constraints:
+                      const BoxConstraints(minWidth: 32, minHeight: 32),
                   tooltip: 'Cerrar',
                 ),
               ],
@@ -252,7 +263,8 @@ Plataforma: Flutter Nativo
                         borderRadius: BorderRadius.circular(12),
                       ),
                       side: BorderSide(
-                        color: theme.colorScheme.outline.withValues(alpha: 0.25),
+                        color:
+                            theme.colorScheme.outline.withValues(alpha: 0.25),
                       ),
                     ),
                     icon: Icon(
@@ -318,7 +330,8 @@ Plataforma: Flutter Nativo
         decoration: BoxDecoration(
           color: isSelected
               ? color.withValues(alpha: 0.12)
-              : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
+              : theme.colorScheme.surfaceContainerHighest
+                  .withValues(alpha: 0.4),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected

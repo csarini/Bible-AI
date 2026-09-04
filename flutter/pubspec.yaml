@@ -25,6 +25,7 @@ dependencies:
 
   # Native Integrations & Sharing
   share_plus: ^10.1.4
+  url_launcher: ^6.3.2
   home_widget: ^0.7.0
   in_app_update: ^4.2.3
 
