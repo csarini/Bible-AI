@@ -4045,23 +4045,162 @@ typedef $$LocalBookmarksTableUpdateCompanionBuilder = LocalBookmarksCompanion
   Value<int> rowid,
 });
 
+class $$LocalBookmarksTableFilterComposer
+    extends Composer<_$AppDatabase, $LocalBookmarksTable> {
+  $$LocalBookmarksTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get bookId => $composableBuilder(
+      column: $table.bookId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get bookName => $composableBuilder(
+      column: $table.bookName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get chapter => $composableBuilder(
+      column: $table.chapter, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get verse => $composableBuilder(
+      column: $table.verse, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get verseText => $composableBuilder(
+      column: $table.verseText, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get colorHex => $composableBuilder(
+      column: $table.colorHex, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get customTitle => $composableBuilder(
+      column: $table.customTitle, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get personalNote => $composableBuilder(
+      column: $table.personalNote, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$LocalBookmarksTableOrderingComposer
+    extends Composer<_$AppDatabase, $LocalBookmarksTable> {
+  $$LocalBookmarksTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get bookId => $composableBuilder(
+      column: $table.bookId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get bookName => $composableBuilder(
+      column: $table.bookName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get chapter => $composableBuilder(
+      column: $table.chapter, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get verse => $composableBuilder(
+      column: $table.verse, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get verseText => $composableBuilder(
+      column: $table.verseText, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get colorHex => $composableBuilder(
+      column: $table.colorHex, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get customTitle => $composableBuilder(
+      column: $table.customTitle, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get personalNote => $composableBuilder(
+      column: $table.personalNote,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$LocalBookmarksTableAnnotationComposer
+    extends Composer<_$AppDatabase, $LocalBookmarksTable> {
+  $$LocalBookmarksTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get bookId =>
+      $composableBuilder(column: $table.bookId, builder: (column) => column);
+
+  GeneratedColumn<String> get bookName =>
+      $composableBuilder(column: $table.bookName, builder: (column) => column);
+
+  GeneratedColumn<int> get chapter =>
+      $composableBuilder(column: $table.chapter, builder: (column) => column);
+
+  GeneratedColumn<int> get verse =>
+      $composableBuilder(column: $table.verse, builder: (column) => column);
+
+  GeneratedColumn<String> get verseText =>
+      $composableBuilder(column: $table.verseText, builder: (column) => column);
+
+  GeneratedColumn<String> get colorHex =>
+      $composableBuilder(column: $table.colorHex, builder: (column) => column);
+
+  GeneratedColumn<String> get customTitle => $composableBuilder(
+      column: $table.customTitle, builder: (column) => column);
+
+  GeneratedColumn<String> get personalNote => $composableBuilder(
+      column: $table.personalNote, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSynced =>
+      $composableBuilder(column: $table.isSynced, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
 class $$LocalBookmarksTableTableManager extends RootTableManager<
     _$AppDatabase,
     $LocalBookmarksTable,
     LocalBookmarkEntry,
     $$LocalBookmarksTableFilterComposer,
     $$LocalBookmarksTableOrderingComposer,
+    $$LocalBookmarksTableAnnotationComposer,
     $$LocalBookmarksTableCreateCompanionBuilder,
-    $$LocalBookmarksTableUpdateCompanionBuilder> {
+    $$LocalBookmarksTableUpdateCompanionBuilder,
+    (
+      LocalBookmarkEntry,
+      BaseReferences<_$AppDatabase, $LocalBookmarksTable, LocalBookmarkEntry>
+    ),
+    LocalBookmarkEntry,
+    PrefetchHooks Function()> {
   $$LocalBookmarksTableTableManager(
       _$AppDatabase db, $LocalBookmarksTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$LocalBookmarksTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$LocalBookmarksTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$LocalBookmarksTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LocalBookmarksTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LocalBookmarksTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> bookId = const Value.absent(),
@@ -4118,127 +4257,33 @@ class $$LocalBookmarksTableTableManager extends RootTableManager<
             createdAt: createdAt,
             rowid: rowid,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$LocalBookmarksTable, LocalBookmarkEntry>(
+                        table),
+                    BaseReferences<_$AppDatabase, $LocalBookmarksTable,
+                        LocalBookmarkEntry>(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$LocalBookmarksTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $LocalBookmarksTable> {
-  $$LocalBookmarksTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get bookId => $state.composableBuilder(
-      column: $state.table.bookId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get bookName => $state.composableBuilder(
-      column: $state.table.bookName,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get chapter => $state.composableBuilder(
-      column: $state.table.chapter,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get verse => $state.composableBuilder(
-      column: $state.table.verse,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get verseText => $state.composableBuilder(
-      column: $state.table.verseText,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get colorHex => $state.composableBuilder(
-      column: $state.table.colorHex,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get customTitle => $state.composableBuilder(
-      column: $state.table.customTitle,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get personalNote => $state.composableBuilder(
-      column: $state.table.personalNote,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get isSynced => $state.composableBuilder(
-      column: $state.table.isSynced,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$LocalBookmarksTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $LocalBookmarksTable> {
-  $$LocalBookmarksTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get bookId => $state.composableBuilder(
-      column: $state.table.bookId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get bookName => $state.composableBuilder(
-      column: $state.table.bookName,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get chapter => $state.composableBuilder(
-      column: $state.table.chapter,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get verse => $state.composableBuilder(
-      column: $state.table.verse,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get verseText => $state.composableBuilder(
-      column: $state.table.verseText,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get colorHex => $state.composableBuilder(
-      column: $state.table.colorHex,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get customTitle => $state.composableBuilder(
-      column: $state.table.customTitle,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get personalNote => $state.composableBuilder(
-      column: $state.table.personalNote,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get isSynced => $state.composableBuilder(
-      column: $state.table.isSynced,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$LocalBookmarksTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $LocalBookmarksTable,
+    LocalBookmarkEntry,
+    $$LocalBookmarksTableFilterComposer,
+    $$LocalBookmarksTableOrderingComposer,
+    $$LocalBookmarksTableAnnotationComposer,
+    $$LocalBookmarksTableCreateCompanionBuilder,
+    $$LocalBookmarksTableUpdateCompanionBuilder,
+    (
+      LocalBookmarkEntry,
+      BaseReferences<_$AppDatabase, $LocalBookmarksTable, LocalBookmarkEntry>
+    ),
+    LocalBookmarkEntry,
+    PrefetchHooks Function()>;
 typedef $$EventCategoriesTableCreateCompanionBuilder = EventCategoriesCompanion
     Function({
   required String id,
@@ -4258,23 +4303,166 @@ typedef $$EventCategoriesTableUpdateCompanionBuilder = EventCategoriesCompanion
   Value<int> rowid,
 });
 
+final class $$EventCategoriesTableReferences extends BaseReferences<
+    _$AppDatabase, $EventCategoriesTable, EventCategoryEntry> {
+  $$EventCategoriesTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$UserEventsTable, List<UserEventEntry>>
+      _userEventsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.userEvents,
+              aliasName: 'event_categories__id__user_events__category_id');
+
+  $$UserEventsTableProcessedTableManager get userEventsRefs {
+    final manager = $$UserEventsTableTableManager($_db, $_db.userEvents)
+        .filter((f) => f.categoryId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_userEventsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$EventCategoriesTableFilterComposer
+    extends Composer<_$AppDatabase, $EventCategoriesTable> {
+  $$EventCategoriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get colorHex => $composableBuilder(
+      column: $table.colorHex, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get iconName => $composableBuilder(
+      column: $table.iconName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> userEventsRefs(
+      Expression<bool> Function($$UserEventsTableFilterComposer f) f) {
+    final $$UserEventsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.userEvents,
+        getReferencedColumn: (t) => t.categoryId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UserEventsTableFilterComposer(
+              $db: $db,
+              $table: $db.userEvents,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$EventCategoriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $EventCategoriesTable> {
+  $$EventCategoriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get colorHex => $composableBuilder(
+      column: $table.colorHex, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get iconName => $composableBuilder(
+      column: $table.iconName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$EventCategoriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $EventCategoriesTable> {
+  $$EventCategoriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get colorHex =>
+      $composableBuilder(column: $table.colorHex, builder: (column) => column);
+
+  GeneratedColumn<String> get iconName =>
+      $composableBuilder(column: $table.iconName, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  Expression<T> userEventsRefs<T extends Object>(
+      Expression<T> Function($$UserEventsTableAnnotationComposer a) f) {
+    final $$UserEventsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.userEvents,
+        getReferencedColumn: (t) => t.categoryId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UserEventsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.userEvents,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
 class $$EventCategoriesTableTableManager extends RootTableManager<
     _$AppDatabase,
     $EventCategoriesTable,
     EventCategoryEntry,
     $$EventCategoriesTableFilterComposer,
     $$EventCategoriesTableOrderingComposer,
+    $$EventCategoriesTableAnnotationComposer,
     $$EventCategoriesTableCreateCompanionBuilder,
-    $$EventCategoriesTableUpdateCompanionBuilder> {
+    $$EventCategoriesTableUpdateCompanionBuilder,
+    (EventCategoryEntry, $$EventCategoriesTableReferences),
+    EventCategoryEntry,
+    PrefetchHooks Function({bool userEventsRefs})> {
   $$EventCategoriesTableTableManager(
       _$AppDatabase db, $EventCategoriesTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$EventCategoriesTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$EventCategoriesTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$EventCategoriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$EventCategoriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$EventCategoriesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> name = const Value.absent(),
@@ -4307,80 +4495,52 @@ class $$EventCategoriesTableTableManager extends RootTableManager<
             createdAt: createdAt,
             rowid: rowid,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$EventCategoriesTable, EventCategoryEntry>(
+                        table),
+                    $$EventCategoriesTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({userEventsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (userEventsRefs) db.userEvents],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (userEventsRefs)
+                    await $_getPrefetchedData<EventCategoryEntry,
+                            $EventCategoriesTable, UserEventEntry>(
+                        currentTable: table,
+                        referencedTable: $$EventCategoriesTableReferences
+                            ._userEventsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$EventCategoriesTableReferences(db, table, p0)
+                                .userEventsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.categoryId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
         ));
 }
 
-class $$EventCategoriesTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $EventCategoriesTable> {
-  $$EventCategoriesTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get colorHex => $state.composableBuilder(
-      column: $state.table.colorHex,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get iconName => $state.composableBuilder(
-      column: $state.table.iconName,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ComposableFilter userEventsRefs(
-      ComposableFilter Function($$UserEventsTableFilterComposer f) f) {
-    final $$UserEventsTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $state.db.userEvents,
-        getReferencedColumn: (t) => t.categoryId,
-        builder: (joinBuilder, parentComposers) =>
-            $$UserEventsTableFilterComposer(ComposerState($state.db,
-                $state.db.userEvents, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-}
-
-class $$EventCategoriesTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $EventCategoriesTable> {
-  $$EventCategoriesTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get colorHex => $state.composableBuilder(
-      column: $state.table.colorHex,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get iconName => $state.composableBuilder(
-      column: $state.table.iconName,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$EventCategoriesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $EventCategoriesTable,
+    EventCategoryEntry,
+    $$EventCategoriesTableFilterComposer,
+    $$EventCategoriesTableOrderingComposer,
+    $$EventCategoriesTableAnnotationComposer,
+    $$EventCategoriesTableCreateCompanionBuilder,
+    $$EventCategoriesTableUpdateCompanionBuilder,
+    (EventCategoryEntry, $$EventCategoriesTableReferences),
+    EventCategoryEntry,
+    PrefetchHooks Function({bool userEventsRefs})>;
 typedef $$UserEventsTableCreateCompanionBuilder = UserEventsCompanion Function({
   required String id,
   required String categoryId,
@@ -4410,22 +4570,237 @@ typedef $$UserEventsTableUpdateCompanionBuilder = UserEventsCompanion Function({
   Value<int> rowid,
 });
 
+final class $$UserEventsTableReferences
+    extends BaseReferences<_$AppDatabase, $UserEventsTable, UserEventEntry> {
+  $$UserEventsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $EventCategoriesTable _categoryIdTable(_$AppDatabase db) =>
+      db.eventCategories
+          .createAlias('user_events__category_id__event_categories__id');
+
+  $$EventCategoriesTableProcessedTableManager get categoryId {
+    final $_column = $_itemColumn<String>('category_id')!;
+
+    final manager =
+        $$EventCategoriesTableTableManager($_db, $_db.eventCategories)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_categoryIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$UserEventsTableFilterComposer
+    extends Composer<_$AppDatabase, $UserEventsTable> {
+  $$UserEventsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get linkedVersesJson => $composableBuilder(
+      column: $table.linkedVersesJson,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get eventDate => $composableBuilder(
+      column: $table.eventDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get hasFoodService => $composableBuilder(
+      column: $table.hasFoodService,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get foodServiceDetails => $composableBuilder(
+      column: $table.foodServiceDetails,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get hasChildCare => $composableBuilder(
+      column: $table.hasChildCare, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get hasBookSales => $composableBuilder(
+      column: $table.hasBookSales, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  $$EventCategoriesTableFilterComposer get categoryId {
+    final $$EventCategoriesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.categoryId,
+        referencedTable: $db.eventCategories,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EventCategoriesTableFilterComposer(
+              $db: $db,
+              $table: $db.eventCategories,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$UserEventsTableOrderingComposer
+    extends Composer<_$AppDatabase, $UserEventsTable> {
+  $$UserEventsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get linkedVersesJson => $composableBuilder(
+      column: $table.linkedVersesJson,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get eventDate => $composableBuilder(
+      column: $table.eventDate, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get hasFoodService => $composableBuilder(
+      column: $table.hasFoodService,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get foodServiceDetails => $composableBuilder(
+      column: $table.foodServiceDetails,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get hasChildCare => $composableBuilder(
+      column: $table.hasChildCare,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get hasBookSales => $composableBuilder(
+      column: $table.hasBookSales,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  $$EventCategoriesTableOrderingComposer get categoryId {
+    final $$EventCategoriesTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.categoryId,
+        referencedTable: $db.eventCategories,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EventCategoriesTableOrderingComposer(
+              $db: $db,
+              $table: $db.eventCategories,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$UserEventsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $UserEventsTable> {
+  $$UserEventsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => column);
+
+  GeneratedColumn<String> get linkedVersesJson => $composableBuilder(
+      column: $table.linkedVersesJson, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get eventDate =>
+      $composableBuilder(column: $table.eventDate, builder: (column) => column);
+
+  GeneratedColumn<bool> get hasFoodService => $composableBuilder(
+      column: $table.hasFoodService, builder: (column) => column);
+
+  GeneratedColumn<String> get foodServiceDetails => $composableBuilder(
+      column: $table.foodServiceDetails, builder: (column) => column);
+
+  GeneratedColumn<bool> get hasChildCare => $composableBuilder(
+      column: $table.hasChildCare, builder: (column) => column);
+
+  GeneratedColumn<bool> get hasBookSales => $composableBuilder(
+      column: $table.hasBookSales, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$EventCategoriesTableAnnotationComposer get categoryId {
+    final $$EventCategoriesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.categoryId,
+        referencedTable: $db.eventCategories,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EventCategoriesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.eventCategories,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
 class $$UserEventsTableTableManager extends RootTableManager<
     _$AppDatabase,
     $UserEventsTable,
     UserEventEntry,
     $$UserEventsTableFilterComposer,
     $$UserEventsTableOrderingComposer,
+    $$UserEventsTableAnnotationComposer,
     $$UserEventsTableCreateCompanionBuilder,
-    $$UserEventsTableUpdateCompanionBuilder> {
+    $$UserEventsTableUpdateCompanionBuilder,
+    (UserEventEntry, $$UserEventsTableReferences),
+    UserEventEntry,
+    PrefetchHooks Function({bool categoryId})> {
   $$UserEventsTableTableManager(_$AppDatabase db, $UserEventsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$UserEventsTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$UserEventsTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$UserEventsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$UserEventsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$UserEventsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> categoryId = const Value.absent(),
@@ -4482,143 +4857,62 @@ class $$UserEventsTableTableManager extends RootTableManager<
             createdAt: createdAt,
             rowid: rowid,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$UserEventsTable, UserEventEntry>(table),
+                    $$UserEventsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({categoryId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (categoryId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.categoryId,
+                    referencedTable:
+                        $$UserEventsTableReferences._categoryIdTable(db),
+                    referencedColumn:
+                        $$UserEventsTableReferences._categoryIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ));
 }
 
-class $$UserEventsTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $UserEventsTable> {
-  $$UserEventsTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get description => $state.composableBuilder(
-      column: $state.table.description,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get linkedVersesJson => $state.composableBuilder(
-      column: $state.table.linkedVersesJson,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get eventDate => $state.composableBuilder(
-      column: $state.table.eventDate,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get hasFoodService => $state.composableBuilder(
-      column: $state.table.hasFoodService,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get foodServiceDetails => $state.composableBuilder(
-      column: $state.table.foodServiceDetails,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get hasChildCare => $state.composableBuilder(
-      column: $state.table.hasChildCare,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get hasBookSales => $state.composableBuilder(
-      column: $state.table.hasBookSales,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$EventCategoriesTableFilterComposer get categoryId {
-    final $$EventCategoriesTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.categoryId,
-            referencedTable: $state.db.eventCategories,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$EventCategoriesTableFilterComposer(ComposerState($state.db,
-                    $state.db.eventCategories, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
-
-class $$UserEventsTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $UserEventsTable> {
-  $$UserEventsTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get description => $state.composableBuilder(
-      column: $state.table.description,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get linkedVersesJson => $state.composableBuilder(
-      column: $state.table.linkedVersesJson,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get eventDate => $state.composableBuilder(
-      column: $state.table.eventDate,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get hasFoodService => $state.composableBuilder(
-      column: $state.table.hasFoodService,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get foodServiceDetails => $state.composableBuilder(
-      column: $state.table.foodServiceDetails,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get hasChildCare => $state.composableBuilder(
-      column: $state.table.hasChildCare,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get hasBookSales => $state.composableBuilder(
-      column: $state.table.hasBookSales,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$EventCategoriesTableOrderingComposer get categoryId {
-    final $$EventCategoriesTableOrderingComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.categoryId,
-            referencedTable: $state.db.eventCategories,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$EventCategoriesTableOrderingComposer(ComposerState($state.db,
-                    $state.db.eventCategories, joinBuilder, parentComposers)));
-    return composer;
-  }
-}
-
+typedef $$UserEventsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $UserEventsTable,
+    UserEventEntry,
+    $$UserEventsTableFilterComposer,
+    $$UserEventsTableOrderingComposer,
+    $$UserEventsTableAnnotationComposer,
+    $$UserEventsTableCreateCompanionBuilder,
+    $$UserEventsTableUpdateCompanionBuilder,
+    (UserEventEntry, $$UserEventsTableReferences),
+    UserEventEntry,
+    PrefetchHooks Function({bool categoryId})>;
 typedef $$FoodCourtMenusTableCreateCompanionBuilder = FoodCourtMenusCompanion
     Function({
   required String id,
@@ -4644,23 +4938,134 @@ typedef $$FoodCourtMenusTableUpdateCompanionBuilder = FoodCourtMenusCompanion
   Value<int> rowid,
 });
 
+class $$FoodCourtMenusTableFilterComposer
+    extends Composer<_$AppDatabase, $FoodCourtMenusTable> {
+  $$FoodCourtMenusTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get churchId => $composableBuilder(
+      column: $table.churchId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get price => $composableBuilder(
+      column: $table.price, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get shift => $composableBuilder(
+      column: $table.shift, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isAvailable => $composableBuilder(
+      column: $table.isAvailable, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$FoodCourtMenusTableOrderingComposer
+    extends Composer<_$AppDatabase, $FoodCourtMenusTable> {
+  $$FoodCourtMenusTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get churchId => $composableBuilder(
+      column: $table.churchId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get price => $composableBuilder(
+      column: $table.price, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get shift => $composableBuilder(
+      column: $table.shift, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isAvailable => $composableBuilder(
+      column: $table.isAvailable, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$FoodCourtMenusTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FoodCourtMenusTable> {
+  $$FoodCourtMenusTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get churchId =>
+      $composableBuilder(column: $table.churchId, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => column);
+
+  GeneratedColumn<double> get price =>
+      $composableBuilder(column: $table.price, builder: (column) => column);
+
+  GeneratedColumn<String> get shift =>
+      $composableBuilder(column: $table.shift, builder: (column) => column);
+
+  GeneratedColumn<bool> get isAvailable => $composableBuilder(
+      column: $table.isAvailable, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
 class $$FoodCourtMenusTableTableManager extends RootTableManager<
     _$AppDatabase,
     $FoodCourtMenusTable,
     FoodCourtMenuEntry,
     $$FoodCourtMenusTableFilterComposer,
     $$FoodCourtMenusTableOrderingComposer,
+    $$FoodCourtMenusTableAnnotationComposer,
     $$FoodCourtMenusTableCreateCompanionBuilder,
-    $$FoodCourtMenusTableUpdateCompanionBuilder> {
+    $$FoodCourtMenusTableUpdateCompanionBuilder,
+    (
+      FoodCourtMenuEntry,
+      BaseReferences<_$AppDatabase, $FoodCourtMenusTable, FoodCourtMenuEntry>
+    ),
+    FoodCourtMenuEntry,
+    PrefetchHooks Function()> {
   $$FoodCourtMenusTableTableManager(
       _$AppDatabase db, $FoodCourtMenusTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$FoodCourtMenusTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$FoodCourtMenusTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$FoodCourtMenusTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FoodCourtMenusTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FoodCourtMenusTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> churchId = const Value.absent(),
@@ -4705,97 +5110,33 @@ class $$FoodCourtMenusTableTableManager extends RootTableManager<
             createdAt: createdAt,
             rowid: rowid,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$FoodCourtMenusTable, FoodCourtMenuEntry>(
+                        table),
+                    BaseReferences<_$AppDatabase, $FoodCourtMenusTable,
+                        FoodCourtMenuEntry>(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$FoodCourtMenusTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $FoodCourtMenusTable> {
-  $$FoodCourtMenusTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get churchId => $state.composableBuilder(
-      column: $state.table.churchId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get description => $state.composableBuilder(
-      column: $state.table.description,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<double> get price => $state.composableBuilder(
-      column: $state.table.price,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get shift => $state.composableBuilder(
-      column: $state.table.shift,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get isAvailable => $state.composableBuilder(
-      column: $state.table.isAvailable,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$FoodCourtMenusTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $FoodCourtMenusTable> {
-  $$FoodCourtMenusTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get churchId => $state.composableBuilder(
-      column: $state.table.churchId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get description => $state.composableBuilder(
-      column: $state.table.description,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<double> get price => $state.composableBuilder(
-      column: $state.table.price,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get shift => $state.composableBuilder(
-      column: $state.table.shift,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get isAvailable => $state.composableBuilder(
-      column: $state.table.isAvailable,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$FoodCourtMenusTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $FoodCourtMenusTable,
+    FoodCourtMenuEntry,
+    $$FoodCourtMenusTableFilterComposer,
+    $$FoodCourtMenusTableOrderingComposer,
+    $$FoodCourtMenusTableAnnotationComposer,
+    $$FoodCourtMenusTableCreateCompanionBuilder,
+    $$FoodCourtMenusTableUpdateCompanionBuilder,
+    (
+      FoodCourtMenuEntry,
+      BaseReferences<_$AppDatabase, $FoodCourtMenusTable, FoodCourtMenuEntry>
+    ),
+    FoodCourtMenuEntry,
+    PrefetchHooks Function()>;
 typedef $$LocalBibleBooksTableCreateCompanionBuilder = LocalBibleBooksCompanion
     Function({
   required String id,
@@ -4825,23 +5166,157 @@ typedef $$LocalBibleBooksTableUpdateCompanionBuilder = LocalBibleBooksCompanion
   Value<int> rowid,
 });
 
+class $$LocalBibleBooksTableFilterComposer
+    extends Composer<_$AppDatabase, $LocalBibleBooksTable> {
+  $$LocalBibleBooksTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get translationKey => $composableBuilder(
+      column: $table.translationKey,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get bookNumber => $composableBuilder(
+      column: $table.bookNumber, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get bookCode => $composableBuilder(
+      column: $table.bookCode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get totalChapters => $composableBuilder(
+      column: $table.totalChapters, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isNewTestament => $composableBuilder(
+      column: $table.isNewTestament,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get url => $composableBuilder(
+      column: $table.url, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get sha => $composableBuilder(
+      column: $table.sha, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$LocalBibleBooksTableOrderingComposer
+    extends Composer<_$AppDatabase, $LocalBibleBooksTable> {
+  $$LocalBibleBooksTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get translationKey => $composableBuilder(
+      column: $table.translationKey,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get bookNumber => $composableBuilder(
+      column: $table.bookNumber, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get bookCode => $composableBuilder(
+      column: $table.bookCode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get totalChapters => $composableBuilder(
+      column: $table.totalChapters,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isNewTestament => $composableBuilder(
+      column: $table.isNewTestament,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get url => $composableBuilder(
+      column: $table.url, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get sha => $composableBuilder(
+      column: $table.sha, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$LocalBibleBooksTableAnnotationComposer
+    extends Composer<_$AppDatabase, $LocalBibleBooksTable> {
+  $$LocalBibleBooksTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get translationKey => $composableBuilder(
+      column: $table.translationKey, builder: (column) => column);
+
+  GeneratedColumn<int> get bookNumber => $composableBuilder(
+      column: $table.bookNumber, builder: (column) => column);
+
+  GeneratedColumn<String> get bookCode =>
+      $composableBuilder(column: $table.bookCode, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<int> get totalChapters => $composableBuilder(
+      column: $table.totalChapters, builder: (column) => column);
+
+  GeneratedColumn<bool> get isNewTestament => $composableBuilder(
+      column: $table.isNewTestament, builder: (column) => column);
+
+  GeneratedColumn<String> get url =>
+      $composableBuilder(column: $table.url, builder: (column) => column);
+
+  GeneratedColumn<String> get sha =>
+      $composableBuilder(column: $table.sha, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
 class $$LocalBibleBooksTableTableManager extends RootTableManager<
     _$AppDatabase,
     $LocalBibleBooksTable,
     BibleBookEntry,
     $$LocalBibleBooksTableFilterComposer,
     $$LocalBibleBooksTableOrderingComposer,
+    $$LocalBibleBooksTableAnnotationComposer,
     $$LocalBibleBooksTableCreateCompanionBuilder,
-    $$LocalBibleBooksTableUpdateCompanionBuilder> {
+    $$LocalBibleBooksTableUpdateCompanionBuilder,
+    (
+      BibleBookEntry,
+      BaseReferences<_$AppDatabase, $LocalBibleBooksTable, BibleBookEntry>
+    ),
+    BibleBookEntry,
+    PrefetchHooks Function()> {
   $$LocalBibleBooksTableTableManager(
       _$AppDatabase db, $LocalBibleBooksTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$LocalBibleBooksTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$LocalBibleBooksTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$LocalBibleBooksTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LocalBibleBooksTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LocalBibleBooksTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> translationKey = const Value.absent(),
@@ -4894,117 +5369,32 @@ class $$LocalBibleBooksTableTableManager extends RootTableManager<
             createdAt: createdAt,
             rowid: rowid,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$LocalBibleBooksTable, BibleBookEntry>(table),
+                    BaseReferences<_$AppDatabase, $LocalBibleBooksTable,
+                        BibleBookEntry>(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$LocalBibleBooksTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $LocalBibleBooksTable> {
-  $$LocalBibleBooksTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get translationKey => $state.composableBuilder(
-      column: $state.table.translationKey,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get bookNumber => $state.composableBuilder(
-      column: $state.table.bookNumber,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get bookCode => $state.composableBuilder(
-      column: $state.table.bookCode,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get totalChapters => $state.composableBuilder(
-      column: $state.table.totalChapters,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get isNewTestament => $state.composableBuilder(
-      column: $state.table.isNewTestament,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get url => $state.composableBuilder(
-      column: $state.table.url,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get sha => $state.composableBuilder(
-      column: $state.table.sha,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$LocalBibleBooksTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $LocalBibleBooksTable> {
-  $$LocalBibleBooksTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get translationKey => $state.composableBuilder(
-      column: $state.table.translationKey,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get bookNumber => $state.composableBuilder(
-      column: $state.table.bookNumber,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get bookCode => $state.composableBuilder(
-      column: $state.table.bookCode,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get totalChapters => $state.composableBuilder(
-      column: $state.table.totalChapters,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get isNewTestament => $state.composableBuilder(
-      column: $state.table.isNewTestament,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get url => $state.composableBuilder(
-      column: $state.table.url,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get sha => $state.composableBuilder(
-      column: $state.table.sha,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$LocalBibleBooksTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $LocalBibleBooksTable,
+    BibleBookEntry,
+    $$LocalBibleBooksTableFilterComposer,
+    $$LocalBibleBooksTableOrderingComposer,
+    $$LocalBibleBooksTableAnnotationComposer,
+    $$LocalBibleBooksTableCreateCompanionBuilder,
+    $$LocalBibleBooksTableUpdateCompanionBuilder,
+    (
+      BibleBookEntry,
+      BaseReferences<_$AppDatabase, $LocalBibleBooksTable, BibleBookEntry>
+    ),
+    BibleBookEntry,
+    PrefetchHooks Function()>;
 typedef $$LocalBibleTranslationsTableCreateCompanionBuilder
     = LocalBibleTranslationsCompanion Function({
   required String id,
@@ -5032,23 +5422,150 @@ typedef $$LocalBibleTranslationsTableUpdateCompanionBuilder
   Value<int> rowid,
 });
 
+class $$LocalBibleTranslationsTableFilterComposer
+    extends Composer<_$AppDatabase, $LocalBibleTranslationsTable> {
+  $$LocalBibleTranslationsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get abbreviation => $composableBuilder(
+      column: $table.abbreviation, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get language => $composableBuilder(
+      column: $table.language, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get direction => $composableBuilder(
+      column: $table.direction, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get distributionAbbreviation => $composableBuilder(
+      column: $table.distributionAbbreviation,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get url => $composableBuilder(
+      column: $table.url, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$LocalBibleTranslationsTableOrderingComposer
+    extends Composer<_$AppDatabase, $LocalBibleTranslationsTable> {
+  $$LocalBibleTranslationsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get abbreviation => $composableBuilder(
+      column: $table.abbreviation,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get language => $composableBuilder(
+      column: $table.language, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get direction => $composableBuilder(
+      column: $table.direction, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get distributionAbbreviation => $composableBuilder(
+      column: $table.distributionAbbreviation,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get url => $composableBuilder(
+      column: $table.url, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$LocalBibleTranslationsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $LocalBibleTranslationsTable> {
+  $$LocalBibleTranslationsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get abbreviation => $composableBuilder(
+      column: $table.abbreviation, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => column);
+
+  GeneratedColumn<String> get language =>
+      $composableBuilder(column: $table.language, builder: (column) => column);
+
+  GeneratedColumn<String> get direction =>
+      $composableBuilder(column: $table.direction, builder: (column) => column);
+
+  GeneratedColumn<String> get distributionAbbreviation => $composableBuilder(
+      column: $table.distributionAbbreviation, builder: (column) => column);
+
+  GeneratedColumn<String> get url =>
+      $composableBuilder(column: $table.url, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
 class $$LocalBibleTranslationsTableTableManager extends RootTableManager<
     _$AppDatabase,
     $LocalBibleTranslationsTable,
     BibleTranslationEntry,
     $$LocalBibleTranslationsTableFilterComposer,
     $$LocalBibleTranslationsTableOrderingComposer,
+    $$LocalBibleTranslationsTableAnnotationComposer,
     $$LocalBibleTranslationsTableCreateCompanionBuilder,
-    $$LocalBibleTranslationsTableUpdateCompanionBuilder> {
+    $$LocalBibleTranslationsTableUpdateCompanionBuilder,
+    (
+      BibleTranslationEntry,
+      BaseReferences<_$AppDatabase, $LocalBibleTranslationsTable,
+          BibleTranslationEntry>
+    ),
+    BibleTranslationEntry,
+    PrefetchHooks Function()> {
   $$LocalBibleTranslationsTableTableManager(
       _$AppDatabase db, $LocalBibleTranslationsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$LocalBibleTranslationsTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$LocalBibleTranslationsTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$LocalBibleTranslationsTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LocalBibleTranslationsTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LocalBibleTranslationsTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> name = const Value.absent(),
@@ -5097,109 +5614,35 @@ class $$LocalBibleTranslationsTableTableManager extends RootTableManager<
             createdAt: createdAt,
             rowid: rowid,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$LocalBibleTranslationsTable,
+                        BibleTranslationEntry>(table),
+                    BaseReferences<_$AppDatabase, $LocalBibleTranslationsTable,
+                        BibleTranslationEntry>(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$LocalBibleTranslationsTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $LocalBibleTranslationsTable> {
-  $$LocalBibleTranslationsTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get abbreviation => $state.composableBuilder(
-      column: $state.table.abbreviation,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get description => $state.composableBuilder(
-      column: $state.table.description,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get language => $state.composableBuilder(
-      column: $state.table.language,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get direction => $state.composableBuilder(
-      column: $state.table.direction,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get distributionAbbreviation =>
-      $state.composableBuilder(
-          column: $state.table.distributionAbbreviation,
-          builder: (column, joinBuilders) =>
-              ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get url => $state.composableBuilder(
-      column: $state.table.url,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$LocalBibleTranslationsTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $LocalBibleTranslationsTable> {
-  $$LocalBibleTranslationsTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get abbreviation => $state.composableBuilder(
-      column: $state.table.abbreviation,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get description => $state.composableBuilder(
-      column: $state.table.description,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get language => $state.composableBuilder(
-      column: $state.table.language,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get direction => $state.composableBuilder(
-      column: $state.table.direction,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get distributionAbbreviation =>
-      $state.composableBuilder(
-          column: $state.table.distributionAbbreviation,
-          builder: (column, joinBuilders) =>
-              ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get url => $state.composableBuilder(
-      column: $state.table.url,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$LocalBibleTranslationsTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $LocalBibleTranslationsTable,
+        BibleTranslationEntry,
+        $$LocalBibleTranslationsTableFilterComposer,
+        $$LocalBibleTranslationsTableOrderingComposer,
+        $$LocalBibleTranslationsTableAnnotationComposer,
+        $$LocalBibleTranslationsTableCreateCompanionBuilder,
+        $$LocalBibleTranslationsTableUpdateCompanionBuilder,
+        (
+          BibleTranslationEntry,
+          BaseReferences<_$AppDatabase, $LocalBibleTranslationsTable,
+              BibleTranslationEntry>
+        ),
+        BibleTranslationEntry,
+        PrefetchHooks Function()>;
 typedef $$LocalBibleChaptersTableCreateCompanionBuilder
     = LocalBibleChaptersCompanion Function({
   required String id,
@@ -5227,23 +5670,146 @@ typedef $$LocalBibleChaptersTableUpdateCompanionBuilder
   Value<int> rowid,
 });
 
+class $$LocalBibleChaptersTableFilterComposer
+    extends Composer<_$AppDatabase, $LocalBibleChaptersTable> {
+  $$LocalBibleChaptersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get translationKey => $composableBuilder(
+      column: $table.translationKey,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get bookNumber => $composableBuilder(
+      column: $table.bookNumber, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get bookCode => $composableBuilder(
+      column: $table.bookCode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get bookName => $composableBuilder(
+      column: $table.bookName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get chapter => $composableBuilder(
+      column: $table.chapter, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get versesJson => $composableBuilder(
+      column: $table.versesJson, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get verseCount => $composableBuilder(
+      column: $table.verseCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$LocalBibleChaptersTableOrderingComposer
+    extends Composer<_$AppDatabase, $LocalBibleChaptersTable> {
+  $$LocalBibleChaptersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get translationKey => $composableBuilder(
+      column: $table.translationKey,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get bookNumber => $composableBuilder(
+      column: $table.bookNumber, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get bookCode => $composableBuilder(
+      column: $table.bookCode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get bookName => $composableBuilder(
+      column: $table.bookName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get chapter => $composableBuilder(
+      column: $table.chapter, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get versesJson => $composableBuilder(
+      column: $table.versesJson, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get verseCount => $composableBuilder(
+      column: $table.verseCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$LocalBibleChaptersTableAnnotationComposer
+    extends Composer<_$AppDatabase, $LocalBibleChaptersTable> {
+  $$LocalBibleChaptersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get translationKey => $composableBuilder(
+      column: $table.translationKey, builder: (column) => column);
+
+  GeneratedColumn<int> get bookNumber => $composableBuilder(
+      column: $table.bookNumber, builder: (column) => column);
+
+  GeneratedColumn<String> get bookCode =>
+      $composableBuilder(column: $table.bookCode, builder: (column) => column);
+
+  GeneratedColumn<String> get bookName =>
+      $composableBuilder(column: $table.bookName, builder: (column) => column);
+
+  GeneratedColumn<int> get chapter =>
+      $composableBuilder(column: $table.chapter, builder: (column) => column);
+
+  GeneratedColumn<String> get versesJson => $composableBuilder(
+      column: $table.versesJson, builder: (column) => column);
+
+  GeneratedColumn<int> get verseCount => $composableBuilder(
+      column: $table.verseCount, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
 class $$LocalBibleChaptersTableTableManager extends RootTableManager<
     _$AppDatabase,
     $LocalBibleChaptersTable,
     BibleChapterEntry,
     $$LocalBibleChaptersTableFilterComposer,
     $$LocalBibleChaptersTableOrderingComposer,
+    $$LocalBibleChaptersTableAnnotationComposer,
     $$LocalBibleChaptersTableCreateCompanionBuilder,
-    $$LocalBibleChaptersTableUpdateCompanionBuilder> {
+    $$LocalBibleChaptersTableUpdateCompanionBuilder,
+    (
+      BibleChapterEntry,
+      BaseReferences<_$AppDatabase, $LocalBibleChaptersTable, BibleChapterEntry>
+    ),
+    BibleChapterEntry,
+    PrefetchHooks Function()> {
   $$LocalBibleChaptersTableTableManager(
       _$AppDatabase db, $LocalBibleChaptersTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$LocalBibleChaptersTableFilterComposer(ComposerState(db, table)),
-          orderingComposer: $$LocalBibleChaptersTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$LocalBibleChaptersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LocalBibleChaptersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LocalBibleChaptersTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> translationKey = const Value.absent(),
@@ -5292,107 +5858,33 @@ class $$LocalBibleChaptersTableTableManager extends RootTableManager<
             createdAt: createdAt,
             rowid: rowid,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$LocalBibleChaptersTable, BibleChapterEntry>(
+                        table),
+                    BaseReferences<_$AppDatabase, $LocalBibleChaptersTable,
+                        BibleChapterEntry>(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$LocalBibleChaptersTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $LocalBibleChaptersTable> {
-  $$LocalBibleChaptersTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get translationKey => $state.composableBuilder(
-      column: $state.table.translationKey,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get bookNumber => $state.composableBuilder(
-      column: $state.table.bookNumber,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get bookCode => $state.composableBuilder(
-      column: $state.table.bookCode,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get bookName => $state.composableBuilder(
-      column: $state.table.bookName,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get chapter => $state.composableBuilder(
-      column: $state.table.chapter,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get versesJson => $state.composableBuilder(
-      column: $state.table.versesJson,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get verseCount => $state.composableBuilder(
-      column: $state.table.verseCount,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$LocalBibleChaptersTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $LocalBibleChaptersTable> {
-  $$LocalBibleChaptersTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get translationKey => $state.composableBuilder(
-      column: $state.table.translationKey,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get bookNumber => $state.composableBuilder(
-      column: $state.table.bookNumber,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get bookCode => $state.composableBuilder(
-      column: $state.table.bookCode,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get bookName => $state.composableBuilder(
-      column: $state.table.bookName,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get chapter => $state.composableBuilder(
-      column: $state.table.chapter,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get versesJson => $state.composableBuilder(
-      column: $state.table.versesJson,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get verseCount => $state.composableBuilder(
-      column: $state.table.verseCount,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$LocalBibleChaptersTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $LocalBibleChaptersTable,
+    BibleChapterEntry,
+    $$LocalBibleChaptersTableFilterComposer,
+    $$LocalBibleChaptersTableOrderingComposer,
+    $$LocalBibleChaptersTableAnnotationComposer,
+    $$LocalBibleChaptersTableCreateCompanionBuilder,
+    $$LocalBibleChaptersTableUpdateCompanionBuilder,
+    (
+      BibleChapterEntry,
+      BaseReferences<_$AppDatabase, $LocalBibleChaptersTable, BibleChapterEntry>
+    ),
+    BibleChapterEntry,
+    PrefetchHooks Function()>;
 typedef $$LocalUsersTableCreateCompanionBuilder = LocalUsersCompanion Function({
   required String id,
   required String authType,
@@ -5414,22 +5906,125 @@ typedef $$LocalUsersTableUpdateCompanionBuilder = LocalUsersCompanion Function({
   Value<int> rowid,
 });
 
+class $$LocalUsersTableFilterComposer
+    extends Composer<_$AppDatabase, $LocalUsersTable> {
+  $$LocalUsersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get authType => $composableBuilder(
+      column: $table.authType, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get email => $composableBuilder(
+      column: $table.email, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get remoteUserId => $composableBuilder(
+      column: $table.remoteUserId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get displayName => $composableBuilder(
+      column: $table.displayName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastSeenAt => $composableBuilder(
+      column: $table.lastSeenAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$LocalUsersTableOrderingComposer
+    extends Composer<_$AppDatabase, $LocalUsersTable> {
+  $$LocalUsersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get authType => $composableBuilder(
+      column: $table.authType, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get email => $composableBuilder(
+      column: $table.email, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get remoteUserId => $composableBuilder(
+      column: $table.remoteUserId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get displayName => $composableBuilder(
+      column: $table.displayName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastSeenAt => $composableBuilder(
+      column: $table.lastSeenAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$LocalUsersTableAnnotationComposer
+    extends Composer<_$AppDatabase, $LocalUsersTable> {
+  $$LocalUsersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get authType =>
+      $composableBuilder(column: $table.authType, builder: (column) => column);
+
+  GeneratedColumn<String> get email =>
+      $composableBuilder(column: $table.email, builder: (column) => column);
+
+  GeneratedColumn<String> get remoteUserId => $composableBuilder(
+      column: $table.remoteUserId, builder: (column) => column);
+
+  GeneratedColumn<String> get displayName => $composableBuilder(
+      column: $table.displayName, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastSeenAt => $composableBuilder(
+      column: $table.lastSeenAt, builder: (column) => column);
+}
+
 class $$LocalUsersTableTableManager extends RootTableManager<
     _$AppDatabase,
     $LocalUsersTable,
     LocalUserEntry,
     $$LocalUsersTableFilterComposer,
     $$LocalUsersTableOrderingComposer,
+    $$LocalUsersTableAnnotationComposer,
     $$LocalUsersTableCreateCompanionBuilder,
-    $$LocalUsersTableUpdateCompanionBuilder> {
+    $$LocalUsersTableUpdateCompanionBuilder,
+    (
+      LocalUserEntry,
+      BaseReferences<_$AppDatabase, $LocalUsersTable, LocalUserEntry>
+    ),
+    LocalUserEntry,
+    PrefetchHooks Function()> {
   $$LocalUsersTableTableManager(_$AppDatabase db, $LocalUsersTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$LocalUsersTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$LocalUsersTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$LocalUsersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LocalUsersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LocalUsersTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> authType = const Value.absent(),
@@ -5470,87 +6065,32 @@ class $$LocalUsersTableTableManager extends RootTableManager<
             lastSeenAt: lastSeenAt,
             rowid: rowid,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$LocalUsersTable, LocalUserEntry>(table),
+                    BaseReferences<_$AppDatabase, $LocalUsersTable,
+                        LocalUserEntry>(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$LocalUsersTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $LocalUsersTable> {
-  $$LocalUsersTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get authType => $state.composableBuilder(
-      column: $state.table.authType,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get email => $state.composableBuilder(
-      column: $state.table.email,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get remoteUserId => $state.composableBuilder(
-      column: $state.table.remoteUserId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get displayName => $state.composableBuilder(
-      column: $state.table.displayName,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get lastSeenAt => $state.composableBuilder(
-      column: $state.table.lastSeenAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$LocalUsersTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $LocalUsersTable> {
-  $$LocalUsersTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get authType => $state.composableBuilder(
-      column: $state.table.authType,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get email => $state.composableBuilder(
-      column: $state.table.email,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get remoteUserId => $state.composableBuilder(
-      column: $state.table.remoteUserId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get displayName => $state.composableBuilder(
-      column: $state.table.displayName,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get lastSeenAt => $state.composableBuilder(
-      column: $state.table.lastSeenAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$LocalUsersTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $LocalUsersTable,
+    LocalUserEntry,
+    $$LocalUsersTableFilterComposer,
+    $$LocalUsersTableOrderingComposer,
+    $$LocalUsersTableAnnotationComposer,
+    $$LocalUsersTableCreateCompanionBuilder,
+    $$LocalUsersTableUpdateCompanionBuilder,
+    (
+      LocalUserEntry,
+      BaseReferences<_$AppDatabase, $LocalUsersTable, LocalUserEntry>
+    ),
+    LocalUserEntry,
+    PrefetchHooks Function()>;
 typedef $$UserPreferencesTableCreateCompanionBuilder = UserPreferencesCompanion
     Function({
   required String userId,
@@ -5566,23 +6106,89 @@ typedef $$UserPreferencesTableUpdateCompanionBuilder = UserPreferencesCompanion
   Value<int> rowid,
 });
 
+class $$UserPreferencesTableFilterComposer
+    extends Composer<_$AppDatabase, $UserPreferencesTable> {
+  $$UserPreferencesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get key => $composableBuilder(
+      column: $table.key, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnFilters(column));
+}
+
+class $$UserPreferencesTableOrderingComposer
+    extends Composer<_$AppDatabase, $UserPreferencesTable> {
+  $$UserPreferencesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get key => $composableBuilder(
+      column: $table.key, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnOrderings(column));
+}
+
+class $$UserPreferencesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $UserPreferencesTable> {
+  $$UserPreferencesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<String> get key =>
+      $composableBuilder(column: $table.key, builder: (column) => column);
+
+  GeneratedColumn<String> get value =>
+      $composableBuilder(column: $table.value, builder: (column) => column);
+}
+
 class $$UserPreferencesTableTableManager extends RootTableManager<
     _$AppDatabase,
     $UserPreferencesTable,
     UserPreferenceEntry,
     $$UserPreferencesTableFilterComposer,
     $$UserPreferencesTableOrderingComposer,
+    $$UserPreferencesTableAnnotationComposer,
     $$UserPreferencesTableCreateCompanionBuilder,
-    $$UserPreferencesTableUpdateCompanionBuilder> {
+    $$UserPreferencesTableUpdateCompanionBuilder,
+    (
+      UserPreferenceEntry,
+      BaseReferences<_$AppDatabase, $UserPreferencesTable, UserPreferenceEntry>
+    ),
+    UserPreferenceEntry,
+    PrefetchHooks Function()> {
   $$UserPreferencesTableTableManager(
       _$AppDatabase db, $UserPreferencesTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$UserPreferencesTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$UserPreferencesTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$UserPreferencesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$UserPreferencesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$UserPreferencesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> userId = const Value.absent(),
             Value<String> key = const Value.absent(),
@@ -5607,46 +6213,33 @@ class $$UserPreferencesTableTableManager extends RootTableManager<
             value: value,
             rowid: rowid,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$UserPreferencesTable, UserPreferenceEntry>(
+                        table),
+                    BaseReferences<_$AppDatabase, $UserPreferencesTable,
+                        UserPreferenceEntry>(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$UserPreferencesTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $UserPreferencesTable> {
-  $$UserPreferencesTableFilterComposer(super.$state);
-  ColumnFilters<String> get userId => $state.composableBuilder(
-      column: $state.table.userId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get key => $state.composableBuilder(
-      column: $state.table.key,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get value => $state.composableBuilder(
-      column: $state.table.value,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$UserPreferencesTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $UserPreferencesTable> {
-  $$UserPreferencesTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get userId => $state.composableBuilder(
-      column: $state.table.userId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get key => $state.composableBuilder(
-      column: $state.table.key,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get value => $state.composableBuilder(
-      column: $state.table.value,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
+typedef $$UserPreferencesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $UserPreferencesTable,
+    UserPreferenceEntry,
+    $$UserPreferencesTableFilterComposer,
+    $$UserPreferencesTableOrderingComposer,
+    $$UserPreferencesTableAnnotationComposer,
+    $$UserPreferencesTableCreateCompanionBuilder,
+    $$UserPreferencesTableUpdateCompanionBuilder,
+    (
+      UserPreferenceEntry,
+      BaseReferences<_$AppDatabase, $UserPreferencesTable, UserPreferenceEntry>
+    ),
+    UserPreferenceEntry,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
