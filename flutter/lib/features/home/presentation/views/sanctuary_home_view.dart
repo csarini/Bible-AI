@@ -8,6 +8,7 @@ import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../core/theme/sanctuary_theme.dart';
+import '../../../../shared/services/home_widget_service.dart';
 import '../../../../shared/services/share_service.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
 import '../../../../shared/widgets/sanctuary_church_logo.dart';
@@ -52,6 +53,14 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
     // Dynamically pick a random daily verse on launch (not hardcoded)
     _currentVerse = getRandomDailyVerse();
     _checkIfSaved();
+    _syncToWidget();
+  }
+
+  void _syncToWidget() {
+    HomeWidgetService.updateVerseOfTheDay(
+      reference: _currentVerse.reference,
+      verseText: _currentVerse.text,
+    );
   }
 
   void _randomizeVerse({String? theme}) {
@@ -63,6 +72,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
       _isSavedInBookmarks = false;
     });
     _checkIfSaved();
+    _syncToWidget();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(

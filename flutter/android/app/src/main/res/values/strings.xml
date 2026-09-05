@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Biblia Inteligente</string>
+    <string name="widget_name">Versículo del Día</string>
+    <string name="widget_description">Muestra el versículo bíblico diario de tu Santuario Digital en la pantalla de inicio.</string>
+    <string name="widget_badge_title">VERSÍCULO DEL DÍA</string>
+    <string name="widget_sanctuary_brand">SANTUARIO DIGITAL</string>
+    <string name="widget_default_reference">Salmos 119:105</string>
+    <string name="widget_default_text">Lámpara es a mis pies tu palabra, y lumbrera a mi camino.</string>
+</resources>

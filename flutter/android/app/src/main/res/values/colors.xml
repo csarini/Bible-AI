@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="launch_background_color">#FAF8F5</color>
-    <color name="sanctuary_navy">#0B2B68</color>
+    <color name="sanctuary_navy">#002147</color>
+    <color name="sanctuary_navy_brand">#0B2B68</color>
+    <color name="sanctuary_parchment">#F9F6F0</color>
+    <color name="sanctuary_gold">#D4AF37</color>
+    <color name="sanctuary_gold_subtle">#26D4AF37</color>
+    <color name="sanctuary_border">#E8E0D2</color>
+    <color name="sanctuary_muted">#5D6B7D</color>
 	<color name="ic_launcher_background">#FAF8F5</color>
 </resources>
