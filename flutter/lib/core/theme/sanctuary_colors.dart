@@ -104,6 +104,7 @@ class SanctuaryColors {
   static const Color sepiaBackground = ElShaddaiColors.sepiaBackground;
   static const Color sepiaSurface = ElShaddaiColors.sepiaSurface;
   static const Color sepiaSurfaceElevated = ElShaddaiColors.sepiaSurfaceElevated;
+  static const Color parchmentPaper = Color(0xFFF9F6F0);
   static const Color sepiaBorder = ElShaddaiColors.sepiaBorder;
   static const Color sepiaBorderStrong = Color(0xFFD8CCBA);
   static const Color sepiaTextPrimary = ElShaddaiColors.sepiaTextPrimary;

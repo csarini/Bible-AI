@@ -5,6 +5,45 @@ import 'sanctuary_colors.dart';
 /// Extension de Tema para soportar tokens semánticos específicos de El-Shaddai
 @immutable
 class SanctuaryThemeExtension extends ThemeExtension<SanctuaryThemeExtension> {
+  static const SanctuaryThemeExtension light = SanctuaryThemeExtension(
+    surfaceElevated: SanctuaryColors.lightSurfaceElevated,
+    textSecondary: SanctuaryColors.lightTextSecondary,
+    activeState: SanctuaryColors.waveNavy,
+    border: SanctuaryColors.lightBorder,
+    brandNavy: SanctuaryColors.waveNavy,
+    brandOrange: SanctuaryColors.sunOrange,
+    brandCyan: SanctuaryColors.cyanAccent,
+    brandAmber: SanctuaryColors.amberGold,
+    brandPurple: SanctuaryColors.brandPurple,
+    brandGreen: SanctuaryColors.emeraldGreen,
+  );
+
+  static const SanctuaryThemeExtension sepia = SanctuaryThemeExtension(
+    surfaceElevated: SanctuaryColors.sepiaSurfaceElevated,
+    textSecondary: SanctuaryColors.sepiaTextSecondary,
+    activeState: SanctuaryColors.sepiaActive,
+    border: SanctuaryColors.sepiaBorder,
+    brandNavy: SanctuaryColors.waveNavy,
+    brandOrange: SanctuaryColors.sunOrange,
+    brandCyan: SanctuaryColors.cyanAccent,
+    brandAmber: SanctuaryColors.amberGold,
+    brandPurple: SanctuaryColors.brandPurple,
+    brandGreen: SanctuaryColors.emeraldGreen,
+  );
+
+  static const SanctuaryThemeExtension dark = SanctuaryThemeExtension(
+    surfaceElevated: SanctuaryColors.darkSurfaceElevated,
+    textSecondary: SanctuaryColors.darkTextSecondary,
+    activeState: SanctuaryColors.darkActive,
+    border: SanctuaryColors.darkBorder,
+    brandNavy: SanctuaryColors.waveNavy,
+    brandOrange: SanctuaryColors.sunOrange,
+    brandCyan: SanctuaryColors.cyanAccent,
+    brandAmber: SanctuaryColors.amberGold,
+    brandPurple: SanctuaryColors.brandPurple,
+    brandGreen: SanctuaryColors.emeraldGreen,
+  );
+
   final Color surfaceElevated;
   final Color textSecondary;
   final Color activeState;

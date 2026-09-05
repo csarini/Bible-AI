@@ -45,8 +45,7 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final tokens =
-        theme.extension<SanctuaryThemeExtension>() ?? SanctuaryThemeExtension.light;
+    final tokens = context.sanctuaryTokens;
     final isDark = theme.brightness == Brightness.dark;
 
     return DraggableScrollableSheet(
