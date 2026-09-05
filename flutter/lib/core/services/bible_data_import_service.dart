@@ -29,6 +29,64 @@ class BibleDataImportService {
     }
   }
 
+  /// Repairs one missing chapter without repeating the complete first-run import.
+  Future<bool> importChapterIfMissing({
+    required String translationKey,
+    required int bookNumber,
+    required int chapterNumber,
+  }) async {
+    final config = switch (translationKey.toLowerCase().trim()) {
+      'sse' => (folder: 'sse_json', prefix: 'sse'),
+      'rv1858' => (folder: 'rv1858_json', prefix: 'rv1858'),
+      _ => (folder: 'valera_json', prefix: 'valera'),
+    };
+    final assetPath =
+        'assets/data/${config.folder}/${config.prefix}_$bookNumber.json';
+
+    try {
+      final bookData = json.decode(await rootBundle.loadString(assetPath))
+          as Map<String, dynamic>;
+      final rawChapters = bookData['chapters'] as List<dynamic>? ?? const [];
+      final chapter = rawChapters.whereType<Map<String, dynamic>>().firstWhere(
+            (item) => _readInt(item['chapter']) == chapterNumber,
+            orElse: () => <String, dynamic>{},
+          );
+      if (chapter.isEmpty) return false;
+
+      final meta = kCanonicalBookMetadata[bookNumber];
+      final verses = (chapter['verses'] as List<dynamic>? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map((verse) => {
+                'chapter': chapterNumber,
+                'verse': _readInt(verse['verse'], fallback: 1),
+                'name': verse['name']?.toString() ?? '',
+                'text': verse['text']?.toString().trim() ?? '',
+              })
+          .where((verse) => (verse['text'] as String).isNotEmpty)
+          .toList(growable: false);
+      if (verses.isEmpty || meta == null) return false;
+
+      await database.saveChapter(
+        translationKey: translationKey.toLowerCase().trim(),
+        bookNumber: bookNumber,
+        bookCode: meta.code,
+        bookName: bookData['name']?.toString() ?? 'Libro $bookNumber',
+        chapter: chapterNumber,
+        versesJson: json.encode(verses),
+        verseCount: verses.length,
+      );
+      return true;
+    } catch (error) {
+      debugPrint('Error reparando $assetPath capítulo $chapterNumber: $error');
+      return false;
+    }
+  }
+
+  static int _readInt(Object? value, {int fallback = -1}) {
+    if (value is int) return value;
+    return int.tryParse(value?.toString() ?? '') ?? fallback;
+  }
+
   /// Imports all canonical translations, book indexes, and full chapter/verse text
   /// from local JSON assets directly into SQLite.
   Future<void> importAllBibleData({

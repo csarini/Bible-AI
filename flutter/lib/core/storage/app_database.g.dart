@@ -944,6 +944,16 @@ class $UserEventsTable extends UserEvents
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("has_book_sales" IN (0, 1))'),
       defaultValue: const Constant(false));
+  static const VerificationMeta _isSyncedMeta =
+      const VerificationMeta('isSynced');
+  @override
+  late final GeneratedColumn<bool> isSynced = GeneratedColumn<bool>(
+      'is_synced', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_synced" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -964,6 +974,7 @@ class $UserEventsTable extends UserEvents
         foodServiceDetails,
         hasChildCare,
         hasBookSales,
+        isSynced,
         createdAt
       ];
   @override
@@ -1039,6 +1050,10 @@ class $UserEventsTable extends UserEvents
           hasBookSales.isAcceptableOrUnknown(
               data['has_book_sales']!, _hasBookSalesMeta));
     }
+    if (data.containsKey('is_synced')) {
+      context.handle(_isSyncedMeta,
+          isSynced.isAcceptableOrUnknown(data['is_synced']!, _isSyncedMeta));
+    }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
@@ -1072,6 +1087,8 @@ class $UserEventsTable extends UserEvents
           .read(DriftSqlType.bool, data['${effectivePrefix}has_child_care'])!,
       hasBookSales: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}has_book_sales'])!,
+      isSynced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_synced'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -1094,6 +1111,7 @@ class UserEventEntry extends DataClass implements Insertable<UserEventEntry> {
   final String? foodServiceDetails;
   final bool hasChildCare;
   final bool hasBookSales;
+  final bool isSynced;
   final DateTime createdAt;
   const UserEventEntry(
       {required this.id,
@@ -1106,6 +1124,7 @@ class UserEventEntry extends DataClass implements Insertable<UserEventEntry> {
       this.foodServiceDetails,
       required this.hasChildCare,
       required this.hasBookSales,
+      required this.isSynced,
       required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1122,6 +1141,7 @@ class UserEventEntry extends DataClass implements Insertable<UserEventEntry> {
     }
     map['has_child_care'] = Variable<bool>(hasChildCare);
     map['has_book_sales'] = Variable<bool>(hasBookSales);
+    map['is_synced'] = Variable<bool>(isSynced);
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
@@ -1140,6 +1160,7 @@ class UserEventEntry extends DataClass implements Insertable<UserEventEntry> {
           : Value(foodServiceDetails),
       hasChildCare: Value(hasChildCare),
       hasBookSales: Value(hasBookSales),
+      isSynced: Value(isSynced),
       createdAt: Value(createdAt),
     );
   }
@@ -1159,6 +1180,7 @@ class UserEventEntry extends DataClass implements Insertable<UserEventEntry> {
           serializer.fromJson<String?>(json['foodServiceDetails']),
       hasChildCare: serializer.fromJson<bool>(json['hasChildCare']),
       hasBookSales: serializer.fromJson<bool>(json['hasBookSales']),
+      isSynced: serializer.fromJson<bool>(json['isSynced']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -1176,6 +1198,7 @@ class UserEventEntry extends DataClass implements Insertable<UserEventEntry> {
       'foodServiceDetails': serializer.toJson<String?>(foodServiceDetails),
       'hasChildCare': serializer.toJson<bool>(hasChildCare),
       'hasBookSales': serializer.toJson<bool>(hasBookSales),
+      'isSynced': serializer.toJson<bool>(isSynced),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
@@ -1191,6 +1214,7 @@ class UserEventEntry extends DataClass implements Insertable<UserEventEntry> {
           Value<String?> foodServiceDetails = const Value.absent(),
           bool? hasChildCare,
           bool? hasBookSales,
+          bool? isSynced,
           DateTime? createdAt}) =>
       UserEventEntry(
         id: id ?? this.id,
@@ -1205,6 +1229,7 @@ class UserEventEntry extends DataClass implements Insertable<UserEventEntry> {
             : this.foodServiceDetails,
         hasChildCare: hasChildCare ?? this.hasChildCare,
         hasBookSales: hasBookSales ?? this.hasBookSales,
+        isSynced: isSynced ?? this.isSynced,
         createdAt: createdAt ?? this.createdAt,
       );
   UserEventEntry copyWithCompanion(UserEventsCompanion data) {
@@ -1231,6 +1256,7 @@ class UserEventEntry extends DataClass implements Insertable<UserEventEntry> {
       hasBookSales: data.hasBookSales.present
           ? data.hasBookSales.value
           : this.hasBookSales,
+      isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -1248,6 +1274,7 @@ class UserEventEntry extends DataClass implements Insertable<UserEventEntry> {
           ..write('foodServiceDetails: $foodServiceDetails, ')
           ..write('hasChildCare: $hasChildCare, ')
           ..write('hasBookSales: $hasBookSales, ')
+          ..write('isSynced: $isSynced, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -1265,6 +1292,7 @@ class UserEventEntry extends DataClass implements Insertable<UserEventEntry> {
       foodServiceDetails,
       hasChildCare,
       hasBookSales,
+      isSynced,
       createdAt);
   @override
   bool operator ==(Object other) =>
@@ -1280,6 +1308,7 @@ class UserEventEntry extends DataClass implements Insertable<UserEventEntry> {
           other.foodServiceDetails == this.foodServiceDetails &&
           other.hasChildCare == this.hasChildCare &&
           other.hasBookSales == this.hasBookSales &&
+          other.isSynced == this.isSynced &&
           other.createdAt == this.createdAt);
 }
 
@@ -1294,6 +1323,7 @@ class UserEventsCompanion extends UpdateCompanion<UserEventEntry> {
   final Value<String?> foodServiceDetails;
   final Value<bool> hasChildCare;
   final Value<bool> hasBookSales;
+  final Value<bool> isSynced;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const UserEventsCompanion({
@@ -1307,6 +1337,7 @@ class UserEventsCompanion extends UpdateCompanion<UserEventEntry> {
     this.foodServiceDetails = const Value.absent(),
     this.hasChildCare = const Value.absent(),
     this.hasBookSales = const Value.absent(),
+    this.isSynced = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -1321,6 +1352,7 @@ class UserEventsCompanion extends UpdateCompanion<UserEventEntry> {
     this.foodServiceDetails = const Value.absent(),
     this.hasChildCare = const Value.absent(),
     this.hasBookSales = const Value.absent(),
+    this.isSynced = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : id = Value(id),
@@ -1339,6 +1371,7 @@ class UserEventsCompanion extends UpdateCompanion<UserEventEntry> {
     Expression<String>? foodServiceDetails,
     Expression<bool>? hasChildCare,
     Expression<bool>? hasBookSales,
+    Expression<bool>? isSynced,
     Expression<DateTime>? createdAt,
     Expression<int>? rowid,
   }) {
@@ -1354,6 +1387,7 @@ class UserEventsCompanion extends UpdateCompanion<UserEventEntry> {
         'food_service_details': foodServiceDetails,
       if (hasChildCare != null) 'has_child_care': hasChildCare,
       if (hasBookSales != null) 'has_book_sales': hasBookSales,
+      if (isSynced != null) 'is_synced': isSynced,
       if (createdAt != null) 'created_at': createdAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -1370,6 +1404,7 @@ class UserEventsCompanion extends UpdateCompanion<UserEventEntry> {
       Value<String?>? foodServiceDetails,
       Value<bool>? hasChildCare,
       Value<bool>? hasBookSales,
+      Value<bool>? isSynced,
       Value<DateTime>? createdAt,
       Value<int>? rowid}) {
     return UserEventsCompanion(
@@ -1383,6 +1418,7 @@ class UserEventsCompanion extends UpdateCompanion<UserEventEntry> {
       foodServiceDetails: foodServiceDetails ?? this.foodServiceDetails,
       hasChildCare: hasChildCare ?? this.hasChildCare,
       hasBookSales: hasBookSales ?? this.hasBookSales,
+      isSynced: isSynced ?? this.isSynced,
       createdAt: createdAt ?? this.createdAt,
       rowid: rowid ?? this.rowid,
     );
@@ -1421,6 +1457,9 @@ class UserEventsCompanion extends UpdateCompanion<UserEventEntry> {
     if (hasBookSales.present) {
       map['has_book_sales'] = Variable<bool>(hasBookSales.value);
     }
+    if (isSynced.present) {
+      map['is_synced'] = Variable<bool>(isSynced.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -1443,6 +1482,7 @@ class UserEventsCompanion extends UpdateCompanion<UserEventEntry> {
           ..write('foodServiceDetails: $foodServiceDetails, ')
           ..write('hasChildCare: $hasChildCare, ')
           ..write('hasBookSales: $hasBookSales, ')
+          ..write('isSynced: $isSynced, ')
           ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -1500,6 +1540,16 @@ class $FoodCourtMenusTable extends FoodCourtMenus
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("is_available" IN (0, 1))'),
       defaultValue: const Constant(true));
+  static const VerificationMeta _isSyncedMeta =
+      const VerificationMeta('isSynced');
+  @override
+  late final GeneratedColumn<bool> isSynced = GeneratedColumn<bool>(
+      'is_synced', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_synced" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -1509,8 +1559,17 @@ class $FoodCourtMenusTable extends FoodCourtMenus
       requiredDuringInsert: false,
       defaultValue: currentDateAndTime);
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, churchId, title, description, price, shift, isAvailable, createdAt];
+  List<GeneratedColumn> get $columns => [
+        id,
+        churchId,
+        title,
+        description,
+        price,
+        shift,
+        isAvailable,
+        isSynced,
+        createdAt
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1562,6 +1621,10 @@ class $FoodCourtMenusTable extends FoodCourtMenus
           isAvailable.isAcceptableOrUnknown(
               data['is_available']!, _isAvailableMeta));
     }
+    if (data.containsKey('is_synced')) {
+      context.handle(_isSyncedMeta,
+          isSynced.isAcceptableOrUnknown(data['is_synced']!, _isSyncedMeta));
+    }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
@@ -1589,6 +1652,8 @@ class $FoodCourtMenusTable extends FoodCourtMenus
           .read(DriftSqlType.string, data['${effectivePrefix}shift'])!,
       isAvailable: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}is_available'])!,
+      isSynced: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_synced'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -1609,6 +1674,7 @@ class FoodCourtMenuEntry extends DataClass
   final double price;
   final String shift;
   final bool isAvailable;
+  final bool isSynced;
   final DateTime createdAt;
   const FoodCourtMenuEntry(
       {required this.id,
@@ -1618,6 +1684,7 @@ class FoodCourtMenuEntry extends DataClass
       required this.price,
       required this.shift,
       required this.isAvailable,
+      required this.isSynced,
       required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1629,6 +1696,7 @@ class FoodCourtMenuEntry extends DataClass
     map['price'] = Variable<double>(price);
     map['shift'] = Variable<String>(shift);
     map['is_available'] = Variable<bool>(isAvailable);
+    map['is_synced'] = Variable<bool>(isSynced);
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
@@ -1642,6 +1710,7 @@ class FoodCourtMenuEntry extends DataClass
       price: Value(price),
       shift: Value(shift),
       isAvailable: Value(isAvailable),
+      isSynced: Value(isSynced),
       createdAt: Value(createdAt),
     );
   }
@@ -1657,6 +1726,7 @@ class FoodCourtMenuEntry extends DataClass
       price: serializer.fromJson<double>(json['price']),
       shift: serializer.fromJson<String>(json['shift']),
       isAvailable: serializer.fromJson<bool>(json['isAvailable']),
+      isSynced: serializer.fromJson<bool>(json['isSynced']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -1671,6 +1741,7 @@ class FoodCourtMenuEntry extends DataClass
       'price': serializer.toJson<double>(price),
       'shift': serializer.toJson<String>(shift),
       'isAvailable': serializer.toJson<bool>(isAvailable),
+      'isSynced': serializer.toJson<bool>(isSynced),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
@@ -1683,6 +1754,7 @@ class FoodCourtMenuEntry extends DataClass
           double? price,
           String? shift,
           bool? isAvailable,
+          bool? isSynced,
           DateTime? createdAt}) =>
       FoodCourtMenuEntry(
         id: id ?? this.id,
@@ -1692,6 +1764,7 @@ class FoodCourtMenuEntry extends DataClass
         price: price ?? this.price,
         shift: shift ?? this.shift,
         isAvailable: isAvailable ?? this.isAvailable,
+        isSynced: isSynced ?? this.isSynced,
         createdAt: createdAt ?? this.createdAt,
       );
   FoodCourtMenuEntry copyWithCompanion(FoodCourtMenusCompanion data) {
@@ -1705,6 +1778,7 @@ class FoodCourtMenuEntry extends DataClass
       shift: data.shift.present ? data.shift.value : this.shift,
       isAvailable:
           data.isAvailable.present ? data.isAvailable.value : this.isAvailable,
+      isSynced: data.isSynced.present ? data.isSynced.value : this.isSynced,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -1719,14 +1793,15 @@ class FoodCourtMenuEntry extends DataClass
           ..write('price: $price, ')
           ..write('shift: $shift, ')
           ..write('isAvailable: $isAvailable, ')
+          ..write('isSynced: $isSynced, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, churchId, title, description, price, shift, isAvailable, createdAt);
+  int get hashCode => Object.hash(id, churchId, title, description, price,
+      shift, isAvailable, isSynced, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1738,6 +1813,7 @@ class FoodCourtMenuEntry extends DataClass
           other.price == this.price &&
           other.shift == this.shift &&
           other.isAvailable == this.isAvailable &&
+          other.isSynced == this.isSynced &&
           other.createdAt == this.createdAt);
 }
 
@@ -1749,6 +1825,7 @@ class FoodCourtMenusCompanion extends UpdateCompanion<FoodCourtMenuEntry> {
   final Value<double> price;
   final Value<String> shift;
   final Value<bool> isAvailable;
+  final Value<bool> isSynced;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const FoodCourtMenusCompanion({
@@ -1759,6 +1836,7 @@ class FoodCourtMenusCompanion extends UpdateCompanion<FoodCourtMenuEntry> {
     this.price = const Value.absent(),
     this.shift = const Value.absent(),
     this.isAvailable = const Value.absent(),
+    this.isSynced = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -1770,6 +1848,7 @@ class FoodCourtMenusCompanion extends UpdateCompanion<FoodCourtMenuEntry> {
     required double price,
     required String shift,
     this.isAvailable = const Value.absent(),
+    this.isSynced = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : id = Value(id),
@@ -1785,6 +1864,7 @@ class FoodCourtMenusCompanion extends UpdateCompanion<FoodCourtMenuEntry> {
     Expression<double>? price,
     Expression<String>? shift,
     Expression<bool>? isAvailable,
+    Expression<bool>? isSynced,
     Expression<DateTime>? createdAt,
     Expression<int>? rowid,
   }) {
@@ -1796,6 +1876,7 @@ class FoodCourtMenusCompanion extends UpdateCompanion<FoodCourtMenuEntry> {
       if (price != null) 'price': price,
       if (shift != null) 'shift': shift,
       if (isAvailable != null) 'is_available': isAvailable,
+      if (isSynced != null) 'is_synced': isSynced,
       if (createdAt != null) 'created_at': createdAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -1809,6 +1890,7 @@ class FoodCourtMenusCompanion extends UpdateCompanion<FoodCourtMenuEntry> {
       Value<double>? price,
       Value<String>? shift,
       Value<bool>? isAvailable,
+      Value<bool>? isSynced,
       Value<DateTime>? createdAt,
       Value<int>? rowid}) {
     return FoodCourtMenusCompanion(
@@ -1819,6 +1901,7 @@ class FoodCourtMenusCompanion extends UpdateCompanion<FoodCourtMenuEntry> {
       price: price ?? this.price,
       shift: shift ?? this.shift,
       isAvailable: isAvailable ?? this.isAvailable,
+      isSynced: isSynced ?? this.isSynced,
       createdAt: createdAt ?? this.createdAt,
       rowid: rowid ?? this.rowid,
     );
@@ -1848,6 +1931,9 @@ class FoodCourtMenusCompanion extends UpdateCompanion<FoodCourtMenuEntry> {
     if (isAvailable.present) {
       map['is_available'] = Variable<bool>(isAvailable.value);
     }
+    if (isSynced.present) {
+      map['is_synced'] = Variable<bool>(isSynced.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -1867,6 +1953,7 @@ class FoodCourtMenusCompanion extends UpdateCompanion<FoodCourtMenuEntry> {
           ..write('price: $price, ')
           ..write('shift: $shift, ')
           ..write('isAvailable: $isAvailable, ')
+          ..write('isSynced: $isSynced, ')
           ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -4552,6 +4639,7 @@ typedef $$UserEventsTableCreateCompanionBuilder = UserEventsCompanion Function({
   Value<String?> foodServiceDetails,
   Value<bool> hasChildCare,
   Value<bool> hasBookSales,
+  Value<bool> isSynced,
   Value<DateTime> createdAt,
   Value<int> rowid,
 });
@@ -4566,6 +4654,7 @@ typedef $$UserEventsTableUpdateCompanionBuilder = UserEventsCompanion Function({
   Value<String?> foodServiceDetails,
   Value<bool> hasChildCare,
   Value<bool> hasBookSales,
+  Value<bool> isSynced,
   Value<DateTime> createdAt,
   Value<int> rowid,
 });
@@ -4629,6 +4718,9 @@ class $$UserEventsTableFilterComposer
 
   ColumnFilters<bool> get hasBookSales => $composableBuilder(
       column: $table.hasBookSales, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnFilters(column));
@@ -4695,6 +4787,9 @@ class $$UserEventsTableOrderingComposer
       column: $table.hasBookSales,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 
@@ -4755,6 +4850,9 @@ class $$UserEventsTableAnnotationComposer
   GeneratedColumn<bool> get hasBookSales => $composableBuilder(
       column: $table.hasBookSales, builder: (column) => column);
 
+  GeneratedColumn<bool> get isSynced =>
+      $composableBuilder(column: $table.isSynced, builder: (column) => column);
+
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
@@ -4812,6 +4910,7 @@ class $$UserEventsTableTableManager extends RootTableManager<
             Value<String?> foodServiceDetails = const Value.absent(),
             Value<bool> hasChildCare = const Value.absent(),
             Value<bool> hasBookSales = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -4826,6 +4925,7 @@ class $$UserEventsTableTableManager extends RootTableManager<
             foodServiceDetails: foodServiceDetails,
             hasChildCare: hasChildCare,
             hasBookSales: hasBookSales,
+            isSynced: isSynced,
             createdAt: createdAt,
             rowid: rowid,
           ),
@@ -4840,6 +4940,7 @@ class $$UserEventsTableTableManager extends RootTableManager<
             Value<String?> foodServiceDetails = const Value.absent(),
             Value<bool> hasChildCare = const Value.absent(),
             Value<bool> hasBookSales = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -4854,6 +4955,7 @@ class $$UserEventsTableTableManager extends RootTableManager<
             foodServiceDetails: foodServiceDetails,
             hasChildCare: hasChildCare,
             hasBookSales: hasBookSales,
+            isSynced: isSynced,
             createdAt: createdAt,
             rowid: rowid,
           ),
@@ -4922,6 +5024,7 @@ typedef $$FoodCourtMenusTableCreateCompanionBuilder = FoodCourtMenusCompanion
   required double price,
   required String shift,
   Value<bool> isAvailable,
+  Value<bool> isSynced,
   Value<DateTime> createdAt,
   Value<int> rowid,
 });
@@ -4934,6 +5037,7 @@ typedef $$FoodCourtMenusTableUpdateCompanionBuilder = FoodCourtMenusCompanion
   Value<double> price,
   Value<String> shift,
   Value<bool> isAvailable,
+  Value<bool> isSynced,
   Value<DateTime> createdAt,
   Value<int> rowid,
 });
@@ -4967,6 +5071,9 @@ class $$FoodCourtMenusTableFilterComposer
 
   ColumnFilters<bool> get isAvailable => $composableBuilder(
       column: $table.isAvailable, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnFilters(column));
@@ -5002,6 +5109,9 @@ class $$FoodCourtMenusTableOrderingComposer
   ColumnOrderings<bool> get isAvailable => $composableBuilder(
       column: $table.isAvailable, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<bool> get isSynced => $composableBuilder(
+      column: $table.isSynced, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 }
@@ -5035,6 +5145,9 @@ class $$FoodCourtMenusTableAnnotationComposer
 
   GeneratedColumn<bool> get isAvailable => $composableBuilder(
       column: $table.isAvailable, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSynced =>
+      $composableBuilder(column: $table.isSynced, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -5074,6 +5187,7 @@ class $$FoodCourtMenusTableTableManager extends RootTableManager<
             Value<double> price = const Value.absent(),
             Value<String> shift = const Value.absent(),
             Value<bool> isAvailable = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -5085,6 +5199,7 @@ class $$FoodCourtMenusTableTableManager extends RootTableManager<
             price: price,
             shift: shift,
             isAvailable: isAvailable,
+            isSynced: isSynced,
             createdAt: createdAt,
             rowid: rowid,
           ),
@@ -5096,6 +5211,7 @@ class $$FoodCourtMenusTableTableManager extends RootTableManager<
             required double price,
             required String shift,
             Value<bool> isAvailable = const Value.absent(),
+            Value<bool> isSynced = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -5107,6 +5223,7 @@ class $$FoodCourtMenusTableTableManager extends RootTableManager<
             price: price,
             shift: shift,
             isAvailable: isAvailable,
+            isSynced: isSynced,
             createdAt: createdAt,
             rowid: rowid,
           ),

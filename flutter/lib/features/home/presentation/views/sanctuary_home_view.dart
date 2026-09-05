@@ -9,7 +9,6 @@ import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../core/theme/sanctuary_theme.dart';
 import '../../../../shared/services/share_service.dart';
-import '../../../../shared/widgets/coachmark_guide_dialog.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
 import '../../../../shared/widgets/sanctuary_church_logo.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
@@ -248,7 +247,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                           border: Border.all(
                             color: isSelected
                                 ? tokens.activeState
-                                : theme.colorScheme.outline.withValues(alpha: 0.25),
+                                : theme.colorScheme.outline
+                                    .withValues(alpha: 0.25),
                             width: 1.1,
                           ),
                           boxShadow: isSelected
@@ -394,7 +394,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
                         color: tokens.surfaceElevated,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: theme.colorScheme.outline.withValues(alpha: 0.2),
+                          color:
+                              theme.colorScheme.outline.withValues(alpha: 0.2),
                         ),
                       ),
                       padding: const EdgeInsets.all(3),

@@ -6,8 +6,27 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../constants/bible_books.dart';
+import '../utils/string_utils.dart';
 
 part 'app_database.g.dart';
+
+class BibleVerseSearchResult {
+  const BibleVerseSearchResult({
+    required this.bookId,
+    required this.bookName,
+    required this.translationKey,
+    required this.chapter,
+    required this.verse,
+    required this.text,
+  });
+
+  final String bookId;
+  final String bookName;
+  final String translationKey;
+  final int chapter;
+  final int verse;
+  final String text;
+}
 
 // =============================================================================
 // TABLE DEFINITIONS
@@ -102,6 +121,8 @@ class UserEvents extends Table {
       boolean().withDefault(const Constant(false)).named('has_child_care')();
   BoolColumn get hasBookSales =>
       boolean().withDefault(const Constant(false)).named('has_book_sales')();
+  BoolColumn get isSynced =>
+      boolean().withDefault(const Constant(false)).named('is_synced')();
   DateTimeColumn get createdAt =>
       dateTime().withDefault(currentDateAndTime).named('created_at')();
 
@@ -120,6 +141,8 @@ class FoodCourtMenus extends Table {
   TextColumn get shift => text()(); // 'day', 'night', 'both'
   BoolColumn get isAvailable =>
       boolean().withDefault(const Constant(true)).named('is_available')();
+  BoolColumn get isSynced =>
+      boolean().withDefault(const Constant(false)).named('is_synced')();
   DateTimeColumn get createdAt =>
       dateTime().withDefault(currentDateAndTime).named('created_at')();
 
@@ -190,7 +213,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -230,6 +253,10 @@ class AppDatabase extends _$AppDatabase {
           if (from < 2) {
             await m.createTable(localUsers);
             await m.createTable(userPreferences);
+          }
+          if (from < 3) {
+            await m.addColumn(userEvents, userEvents.isSynced);
+            await m.addColumn(foodCourtMenus, foodCourtMenus.isSynced);
           }
         },
         beforeOpen: (details) async {
@@ -439,6 +466,53 @@ class AppDatabase extends _$AppDatabase {
         .getSingleOrNull();
   }
 
+  /// Searches verse JSON locally and applies accent-insensitive matching after
+  /// SQLite narrows the candidate chapters with LIKE.
+  Future<List<BibleVerseSearchResult>> searchVersesByKeyword(
+    String keyword, {
+    int limit = 50,
+  }) async {
+    final normalizedKeyword = normalizeSearchText(keyword);
+    if (normalizedKeyword.length < 2 || limit <= 0) return const [];
+
+    final escaped =
+        normalizedKeyword.replaceAll('%', r'\%').replaceAll('_', r'\_');
+    final candidates = await (select(localBibleChapters)
+          ..where((chapter) => chapter.versesJson.lower().like('%$escaped%'))
+          ..orderBy(
+              [(chapter) => OrderingTerm(expression: chapter.bookNumber)]))
+        .get();
+    final chapters = candidates.isNotEmpty
+        ? candidates
+        : await (select(localBibleChapters)
+              ..orderBy(
+                  [(chapter) => OrderingTerm(expression: chapter.bookNumber)]))
+            .get();
+
+    final results = <BibleVerseSearchResult>[];
+    for (final chapter in chapters) {
+      final decoded = jsonDecode(chapter.versesJson);
+      if (decoded is! List) continue;
+      for (final rawVerse in decoded) {
+        if (rawVerse is! Map) continue;
+        final text = rawVerse['text']?.toString().trim() ?? '';
+        if (!normalizeSearchText(text).contains(normalizedKeyword)) continue;
+        results.add(
+          BibleVerseSearchResult(
+            bookId: chapter.bookCode,
+            bookName: chapter.bookName,
+            translationKey: chapter.translationKey,
+            chapter: chapter.chapter,
+            verse: int.tryParse(rawVerse['verse']?.toString() ?? '') ?? 0,
+            text: text,
+          ),
+        );
+        if (results.length >= limit) return results;
+      }
+    }
+    return results;
+  }
+
   Stream<BibleChapterEntry?> watchChapter(
     String translationKey,
     int bookNumber,
@@ -504,10 +578,15 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<bool> isBibleDataImported() async {
-    final count = await countStoredChapters();
-    // 66 books * chapters (1189) across 3 translations is ~3567 chapters
-    // If we have at least 1189 chapters stored, Bible is imported.
-    return count >= 1189;
+    final expectedChaptersPerTranslation = kCanonicalBookMetadata.values
+        .fold<int>(0, (total, book) => total + book.chapters);
+    const expectedTranslations = ['valera', 'sse', 'rv1858'];
+
+    for (final translation in expectedTranslations) {
+      final count = await countStoredChapters(translation);
+      if (count < expectedChaptersPerTranslation) return false;
+    }
+    return true;
   }
 
   Stream<int> watchStoredChaptersCount([String? translationKey]) {
@@ -566,6 +645,17 @@ class AppDatabase extends _$AppDatabase {
 
   Future<int> insertOrUpdateBookmark(LocalBookmarksCompanion entry) {
     return into(localBookmarks).insertOnConflictUpdate(entry);
+  }
+
+  Future<List<LocalBookmarkEntry>> getUnsyncedBookmarks() {
+    return (select(localBookmarks)..where((t) => t.isSynced.equals(false)))
+        .get();
+  }
+
+  Future<int> markBookmarkSynced(String id) {
+    return (update(localBookmarks)..where((t) => t.id.equals(id))).write(
+      const LocalBookmarksCompanion(isSynced: Value(true)),
+    );
   }
 
   Future<int> saveBookmark({
@@ -658,6 +748,16 @@ class AppDatabase extends _$AppDatabase {
     return into(userEvents).insertOnConflictUpdate(entry);
   }
 
+  Future<List<UserEventEntry>> getUnsyncedEvents() {
+    return (select(userEvents)..where((t) => t.isSynced.equals(false))).get();
+  }
+
+  Future<int> markEventSynced(String id) {
+    return (update(userEvents)..where((t) => t.id.equals(id))).write(
+      const UserEventsCompanion(isSynced: Value(true)),
+    );
+  }
+
   Future<int> deleteEvent(String id) {
     return (delete(userEvents)..where((t) => t.id.equals(id))).go();
   }
@@ -677,6 +777,17 @@ class AppDatabase extends _$AppDatabase {
 
   Future<int> insertOrUpdateMenu(FoodCourtMenusCompanion entry) {
     return into(foodCourtMenus).insertOnConflictUpdate(entry);
+  }
+
+  Future<List<FoodCourtMenuEntry>> getUnsyncedMenus() {
+    return (select(foodCourtMenus)..where((t) => t.isSynced.equals(false)))
+        .get();
+  }
+
+  Future<int> markMenuSynced(String id) {
+    return (update(foodCourtMenus)..where((t) => t.id.equals(id))).write(
+      const FoodCourtMenusCompanion(isSynced: Value(true)),
+    );
   }
 
   Future<int> deleteMenu(String id) {
@@ -704,8 +815,11 @@ class AppDatabase extends _$AppDatabase {
       ''', [key, value]);
     } catch (e) {
       // Fallback in case table or migration needs creation
-      await customStatement('CREATE TABLE IF NOT EXISTS app_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);');
-      await customStatement('REPLACE INTO app_settings (key, value) VALUES (?, ?);', [key, value]);
+      await customStatement(
+          'CREATE TABLE IF NOT EXISTS app_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);');
+      await customStatement(
+          'REPLACE INTO app_settings (key, value) VALUES (?, ?);',
+          [key, value]);
     }
   }
 
@@ -725,7 +839,8 @@ class AppDatabase extends _$AppDatabase {
   Future<Map<String, String>> getAllSettings() async {
     try {
       await initSettingsTable();
-      final results = await customSelect('SELECT key, value FROM app_settings;').get();
+      final results =
+          await customSelect('SELECT key, value FROM app_settings;').get();
       final map = <String, String>{};
       for (final row in results) {
         final k = row.data['key'] as String?;

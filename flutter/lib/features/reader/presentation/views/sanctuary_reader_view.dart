@@ -5,11 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/constants/bible_books.dart';
 import '../../../../core/providers/app_settings_providers.dart';
+import '../../../../core/services/bible_data_import_service.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/services/share_service.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
-import '../../../saved_verses/presentation/views/sanctuary_saved_verses_view.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 import '../../data/services/getbible_service.dart';
 import '../../domain/entities/verse_entity.dart';
@@ -26,6 +26,7 @@ class SanctuaryReaderView extends ConsumerStatefulWidget {
 
 class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
   late final GetBibleService _bibleService;
+  late final BibleDataImportService _importService;
   final ScrollController _scrollController = ScrollController();
 
   BibleBookInfo _currentBook = kBibleBooks.firstWhere((b) => b.id == 'MAT');
@@ -44,6 +45,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
   void initState() {
     super.initState();
     _bibleService = GetBibleService(database: widget.database);
+    _importService = BibleDataImportService(database: widget.database);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final initialBookId = ref.read(appSelectedBookProvider);
       final initialChapter = ref.read(appSelectedChapterProvider);
@@ -88,9 +90,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
       } else if (_scrollController.hasClients) {
         final maxScroll = _scrollController.position.maxScrollExtent;
         if (maxScroll > 0) {
-          final estOffset = (_verses.length > 1)
-              ? (index / _verses.length) * maxScroll
-              : 0.0;
+          final estOffset =
+              (_verses.length > 1) ? (index / _verses.length) * maxScroll : 0.0;
           _scrollController.jumpTo(estOffset.clamp(0.0, maxScroll));
         }
         if (retryCount < 4) {
@@ -111,7 +112,10 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
     }
   }
 
-  Future<void> _loadChapter([int? targetVerseNumber]) async {
+  Future<void> _loadChapter([
+    int? targetVerseNumber,
+    bool repairMissingChapter = true,
+  ]) async {
     final targetVerse = targetVerseNumber ?? ref.read(appSelectedVerseProvider);
     _verseKeys.clear();
     setState(() {
@@ -172,6 +176,17 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
         }
       }
     } catch (e) {
+      if (repairMissingChapter) {
+        final repaired = await _importService.importChapterIfMissing(
+          translationKey: translation,
+          bookNumber: _currentBook.number,
+          chapterNumber: _currentChapter,
+        );
+        if (repaired && mounted) {
+          await _loadChapter(targetVerseNumber, false);
+          return;
+        }
+      }
       if (mounted) {
         setState(() {
           _errorMessage = e.toString();
@@ -677,9 +692,11 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
             if (bookmark != null) {
               bgColor = SanctuaryColors.getHighlightColor(bookmark.colorHex);
               if (isSelected) {
-                border = Border.all(color: SanctuaryColors.waveNavy, width: 2.0);
+                border =
+                    Border.all(color: SanctuaryColors.waveNavy, width: 2.0);
               } else if (isTargetHighlighted) {
-                border = Border.all(color: SanctuaryColors.sunOrange, width: 2.0);
+                border =
+                    Border.all(color: SanctuaryColors.sunOrange, width: 2.0);
               }
             } else if (isSelected) {
               bgColor = SanctuaryColors.waveNavy.withValues(alpha: 0.09);
@@ -933,7 +950,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
               },
               borderRadius: BorderRadius.circular(20),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(20),

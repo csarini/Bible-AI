@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../shared/services/home_widget_service.dart';
@@ -229,3 +228,18 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
     super.dispose();
   }
 }
+
+final readerNotifierProvider =
+    StateNotifierProvider<ReaderNotifier, ReaderState>((ref) {
+  final db = ref.watch(appDatabaseProvider);
+  return ReaderNotifier(
+    bibleService: LocalBibleService(database: db),
+    database: db,
+  );
+});
+
+// Provider for app database
+final appDatabaseProvider = Provider<AppDatabase>((ref) {
+  throw UnimplementedError(
+      'appDatabaseProvider must be overridden in ProviderScope');
+});
