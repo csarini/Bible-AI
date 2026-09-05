@@ -8,9 +8,11 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
+import '../../../../shared/models/daily_verse_data.dart';
 import '../../../../shared/widgets/coachmark_guide_dialog.dart';
 import '../../../../shared/widgets/feedback_dialog.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
+import '../../../../shared/widgets/widget_preview_sheet.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 
 class SanctuarySettingsView extends ConsumerWidget {
@@ -407,7 +409,59 @@ class SanctuarySettingsView extends ConsumerWidget {
 
           const SizedBox(height: 16),
 
-          // Section 4: Data Backup (Export / Import JSON)
+          // Section 4: Widgets de Pantalla (El Shaddai)
+          _buildCard(
+            context,
+            title: 'Widgets de Pantalla (El Shaddai)',
+            icon: LucideIcons.layoutGrid,
+            iconColor: SanctuaryColors.sunOrange,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Personaliza y previsualiza cómo lucirán los widgets del versículo diario de El Shaddai en tu pantalla de inicio antes de añadirlos:',
+                  style: GoogleFonts.inter(
+                      fontSize: 13,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.75)),
+                ),
+                const SizedBox(height: 12),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: SanctuaryColors.sunOrange.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(LucideIcons.sparkles,
+                        color: SanctuaryColors.sunOrange, size: 20),
+                  ),
+                  title: Text(
+                    'Previsualizar Widgets (2×2 y 4×2)',
+                    style: GoogleFonts.inter(
+                        fontSize: 14, fontWeight: FontWeight.w700),
+                  ),
+                  subtitle: Text(
+                    'Explora los tamaños pequeño y mediano con el nombre oficial El Shaddai',
+                    style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
+                  ),
+                  trailing: const Icon(LucideIcons.chevronRight, size: 18),
+                  onTap: () {
+                    WidgetPreviewSheet.show(
+                      context,
+                      dailyVerse: getRandomDailyVerse(),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Section 5: Data Backup (Export / Import JSON)
           _buildCard(
             context,
             title: 'Respaldo & Transferencia (JSON)',

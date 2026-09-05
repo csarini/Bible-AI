@@ -117,7 +117,7 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
   };
 
   const handleCopy = async () => {
-    const text = `"${currentDailyVerse.text}"\n— ${currentDailyVerse.reference} (RVR1909)\n\n🕊️ Versículo del Día • Iglesia El-Shaddai`;
+    const text = `"${currentDailyVerse.text}"\n— ${currentDailyVerse.reference} (RVR1909)\n\n🕊️ Versículo del Día • El Shaddai`;
     const success = await ShareService.copyToClipboard(text);
     if (success) {
       setCopied(true);
@@ -371,7 +371,7 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
                       />
                     </div>
                     <span className="text-[10px] font-bold tracking-wider uppercase line-clamp-1 opacity-90 font-sans">
-                      El-Shaddai
+                      El Shaddai
                     </span>
                   </div>
                   <span className={`text-[10px] font-bold font-mono px-1.5 py-0.5 rounded-md ${getWidgetThemeStyles(widgetVisualTheme).badgeBg}`}>
@@ -460,7 +460,7 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
                     </div>
                     <div>
                       <span className="text-[11px] font-bold block leading-tight font-sans">
-                        Biblia El-Shaddai
+                        El Shaddai
                       </span>
                       <span className="text-[9px] uppercase font-bold tracking-widest text-[#F25C05] block font-sans">
                         Versículo del Día
@@ -587,7 +587,7 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[10px] uppercase font-bold tracking-widest text-[#F25C05] flex items-center gap-1">
                       <Sparkles className="w-3 h-3 text-[#F25C05]" />
-                      Santuario Digital
+                      El Shaddai
                     </span>
                     <span className="text-[10px] opacity-70 font-mono">
                       {currentDailyVerse.reference}
@@ -668,7 +668,7 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
                       <div className="w-5 h-5 rounded-full overflow-hidden">
                         <img src="/icon.svg" alt="Icono" className="w-full h-full" referrerPolicy="no-referrer" />
                       </div>
-                      <span className="text-xs font-bold text-[#0B2B68]">Biblia El-Shaddai</span>
+                      <span className="text-xs font-bold text-[#0B2B68]">El Shaddai</span>
                     </div>
                     <span className="text-[10px] bg-[#00A3E0]/15 text-[#0B2B68] font-bold px-2 py-0.5 rounded-full">
                       {currentDailyVerse.reference}

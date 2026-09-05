@@ -160,12 +160,12 @@ struct VerseSystemSmallView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            // Header: Golden Sanctuary pill badge
+            // Header: Golden El Shaddai badge
             HStack(spacing: 4) {
                 Image(systemName: "sparkle")
                     .font(.system(size: 9, weight: .bold))
                     .foregroundColor(.sanctuaryGold)
-                Text("VERSÍCULO DEL DÍA")
+                Text("EL SHADDAI")
                     .font(.system(size: 8, weight: .bold))
                     .tracking(0.8)
                     .foregroundColor(.sanctuaryGold)
@@ -220,7 +220,7 @@ struct VerseSystemMediumView: View {
                         Image(systemName: "book.fill")
                             .font(.system(size: 10, weight: .bold))
                             .foregroundColor(.sanctuaryGold)
-                        Text("SANTUARIO DIGITAL")
+                        Text("EL SHADDAI")
                             .font(.system(size: 9, weight: .bold))
                             .tracking(0.6)
                             .foregroundColor(.sanctuaryGold)
