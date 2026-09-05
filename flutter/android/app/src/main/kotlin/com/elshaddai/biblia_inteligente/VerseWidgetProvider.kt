@@ -1,17 +1,20 @@
 package com.elshaddai.biblia_inteligente
 
 import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProviderInfo
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
+import android.os.Bundle
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
+import es.antonborri.home_widget.HomeWidgetPlugin
 import es.antonborri.home_widget.HomeWidgetProvider
 
 /**
  * Production-ready AppWidgetProvider for Biblia Inteligente (Digital Sanctuary)
  *
- * Implements Android 12+ Home Screen Widget showing the Verse of the Day.
+ * Implements Android 12+ Home Screen and Lock Screen (Keyguard) Widgets.
  * Reads shared data populated by Flutter via the `home_widget` plugin.
  */
 class VerseWidgetProvider : HomeWidgetProvider() {
@@ -23,18 +26,56 @@ class VerseWidgetProvider : HomeWidgetProvider() {
         widgetData: SharedPreferences
     ) {
         appWidgetIds.forEach { widgetId ->
-            val views = RemoteViews(context.packageName, R.layout.verse_widget).apply {
-                // 1. Retrieve Verse Reference (Primary key: verse_reference, Fallback: votd_reference)
+            updateSingleWidget(context, appWidgetManager, widgetId, widgetData)
+        }
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle?
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+        val widgetData = HomeWidgetPlugin.getData(context)
+        updateSingleWidget(context, appWidgetManager, appWidgetId, widgetData)
+    }
+
+    private fun updateSingleWidget(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        widgetId: Int,
+        widgetData: SharedPreferences
+    ) {
+        try {
+            // Determine if widget is placed on Keyguard (Lock Screen) or Home Screen
+            val options = appWidgetManager.getAppWidgetOptions(widgetId)
+            val category = options.getInt(
+                AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY,
+                AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN
+            )
+            val isKeyguard = category == AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD
+            val maxHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 150)
+
+            // Select layout according to destination & available space
+            val layoutId = if (isKeyguard || maxHeight < 110) {
+                R.layout.verse_widget_lockscreen
+            } else {
+                R.layout.verse_widget
+            }
+
+            val views = RemoteViews(context.packageName, layoutId).apply {
+                // 1. Retrieve Verse Reference
                 val reference = widgetData.getString(KEY_VERSE_REFERENCE, null)
                     ?: widgetData.getString(LEGACY_KEY_REFERENCE, null)
                     ?: context.getString(R.string.widget_default_reference)
 
-                // 2. Retrieve Verse Text (Primary key: verse_text, Fallback: votd_text)
+                // 2. Retrieve Verse Text
                 val rawText = widgetData.getString(KEY_VERSE_TEXT, null)
                     ?: widgetData.getString(LEGACY_KEY_TEXT, null)
                     ?: context.getString(R.string.widget_default_text)
 
-                // Format quote with typography quotes if needed
+                // Format quote with typography quotes
                 val formattedText = if (!rawText.startsWith("«") && !rawText.startsWith("\"")) {
                     "«$rawText»"
                 } else {
@@ -57,6 +98,8 @@ class VerseWidgetProvider : HomeWidgetProvider() {
 
             // 5. Commit update to widget manager
             appWidgetManager.updateAppWidget(widgetId, views)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

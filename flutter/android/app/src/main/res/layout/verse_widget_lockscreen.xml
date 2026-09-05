@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/widget_background"
-    android:padding="16dp">
+    android:padding="12dp">
 
     <!-- Header: Sanctuary Badge + Icon -->
     <LinearLayout
@@ -13,12 +13,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="4dp">
 
         <ImageView
             android:id="@+id/widget_icon"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
             android:src="@drawable/ic_sanctuary_bible"
             android:contentDescription="@string/widget_name" />
 
@@ -27,12 +27,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="5dp"
             android:text="@string/widget_badge_title"
             android:textColor="@color/sanctuary_gold"
-            android:textSize="10sp"
+            android:textSize="9sp"
             android:textStyle="bold"
-            android:letterSpacing="0.08"
+            android:letterSpacing="0.06"
             android:textAllCaps="true" />
     </LinearLayout>
 
@@ -44,32 +44,22 @@
         android:layout_weight="1"
         android:text="@string/widget_default_text"
         android:textColor="@color/sanctuary_navy"
-        android:textSize="13sp"
-        android:lineSpacingMultiplier="1.2"
-        android:maxLines="4"
+        android:textSize="12sp"
+        android:lineSpacingMultiplier="1.15"
+        android:maxLines="3"
         android:ellipsize="end"
         android:gravity="center_vertical|start" />
-
-    <!-- Subtle Gold Divider (Using RemoteViews-safe ImageView instead of forbidden View) -->
-    <ImageView
-        android:id="@+id/widget_divider"
-        android:layout_width="32dp"
-        android:layout_height="2dp"
-        android:src="@drawable/widget_gold_divider"
-        android:contentDescription="@null"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp" />
 
     <!-- Verse Reference (Soft Gold #D4AF37) -->
     <TextView
         android:id="@+id/widget_verse_reference"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:text="@string/widget_default_reference"
         android:textColor="@color/sanctuary_gold"
-        android:textSize="11sp"
+        android:textSize="10sp"
         android:textStyle="bold"
-        android:letterSpacing="0.04"
         android:gravity="end" />
 
 </LinearLayout>

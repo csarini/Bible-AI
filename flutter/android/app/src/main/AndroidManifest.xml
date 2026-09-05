@@ -33,7 +33,7 @@
 
         <!-- Home & Lock Screen Widget Receiver -->
         <receiver
-            android:name=".VerseWidgetProvider"
+            android:name="com.elshaddai.biblia_inteligente.VerseWidgetProvider"
             android:exported="true"
             android:label="@string/widget_name">
             <intent-filter>
