@@ -1,5 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Smartphone, Sparkles, Copy, Share2, Check, RefreshCw, Sun, Bookmark, ArrowRight, ShieldCheck, Shuffle } from 'lucide-react';
+import {
+  Smartphone,
+  Sparkles,
+  Copy,
+  Share2,
+  Check,
+  RefreshCw,
+  Sun,
+  Bookmark,
+  ArrowRight,
+  ShieldCheck,
+  Shuffle,
+  LayoutGrid,
+  Maximize2,
+  Layers,
+  CheckCircle2,
+  Sliders
+} from 'lucide-react';
 import { getRandomDailyVerse, getRandomDailyVerseSync } from '../data/bibleData';
 import { DailyVerse } from '../types';
 import { ShareService, ShareContent } from '../services/shareService';
@@ -42,8 +59,47 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
 
   const [currentDailyVerse, setCurrentDailyVerse] = useState<DailyVerse>(() => getRandomDailyVerseSync());
   const [widgetPlatform, setWidgetPlatform] = useState<'ios' | 'android'>('ios');
+  const [troubleshootTab, setTroubleshootTab] = useState<'pwa' | 'android' | 'ios'>('pwa');
+  const [selectedWidgetSize, setSelectedWidgetSize] = useState<'all' | 'small' | 'medium'>('all');
+  const [widgetVisualTheme, setWidgetVisualTheme] = useState<'navy' | 'parchment' | 'glass'>('navy');
   const [copied, setCopied] = useState(false);
   const [isLoadingRandom, setIsLoadingRandom] = useState(false);
+
+  const getWidgetThemeStyles = (themeVariant: 'navy' | 'parchment' | 'glass') => {
+    switch (themeVariant) {
+      case 'parchment':
+        return {
+          container: 'bg-gradient-to-br from-[#FAF8F5] via-[#F4F1EA] to-[#EAE6DE] text-[#1B1C19] border-2 border-[#0B2B68]/20 shadow-md',
+          titleColor: 'text-[#0B2B68]',
+          badgeBg: 'bg-[#0B2B68]/10 text-[#0B2B68] border border-[#0B2B68]/20',
+          accentColor: 'text-[#F25C05]',
+          buttonBg: 'bg-[#0B2B68] text-white hover:bg-[#F25C05]',
+          borderDivider: 'border-[#0B2B68]/15',
+          subtext: 'text-[#5C5C66]'
+        };
+      case 'glass':
+        return {
+          container: 'bg-black/65 backdrop-blur-xl text-white border-2 border-white/20 shadow-2xl',
+          titleColor: 'text-[#FED65B]',
+          badgeBg: 'bg-white/15 text-white border border-white/20',
+          accentColor: 'text-[#FED65B]',
+          buttonBg: 'bg-white/20 hover:bg-[#F25C05] text-white border border-white/30',
+          borderDivider: 'border-white/15',
+          subtext: 'text-neutral-300'
+        };
+      case 'navy':
+      default:
+        return {
+          container: 'bg-gradient-to-br from-[#0B2B68] via-[#092252] to-[#04122E] text-white border-2 border-[#FED65B]/30 shadow-xl',
+          titleColor: 'text-white',
+          badgeBg: 'bg-white/10 text-white border border-white/15',
+          accentColor: 'text-[#FED65B]',
+          buttonBg: 'bg-[#F25C05] hover:bg-[#ff6f1e] text-white',
+          borderDivider: 'border-white/10',
+          subtext: 'text-neutral-200/90'
+        };
+    }
+  };
 
   const handleFetchRandomVerse = async () => {
     setIsLoadingRandom(true);
@@ -140,6 +196,327 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
           </button>
         </div>
       </header>
+
+      {/* ========================================================================= */}
+      {/* SECCIÓN: PREVISUALIZACIÓN DE WIDGETS POR TAMAÑO (PEQUEÑO / MEDIANO)      */}
+      {/* ========================================================================= */}
+      <section
+        id="widget-size-preview-section"
+        className={`rounded-3xl p-5 sm:p-7 border shadow-xs transition-all flex flex-col gap-6 ${cardBg}`}
+      >
+        {/* Top Control Bar of the Section */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-5 border-current/10">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="p-1.5 rounded-lg bg-[#0B2B68] text-white">
+                <LayoutGrid className="w-4 h-4 text-[#FED65B]" />
+              </span>
+              <h3 className={`font-serif italic font-bold text-xl sm:text-2xl ${headerTitleColor}`}>
+                Previsualización de Tamaños de Widget
+              </h3>
+            </div>
+            <p className={`font-body-ui text-xs sm:text-sm ${subtextColor} max-w-2xl`}>
+              Compara cómo se adaptará el versículo diario antes de colocarlo en tu pantalla de inicio. Toca cualquier widget para probar la interacción y abrirlo directamente en el lector bíblico.
+            </p>
+          </div>
+
+          {/* Size and Style Selectors */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Size Filter Pills */}
+            <div className={`flex p-1 rounded-xl ${
+              isDark ? 'bg-[#1C2337] border border-white/10' : isSepia ? 'bg-[#FAF0E2] border border-[#705335]/20' : 'bg-[#FAF8F5] border border-[#0B2B68]/15'
+            }`}>
+              <button
+                type="button"
+                onClick={() => setSelectedWidgetSize('all')}
+                className={`px-3 py-1 rounded-lg text-xs font-sans font-bold transition-all cursor-pointer ${
+                  selectedWidgetSize === 'all'
+                    ? 'bg-[#0B2B68] text-white shadow-xs'
+                    : isDark ? 'text-white/70 hover:text-white' : isSepia ? 'text-[#705335] hover:text-[#3B2D1F]' : 'text-[#454652] hover:text-[#0B2B68]'
+                }`}
+              >
+                Ambos Tamaños
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedWidgetSize('small')}
+                className={`px-3 py-1 rounded-lg text-xs font-sans font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                  selectedWidgetSize === 'small'
+                    ? 'bg-[#0B2B68] text-white shadow-xs'
+                    : isDark ? 'text-white/70 hover:text-white' : isSepia ? 'text-[#705335] hover:text-[#3B2D1F]' : 'text-[#454652] hover:text-[#0B2B68]'
+                }`}
+              >
+                <LayoutGrid className="w-3 h-3 text-[#F25C05]" />
+                Pequeño (2×2)
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedWidgetSize('medium')}
+                className={`px-3 py-1 rounded-lg text-xs font-sans font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                  selectedWidgetSize === 'medium'
+                    ? 'bg-[#0B2B68] text-white shadow-xs'
+                    : isDark ? 'text-white/70 hover:text-white' : isSepia ? 'text-[#705335] hover:text-[#3B2D1F]' : 'text-[#454652] hover:text-[#0B2B68]'
+                }`}
+              >
+                <Maximize2 className="w-3 h-3 text-[#00A3E0]" />
+                Mediano (4×2)
+              </button>
+            </div>
+
+            {/* Visual Style Theme Buttons */}
+            <div className={`flex items-center gap-1 p-1 rounded-xl ${
+              isDark ? 'bg-[#1C2337] border border-white/10' : isSepia ? 'bg-[#FAF0E2] border border-[#705335]/20' : 'bg-[#FAF8F5] border border-[#0B2B68]/15'
+            }`}>
+              <button
+                type="button"
+                onClick={() => setWidgetVisualTheme('navy')}
+                className={`px-2.5 py-1 rounded-lg text-xs font-sans font-medium transition-all cursor-pointer ${
+                  widgetVisualTheme === 'navy'
+                    ? 'bg-[#0B2B68] text-[#FED65B] font-bold shadow-xs'
+                    : isDark ? 'text-white/70 hover:text-white' : 'text-[#454652] hover:text-[#0B2B68]'
+                }`}
+                title="Estilo Azul Institucional Santuario"
+              >
+                Santuario
+              </button>
+              <button
+                type="button"
+                onClick={() => setWidgetVisualTheme('parchment')}
+                className={`px-2.5 py-1 rounded-lg text-xs font-sans font-medium transition-all cursor-pointer ${
+                  widgetVisualTheme === 'parchment'
+                    ? 'bg-white text-[#0B2B68] font-bold shadow-xs border border-[#0B2B68]/20'
+                    : isDark ? 'text-white/70 hover:text-white' : 'text-[#454652] hover:text-[#0B2B68]'
+                }`}
+                title="Estilo Pergamino Claro"
+              >
+                Pergamino
+              </button>
+              <button
+                type="button"
+                onClick={() => setWidgetVisualTheme('glass')}
+                className={`px-2.5 py-1 rounded-lg text-xs font-sans font-medium transition-all cursor-pointer ${
+                  widgetVisualTheme === 'glass'
+                    ? 'bg-neutral-800 text-white font-bold shadow-xs'
+                    : isDark ? 'text-white/70 hover:text-white' : 'text-[#454652] hover:text-[#0B2B68]'
+                }`}
+                title="Estilo Vidrio Esmerilado Oscuro"
+              >
+                Vidrio
+              </button>
+            </div>
+
+            {/* Randomize Verse Button */}
+            <button
+              type="button"
+              onClick={handleFetchRandomVerse}
+              disabled={isLoadingRandom}
+              className={`p-2 rounded-xl border transition-all cursor-pointer flex items-center gap-1 text-xs font-sans font-semibold ${
+                isDark
+                  ? 'border-white/15 hover:bg-white/10 text-white'
+                  : isSepia
+                  ? 'border-[#705335]/20 hover:bg-[#FAF0E2] text-[#3B2D1F]'
+                  : 'border-[#0B2B68]/20 hover:bg-[#FAF8F5] text-[#0B2B68]'
+              }`}
+              title="Cambiar versículo de muestra"
+            >
+              <Shuffle className={`w-3.5 h-3.5 text-[#F25C05] ${isLoadingRandom ? 'animate-spin' : ''}`} />
+              <span className="hidden sm:inline">Cambiar versículo</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Dynamic Display Area of Widgets */}
+        <div className="flex flex-col lg:flex-row items-stretch justify-center gap-6 pt-2">
+          {/* ------------------------------------------------------------- */}
+          {/* WIDGET PEQUEÑO (2x2)                                         */}
+          {/* ------------------------------------------------------------- */}
+          {(selectedWidgetSize === 'all' || selectedWidgetSize === 'small') && (
+            <div className={`flex flex-col items-center gap-3.5 transition-all ${
+              selectedWidgetSize === 'small' ? 'w-full max-w-md mx-auto' : 'w-full lg:w-[320px]'
+            }`}>
+              <div className="w-full flex items-center justify-between px-1">
+                <span className="text-xs font-bold font-sans flex items-center gap-1.5 text-[#F25C05]">
+                  <LayoutGrid className="w-4 h-4 text-[#F25C05]" />
+                  Tamaño Pequeño (2×2)
+                </span>
+                <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md border ${
+                  isDark ? 'bg-white/5 border-white/10 text-white/60' : 'bg-black/5 border-black/10 text-[#454652]'
+                }`}>
+                  160 × 160 dp
+                </span>
+              </div>
+
+              {/* Realistic Widget Render Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  onNavigateToScripture(currentDailyVerse.bookId || 'PHP', currentDailyVerse.chapter, currentDailyVerse.verse);
+                  onToast(`Abriendo ${currentDailyVerse.reference} en el Lector...`);
+                }}
+                className={`w-[195px] h-[195px] rounded-[30px] p-4 flex flex-col justify-between text-left transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group select-none ${getWidgetThemeStyles(widgetVisualTheme).container}`}
+                title="Toca para interactuar y abrir en el Lector Bíblico"
+              >
+                {/* Subtle sheen highlight */}
+                <div className="absolute top-0 right-0 w-28 h-28 bg-white/5 rounded-full blur-xl pointer-events-none -mr-8 -mt-8" />
+
+                {/* Card Top */}
+                <div className="flex items-center justify-between relative z-10 w-full">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-white/30 bg-[#0B2B68] flex items-center justify-center shadow-xs">
+                      <img
+                        src="/icon.svg"
+                        alt="Icono"
+                        className="w-full h-full object-contain"
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                    <span className="text-[10px] font-bold tracking-wider uppercase line-clamp-1 opacity-90 font-sans">
+                      El-Shaddai
+                    </span>
+                  </div>
+                  <span className={`text-[10px] font-bold font-mono px-1.5 py-0.5 rounded-md ${getWidgetThemeStyles(widgetVisualTheme).badgeBg}`}>
+                    {currentDailyVerse.reference}
+                  </span>
+                </div>
+
+                {/* Card Center (Scripture Quote) */}
+                <div className="my-auto relative z-10 py-1">
+                  <p className="font-body-reading text-[12px] leading-snug line-clamp-4 italic">
+                    "{currentDailyVerse.text}"
+                  </p>
+                </div>
+
+                {/* Card Bottom */}
+                <div className={`flex items-center justify-between text-[10px] font-bold relative z-10 pt-1.5 border-t ${getWidgetThemeStyles(widgetVisualTheme).borderDivider}`}>
+                  <span className={`truncate max-w-[105px] font-sans ${getWidgetThemeStyles(widgetVisualTheme).accentColor}`}>
+                    {currentDailyVerse.theme}
+                  </span>
+                  <span className="flex items-center gap-0.5 opacity-80 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all text-[9.5px] font-sans font-bold">
+                    <span>Leer</span>
+                    <ArrowRight className="w-2.5 h-2.5" />
+                  </span>
+                </div>
+              </button>
+
+              {/* Explanatory Details */}
+              <div className={`w-full p-3.5 rounded-2xl border text-xs space-y-2 ${innerBoxBg}`}>
+                <div className="flex items-center gap-1.5 font-bold text-neutral-800 dark:text-neutral-200">
+                  <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0" />
+                  <span>Formato Cuadrado Compacto</span>
+                </div>
+                <p className={`text-[11px] leading-relaxed ${subtextColor}`}>
+                  Ocupa 1 espacio (1×1 en iOS / 2×2 en Android). Ideal para ubicarse en la esquina de la pantalla junto a tus aplicaciones más usadas o dentro de una <strong>Pila Inteligente (Smart Stack)</strong> de widgets.
+                </p>
+                <div className="flex items-center justify-between pt-1 border-t border-current/10 text-[10.5px]">
+                  <span className="opacity-70">Incluye: Cita clave + Tema</span>
+                  <span className="font-bold text-[#F25C05]">Táctil &rarr; Lector</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ------------------------------------------------------------- */}
+          {/* WIDGET MEDIANO (4x2)                                         */}
+          {/* ------------------------------------------------------------- */}
+          {(selectedWidgetSize === 'all' || selectedWidgetSize === 'medium') && (
+            <div className={`flex flex-col items-center gap-3.5 transition-all ${
+              selectedWidgetSize === 'medium' ? 'w-full max-w-xl mx-auto' : 'w-full lg:flex-1'
+            }`}>
+              <div className="w-full flex items-center justify-between px-1">
+                <span className="text-xs font-bold font-sans flex items-center gap-1.5 text-[#00A3E0]">
+                  <Maximize2 className="w-4 h-4 text-[#00A3E0]" />
+                  Tamaño Mediano (4×2)
+                </span>
+                <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md border ${
+                  isDark ? 'bg-white/5 border-white/10 text-white/60' : 'bg-black/5 border-black/10 text-[#454652]'
+                }`}>
+                  340 × 160 dp
+                </span>
+              </div>
+
+              {/* Realistic Widget Render Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  onNavigateToScripture(currentDailyVerse.bookId || 'PHP', currentDailyVerse.chapter, currentDailyVerse.verse);
+                  onToast(`Abriendo ${currentDailyVerse.reference} en el Lector...`);
+                }}
+                className={`w-full max-w-[480px] h-[195px] rounded-[30px] p-4 sm:p-5 flex flex-col justify-between text-left transition-all duration-300 transform hover:scale-[1.02] active:scale-98 cursor-pointer relative overflow-hidden group select-none ${getWidgetThemeStyles(widgetVisualTheme).container}`}
+                title="Toca para interactuar y abrir en el Lector Bíblico"
+              >
+                {/* Subtle sheen highlight */}
+                <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full blur-2xl pointer-events-none -mr-12 -mt-12" />
+
+                {/* Card Top */}
+                <div className="flex items-center justify-between relative z-10 w-full gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-white/30 bg-[#0B2B68] flex items-center justify-center p-0.5 shadow-xs">
+                      <img
+                        src="/icon.svg"
+                        alt="Icono"
+                        className="w-full h-full object-contain"
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                    <div>
+                      <span className="text-[11px] font-bold block leading-tight font-sans">
+                        Biblia El-Shaddai
+                      </span>
+                      <span className="text-[9px] uppercase font-bold tracking-widest text-[#F25C05] block font-sans">
+                        Versículo del Día
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <span className={`text-[10.5px] font-bold font-mono px-2 py-0.5 rounded-lg ${getWidgetThemeStyles(widgetVisualTheme).badgeBg}`}>
+                      {currentDailyVerse.reference}
+                    </span>
+                    <span className="text-[9.5px] uppercase tracking-wider font-semibold opacity-60 hidden sm:inline font-sans">
+                      RVR1909
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card Center (Scripture Quote) */}
+                <div className="my-auto relative z-10 py-1">
+                  <p className="font-body-reading text-[13px] sm:text-[14px] leading-snug line-clamp-3 italic">
+                    "{currentDailyVerse.text}"
+                  </p>
+                </div>
+
+                {/* Card Bottom */}
+                <div className={`flex items-center justify-between text-[11px] font-bold relative z-10 pt-2 border-t ${getWidgetThemeStyles(widgetVisualTheme).borderDivider}`}>
+                  <span className={`flex items-center gap-1 text-[11px] font-sans ${getWidgetThemeStyles(widgetVisualTheme).accentColor}`}>
+                    <Sparkles className="w-3 h-3" />
+                    {currentDailyVerse.theme}
+                  </span>
+
+                  <span className={`px-3 py-1 rounded-full text-[10.5px] font-sans font-bold flex items-center gap-1.5 transition-all shadow-xs ${getWidgetThemeStyles(widgetVisualTheme).buttonBg}`}>
+                    <span>Continuar leyendo</span>
+                    <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </div>
+              </button>
+
+              {/* Explanatory Details */}
+              <div className={`w-full max-w-[480px] p-3.5 rounded-2xl border text-xs space-y-2 ${innerBoxBg}`}>
+                <div className="flex items-center gap-1.5 font-bold text-neutral-800 dark:text-neutral-200">
+                  <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0" />
+                  <span>Formato Panorámico Horizontal</span>
+                </div>
+                <p className={`text-[11px] leading-relaxed ${subtextColor}`}>
+                  Ocupa 2 columnas (2×1 en iOS / 4×2 en Android). Perfecto como <strong>banner central en la parte superior</strong> de tu pantalla principal con lectura devocional completa y botón directo para leer todo el capítulo bíblico.
+                </p>
+                <div className="flex items-center justify-between pt-1 border-t border-current/10 text-[10.5px]">
+                  <span className="opacity-70">Incluye: Texto extendido + Traducción + Botón de acción</span>
+                  <span className="font-bold text-[#00A3E0]">Lectura Rápida</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Main Grid: Widget Preview + Daily Devotional Card */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -366,6 +743,92 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
                   <li>Verás el icono de la Biblia listo para usar offline.</li>
                 </ol>
               </div>
+            </div>
+
+            {/* Troubleshooting Tabs for Lockscreen Widget Detection */}
+            <div className={`mt-3 p-3.5 rounded-2xl border ${innerBoxBg} space-y-2.5`}>
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <span className="text-xs font-bold text-[#F25C05] flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-[#F25C05]" />
+                  ¿Por qué no aparece en la Pantalla de Bloqueo?
+                </span>
+                <div className="flex gap-1 p-0.5 bg-black/10 dark:bg-white/10 rounded-lg text-[11px] font-sans">
+                  <button
+                    type="button"
+                    onClick={() => setTroubleshootTab('pwa')}
+                    className={`px-2 py-0.5 rounded-md font-semibold cursor-pointer transition-all ${
+                      troubleshootTab === 'pwa'
+                        ? 'bg-[#0B2B68] text-white shadow-xs'
+                        : 'text-neutral-500 hover:text-neutral-800 dark:hover:text-white'
+                    }`}
+                  >
+                    Web / PWA
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTroubleshootTab('android')}
+                    className={`px-2 py-0.5 rounded-md font-semibold cursor-pointer transition-all ${
+                      troubleshootTab === 'android'
+                        ? 'bg-[#0B2B68] text-white shadow-xs'
+                        : 'text-neutral-500 hover:text-neutral-800 dark:hover:text-white'
+                    }`}
+                  >
+                    Android
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTroubleshootTab('ios')}
+                    className={`px-2 py-0.5 rounded-md font-semibold cursor-pointer transition-all ${
+                      troubleshootTab === 'ios'
+                        ? 'bg-[#0B2B68] text-white shadow-xs'
+                        : 'text-neutral-500 hover:text-neutral-800 dark:hover:text-white'
+                    }`}
+                  >
+                    iPhone (iOS)
+                  </button>
+                </div>
+              </div>
+
+              {troubleshootTab === 'pwa' && (
+                <div className="text-xs space-y-1 text-neutral-600 dark:text-neutral-300">
+                  <p className="font-semibold text-neutral-800 dark:text-neutral-100">
+                    ⚠️ Restricción de Apple y Google para Aplicaciones Web / PWA:
+                  </p>
+                  <p>
+                    Si estás usando la aplicación desde el navegador móvil o la instalaste con <em>"Agregar a Inicio"</em>, <strong>ningún sistema operativo móvil permite a las páginas web añadir widgets a la pantalla de bloqueo ni al menú del sistema</strong>. Solo se permite el icono en la pantalla de inicio.
+                  </p>
+                  <p className="opacity-80">
+                    💡 Para que el widget se integre en el sistema, se debe compilar e instalar la app nativa en Flutter (APK en Android o Xcode en iOS).
+                  </p>
+                </div>
+              )}
+
+              {troubleshootTab === 'android' && (
+                <div className="text-xs space-y-1 text-neutral-600 dark:text-neutral-300">
+                  <p className="font-semibold text-neutral-800 dark:text-neutral-100">
+                    🤖 En teléfonos Android convencionales (Pixel, Motorola, Xiaomi, etc.):
+                  </p>
+                  <p>
+                    Google <strong>eliminó los widgets de terceros en la pantalla de bloqueo</strong> para teléfonos desde Android 5.0. Solo se pueden agregar en la <strong>Pantalla de Inicio</strong> (mantén presionado un espacio libre de tu pantalla de inicio &rarr; <em>Widgets</em> &rarr; <em>Biblia Inteligente</em>).
+                  </p>
+                  <p className="opacity-80">
+                    💡 <strong>En teléfonos Samsung Galaxy:</strong> Puedes habilitar cualquier widget en la pantalla de bloqueo usando la app oficial <em>Samsung Good Lock &rarr; módulo LockStar</em>.
+                  </p>
+                </div>
+              )}
+
+              {troubleshootTab === 'ios' && (
+                <div className="text-xs space-y-1 text-neutral-600 dark:text-neutral-300">
+                  <p className="font-semibold text-neutral-800 dark:text-neutral-100">
+                    📱 En iPhone con iOS 16+ (Compilación Nativa WidgetKit):
+                  </p>
+                  <ol className="list-decimal list-inside space-y-0.5">
+                    <li>En Xcode debe existir el Target <strong>VerseWidgetExtension</strong> con el archivo <code>VerseWidget.swift</code>.</li>
+                    <li>Ambos targets deben tener activado <strong>App Groups</strong> con <code>group.com.tuempresa.bibliainteligente</code>.</li>
+                    <li><strong>Abre la app principal al menos una vez</strong> en tu iPhone antes de personalizar la pantalla de bloqueo para que iOS indexe el widget.</li>
+                  </ol>
+                </div>
+              )}
             </div>
           </div>
 
