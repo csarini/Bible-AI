@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../../core/constants/daily_verses_pool.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
-import '../../../../shared/models/daily_verse_data.dart';
 import '../../../../shared/widgets/coachmark_guide_dialog.dart';
 import '../../../../shared/widgets/feedback_dialog.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
@@ -124,8 +124,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                 'Restaurar Respaldo JSON',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style:
-                    GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 16),
+                style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w800, fontSize: 16),
               ),
             ),
           ],
@@ -422,7 +422,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                   'Personaliza y previsualiza cómo lucirán los widgets del versículo diario de El Shaddai en tu pantalla de inicio antes de añadirlos:',
                   style: GoogleFonts.inter(
                       fontSize: 13,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.75)),
+                      color:
+                          theme.colorScheme.onSurface.withValues(alpha: 0.75)),
                 ),
                 const SizedBox(height: 12),
                 ListTile(
@@ -445,7 +446,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                     'Explora los tamaños pequeño y mediano con el nombre oficial El Shaddai',
                     style: GoogleFonts.inter(
                         fontSize: 12,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.6)),
                   ),
                   trailing: const Icon(LucideIcons.chevronRight, size: 18),
                   onTap: () {

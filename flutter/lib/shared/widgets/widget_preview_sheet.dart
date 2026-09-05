@@ -3,14 +3,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../core/theme/sanctuary_colors.dart';
 import '../../../core/theme/sanctuary_theme.dart';
-import '../../models/daily_verse_data.dart';
+import '../../core/constants/daily_verses_pool.dart';
 
 /// Interactive bottom sheet modal that lets the user preview how the
 /// El Shaddai daily verse widget looks in different sizes (Small 2x2, Medium 4x2)
 /// and color styles (Navy, Pergamino, Glass) before adding it to their device.
 class WidgetPreviewSheet extends StatefulWidget {
   final DailyVerseData dailyVerse;
-  final void Function(String bookId, int chapter, int verse)? onNavigateToScripture;
+  final void Function(String bookId, int chapter, int verse)?
+      onNavigateToScripture;
 
   const WidgetPreviewSheet({
     super.key,
@@ -113,7 +114,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                             'Previsualiza el diseño en tu pantalla antes de agregarlo',
                             style: GoogleFonts.inter(
                               fontSize: 12,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                              color: theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.65),
                             ),
                           ),
                         ],
@@ -127,7 +129,9 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                 ),
               ),
               const SizedBox(height: 10),
-              Divider(height: 1, color: theme.colorScheme.outline.withValues(alpha: 0.15)),
+              Divider(
+                  height: 1,
+                  color: theme.colorScheme.outline.withValues(alpha: 0.15)),
 
               // Scrollable Body
               Expanded(
@@ -143,7 +147,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                           style: GoogleFonts.inter(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.7),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -152,8 +157,10 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                             spacing: 6,
                             children: [
                               _buildSizeFilterChip('all', 'Todos', tokens),
-                              _buildSizeFilterChip('small', 'Pequeño (2×2)', tokens),
-                              _buildSizeFilterChip('medium', 'Mediano (4×2)', tokens),
+                              _buildSizeFilterChip(
+                                  'small', 'Pequeño (2×2)', tokens),
+                              _buildSizeFilterChip(
+                                  'medium', 'Mediano (4×2)', tokens),
                             ],
                           ),
                         ),
@@ -169,7 +176,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                           style: GoogleFonts.inter(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.7),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -191,7 +199,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                     const SizedBox(height: 20),
 
                     // Small Widget Preview
-                    if (_previewWidgetSize == 'all' || _previewWidgetSize == 'small') ...[
+                    if (_previewWidgetSize == 'all' ||
+                        _previewWidgetSize == 'small') ...[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -207,7 +216,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 7, vertical: 2),
                             decoration: BoxDecoration(
-                              color: SanctuaryColors.sunOrange.withValues(alpha: 0.15),
+                              color: SanctuaryColors.sunOrange
+                                  .withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
@@ -235,7 +245,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                         style: GoogleFonts.inter(
                           fontSize: 11,
                           height: 1.4,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.6),
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -243,7 +254,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                     ],
 
                     // Medium Widget Preview
-                    if (_previewWidgetSize == 'all' || _previewWidgetSize == 'medium') ...[
+                    if (_previewWidgetSize == 'all' ||
+                        _previewWidgetSize == 'medium') ...[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -259,7 +271,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 7, vertical: 2),
                             decoration: BoxDecoration(
-                              color: SanctuaryColors.emeraldGreen.withValues(alpha: 0.15),
+                              color: SanctuaryColors.emeraldGreen
+                                  .withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
@@ -281,7 +294,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                         style: GoogleFonts.inter(
                           fontSize: 11,
                           height: 1.4,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.6),
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -295,7 +309,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                         color: SanctuaryColors.amberGold.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: SanctuaryColors.amberGold.withValues(alpha: 0.3),
+                          color:
+                              SanctuaryColors.amberGold.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Column(
@@ -322,7 +337,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                             style: GoogleFonts.inter(
                               fontSize: 11.5,
                               height: 1.45,
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+                              color: theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.8),
                             ),
                           ),
                         ],
@@ -375,8 +391,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
     );
   }
 
-  Widget _buildStyleFilterChip(String styleKey, String label, Color indicatorColor,
-      SanctuaryThemeExtension tokens) {
+  Widget _buildStyleFilterChip(String styleKey, String label,
+      Color indicatorColor, SanctuaryThemeExtension tokens) {
     final isSelected = _previewWidgetTheme == styleKey;
     return GestureDetector(
       onTap: () {
@@ -426,8 +442,7 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
     );
   }
 
-  Widget _buildSmallWidgetPreview(
-      SanctuaryThemeExtension tokens, bool isDark) {
+  Widget _buildSmallWidgetPreview(SanctuaryThemeExtension tokens, bool isDark) {
     Color cardBg;
     Color textColor;
     Color subColor;
@@ -454,7 +469,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
       subColor = SanctuaryColors.cyanSky;
       badgeBg = Colors.white.withValues(alpha: 0.12);
       badgeText = Colors.white;
-      border = Border.all(color: Colors.white.withValues(alpha: 0.18), width: 1.5);
+      border =
+          Border.all(color: Colors.white.withValues(alpha: 0.18), width: 1.5);
     }
 
     return GestureDetector(
@@ -594,7 +610,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
       subColor = SanctuaryColors.cyanSky;
       badgeBg = Colors.white.withValues(alpha: 0.12);
       badgeText = Colors.white;
-      border = Border.all(color: Colors.white.withValues(alpha: 0.18), width: 1.5);
+      border =
+          Border.all(color: Colors.white.withValues(alpha: 0.18), width: 1.5);
     }
 
     return GestureDetector(
@@ -728,7 +745,8 @@ class _WidgetPreviewSheetState extends State<WidgetPreviewSheet> {
                             ),
                           ),
                           const SizedBox(width: 3),
-                          Icon(LucideIcons.arrowRight, size: 12, color: subColor),
+                          Icon(LucideIcons.arrowRight,
+                              size: 12, color: subColor),
                         ],
                       ),
                     ],
