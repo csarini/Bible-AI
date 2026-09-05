@@ -9,6 +9,7 @@ class ElShaddaiColors {
   static const Color waveNavy = Color(0xFF0B2B68); // Primario, Barras de Navegación, Títulos Fuertes
   static const Color sunOrange = Color(0xFFF25C05); // Acento Principal, CTAs, Botones de Acción, Progreso
   static const Color cyanAccent = Color(0xFF00A3E0); // Terciario, Enlaces, Elementos Informativos
+  static const Color cyanSky = Color(0xFF00A3E0); // Alias Cian institucional
   static const Color amberGold = Color(0xFFFED65B); // Iconografía, Medallas de Logros, Resaltados Especiales
   static const Color brandPurple = Color(0xFF4E53A4); // Categorías Secundarias, Etiquetas de Temas
   static const Color emeraldGreen = Color(0xFF10B981); // Éxito, Validaciones, Indicadores Positivos
@@ -84,6 +85,7 @@ class SanctuaryColors {
   static const Color sunOrange = ElShaddaiColors.sunOrange;
   static const Color sunOrangeAccent = Color(0xFFF47B20);
   static const Color cyanAccent = ElShaddaiColors.cyanAccent;
+  static const Color cyanSky = ElShaddaiColors.cyanAccent;
   static const Color electricCyan = ElShaddaiColors.cyanAccent;
   static const Color amberGold = ElShaddaiColors.amberGold;
   static const Color brandPurple = ElShaddaiColors.brandPurple;
