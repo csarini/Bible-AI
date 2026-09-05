@@ -86,8 +86,11 @@ class VerseWidgetProvider : HomeWidgetProvider() {
                 setTextViewText(R.id.widget_verse_reference, reference)
                 setTextViewText(R.id.widget_verse_text, formattedText)
 
-                // 4. Configure deep-link click pending intent to launch Digital Sanctuary
-                val deepLinkUri = Uri.parse(DEEP_LINK_SCHEME)
+                // 4. Configure deep-link click pending intent to launch Digital Sanctuary directly to Reader & highlight verse
+                val bookId = widgetData.getString(KEY_VERSE_BOOK_ID, null) ?: "PSA"
+                val chapter = widgetData.getInt(KEY_VERSE_CHAPTER, 119)
+                val verseNum = widgetData.getInt(KEY_VERSE_NUMBER, 105)
+                val deepLinkUri = Uri.parse("sanctuary://read?book=$bookId&chapter=$chapter&verse=$verseNum")
                 val pendingIntent = HomeWidgetLaunchIntent.getActivity(
                     context,
                     MainActivity::class.java,
@@ -106,6 +109,9 @@ class VerseWidgetProvider : HomeWidgetProvider() {
     companion object {
         const val KEY_VERSE_REFERENCE = "verse_reference"
         const val KEY_VERSE_TEXT = "verse_text"
+        const val KEY_VERSE_BOOK_ID = "verse_book_id"
+        const val KEY_VERSE_CHAPTER = "verse_chapter"
+        const val KEY_VERSE_NUMBER = "verse_number"
         const val LEGACY_KEY_REFERENCE = "votd_reference"
         const val LEGACY_KEY_TEXT = "votd_text"
         const val DEEP_LINK_SCHEME = "sanctuary://verse_of_the_day"

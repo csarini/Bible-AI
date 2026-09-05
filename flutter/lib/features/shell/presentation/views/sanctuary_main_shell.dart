@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
+import '../../../../shared/services/home_widget_service.dart';
 import '../../../../shared/widgets/coachmark_guide_dialog.dart';
 import '../../../../shared/widgets/feedback_dialog.dart';
 import '../../../../shared/widgets/sanctuary_church_logo.dart';
@@ -26,32 +27,78 @@ void openSanctuaryDrawer() {
   sanctuaryScaffoldKey.currentState?.openDrawer();
 }
 
-class SanctuaryMainShell extends ConsumerWidget {
+class SanctuaryMainShell extends ConsumerStatefulWidget {
   final AppDatabase database;
 
   const SanctuaryMainShell({super.key, required this.database});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SanctuaryMainShell> createState() => _SanctuaryMainShellState();
+}
+
+class _SanctuaryMainShellState extends ConsumerState<SanctuaryMainShell> {
+  @override
+  void initState() {
+    super.initState();
+    _initHomeWidgetDeepLinking();
+  }
+
+  void _initHomeWidgetDeepLinking() {
+    // 1. Listen for widget clicks while the application is active or backgrounded
+    HomeWidgetService.initialize(
+      onWidgetClicked: (uri) {
+        _handleWidgetClick(uri);
+      },
+    );
+
+    // 2. Check if the app was cold-launched directly by tapping a Home/Lock Screen widget
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final launchUri = await HomeWidgetService.getInitialWidgetLaunchUri();
+      if (launchUri != null) {
+        _handleWidgetClick(launchUri);
+      }
+    });
+  }
+
+  Future<void> _handleWidgetClick(Uri? uri) async {
+    final coords = await HomeWidgetService.resolveWidgetVerseCoordinates(uri);
+    if (coords != null && mounted) {
+      ref.read(appSelectedBookProvider.notifier).state = coords.bookId;
+      ref.read(appSelectedChapterProvider.notifier).state = coords.chapter;
+      // Force state notification in case the verse was previously set
+      ref.read(appSelectedVerseProvider.notifier).state = null;
+      ref.read(appSelectedVerseProvider.notifier).state = coords.verse;
+      ref.read(selectedTabProvider.notifier).state = 1; // Tab 1 = Lector Bíblico
+    }
+  }
+
+  @override
+  void dispose() {
+    HomeWidgetService.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final currentTab = ref.watch(selectedTabProvider);
     final visualTheme = ref.watch(appVisualThemeModeProvider);
     final bookmarksCountAsync =
-        ref.watch(bookmarksCountStreamProvider(database));
+        ref.watch(bookmarksCountStreamProvider(widget.database));
     final bookmarksCount = bookmarksCountAsync.value ?? 0;
 
     final List<Widget> views = [
       // 0: Home
       SanctuaryHomeView(
-        database: database,
+        database: widget.database,
         onNavigateTab: (index) {
           ref.read(selectedTabProvider.notifier).state = index;
         },
       ),
       // 1: Reader
-      SanctuaryReaderView(database: database),
+      SanctuaryReaderView(database: widget.database),
       // 2: Search & Library (66 Books & direct reference jump)
       SanctuarySearchLibraryView(
-        database: database,
+        database: widget.database,
         onSelectPassage: (bookId, chapter, verse) {
           ref.read(appSelectedBookProvider.notifier).state = bookId;
           ref.read(appSelectedChapterProvider.notifier).state = chapter;
@@ -60,15 +107,15 @@ class SanctuaryMainShell extends ConsumerWidget {
         },
       ),
       // 3: Saved Verses
-      SanctuarySavedVersesView(database: database),
+      SanctuarySavedVersesView(database: widget.database),
       // 4: Biblical Maps
       const SanctuaryMapsView(),
       // 5: Pulpit / Sermons
-      SanctuaryEventsView(database: database),
+      SanctuaryEventsView(database: widget.database),
       // 6: AI Theological Mentor
       const SanctuaryAiMentorView(),
       // 7: Settings
-      SanctuarySettingsView(database: database),
+      SanctuarySettingsView(database: widget.database),
     ];
 
     // Bottom Navigation Bar mapping for primary destinations:

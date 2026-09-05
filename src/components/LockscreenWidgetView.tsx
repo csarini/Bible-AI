@@ -198,7 +198,15 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
                 </div>
 
                 {/* iOS Lock Screen Verse Widget */}
-                <div className="mt-5 mx-1 p-3.5 bg-black/40 backdrop-blur-md rounded-2xl border border-white/20 text-left shadow-lg">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onNavigateToScripture(currentDailyVerse.bookId, currentDailyVerse.chapter, currentDailyVerse.verse);
+                    onToast(`Abriendo ${currentDailyVerse.reference} en el Lector Bíblico...`);
+                  }}
+                  className="mt-5 mx-1 p-3.5 bg-black/40 hover:bg-black/55 backdrop-blur-md rounded-2xl border border-white/20 hover:border-[#FED65B] text-left shadow-lg cursor-pointer transition-all transform hover:scale-[1.02] active:scale-[0.98] group relative w-full block"
+                  title="Toca para continuar leyendo en el Lector Bíblico"
+                >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[10px] uppercase font-bold tracking-widest text-[#F25C05] flex items-center gap-1">
                       <Sparkles className="w-3 h-3 text-[#F25C05]" />
@@ -211,7 +219,11 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
                   <p className="font-body-reading text-[12px] leading-snug line-clamp-2 italic opacity-95 text-neutral-100">
                     "{currentDailyVerse.text}"
                   </p>
-                </div>
+                  <div className="mt-2 flex items-center justify-end gap-1 text-[10px] font-sans font-bold text-[#FED65B] opacity-90 group-hover:opacity-100">
+                    <span>Continuar leyendo</span>
+                    <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                  </div>
+                </button>
               </div>
 
               {/* iOS Bottom Dock */}
@@ -265,7 +277,15 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
                 </div>
 
                 {/* Android Material Widget */}
-                <div className="p-3.5 bg-white border-2 border-[#F25C05]/40 rounded-3xl shadow-md relative">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onNavigateToScripture(currentDailyVerse.bookId, currentDailyVerse.chapter, currentDailyVerse.verse);
+                    onToast(`Abriendo ${currentDailyVerse.reference} en el Lector Bíblico...`);
+                  }}
+                  className="w-full text-left p-3.5 bg-white border-2 border-[#F25C05]/40 hover:border-[#F25C05] rounded-3xl shadow-md hover:shadow-lg relative cursor-pointer transition-all transform hover:scale-[1.02] active:scale-[0.98] group block"
+                  title="Toca para continuar leyendo en el Lector Bíblico"
+                >
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center gap-1.5">
                       <div className="w-5 h-5 rounded-full overflow-hidden">
@@ -284,9 +304,12 @@ export const LockscreenWidgetView: React.FC<LockscreenWidgetViewProps> = ({
 
                   <div className="flex justify-between items-center text-[10px] text-[#F25C05] font-bold pt-1 border-t border-[#FAF8F5]">
                     <span>{currentDailyVerse.theme}</span>
-                    <span className="text-xs">🕊️</span>
+                    <span className="flex items-center gap-1 text-[#0B2B68] group-hover:text-[#F25C05] transition-colors">
+                      <span>Continuar leyendo</span>
+                      <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                    </span>
                   </div>
-                </div>
+                </button>
               </div>
 
               {/* Android Navigation bar pill */}

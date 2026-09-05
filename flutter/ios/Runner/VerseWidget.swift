@@ -20,12 +20,18 @@ struct VerseWidgetConfig {
     static let appGroupId = "group.com.tuempresa.bibliainteligente"
     static let keyVerseReference = "verse_reference"
     static let keyVerseText = "verse_text"
+    static let keyVerseBookId = "verse_book_id"
+    static let keyVerseChapter = "verse_chapter"
+    static let keyVerseNumber = "verse_number"
     static let legacyKeyReference = "votd_reference"
     static let legacyKeyText = "votd_text"
     static let deepLinkUrl = "sanctuary://verse_of_the_day"
 
     static let defaultReference = "Salmos 119:105"
     static let defaultVerseText = "Lámpara es a mis pies tu palabra, y lumbrera a mi camino."
+    static let defaultBookId = "PSA"
+    static let defaultChapter = 119
+    static let defaultVerseNumber = 105
 }
 
 // MARK: - Timeline Entry
@@ -33,12 +39,23 @@ struct VerseEntry: TimelineEntry {
     let date: Date
     let reference: String
     let verseText: String
+    let bookId: String
+    let chapter: Int
+    let verseNumber: Int
+
+    var deepLinkUrl: URL {
+        URL(string: "sanctuary://read?book=\(bookId)&chapter=\(chapter)&verse=\(verseNumber)")
+            ?? URL(string: VerseWidgetConfig.deepLinkUrl)!
+    }
 
     static var placeholder: VerseEntry {
         VerseEntry(
             date: Date(),
             reference: VerseWidgetConfig.defaultReference,
-            verseText: VerseWidgetConfig.defaultVerseText
+            verseText: VerseWidgetConfig.defaultVerseText,
+            bookId: VerseWidgetConfig.defaultBookId,
+            chapter: VerseWidgetConfig.defaultChapter,
+            verseNumber: VerseWidgetConfig.defaultVerseNumber
         )
     }
 }
@@ -79,10 +96,22 @@ struct VerseTimelineProvider: TimelineProvider {
             ?? userDefaults.string(forKey: VerseWidgetConfig.legacyKeyText)
             ?? VerseWidgetConfig.defaultVerseText
 
+        let bookId = userDefaults.string(forKey: VerseWidgetConfig.keyVerseBookId)
+            ?? VerseWidgetConfig.defaultBookId
+
+        let rawChapter = userDefaults.integer(forKey: VerseWidgetConfig.keyVerseChapter)
+        let chapter = rawChapter > 0 ? rawChapter : VerseWidgetConfig.defaultChapter
+
+        let rawVerse = userDefaults.integer(forKey: VerseWidgetConfig.keyVerseNumber)
+        let verseNumber = rawVerse > 0 ? rawVerse : VerseWidgetConfig.defaultVerseNumber
+
         return VerseEntry(
             date: Date(),
             reference: reference,
-            verseText: text
+            verseText: text,
+            bookId: bookId,
+            chapter: chapter,
+            verseNumber: verseNumber
         )
     }
 }
@@ -257,7 +286,7 @@ struct VerseWidgetEntryView: View {
                 VerseSystemSmallView(entry: entry)
             }
         }
-        .widgetURL(URL(string: VerseWidgetConfig.deepLinkUrl))
+        .widgetURL(entry.deepLinkUrl)
     }
 }
 

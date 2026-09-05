@@ -60,6 +60,9 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
     HomeWidgetService.updateVerseOfTheDay(
       reference: _currentVerse.reference,
       verseText: _currentVerse.text,
+      bookId: _currentVerse.bookId,
+      chapter: _currentVerse.chapter,
+      verse: _currentVerse.verse,
     );
   }
 
