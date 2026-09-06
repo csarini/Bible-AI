@@ -3,7 +3,7 @@
     <string name="app_name">Biblia Inteligente</string>
     <string name="widget_name">El Shaddai - Versículo del Día</string>
     <string name="widget_description">Muestra el versículo bíblico diario de El Shaddai en la pantalla de inicio.</string>
-    <string name="widget_badge_title">EL SHADDAI</string>
+    <string name="widget_badge_title">EL SHADDAI - VERSÍCULO DEL DÍA</string>
     <string name="widget_sanctuary_brand">EL SHADDAI</string>
     <string name="widget_default_reference">Salmos 119:105</string>
     <string name="widget_default_text">Lámpara es a mis pies tu palabra, y lumbrera a mi camino.</string>
