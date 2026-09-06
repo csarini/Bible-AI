@@ -981,8 +981,7 @@ class _SanctuarySearchLibraryViewState
     );
   }
 
-  Widget _buildKeywordResultsSliver(
-      ThemeData theme, String activeTranslation) {
+  Widget _buildKeywordResultsSliver(ThemeData theme, String activeTranslation) {
     final translationLabel = _getTranslationLabel(activeTranslation);
     final headerTitle =
         'RESULTADOS EN ${translationLabel.toUpperCase()} (${activeTranslation.toUpperCase()})';
@@ -1005,7 +1004,8 @@ class _SanctuarySearchLibraryViewState
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.8,
                       color: theme.brightness == Brightness.dark
-                          ? SanctuaryColors.darkOnSurface.withValues(alpha: 0.75)
+                          ? SanctuaryColors.darkOnSurface
+                              .withValues(alpha: 0.75)
                           : SanctuaryColors.waveNavy,
                     ),
                   ),
@@ -1022,16 +1022,15 @@ class _SanctuarySearchLibraryViewState
                   )
                 else if (_keywordResults.isNotEmpty)
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 7, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                     decoration: BoxDecoration(
                       color: theme.brightness == Brightness.dark
                           ? SanctuaryColors.darkSurfaceElevated
                           : SanctuaryColors.amberGold.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color:
-                            SanctuaryColors.amberGold.withValues(alpha: 0.5),
+                        color: SanctuaryColors.amberGold.withValues(alpha: 0.5),
                         width: 0.8,
                       ),
                     ),
@@ -1090,8 +1089,7 @@ class _SanctuarySearchLibraryViewState
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.inter(
                     fontSize: 12,
-                    color:
-                        theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               )

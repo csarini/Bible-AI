@@ -7,7 +7,6 @@ import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
-import '../../../reader/presentation/state/reader_state_notifier.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 import '../../data/ai_mentor_service.dart';
 
@@ -168,8 +167,8 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final AppDatabase effectiveDb = widget.database ??
-        ref.watch(appSettingsControllerProvider).database;
+    final AppDatabase effectiveDb =
+        widget.database ?? ref.watch(appSettingsControllerProvider).database;
 
     // Active scripture coordinates from Riverpod
     final currentBookId = ref.watch(appSelectedBookProvider);
