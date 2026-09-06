@@ -113,7 +113,7 @@ class _SanctuaryMainShellState extends ConsumerState<SanctuaryMainShell> {
       // 5: Pulpit / Sermons
       SanctuaryEventsView(database: widget.database),
       // 6: AI Theological Mentor
-      const SanctuaryAiMentorView(),
+      SanctuaryAiMentorView(database: widget.database),
       // 7: Settings
       SanctuarySettingsView(database: widget.database),
     ];

@@ -16,6 +16,7 @@ dependencies:
 
   # Networking & HTTP
   http: ^1.2.1
+  google_generative_ai: ^0.4.6
 
   # Local Persistence (Drift / SQLite)
   drift: ^2.16.0

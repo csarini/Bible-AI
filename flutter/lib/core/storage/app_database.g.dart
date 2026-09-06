@@ -4067,6 +4067,306 @@ class UserPreferencesCompanion extends UpdateCompanion<UserPreferenceEntry> {
   }
 }
 
+class $AiChatMessagesTable extends AiChatMessages
+    with TableInfo<$AiChatMessagesTable, AiChatMessageEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AiChatMessagesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _verseReferenceMeta =
+      const VerificationMeta('verseReference');
+  @override
+  late final GeneratedColumn<String> verseReference = GeneratedColumn<String>(
+      'verse_reference', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _senderMeta = const VerificationMeta('sender');
+  @override
+  late final GeneratedColumn<String> sender = GeneratedColumn<String>(
+      'sender', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _messageTextMeta =
+      const VerificationMeta('messageText');
+  @override
+  late final GeneratedColumn<String> messageText = GeneratedColumn<String>(
+      'message_text', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, verseReference, sender, messageText, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'ai_chat_messages';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<AiChatMessageEntry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('verse_reference')) {
+      context.handle(
+          _verseReferenceMeta,
+          verseReference.isAcceptableOrUnknown(
+              data['verse_reference']!, _verseReferenceMeta));
+    }
+    if (data.containsKey('sender')) {
+      context.handle(_senderMeta,
+          sender.isAcceptableOrUnknown(data['sender']!, _senderMeta));
+    } else if (isInserting) {
+      context.missing(_senderMeta);
+    }
+    if (data.containsKey('message_text')) {
+      context.handle(
+          _messageTextMeta,
+          messageText.isAcceptableOrUnknown(
+              data['message_text']!, _messageTextMeta));
+    } else if (isInserting) {
+      context.missing(_messageTextMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AiChatMessageEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AiChatMessageEntry(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      verseReference: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}verse_reference']),
+      sender: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}sender'])!,
+      messageText: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}message_text'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $AiChatMessagesTable createAlias(String alias) {
+    return $AiChatMessagesTable(attachedDatabase, alias);
+  }
+}
+
+class AiChatMessageEntry extends DataClass
+    implements Insertable<AiChatMessageEntry> {
+  final int id;
+  final String? verseReference;
+  final String sender;
+  final String messageText;
+  final DateTime createdAt;
+  const AiChatMessageEntry({
+    required this.id,
+    this.verseReference,
+    required this.sender,
+    required this.messageText,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || verseReference != null) {
+      map['verse_reference'] = Variable<String>(verseReference);
+    }
+    map['sender'] = Variable<String>(sender);
+    map['message_text'] = Variable<String>(messageText);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  AiChatMessagesCompanion toCompanion(bool nullToAbsent) {
+    return AiChatMessagesCompanion(
+      id: Value(id),
+      verseReference: verseReference == null && nullToAbsent
+          ? const Value.absent()
+          : Value(verseReference),
+      sender: Value(sender),
+      messageText: Value(messageText),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory AiChatMessageEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AiChatMessageEntry(
+      id: serializer.fromJson<int>(json['id']),
+      verseReference: serializer.fromJson<String?>(json['verseReference']),
+      sender: serializer.fromJson<String>(json['sender']),
+      messageText: serializer.fromJson<String>(json['messageText']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'verseReference': serializer.toJson<String?>(verseReference),
+      'sender': serializer.toJson<String>(sender),
+      'messageText': serializer.toJson<String>(messageText),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  AiChatMessageEntry copyWith({
+    int? id,
+    Value<String?> verseReference = const Value.absent(),
+    String? sender,
+    String? messageText,
+    DateTime? createdAt,
+  }) =>
+      AiChatMessageEntry(
+        id: id ?? this.id,
+        verseReference: verseReference.present
+            ? verseReference.value
+            : this.verseReference,
+        sender: sender ?? this.sender,
+        messageText: messageText ?? this.messageText,
+        createdAt: createdAt ?? this.createdAt,
+      );
+
+  @override
+  String toString() {
+    return (StringBuffer('AiChatMessageEntry(')
+          ..write('id: $id, ')
+          ..write('verseReference: $verseReference, ')
+          ..write('sender: $sender, ')
+          ..write('messageText: $messageText, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, verseReference, sender, messageText, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AiChatMessageEntry &&
+          other.id == this.id &&
+          other.verseReference == this.verseReference &&
+          other.sender == this.sender &&
+          other.messageText == this.messageText &&
+          other.createdAt == this.createdAt);
+}
+
+class AiChatMessagesCompanion extends UpdateCompanion<AiChatMessageEntry> {
+  final Value<int> id;
+  final Value<String?> verseReference;
+  final Value<String> sender;
+  final Value<String> messageText;
+  final Value<DateTime> createdAt;
+  const AiChatMessagesCompanion({
+    this.id = const Value.absent(),
+    this.verseReference = const Value.absent(),
+    this.sender = const Value.absent(),
+    this.messageText = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  AiChatMessagesCompanion.insert({
+    this.id = const Value.absent(),
+    this.verseReference = const Value.absent(),
+    required String sender,
+    required String messageText,
+    this.createdAt = const Value.absent(),
+  })  : sender = Value(sender),
+        messageText = Value(messageText);
+  static Insertable<AiChatMessageEntry> custom({
+    Expression<int>? id,
+    Expression<String>? verseReference,
+    Expression<String>? sender,
+    Expression<String>? messageText,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (verseReference != null) 'verse_reference': verseReference,
+      if (sender != null) 'sender': sender,
+      if (messageText != null) 'message_text': messageText,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  AiChatMessagesCompanion copyWith(
+      {Value<int>? id,
+      Value<String?>? verseReference,
+      Value<String>? sender,
+      Value<String>? messageText,
+      Value<DateTime>? createdAt}) {
+    return AiChatMessagesCompanion(
+      id: id ?? this.id,
+      verseReference: verseReference ?? this.verseReference,
+      sender: sender ?? this.sender,
+      messageText: messageText ?? this.messageText,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (verseReference.present) {
+      map['verse_reference'] = Variable<String>(verseReference.value);
+    }
+    if (sender.present) {
+      map['sender'] = Variable<String>(sender.value);
+    }
+    if (messageText.present) {
+      map['message_text'] = Variable<String>(messageText.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AiChatMessagesCompanion(')
+          ..write('id: $id, ')
+          ..write('verseReference: $verseReference, ')
+          ..write('sender: $sender, ')
+          ..write('messageText: $messageText, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -4084,6 +4384,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $LocalUsersTable localUsers = $LocalUsersTable(this);
   late final $UserPreferencesTable userPreferences =
       $UserPreferencesTable(this);
+  late final $AiChatMessagesTable aiChatMessages =
+      $AiChatMessagesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4097,7 +4399,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         localBibleTranslations,
         localBibleChapters,
         localUsers,
-        userPreferences
+        userPreferences,
+        aiChatMessages
       ];
 }
 

@@ -101,6 +101,18 @@ class _SanctuarySearchLibraryViewState
     return normalizeSearchText(input);
   }
 
+  String _getTranslationLabel(String translationKey) {
+    switch (translationKey) {
+      case 'sse':
+        return 'Biblia del Oso 1569';
+      case 'rv1858':
+        return 'Reina Valera NT 1858';
+      case 'valera':
+      default:
+        return 'Reina Valera 1909';
+    }
+  }
+
   void _handleSearchChanged(String value) {
     _searchDebounce?.cancel();
     final generation = ++_searchGeneration;
@@ -135,7 +147,11 @@ class _SanctuarySearchLibraryViewState
         }
         return;
       }
-      final results = await database.searchVersesByKeyword(normalized);
+      final activeTranslation = ref.read(appTranslationProvider);
+      final results = await database.searchVersesByKeywordAndTranslation(
+        keyword: normalized,
+        activeTranslation: activeTranslation,
+      );
       if (!mounted || generation != _searchGeneration) return;
       setState(() {
         _keywordResults = results;
@@ -498,6 +514,13 @@ class _SanctuarySearchLibraryViewState
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final tokens = context.sanctuaryTokens;
+    final activeTranslation = ref.watch(appTranslationProvider);
+    ref.listen<String>(appTranslationProvider, (previous, next) {
+      if (previous != next && _searchController.text.trim().length >= 2) {
+        _handleSearchChanged(_searchController.text);
+      }
+    });
+
     final rawQuery = _searchController.text.trim();
     final normQuery = _normalize(rawQuery);
 
@@ -800,8 +823,9 @@ class _SanctuarySearchLibraryViewState
             ),
           ),
 
-          if (rawQuery.length >= 2 && _keywordResults.isNotEmpty)
-            _buildKeywordResultsSliver(theme),
+          if (rawQuery.length >= 2 &&
+              (_keywordResults.isNotEmpty || _isSearchingVerses))
+            _buildKeywordResultsSliver(theme, activeTranslation),
 
           if (rawQuery.isNotEmpty && filteredBooks.isNotEmpty)
             _buildBookChipsSliver(filteredBooks, theme),
@@ -957,7 +981,12 @@ class _SanctuarySearchLibraryViewState
     );
   }
 
-  Widget _buildKeywordResultsSliver(ThemeData theme) {
+  Widget _buildKeywordResultsSliver(
+      ThemeData theme, String activeTranslation) {
+    final translationLabel = _getTranslationLabel(activeTranslation);
+    final headerTitle =
+        'RESULTADOS EN ${translationLabel.toUpperCase()} (${activeTranslation.toUpperCase()})';
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
@@ -968,84 +997,234 @@ class _SanctuarySearchLibraryViewState
               children: [
                 Expanded(
                   child: Text(
-                    'VERSÍCULOS RELACIONADOS',
+                    headerTitle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.inter(
                       fontSize: 10.5,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.8,
-                      color:
-                          theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                      color: theme.brightness == Brightness.dark
+                          ? SanctuaryColors.darkOnSurface.withValues(alpha: 0.75)
+                          : SanctuaryColors.waveNavy,
                     ),
                   ),
                 ),
+                const SizedBox(width: 8),
                 if (_isSearchingVerses)
                   const SizedBox(
                     width: 14,
                     height: 14,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: SanctuaryColors.sunOrange,
+                    ),
+                  )
+                else if (_keywordResults.isNotEmpty)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 7, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: theme.brightness == Brightness.dark
+                          ? SanctuaryColors.darkSurfaceElevated
+                          : SanctuaryColors.amberGold.withValues(alpha: 0.18),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color:
+                            SanctuaryColors.amberGold.withValues(alpha: 0.5),
+                        width: 0.8,
+                      ),
+                    ),
+                    child: Text(
+                      '${_keywordResults.length}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.inter(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w800,
+                        color: theme.brightness == Brightness.dark
+                            ? SanctuaryColors.amberGold
+                            : SanctuaryColors.waveNavy,
+                      ),
+                    ),
                   ),
               ],
             ),
             const SizedBox(height: 8),
-            ..._keywordResults.map(
-              (result) => Card(
-                margin: const EdgeInsets.only(bottom: 8),
-                child: InkWell(
-                  onTap: () => _selectPassage(
-                    result.bookId,
-                    result.chapter,
-                    result.verse,
+            if (_isSearchingVerses && _keywordResults.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: SanctuaryColors.sunOrange,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'Buscando pasajes en $translationLabel...',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic,
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.65),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else if (_keywordResults.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  'No se encontraron versículos en $translationLabel.',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    color:
+                        theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
-                  borderRadius: BorderRadius.circular(12),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(
-                          LucideIcons.bookOpen,
-                          size: 18,
-                          color: SanctuaryColors.sunOrange,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${result.bookName} ${result.chapter}:${result.verse}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.inter(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800,
-                                  color: SanctuaryColors.waveNavy,
-                                ),
+                ),
+              )
+            else
+              ..._keywordResults.map(
+                (result) => Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  decoration: BoxDecoration(
+                    color: theme.brightness == Brightness.dark
+                        ? SanctuaryColors.darkSurfaceElevated
+                        : SanctuaryColors.lightSurface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: theme.brightness == Brightness.dark
+                          ? SanctuaryColors.darkBorder
+                          : SanctuaryColors.lightBorder,
+                      width: 1,
+                    ),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => _selectPassage(
+                        result.bookId,
+                        result.chapter,
+                        result.verse,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: SanctuaryColors.amberGold
+                                    .withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              const SizedBox(height: 4),
-                              Text.rich(
-                                _highlightVerseText(
-                                  result.text,
-                                  _searchController.text,
-                                  theme,
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.lora(fontSize: 13),
+                              child: const Icon(
+                                LucideIcons.bookOpen,
+                                size: 16,
+                                color: SanctuaryColors.waveNavy,
                               ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          '${result.bookName} ${result.chapter}:${result.verse}',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.inter(
+                                            fontSize: 12.5,
+                                            fontWeight: FontWeight.w800,
+                                            color: theme.brightness ==
+                                                    Brightness.dark
+                                                ? SanctuaryColors.amberGold
+                                                : SanctuaryColors.waveNavy,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 6, vertical: 2),
+                                        decoration: BoxDecoration(
+                                          color: theme.brightness ==
+                                                  Brightness.dark
+                                              ? SanctuaryColors.darkSurface
+                                              : SanctuaryColors.parchmentPaper,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          border: Border.all(
+                                            color: SanctuaryColors.amberGold
+                                                .withValues(alpha: 0.5),
+                                            width: 0.8,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          activeTranslation.toUpperCase(),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.inter(
+                                            fontSize: 9.5,
+                                            fontWeight: FontWeight.w700,
+                                            color: theme.brightness ==
+                                                    Brightness.dark
+                                                ? SanctuaryColors.darkOnSurface
+                                                : SanctuaryColors.waveNavy,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text.rich(
+                                    _highlightVerseText(
+                                      result.text,
+                                      _searchController.text,
+                                      theme,
+                                    ),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.lora(
+                                      fontSize: 13,
+                                      height: 1.4,
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Icon(
+                              LucideIcons.chevronRight,
+                              size: 16,
+                              color: theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.4),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 6),
-                        const Icon(LucideIcons.chevronRight, size: 16),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

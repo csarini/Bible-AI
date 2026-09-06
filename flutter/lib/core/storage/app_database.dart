@@ -194,6 +194,17 @@ class UserPreferences extends Table {
   Set<Column> get primaryKey => {userId, key};
 }
 
+@DataClassName('AiChatMessageEntry')
+class AiChatMessages extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get verseReference =>
+      text().nullable().named('verse_reference')();
+  TextColumn get sender => text()(); // 'user' | 'mentor'
+  TextColumn get messageText => text().named('message_text')();
+  DateTimeColumn get createdAt =>
+      dateTime().withDefault(currentDateAndTime).named('created_at')();
+}
+
 // =============================================================================
 // DRIFT DATABASE & CRUD OPERATIONS
 // =============================================================================
@@ -208,12 +219,13 @@ class UserPreferences extends Table {
   LocalBibleChapters,
   LocalUsers,
   UserPreferences,
+  AiChatMessages,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -248,6 +260,11 @@ class AppDatabase extends _$AppDatabase {
               ),
             ]);
           });
+          // Translation & chapter performance indexes
+          await customStatement(
+              'CREATE INDEX IF NOT EXISTS idx_chapters_translation ON local_bible_chapters (translation_key);');
+          await customStatement(
+              'CREATE INDEX IF NOT EXISTS idx_chapters_trans_book ON local_bible_chapters (translation_key, book_number);');
         },
         onUpgrade: (Migrator m, int from, int to) async {
           if (from < 2) {
@@ -257,6 +274,17 @@ class AppDatabase extends _$AppDatabase {
           if (from < 3) {
             await m.addColumn(userEvents, userEvents.isSynced);
             await m.addColumn(foodCourtMenus, foodCourtMenus.isSynced);
+          }
+          if (from < 4) {
+            // Safe index creation without altering tables or dropping data
+            await customStatement(
+                'CREATE INDEX IF NOT EXISTS idx_chapters_translation ON local_bible_chapters (translation_key);');
+            await customStatement(
+                'CREATE INDEX IF NOT EXISTS idx_chapters_trans_book ON local_bible_chapters (translation_key, book_number);');
+          }
+          if (from < 5) {
+            // Create AI chat messages table while safely preserving all existing user records
+            await m.createTable(aiChatMessages);
           }
         },
         beforeOpen: (details) async {
@@ -466,10 +494,13 @@ class AppDatabase extends _$AppDatabase {
         .getSingleOrNull();
   }
 
-  /// Searches verse JSON locally and applies accent-insensitive matching after
-  /// SQLite narrows the candidate chapters with LIKE.
-  Future<List<BibleVerseSearchResult>> searchVersesByKeyword(
-    String keyword, {
+  /// Searches verse entries strictly scoped to the active translation ([activeTranslation]).
+  /// Uses SQLite query condition:
+  /// `chapter.versesJson.lower().like('%$escaped%') & chapter.translationKey.equals(activeTranslation)`
+  /// followed by accent-insensitive normalization to return exact matches.
+  Future<List<BibleVerseSearchResult>> searchVersesByKeywordAndTranslation({
+    required String keyword,
+    required String activeTranslation,
     int limit = 50,
   }) async {
     final normalizedKeyword = normalizeSearchText(keyword);
@@ -477,11 +508,77 @@ class AppDatabase extends _$AppDatabase {
 
     final escaped =
         normalizedKeyword.replaceAll('%', r'\%').replaceAll('_', r'\_');
+
+    // SQLite condition: strictly filter candidate chapters by translation and keyword pattern
+    final candidates = await (select(localBibleChapters)
+          ..where((chapter) =>
+              chapter.translationKey.equals(activeTranslation) &
+              chapter.versesJson.lower().like('%$escaped%'))
+          ..orderBy(
+              [(chapter) => OrderingTerm(expression: chapter.bookNumber)]))
+        .get();
+
+    final chapters = candidates.isNotEmpty
+        ? candidates
+        : await (select(localBibleChapters)
+              ..where((chapter) =>
+                  chapter.translationKey.equals(activeTranslation))
+              ..orderBy(
+                  [(chapter) => OrderingTerm(expression: chapter.bookNumber)]))
+            .get();
+
+    final results = <BibleVerseSearchResult>[];
+    for (final chapter in chapters) {
+      if (chapter.translationKey != activeTranslation) continue;
+      final decoded = jsonDecode(chapter.versesJson);
+      if (decoded is! List) continue;
+      for (final rawVerse in decoded) {
+        if (rawVerse is! Map) continue;
+        final text = rawVerse['text']?.toString().trim() ?? '';
+        if (!normalizeSearchText(text).contains(normalizedKeyword)) continue;
+        results.add(
+          BibleVerseSearchResult(
+            bookId: chapter.bookCode,
+            bookName: chapter.bookName,
+            translationKey: chapter.translationKey,
+            chapter: chapter.chapter,
+            verse: int.tryParse(rawVerse['verse']?.toString() ?? '') ?? 0,
+            text: text,
+          ),
+        );
+        if (results.length >= limit) return results;
+      }
+    }
+    return results;
+  }
+
+  /// Searches verse JSON locally. If [translationKey] is provided, it delegates
+  /// to [searchVersesByKeywordAndTranslation] for strict single-translation scoping.
+  Future<List<BibleVerseSearchResult>> searchVersesByKeyword(
+    String keyword, {
+    String? translationKey,
+    int limit = 50,
+  }) async {
+    if (translationKey != null && translationKey.isNotEmpty) {
+      return searchVersesByKeywordAndTranslation(
+        keyword: keyword,
+        activeTranslation: translationKey,
+        limit: limit,
+      );
+    }
+
+    final normalizedKeyword = normalizeSearchText(keyword);
+    if (normalizedKeyword.length < 2 || limit <= 0) return const [];
+
+    final escaped =
+        normalizedKeyword.replaceAll('%', r'\%').replaceAll('_', r'\_');
+
     final candidates = await (select(localBibleChapters)
           ..where((chapter) => chapter.versesJson.lower().like('%$escaped%'))
           ..orderBy(
               [(chapter) => OrderingTerm(expression: chapter.bookNumber)]))
         .get();
+
     final chapters = candidates.isNotEmpty
         ? candidates
         : await (select(localBibleChapters)
@@ -853,6 +950,58 @@ class AppDatabase extends _$AppDatabase {
     } catch (e) {
       return {};
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // AI CHAT MESSAGES PERSISTENCE & REACTIVE STREAMS
+  // ---------------------------------------------------------------------------
+
+  /// Watches stored AI Mentor chat messages in chronological order.
+  /// If [verseReference] is provided, it filters messages for that specific passage.
+  Stream<List<AiChatMessageEntry>> watchChatMessages({String? verseReference}) {
+    final query = select(aiChatMessages);
+    if (verseReference != null && verseReference.trim().isNotEmpty) {
+      query.where((tbl) => tbl.verseReference.equals(verseReference.trim()));
+    }
+    query.orderBy([(tbl) => OrderingTerm.asc(tbl.createdAt)]);
+    return query.watch();
+  }
+
+  /// Retrieves stored AI Mentor chat messages once in chronological order.
+  Future<List<AiChatMessageEntry>> getChatMessages({String? verseReference}) {
+    final query = select(aiChatMessages);
+    if (verseReference != null && verseReference.trim().isNotEmpty) {
+      query.where((tbl) => tbl.verseReference.equals(verseReference.trim()));
+    }
+    query.orderBy([(tbl) => OrderingTerm.asc(tbl.createdAt)]);
+    return query.get();
+  }
+
+  /// Inserts a chat message from either 'user' or 'mentor' with optional verse context.
+  Future<int> insertChatMessage({
+    String? verseReference,
+    required String sender,
+    required String messageText,
+  }) {
+    return into(aiChatMessages).insert(
+      AiChatMessagesCompanion.insert(
+        verseReference: verseReference != null && verseReference.trim().isNotEmpty
+            ? Value(verseReference.trim())
+            : const Value.absent(),
+        sender: sender,
+        messageText: messageText,
+      ),
+    );
+  }
+
+  /// Clears stored chat messages, optionally scoped to a [verseReference].
+  Future<int> clearChatMessages({String? verseReference}) {
+    if (verseReference != null && verseReference.trim().isNotEmpty) {
+      return (delete(aiChatMessages)
+            ..where((tbl) => tbl.verseReference.equals(verseReference.trim())))
+          .go();
+    }
+    return delete(aiChatMessages).go();
   }
 }
 

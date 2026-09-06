@@ -44,4 +44,57 @@ void main() {
     expect(results.single.chapter, 3);
     expect(results.single.verse, 16);
   });
+
+  test('filtra versículos estrictamente por traducción activa', () async {
+    final database = AppDatabase(NativeDatabase.memory());
+    addTearDown(database.close);
+
+    await database.saveChapter(
+      translationKey: 'valera',
+      bookNumber: 43,
+      bookCode: 'JHN',
+      bookName: 'Juan',
+      chapter: 3,
+      versesJson: jsonEncode([
+        {'verse': 16, 'text': 'Porque de tal manera amó Dios al mundo.'},
+      ]),
+      verseCount: 1,
+    );
+
+    await database.saveChapter(
+      translationKey: 'rv1858',
+      bookNumber: 43,
+      bookCode: 'JHN',
+      bookName: 'San Juan',
+      chapter: 3,
+      versesJson: jsonEncode([
+        {
+          'verse': 16,
+          'text':
+              'Porque de tal manera amó Dios al mundo, que ha dado á su Hijo unigénito.'
+        },
+      ]),
+      verseCount: 1,
+    );
+
+    final valeraResults = await database.searchVersesByKeywordAndTranslation(
+      keyword: 'mundo',
+      activeTranslation: 'valera',
+    );
+    expect(valeraResults, hasLength(1));
+    expect(valeraResults.single.translationKey, 'valera');
+
+    final rv1858Results = await database.searchVersesByKeywordAndTranslation(
+      keyword: 'mundo',
+      activeTranslation: 'rv1858',
+    );
+    expect(rv1858Results, hasLength(1));
+    expect(rv1858Results.single.translationKey, 'rv1858');
+
+    final sseResults = await database.searchVersesByKeywordAndTranslation(
+      keyword: 'mundo',
+      activeTranslation: 'sse',
+    );
+    expect(sseResults, isEmpty);
+  });
 }

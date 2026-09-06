@@ -367,6 +367,7 @@ export default function App() {
               recentSearches={recentSearches}
               onPerformSearchText={handlePerformSearchText}
               currentTheme={settings.themeMode}
+              currentTranslation={settings.translation}
             />
           )}
 

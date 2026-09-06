@@ -1,143 +1,196 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../../core/providers/app_settings_providers.dart';
+import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
+import '../../../../shared/models/bible_book_info.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
+import '../../../reader/presentation/state/reader_state_notifier.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
+import '../../data/ai_mentor_service.dart';
 
-class ChatMessage {
-  final String text;
-  final bool isUser;
-  final DateTime timestamp;
-  final String? originalLanguageNote;
+/// Interactive theological AI chat view with local Drift SQLite persistence,
+/// active scripture context injection, and strict alignment to biblical studies.
+class SanctuaryAiMentorView extends ConsumerStatefulWidget {
+  final AppDatabase? database;
 
-  const ChatMessage({
-    required this.text,
-    required this.isUser,
-    required this.timestamp,
-    this.originalLanguageNote,
-  });
-}
-
-class SanctuaryAiMentorView extends StatefulWidget {
-  const SanctuaryAiMentorView({super.key});
+  const SanctuaryAiMentorView({super.key, this.database});
 
   @override
-  State<SanctuaryAiMentorView> createState() => _SanctuaryAiMentorViewState();
+  ConsumerState<SanctuaryAiMentorView> createState() =>
+      _SanctuaryAiMentorViewState();
 }
 
-class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
+class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
   final TextEditingController _inputController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  int _queriesUsedToday = 0;
-  final int _dailyLimit = 2;
   bool _isLoading = false;
-
-  final List<ChatMessage> _messages = [
-    ChatMessage(
-      text:
-          '¡Gracia y paz en Cristo Jesús! Soy tu Mentor Teológico. Puedo ayudarte a profundizar en el contexto histórico, exégesis doctrinal y raíces en hebreo y griego bíblico de las Sagradas Escrituras.',
-      isUser: false,
-      timestamp: DateTime.now(),
-      originalLanguageNote:
-          'Modo Prueba Activo — 2 consultas por día con reinicio automático a medianoche.',
-    ),
-  ];
+  int _queriesUsedToday = 0;
+  final int _dailyLimit = 15;
 
   final List<String> _suggestedPrompts = [
     '¿Qué significa «Shālôm» (שָׁלוֹם) en su raíz hebrea?',
     'Explica el término «Monogenēs» (μονογενής) en Juan 3:16',
-    '¿Cuál es el contexto histórico de la carta a los Filipenses?',
+    '¿Cuál es el contexto histórico de Filipenses?',
     '¿Qué significa «Qāvāh» (קָוָה) en Isaías 40:31?',
+    '¿Cuál es el significado del pacto en Génesis 17:1?',
   ];
 
-  void _sendMessage(String query) {
-    if (query.trim().isEmpty) return;
+  @override
+  void dispose() {
+    _inputController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  Future<void> _sendMessage({
+    required AppDatabase db,
+    required String query,
+    required String activeReference,
+    String? activeVerseText,
+  }) async {
+    final cleanQuery = query.trim();
+    if (cleanQuery.isEmpty || _isLoading) return;
 
     if (_queriesUsedToday >= _dailyLimit) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-              'Has alcanzado el límite diario de 2 consultas del Modo Prueba. Se restablece a medianoche (00:00 hs).'),
+            'Has alcanzado el límite diario de consultas. Se restablece a medianoche.',
+          ),
           backgroundColor: SanctuaryColors.sunOrange,
         ),
       );
       return;
     }
 
-    setState(() {
-      _messages.add(ChatMessage(
-        text: query,
-        isUser: true,
-        timestamp: DateTime.now(),
-      ));
-      _queriesUsedToday++;
-      _isLoading = true;
-    });
-
     _inputController.clear();
-
-    // Generate theological exegesis response
-    Future.delayed(const Duration(milliseconds: 1200), () {
-      if (!mounted) return;
-
-      String responseText = '';
-      String? rootAnalysis;
-
-      if (query.toLowerCase().contains('shalom') ||
-          query.toLowerCase().contains('paz')) {
-        responseText =
-            'El término hebreo **Shālôm (שָׁלוֹם)** trasciende la simple ausencia de conflicto. Proviene de la raíz *sh-l-m* que connota integridad, plenitud, bienestar holístico, armonía y restauración en la relación del ser humano con Dios, el prójimo y la creación (Números 6:24-26; Isaías 9:6).';
-        rootAnalysis =
-            'Hebreo: שָׁלוֹם (Shālôm) • Raíz: שָׁלֵם (Shālēm - estar completo, perfeccionado)';
-      } else if (query.toLowerCase().contains('monogenes') ||
-          query.toLowerCase().contains('juan 3:16') ||
-          query.toLowerCase().contains('unigenito')) {
-        responseText =
-            'En Juan 3:16, el vocablo griego **Monogenēs (μονογενής)** se compone de *monos* (único/singular) y *genos* (clase, linaje o tipo). No significa "nacido", sino **«único en su género, incomparable y supremamente amado»**. Resalta la relación eterna, singular y divina entre el Padre y el Hijo.';
-        rootAnalysis =
-            'Griego: μονογενής (Monogenēs) • Compuesto: μόνος (único) + γένος (linaje/clase)';
-      } else if (query.toLowerCase().contains('qavah') ||
-          query.toLowerCase().contains('esperan') ||
-          query.toLowerCase().contains('isaias 40')) {
-        responseText =
-            'En Isaías 40:31, la palabra traducida como «esperan» es el verbo hebreo **Qāvāh (קָוָה)**, cuya etimología alude al acto de torcer, entrelazar firmemente hilos o cuerdas para hacerlas irrompibles. Esperar en Jehová es entrelazar nuestra fragilidad con Su fortaleza todopoderosa.';
-        rootAnalysis =
-            'Hebreo: קָוָה (Qāvāh) • Sentido literal: trenzar, entrelazar con expectación firme';
-      } else {
-        responseText =
-            'Al examinar «$query», las Escrituras nos enseñan a interpretar el pasaje dentro de su contexto histórico, su pacto correspondiente y la revelación progresiva que culmina en la persona y obra redentora de Jesucristo.';
-        rootAnalysis =
-            'Hermenéutica bíblica: Contexto histórico-gramatical y teología del pacto';
-      }
-
-      setState(() {
-        _isLoading = false;
-        _messages.add(ChatMessage(
-          text: responseText,
-          isUser: false,
-          timestamp: DateTime.now(),
-          originalLanguageNote: rootAnalysis,
-        ));
-      });
-
-      // Scroll to bottom
-      Future.delayed(const Duration(milliseconds: 100), () {
-        if (_scrollController.hasClients) {
-          _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
-        }
-      });
+    setState(() {
+      _isLoading = true;
+      _queriesUsedToday++;
     });
+    _scrollToBottom();
+
+    try {
+      final service = AiMentorService(database: db);
+      await service.askMentorWithContext(
+        question: cleanQuery,
+        verseReference: activeReference,
+        verseText: activeVerseText,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al consultar al Mentor IA: $e'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+        _scrollToBottom();
+      }
+    }
+  }
+
+  Future<void> _confirmClearChat(AppDatabase db) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Row(
+          children: [
+            const Icon(LucideIcons.trash2, color: Colors.redAccent, size: 20),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                'Limpiar conversación',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.inter(fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          '¿Deseas eliminar todo el historial de conversaciones con el Mentor IA de tu dispositivo?',
+          style: GoogleFonts.inter(fontSize: 13.5),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(
+              'Cancelar',
+              style: GoogleFonts.inter(color: Colors.grey),
+            ),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: FilledButton.styleFrom(backgroundColor: Colors.redAccent),
+            child: Text(
+              'Eliminar',
+              style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await db.clearChatMessages();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Historial del Mentor IA borrado con éxito.'),
+          backgroundColor: SanctuaryColors.waveNavy,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final remaining = _dailyLimit - _queriesUsedToday;
+    final effectiveDb = widget.database ?? ref.watch(appDatabaseProvider);
+
+    // Active scripture coordinates from Riverpod
+    final currentBookId = ref.watch(appSelectedBookProvider);
+    final currentChapter = ref.watch(appSelectedChapterProvider);
+    final currentVerse = ref.watch(appSelectedVerseProvider);
+
+    final bookInfo = kBibleBooks.firstWhere(
+      (b) => b.id == currentBookId,
+      orElse: () => const BibleBookInfo(
+        id: 'MAT',
+        name: 'Mateo',
+        testament: 'NT',
+        chapters: 28,
+        category: 'Evangelios',
+      ),
+    );
+
+    final activeReference = currentVerse != null
+        ? '${bookInfo.name} $currentChapter:$currentVerse'
+        : '${bookInfo.name} $currentChapter';
+
+    final remainingQueries = _dailyLimit - _queriesUsedToday;
 
     return Scaffold(
       appBar: AppBar(
@@ -159,24 +212,30 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w700,
-                  fontSize: 17,
+                  fontSize: 16.5,
                 ),
               ),
             ),
           ],
         ),
         actions: [
+          // Clear History Action Button
+          IconButton(
+            icon: const Icon(LucideIcons.trash2, size: 18),
+            tooltip: 'Borrar historial',
+            onPressed: () => _confirmClearChat(effectiveDb),
+          ),
           // Quota Badge
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
             decoration: BoxDecoration(
-              color: remaining > 0
+              color: remainingQueries > 0
                   ? const Color(0xFF10B981).withValues(alpha: 0.15)
                   : Colors.redAccent.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: remaining > 0
+                color: remainingQueries > 0
                     ? const Color(0xFF10B981).withValues(alpha: 0.4)
                     : Colors.redAccent.withValues(alpha: 0.4),
               ),
@@ -186,20 +245,20 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
               children: [
                 Icon(
                   LucideIcons.zap,
-                  size: 13,
-                  color: remaining > 0
+                  size: 12,
+                  color: remainingQueries > 0
                       ? const Color(0xFF10B981)
                       : Colors.redAccent,
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  '$remaining/$_dailyLimit hoy',
+                  '$remainingQueries/$_dailyLimit',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w800,
-                    fontSize: 11,
-                    color: remaining > 0
+                    fontSize: 10.5,
+                    color: remainingQueries > 0
                         ? const Color(0xFF10B981)
                         : Colors.redAccent,
                   ),
@@ -216,172 +275,325 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
       ),
       body: Column(
         children: [
-          // Banner of Test Mode
+          // Active Biblical Context Bar
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
-              color: SanctuaryColors.sunOrange.withValues(alpha: 0.1),
+              color: const Color(0xFF0B2B68).withValues(alpha: 0.08),
               border: Border(
                 bottom: BorderSide(
-                  color: SanctuaryColors.sunOrange.withValues(alpha: 0.25),
+                  color: const Color(0xFF0B2B68).withValues(alpha: 0.15),
                 ),
               ),
             ),
             child: Row(
               children: [
-                const Icon(LucideIcons.info,
-                    size: 16, color: SanctuaryColors.sunOrange),
+                const Icon(
+                  LucideIcons.bookOpen,
+                  size: 15,
+                  color: SanctuaryColors.waveNavy,
+                ),
                 const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'Modo Prueba: 2 consultas/día (reinicio automático a medianoche)',
-                    maxLines: 2,
+                Flexible(
+                  child: RichText(
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.inter(
-                      fontSize: 11.5,
-                      fontWeight: FontWeight.w700,
-                      color: SanctuaryColors.sunOrange,
+                    text: TextSpan(
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                      children: [
+                        const TextSpan(
+                          text: 'Contexto activo: ',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                        TextSpan(
+                          text: activeReference,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w800,
+                            color: SanctuaryColors.waveNavy,
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF10B981).withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(LucideIcons.shieldCheck,
+                          size: 11, color: Color(0xFF10B981)),
+                      const SizedBox(width: 3),
+                      Text(
+                        'Alineación Teológica',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.inter(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF10B981),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
 
-          // Messages List
+          // Messages List connected to SQLite Drift Stream
           Expanded(
-            child: ListView.separated(
-              controller: _scrollController,
-              padding: const EdgeInsets.all(16),
-              itemCount: _messages.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 14),
-              itemBuilder: (context, index) {
-                final msg = _messages[index];
-                return Align(
-                  alignment:
-                      msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.85,
+            child: StreamBuilder<List<AiChatMessageEntry>>(
+              stream: effectiveDb.watchChatMessages(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting &&
+                    !snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                final messages = snapshot.data ?? [];
+
+                if (messages.isEmpty) {
+                  return _buildEmptyState(
+                    theme: theme,
+                    activeReference: activeReference,
+                    onPromptSelected: (prompt) => _sendMessage(
+                      db: effectiveDb,
+                      query: prompt,
+                      activeReference: activeReference,
                     ),
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: msg.isUser
-                          ? theme.colorScheme.primary
-                          : theme.cardTheme.color,
-                      borderRadius: BorderRadius.circular(18).copyWith(
-                        bottomRight:
-                            msg.isUser ? const Radius.circular(4) : null,
-                        bottomLeft:
-                            !msg.isUser ? const Radius.circular(4) : null,
-                      ),
-                      border: !msg.isUser
-                          ? Border.all(
-                              color: theme.colorScheme.outline
-                                  .withValues(alpha: 0.3))
-                          : null,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          msg.text,
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            height: 1.5,
-                            color: msg.isUser
-                                ? Colors.white
-                                : theme.colorScheme.onSurface,
-                          ),
+                  );
+                }
+
+                // Scroll to bottom when new message arrives
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (_scrollController.hasClients) {
+                    _scrollController.jumpTo(
+                      _scrollController.position.maxScrollExtent,
+                    );
+                  }
+                });
+
+                return ListView.separated(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.all(16),
+                  itemCount: messages.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final msg = messages[index];
+                    final isUser = msg.sender.toLowerCase() == 'user';
+
+                    return Align(
+                      alignment:
+                          isUser ? Alignment.centerRight : Alignment.centerLeft,
+                      child: Container(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.86,
                         ),
-                        if (msg.originalLanguageNote != null) ...[
-                          const SizedBox(height: 8),
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF10B981)
-                                  .withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(10),
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: isUser
+                              ? SanctuaryColors.waveNavy
+                              : theme.cardTheme.color ?? theme.cardColor,
+                          borderRadius: BorderRadius.circular(16).copyWith(
+                            bottomRight:
+                                isUser ? const Radius.circular(3) : null,
+                            bottomLeft:
+                                !isUser ? const Radius.circular(3) : null,
+                          ),
+                          border: !isUser
+                              ? Border.all(
+                                  color: theme.colorScheme.outline
+                                      .withValues(alpha: 0.25),
+                                )
+                              : null,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.04),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
                             ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Header badge with Role and Verse Reference
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(LucideIcons.languages,
-                                    size: 14, color: Color(0xFF10B981)),
-                                const SizedBox(width: 6),
-                                Expanded(
+                                Icon(
+                                  isUser
+                                      ? LucideIcons.user
+                                      : LucideIcons.sparkles,
+                                  size: 13,
+                                  color: isUser
+                                      ? Colors.white70
+                                      : const Color(0xFF10B981),
+                                ),
+                                const SizedBox(width: 5),
+                                Flexible(
                                   child: Text(
-                                    msg.originalLanguageNote!,
+                                    isUser ? 'Tú' : 'Mentor Teológico',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.inter(
                                       fontSize: 11,
-                                      fontWeight: FontWeight.w600,
-                                      color: const Color(0xFF10B981),
+                                      fontWeight: FontWeight.w700,
+                                      color: isUser
+                                          ? Colors.white70
+                                          : const Color(0xFF10B981),
                                     ),
                                   ),
                                 ),
+                                if (msg.verseReference != null &&
+                                    msg.verseReference!.isNotEmpty) ...[
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: isUser
+                                          ? Colors.white.withValues(alpha: 0.15)
+                                          : SanctuaryColors.waveNavy
+                                              .withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          LucideIcons.bookmark,
+                                          size: 10,
+                                          color: isUser
+                                              ? Colors.white
+                                              : SanctuaryColors.waveNavy,
+                                        ),
+                                        const SizedBox(width: 3),
+                                        Flexible(
+                                          child: Text(
+                                            msg.verseReference!,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: GoogleFonts.inter(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w600,
+                                              color: isUser
+                                                  ? Colors.white
+                                                  : SanctuaryColors.waveNavy,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ],
                             ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
+                            const SizedBox(height: 8),
+                            // Message Content
+                            SelectableText(
+                              msg.messageText,
+                              style: GoogleFonts.inter(
+                                fontSize: 13.5,
+                                height: 1.5,
+                                color: isUser
+                                    ? Colors.white
+                                    : theme.colorScheme.onSurface,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
           ),
 
+          // Loading status indicator
           if (_isLoading)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              color: SanctuaryColors.sunOrange.withValues(alpha: 0.08),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    width: 14,
+                    height: 14,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: SanctuaryColors.sunOrange,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Flexible(
                     child: Text(
-                      'Analizando textos originales y contexto...',
+                      'Consultando fuentes teológicas, hebreo y griego...',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.inter(
-                          fontSize: 12, color: SanctuaryColors.sunOrange),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: SanctuaryColors.sunOrange,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
 
-          // Suggested Prompts
-          if (_messages.length == 1)
-            Container(
-              height: 40,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              margin: const EdgeInsets.only(bottom: 8),
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: _suggestedPrompts.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 6),
-                itemBuilder: (context, idx) {
-                  final prompt = _suggestedPrompts[idx];
-                  return ActionChip(
-                    label: Text(
-                      prompt,
-                      style: GoogleFonts.inter(
-                          fontSize: 11, fontWeight: FontWeight.w600),
+          // Suggested Prompts Quick Carousel
+          Container(
+            height: 38,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            margin: const EdgeInsets.only(top: 4, bottom: 4),
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: _suggestedPrompts.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 6),
+              itemBuilder: (context, idx) {
+                final prompt = _suggestedPrompts[idx];
+                return ActionChip(
+                  avatar: const Icon(LucideIcons.sparkle,
+                      size: 12, color: Color(0xFF10B981)),
+                  label: Text(
+                    prompt,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
                     ),
-                    onPressed: () => _sendMessage(prompt),
-                  );
-                },
-              ),
+                  ),
+                  onPressed: _isLoading
+                      ? null
+                      : () => _sendMessage(
+                            db: effectiveDb,
+                            query: prompt,
+                            activeReference: activeReference,
+                          ),
+                );
+              },
             ),
+          ),
 
-          // Input Bar
+          // Input Bar with Defensive Tokens
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -392,39 +604,210 @@ class _SanctuaryAiMentorViewState extends State<SanctuaryAiMentorView> {
                 ),
               ),
             ),
+            child: SafeArea(
+              top: false,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _inputController,
+                      decoration: InputDecoration(
+                        hintText: remainingQueries > 0
+                            ? 'Pregunta sobre teología, hebreo, griego o $activeReference...'
+                            : 'Cupo diario agotado por hoy',
+                        hintStyle: GoogleFonts.inter(fontSize: 12.5),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 11,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.outline
+                                .withValues(alpha: 0.3),
+                          ),
+                        ),
+                        enabled: remainingQueries > 0 && !_isLoading,
+                      ),
+                      onSubmitted: (text) => _sendMessage(
+                        db: effectiveDb,
+                        query: text,
+                        activeReference: activeReference,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton.filled(
+                    onPressed: (remainingQueries > 0 && !_isLoading)
+                        ? () => _sendMessage(
+                              db: effectiveDb,
+                              query: _inputController.text,
+                              activeReference: activeReference,
+                            )
+                        : null,
+                    style: IconButton.styleFrom(
+                      backgroundColor: SanctuaryColors.waveNavy,
+                    ),
+                    icon: const Icon(LucideIcons.send, size: 18),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState({
+    required ThemeData theme,
+    required String activeReference,
+    required ValueChanged<String> onPromptSelected,
+  }) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: const Color(0xFF10B981).withValues(alpha: 0.12),
+              border: Border.all(
+                color: const Color(0xFF10B981).withValues(alpha: 0.3),
+              ),
+            ),
+            child: const Icon(
+              LucideIcons.sparkles,
+              size: 32,
+              color: Color(0xFF10B981),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Mentor Teológico Digital',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.cinzel(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Acompañamiento doctrinal riguroso, exégesis en lenguas originales y hermenéutica fiel a las Sagradas Escrituras. Tus diálogos se guardan localmente en tu Santuario.',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.inter(
+                fontSize: 13,
+                height: 1.5,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          // Active Context Card
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: theme.cardTheme.color ?? theme.cardColor,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: theme.colorScheme.outline.withValues(alpha: 0.2),
+              ),
+            ),
             child: Row(
               children: [
+                const Icon(LucideIcons.bookMarked,
+                    size: 18, color: SanctuaryColors.waveNavy),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: TextField(
-                    controller: _inputController,
-                    decoration: InputDecoration(
-                      hintText: remaining > 0
-                          ? 'Pregunta sobre teología, hebreo o griego...'
-                          : 'Cupo diario agotado por hoy',
-                      hintStyle: GoogleFonts.inter(fontSize: 13),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: BorderSide(
-                            color: theme.colorScheme.outline
-                                .withValues(alpha: 0.3)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Pasaje de Estudio Seleccionado',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: SanctuaryColors.waveNavy,
+                        ),
                       ),
-                      enabled: remaining > 0,
-                    ),
-                    onSubmitted: _sendMessage,
+                      Text(
+                        activeReference,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 8),
-                IconButton.filled(
-                  onPressed: remaining > 0
-                      ? () => _sendMessage(_inputController.text)
-                      : null,
-                  style: IconButton.styleFrom(
-                      backgroundColor: SanctuaryColors.waveNavy),
-                  icon: const Icon(LucideIcons.send, size: 18),
-                ),
               ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Preguntas Teológicas Sugeridas:',
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          ..._suggestedPrompts.map(
+            (prompt) => Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () => onPromptSelected(prompt),
+                style: OutlinedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  alignment: Alignment.centerLeft,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  side: BorderSide(
+                    color: theme.colorScheme.outline.withValues(alpha: 0.2),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      LucideIcons.helpCircle,
+                      size: 14,
+                      color: SanctuaryColors.waveNavy,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        prompt,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.inter(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w600,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                    const Icon(LucideIcons.chevronRight, size: 14),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
