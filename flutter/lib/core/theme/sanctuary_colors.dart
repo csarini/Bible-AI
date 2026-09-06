@@ -37,6 +37,7 @@ class ElShaddaiColors {
   static const Color darkSurface = Color(0xFF131722);
   static const Color darkSurfaceElevated = Color(0xFF1C2337);
   static const Color darkTextPrimary = Color(0xFFF1F3F9);
+  static const Color darkOnSurface = Color(0xFFF1F3F9);
   static const Color darkTextSecondary = Color(0xFF9AA5C2);
   static const Color darkActive = Color(0xFF2B3990);
   static const Color darkBorder = Color(0xFF252D43);
@@ -118,6 +119,7 @@ class SanctuaryColors {
   static const Color darkBorder = ElShaddaiColors.darkBorder;
   static const Color darkBorderStrong = Color(0xFF2B3964);
   static const Color darkTextPrimary = ElShaddaiColors.darkTextPrimary;
+  static const Color darkOnSurface = ElShaddaiColors.darkOnSurface;
   static const Color darkTextSecondary = ElShaddaiColors.darkTextSecondary;
   static const Color darkActive = ElShaddaiColors.darkActive;
 
