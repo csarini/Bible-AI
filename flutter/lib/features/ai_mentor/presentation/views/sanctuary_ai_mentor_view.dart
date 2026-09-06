@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../../core/constants/bible_books.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
-import '../../../../shared/models/bible_book_info.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
 import '../../../reader/presentation/state/reader_state_notifier.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
@@ -168,7 +168,8 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final effectiveDb = widget.database ?? ref.watch(appDatabaseProvider);
+    final AppDatabase effectiveDb = widget.database ??
+        ref.watch(appSettingsControllerProvider).database;
 
     // Active scripture coordinates from Riverpod
     final currentBookId = ref.watch(appSelectedBookProvider);
@@ -178,11 +179,11 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
     final bookInfo = kBibleBooks.firstWhere(
       (b) => b.id == currentBookId,
       orElse: () => const BibleBookInfo(
+        number: 40,
         id: 'MAT',
         name: 'Mateo',
-        testament: 'NT',
-        chapters: 28,
-        category: 'Evangelios',
+        totalChapters: 28,
+        isNewTestament: true,
       ),
     );
 

@@ -7,6 +7,7 @@ import 'core/services/debug_log_service.dart';
 import 'core/services/local_user_service.dart';
 import 'core/storage/app_database.dart';
 import 'core/theme/sanctuary_theme.dart';
+import 'features/reader/presentation/state/reader_state_notifier.dart';
 import 'features/shell/presentation/views/sanctuary_main_shell.dart';
 import 'features/splash/presentation/views/sanctuary_splash_screen.dart';
 import 'shared/services/home_widget_service.dart';
@@ -36,6 +37,7 @@ void main() {
     runApp(
       ProviderScope(
         overrides: [
+          appDatabaseProvider.overrideWithValue(database),
           appVisualThemeModeProvider.overrideWith(
             (ref) => _parseVisualTheme(savedSettings[appSettingThemeKey]),
           ),
