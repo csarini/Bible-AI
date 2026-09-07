@@ -30,11 +30,12 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
   final int _dailyLimit = 15;
 
   final List<String> _suggestedPrompts = [
+    '¿Qué dice la Biblia sobre la amistad?',
+    '¿Qué dice la Biblia sobre el perdón y la reconciliación?',
+    'Analiza Juan 3:16 y qué significa para mi vida',
     '¿Qué significa «Shālôm» (שָׁלוֹם) en su raíz hebrea?',
-    'Explica el término «Monogenēs» (μονογενής) en Juan 3:16',
-    '¿Cuál es el contexto histórico de Filipenses?',
-    '¿Qué significa «Qāvāh» (קָוָה) en Isaías 40:31?',
     '¿Cuál es el significado del pacto en Génesis 17:1?',
+    '¿Qué significa «Qāvāh» (קָוāh) en Isaías 40:31?',
   ];
 
   @override
@@ -65,14 +66,24 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
     final cleanQuery = query.trim();
     if (cleanQuery.isEmpty || _isLoading) return;
 
-    if (_queriesUsedToday >= _dailyLimit) {
+    final customKey = await db.getSetting('ai_api_key') ??
+        await db.getSetting('ai_gemini_key') ??
+        AiMentorService.defaultGeminiApiKey;
+    final hasCustomKey = customKey.trim().isNotEmpty;
+
+    if (!hasCustomKey && _queriesUsedToday >= _dailyLimit) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Has alcanzado el límite diario de consultas. Se restablece a medianoche.',
+        SnackBar(
+          content: const Text(
+            'Límite de prueba alcanzado. Configura tus credenciales para consultas ilimitadas.',
           ),
           backgroundColor: SanctuaryColors.sunOrange,
+          action: SnackBarAction(
+            label: 'Configurar',
+            textColor: Colors.white,
+            onPressed: () => _showAiSettingsDialog(db),
+          ),
         ),
       );
       return;
@@ -162,6 +173,195 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
         ),
       );
     }
+  }
+
+  Future<void> _showAiSettingsDialog(AppDatabase db) async {
+    final currentProvider = await db.getSetting('ai_provider') ?? 'gemini';
+    final currentKey = await db.getSetting('ai_api_key') ??
+        await db.getSetting('ai_gemini_key') ??
+        AiMentorService.defaultGeminiApiKey;
+    final currentModel = await db.getSetting('ai_model') ?? '';
+    final currentEndpoint = await db.getSetting('ai_endpoint') ?? '';
+
+    String selectedProvider = currentProvider;
+    final keyController = TextEditingController(text: currentKey);
+    final modelController = TextEditingController(text: currentModel);
+    final endpointController = TextEditingController(text: currentEndpoint);
+    bool obscureKey = true;
+
+    if (!mounted) return;
+
+    await showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          return AlertDialog(
+            title: Row(
+              children: [
+                const Icon(LucideIcons.bot, color: SanctuaryColors.sunOrange, size: 22),
+                const SizedBox(width: 8),
+                Text(
+                  'Ajustes del Mentor IA',
+                  style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 17),
+                ),
+              ],
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Configura tus credenciales para usar Gemini, ChatGPT o Qwen con respuestas bíblicas en tiempo real.',
+                    style: GoogleFonts.inter(fontSize: 12.5, color: Colors.grey[700]),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Proveedor de IA:',
+                    style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700),
+                  ),
+                  const SizedBox(height: 6),
+                  DropdownButtonFormField<String>(
+                    value: selectedProvider,
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'gemini',
+                        child: Text('Google Gemini (Recomendado - Gratuito)'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'openai',
+                        child: Text('OpenAI (ChatGPT gpt-4o-mini)'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'qwen',
+                        child: Text('Qwen (OpenRouter / DeepSeek)'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'custom',
+                        child: Text('Servidor Local / Proxy'),
+                      ),
+                    ],
+                    onChanged: (val) {
+                      if (val != null) {
+                        setDialogState(() {
+                          selectedProvider = val;
+                          if (val == 'gemini' && modelController.text.isEmpty) {
+                            modelController.text = 'gemini-3.6-flash';
+                          } else if (val == 'openai' && modelController.text.isEmpty) {
+                            modelController.text = 'gpt-4o-mini';
+                          } else if (val == 'qwen' && modelController.text.isEmpty) {
+                            modelController.text = 'qwen/qwen-2.5-72b-instruct';
+                          }
+                        });
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    'Clave API ($selectedProvider):',
+                    style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700),
+                  ),
+                  const SizedBox(height: 6),
+                  TextField(
+                    controller: keyController,
+                    obscureText: obscureKey,
+                    decoration: InputDecoration(
+                      hintText: selectedProvider == 'gemini'
+                          ? 'AIzaSy...'
+                          : selectedProvider == 'openai'
+                              ? 'sk-proj-...'
+                              : 'sk-or-v1-...',
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          obscureKey ? LucideIcons.eyeOff : LucideIcons.eye,
+                          size: 18,
+                        ),
+                        onPressed: () {
+                          setDialogState(() {
+                            obscureKey = !obscureKey;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    'Modelo (opcional):',
+                    style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700),
+                  ),
+                  const SizedBox(height: 6),
+                  TextField(
+                    controller: modelController,
+                    decoration: InputDecoration(
+                      hintText: selectedProvider == 'gemini'
+                          ? 'gemini-3.6-flash'
+                          : selectedProvider == 'openai'
+                              ? 'gpt-4o-mini'
+                              : 'qwen/qwen-2.5-72b-instruct',
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                  if (selectedProvider == 'qwen' || selectedProvider == 'custom') ...[
+                    const SizedBox(height: 14),
+                    Text(
+                      'URL Endpoint / Proxy (opcional):',
+                      style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(height: 6),
+                    TextField(
+                      controller: endpointController,
+                      decoration: InputDecoration(
+                        hintText: 'https://openrouter.ai/api/v1/chat/completions',
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: const Text('Cancelar'),
+              ),
+              FilledButton(
+                onPressed: () async {
+                  await db.saveSetting('ai_provider', selectedProvider);
+                  await db.saveSetting('ai_api_key', keyController.text.trim());
+                  await db.saveSetting('ai_gemini_key', keyController.text.trim());
+                  if (modelController.text.trim().isNotEmpty) {
+                    await db.saveSetting('ai_model', modelController.text.trim());
+                  }
+                  if (endpointController.text.trim().isNotEmpty) {
+                    await db.saveSetting('ai_endpoint', endpointController.text.trim());
+                  }
+                  if (ctx.mounted) {
+                    Navigator.of(ctx).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('✓ Credenciales y proveedor de IA guardados exitosamente.'),
+                        backgroundColor: SanctuaryColors.waveNavy,
+                      ),
+                    );
+                  }
+                },
+                style: FilledButton.styleFrom(backgroundColor: SanctuaryColors.waveNavy),
+                child: const Text('Guardar Credenciales'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -265,6 +465,11 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                 ),
               ],
             ),
+          ),
+          IconButton(
+            icon: const Icon(LucideIcons.bot),
+            tooltip: 'Ajustes de IA (Gemini / ChatGPT / Qwen)',
+            onPressed: () => _showAiSettingsDialog(effectiveDb),
           ),
           IconButton(
             icon: const Icon(LucideIcons.settings2),

@@ -11,16 +11,21 @@ import {
   AlertCircle,
   Clock,
   FlaskConical,
-  HelpCircle
+  HelpCircle,
+  Bot,
+  SlidersHorizontal,
+  Key
 } from 'lucide-react';
 import { BibleVerse } from '../types';
 import { ShareService } from '../services/shareService';
+import { StorageService } from '../services/storageService';
 import {
   getMentorQuota,
   consumeMentorQuery,
   MentorQuotaInfo,
   MENTOR_DAILY_LIMIT
 } from '../services/mentorQuotaService';
+import { AIMentorSettingsModal } from './AIMentorSettingsModal';
 
 interface AIMentorViewProps {
   initialVerse?: BibleVerse | null;
@@ -53,6 +58,7 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
   const [loading, setLoading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [quota, setQuota] = useState<MentorQuotaInfo>(() => getMentorQuota());
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   // Sync quota on mount and custom events
@@ -75,20 +81,21 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
     {
       id: 'welcome-1',
       role: 'mentor',
-      text: '¡La paz de Cristo sea contigo! Soy tu Mentor Bíblico e Histórico de la Iglesia El-Shaddai. Puedes preguntarme sobre el contexto de cualquier pasaje bíblico, palabras clave en griego o hebreo original, o aplicaciones espirituales para tu vida.',
+      text: '¡La paz de Cristo sea contigo! Soy tu Mentor Bíblico y Teológico. Puedes consultarme sobre temas de la vida cristiana (por ejemplo: ¿qué dice la Biblia sobre la amistad o el perdón?), o pedirme que analice cualquier versículo bíblico en su contexto histórico, raíces en griego y hebreo, y aplicación espiritual.',
       insights: [
-        'Exégesis y trasfondo histórico del antiguo Israel y la Iglesia Primitiva',
-        'Estudio etimológico de términos originales (Shālôm, Agapē, Hésed, Metanoia)',
-        'Armonía bíblica y aplicaciones devocionales prácticas'
+        'Consultas temáticas (Amistad, Fe, Perdón, Matrimonio, Oración, Esperanza)',
+        'Análisis exegético y etimológico de versículos en hebreo, arameo y griego bíblico',
+        'Respuestas teológicas en vivo generadas con modelos de IA (Gemini, ChatGPT, Qwen)'
       ]
     }
   ]);
 
   const presetTopics = [
+    { title: '¿Qué dice la Biblia sobre la amistad?', query: '¿Qué dice la Biblia sobre la amistad, la lealtad y los verdaderos amigos?' },
     { title: 'Juan 3:16 y el amor Ágape', query: '¿Cuál es la profundidad teológica del término ágape y el contexto de Nicodemo en Juan 3:16?' },
-    { title: 'Paz en Juan 14:27 (Eirēnē vs Pax Romana)', query: 'Explica la diferencia entre la paz que da Cristo (Eirēnē) y la Pax Romana según Juan 14:27.' },
-    { title: 'Isaías 40:31 y las alas de águila (Qavah)', query: '¿Qué significa "esperar en Jehová" (Qavah) y la metáfora de las águilas en Isaías 40:31?' },
-    { title: 'El significado de El-Shaddai (Génesis 17:1)', query: '¿Qué significa el nombre Dios Todopoderoso (El-Shaddai) en Génesis 17:1 y su relevancia hoy?' }
+    { title: 'El perdón y la reconciliación', query: '¿Qué enseña la Biblia sobre el perdón y cómo aplicarlo en el día a día?' },
+    { title: 'Paz en Juan 14:27 (Eirēnē vs Pax Romana)', query: 'Explica la diferencia entre la paz que da Cristo (Eirēnē) y la paz terrenal según Juan 14:27.' },
+    { title: 'Isaías 40:31 y las alas de águila (Qavah)', query: '¿Qué significa "esperar en Jehová" (Qavah) y la metáfora de las águilas en Isaías 40:31?' }
   ];
 
   const scrollToBottom = () => {
@@ -109,29 +116,40 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
     const textToSend = queryText || inputQuery;
     if (!textToSend.trim() || loading) return;
 
-    // Check quota before sending
-    const currentQuota = getMentorQuota();
-    if (!currentQuota.canQuery) {
-      setQuota(currentQuota);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: 'limit-' + Date.now(),
-          role: 'mentor',
-          text: `⚠️ **Límite diario alcanzado (${MENTOR_DAILY_LIMIT}/${MENTOR_DAILY_LIMIT} consultas)**\n\nHas utilizado tus 2 consultas del día para el Mentor IA. Esta limitación en **Modo Prueba** previene gastos y consumos excesivos de computación.\n\nTu cupo se restablecerá automáticamente mañana a las **${currentQuota.formattedResetTime}**.`,
-          isLimitWarning: true,
-          insights: [
-            'El límite de 2 consultas diarias se reinicia cada medianoche.',
-            'Puedes seguir leyendo los 1.189 capítulos bíblicos y mapas sin ninguna restricción.'
-          ]
-        }
-      ]);
-      return;
-    }
+    // Retrieve user credentials
+    const DEFAULT_KEY = 'AQ.Ab8RN6I_vopKgtr88G9_2H0StDa0yjJIJNP6I9YRUl43AelVfQ';
+    const userProvider = localStorage.getItem('el_shaddai_ai_provider') || 'gemini';
+    const userApiKey = localStorage.getItem('el_shaddai_ai_api_key') || localStorage.getItem('el_shaddai_gemini_api_key') || StorageService.getGeminiApiKey() || DEFAULT_KEY;
+    const userModel = localStorage.getItem('el_shaddai_ai_model') || '';
+    const userEndpoint = localStorage.getItem('el_shaddai_ai_endpoint') || '';
 
-    // Consume 1 query from quota
-    const updatedQuota = consumeMentorQuery();
-    setQuota(updatedQuota);
+    const hasCustomKey = userApiKey.trim().length > 0;
+
+    // Check quota only if user has NOT configured their own API Key
+    if (!hasCustomKey) {
+      const currentQuota = getMentorQuota();
+      if (!currentQuota.canQuery) {
+        setQuota(currentQuota);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: 'limit-' + Date.now(),
+            role: 'mentor',
+            text: `⚠️ **Límite de prueba alcanzado (${MENTOR_DAILY_LIMIT}/${MENTOR_DAILY_LIMIT} consultas)**\n\nHas utilizado tus consultas gratuitas del día. Para seguir consultando sin límite:\n\n1. Haz clic en **Ajustes de IA** arriba a la derecha.\n2. Ingresa tu propia clave API gratuita de Google AI Studio (Gemini), OpenAI o Qwen.\n3. ¡Disfruta de consultas ilimitadas con tu propia clave!`,
+            isLimitWarning: true,
+            insights: [
+              'Con tu propia clave API, no hay restricciones diarias de consulta.',
+              'Puedes obtener una clave de Google Gemini 100% gratis en Google AI Studio.'
+            ]
+          }
+        ]);
+        return;
+      }
+
+      // Consume 1 query from trial quota
+      const updatedQuota = consumeMentorQuery();
+      setQuota(updatedQuota);
+    }
 
     const userMsgId = 'user-' + Date.now();
     const userMsg: Message = { id: userMsgId, role: 'user', text: textToSend };
@@ -140,7 +158,7 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
     setLoading(true);
 
     try {
-      // Call backend API /api/ai-mentor
+      // Call backend API /api/ai-mentor with multi-provider options
       const response = await fetch('/api/ai-mentor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -151,87 +169,58 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
               reference: `${initialVerse.bookName} ${initialVerse.chapter}:${initialVerse.verse}`,
               text: initialVerse.text
             }
-            : undefined
+            : undefined,
+          provider: userProvider,
+          apiKey: userApiKey,
+          model: userModel,
+          endpoint: userEndpoint
         })
       });
 
       if (response.ok) {
         const data = await response.json();
-        if (data && data.text) {
+        const replyText = data.reply || data.text;
+        if (replyText) {
           setMessages((prev) => [
             ...prev,
             {
               id: 'mentor-' + Date.now(),
               role: 'mentor',
-              text: data.text,
+              text: replyText,
               greekHebrewRoot: data.greekHebrewRoot,
               insights: data.insights
             }
           ]);
-          setLoading(false);
           return;
         }
       }
-    } catch (err) {
-      console.warn('API fetch encountered error, using local fallback:', err);
-    }
 
-    // Direct local scholarly response as guaranteed backup
-    setTimeout(() => {
-      let mentorResponse = '';
-      let greekHebrewRoot = '';
-      let insights: string[] = [];
-
-      const q = textToSend.toLowerCase();
-      if (q.includes('juan 3:16') || q.includes('ágape') || q.includes('agape') || q.includes('amor')) {
-        mentorResponse = `En Juan 3:16, Jesús dialoga con Nicodemo, maestro de la ley. El vocablo griego utilizado es "Agapē" (ἀγάπη), que representa el amor incondicional, sublime y sacrificial que se entrega sin exigir mérito a cambio. La entrega del Hijo unigénito (*Monogenēs*) sella el pacto de redención eterna para todo aquel que cree.`;
-        greekHebrewRoot = `Griego: ἀγάπη (Agapē) - Amor sacrificial / μονογενής (Monogenēs) - Único en su clase y majestad.`;
-        insights = [
-          'El amor de Dios no depende de nuestras obras, sino de su gracia infinita.',
-          'La vida eterna (*zoē aiōnios*) es la comunión viva con Dios que experimentamos desde el presente.'
-        ];
-      } else if (q.includes('juan 14') || q.includes('paz') || q.includes('eirene')) {
-        mentorResponse = `En Juan 14:27, la paz (*Eirēnē*) que Jesús promete no es un armisticio terrenal o la ausencia transitoria de dificultades. Es la reconciliación total y el reposo del alma en la soberanía de Dios, capaz de sostener al creyente en cualquier tormenta.`;
-        greekHebrewRoot = `Hebreo: שָׁלוֹ姆 (Shālôm) - Plenitud integral / Griego: εἰρήνη (Eirēnē) - Paz profunda y sosiego espiritual.`;
-        insights = [
-          'La paz del mundo es frágil; la paz de Cristo permanece inalterable ante las pruebas.',
-          'Descansa en la promesa: "No se turbe vuestro corazón, ni tenga miedo".'
-        ];
-      } else if (q.includes('isaias 40') || q.includes('fuerzas') || q.includes('águila') || q.includes('qavah')) {
-        mentorResponse = `En Isaías 40:31, el profeta proclama fortaleza a los cansados. El verbo hebreo "Qavah" (קָוָה) describe entrelazar fuertemente los hilos de nuestra debilidad humana con el poder ilimitado del Creador. Al esperar en Jehová, remontamos vuelo con la serenidad del águila sobre las corrientes adversas.`;
-        greekHebrewRoot = `Hebreo: קָוָה (Qāvāh) - Esperar activamente con confianza y entrelazamiento de fe.`;
-        insights = [
-          'Esperar en Dios renueva tus fuerzas físicas, emocionales y espirituales.',
-          'Aprovecha las pruebas para elevarte más alto en oración y comunión.'
-        ];
-      } else if (q.includes('el-shaddai') || q.includes('shaddai') || q.includes('todopoderoso')) {
-        mentorResponse = `En Génesis 17:1, Dios se revela a Abram diciendo: "Yo soy el Dios Todopoderoso (El-Shaddai); anda delante de mí y sé perfecto". "El" denota soberanía y fuerza absoluta, mientras que "Shaddai" alude al Sustentador que nutre, provee y cuida con fidelidad inquebrantable a sus hijos.`;
-        greekHebrewRoot = `Hebreo: אֵל שַׁדַּי (El-Shaddai) - El Dios Todopoderoso y Todo-Suficiente.`;
-        insights = [
-          'Para Dios no hay nada imposible; su poder sostiene cada aspecto de tu caminar.',
-          'Caminar en integridad delante de Él es responder a su gracia y fidelidad.'
-        ];
-      } else {
-        mentorResponse = `Al meditar en tu consulta sobre las Escrituras, la Palabra viva nos enseña a fundamentar nuestra vida en la verdad eterna de Cristo. Todo pasaje bíblico tiene el propósito de alumbrar nuestro entendimiento, renovar nuestra esperanza y guiarnos en justicia.`;
-        greekHebrewRoot = `Hebreo: דָּבָר (Dabar) - La Palabra viva y creadora de Dios.`;
-        insights = [
-          'Guarda esta reflexión en tu devocional diario para meditar en ella.',
-          'Pide al Espíritu Santo revelación continua mientras escudriñas las Escrituras.'
-        ];
+      let errDesc = '';
+      try {
+        const errData = await response.json();
+        errDesc = errData.error || errData.reply || '';
+      } catch {
+        errDesc = response.statusText;
       }
-
+      throw new Error(errDesc || 'No se recibió respuesta del modelo de IA.');
+    } catch (err: any) {
+      console.error('API fetch error:', err);
+      // Clean informative error message - no canned fake fallbacks!
       setMessages((prev) => [
         ...prev,
         {
-          id: 'mentor-' + Date.now(),
+          id: 'error-' + Date.now(),
           role: 'mentor',
-          text: mentorResponse,
-          greekHebrewRoot,
-          insights
+          text: `⚠️ **No se pudo obtener respuesta del modelo de IA (${userProvider})**\n\n${err?.message || 'Error de conexión con el proveedor.'}\n\nPara resolverlo:\n- Verifica tu conexión a internet.\n- Haz clic en **Ajustes de IA** arriba a la derecha y asegúrate de haber configurado una clave API válida de Gemini, OpenAI o Qwen.`,
+          insights: [
+            'Puedes obtener tu API Key gratuita en Google AI Studio (aistudio.google.com).',
+            'Al guardar tu clave API en Ajustes de IA, la app se conecta directamente al modelo.'
+          ]
         }
       ]);
+    } finally {
       setLoading(false);
-    }, 400);
+    }
   };
 
   const headerTitleColor = isDark ? 'text-white' : isSepia ? 'text-[#3B2D1F]' : 'text-[#0B2B68]';
@@ -261,6 +250,10 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
     : isSepia
       ? 'bg-[#EAE0D0] hover:bg-[#DFD3C0] text-[#3B2D1F] border-[#705335]/20'
       : 'bg-[#0B2B68]/5 hover:bg-[#0B2B68]/10 text-[#0B2B68] border-[#0B2B68]/10';
+
+  const hasCustomKey = Boolean(
+    localStorage.getItem('el_shaddai_ai_api_key') || localStorage.getItem('el_shaddai_gemini_api_key')
+  );
 
   return (
     <div id="ai-mentor-view" className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col gap-6">
@@ -306,6 +299,16 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
             </span>
           </div>
 
+          <button
+            type="button"
+            onClick={() => setIsSettingsOpen(true)}
+            className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border shadow-2xs bg-[#F25C05]/10 border-[#F25C05]/30 text-[#F25C05] hover:bg-[#F25C05]/20 transition-all cursor-pointer"
+            title="Configurar credenciales (Gemini, ChatGPT, Qwen)"
+          >
+            <Bot className="w-3.5 h-3.5 text-[#F25C05]" />
+            <span>Ajustes de IA</span>
+          </button>
+
           <div className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border shadow-2xs ${badgeBg}`}>
             <Church className="w-3.5 h-3.5 text-[#F25C05]" />
             <span>El-Shaddai</span>
@@ -332,10 +335,14 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
               </p>
             </div>
           </div>
-          <div className="text-[11px] font-semibold px-2.5 py-1 rounded-xl bg-black/10 dark:bg-white/10 shrink-0 self-end sm:self-auto flex items-center gap-1">
-            <Clock className="w-3 h-3" />
-            <span>Reinicia a medianoche</span>
-          </div>
+          <button
+            type="button"
+            onClick={() => setIsSettingsOpen(true)}
+            className="text-xs font-bold px-3.5 py-1.5 rounded-xl bg-[#0B2B68] text-[#FED65B] shrink-0 self-end sm:self-auto flex items-center gap-1.5 cursor-pointer shadow-xs hover:bg-[#F25C05] hover:text-white transition-all"
+          >
+            <Key className="w-3.5 h-3.5" />
+            <span>Configurar Credenciales</span>
+          </button>
         </div>
       )}
 
@@ -474,13 +481,15 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
           <input
             type="text"
             id="ai-mentor-input"
-            disabled={!quota.canQuery || loading}
+            disabled={(!hasCustomKey && !quota.canQuery) || loading}
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
             placeholder={
-              quota.canQuery
-                ? `Pregunta sobre pasajes, raíces griego/hebreo o teología (${quota.remaining} consultas restantes hoy)...`
-                : 'Límite de 2 consultas diarias alcanzado. Se renovará mañana a las 00:00 hs.'
+              hasCustomKey
+                ? 'Pregunta sobre temas bíblicos (ej. amistad, perdón) o pasajes (Ilimitado con tu clave)...'
+                : quota.canQuery
+                  ? `Pregunta sobre pasajes, temas bíblicos o teología (${quota.remaining} consultas restantes hoy)...`
+                  : 'Límite de prueba alcanzado. Configura tu clave en Ajustes de IA para consultas ilimitadas.'
             }
             className={`w-full border rounded-2xl pl-5 pr-14 py-3.5 text-sm sm:text-base font-body-ui shadow-sm transition-all outline-none disabled:opacity-60 disabled:cursor-not-allowed ${isDark
                 ? 'bg-[#131722] border-white/20 text-white placeholder:text-white/40 focus:border-[#FED65B] focus:ring-2 focus:ring-[#FED65B]/20'
@@ -492,9 +501,9 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
           <button
             type="submit"
             id="ai-mentor-send-btn"
-            disabled={!inputQuery.trim() || loading || !quota.canQuery}
+            disabled={!inputQuery.trim() || loading || (!hasCustomKey && !quota.canQuery)}
             className="absolute right-2 p-2.5 rounded-xl bg-[#0B2B68] text-[#FED65B] disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#F25C05] hover:text-white transition-all cursor-pointer shadow-xs"
-            title={quota.canQuery ? 'Enviar consulta' : 'Límite diario alcanzado'}
+            title={hasCustomKey || quota.canQuery ? 'Enviar consulta' : 'Límite diario alcanzado'}
           >
             <Send className="w-4 h-4" />
           </button>
@@ -502,10 +511,17 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
 
         {/* Small trial disclaimer below input */}
         <div className="flex items-center justify-between text-[11px] opacity-70 px-2">
-          <span>Modo Prueba: Limitado a 2 consultas por día</span>
-          <span className="font-semibold">{quota.remaining} / {quota.limit} hoy</span>
+          <span>{hasCustomKey ? '✨ Consultas ilimitadas con tu propia clave' : 'Modo Prueba: Limitado a 2 consultas por día'}</span>
+          <span className="font-semibold">{hasCustomKey ? 'Activo' : `${quota.remaining} / ${quota.limit} hoy`}</span>
         </div>
       </form>
+
+      {/* AI Credentials Configuration Modal */}
+      <AIMentorSettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        theme={currentTheme}
+      />
     </div>
   );
 };

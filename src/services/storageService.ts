@@ -295,7 +295,7 @@ export const StorageService = {
   },
 
   getGeminiApiKey(): string {
-    return localStorage.getItem('santuario_gemini_key') || '';
+    return localStorage.getItem('santuario_gemini_key') || 'AQ.Ab8RN6I_vopKgtr88G9_2H0StDa0yjJIJNP6I9YRUl43AelVfQ';
   },
 
   saveGeminiApiKey(key: string): void {

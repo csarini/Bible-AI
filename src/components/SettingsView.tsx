@@ -12,7 +12,8 @@ import {
   Upload,
   HardDrive,
   FileJson,
-  RefreshCw
+  RefreshCw,
+  Sparkles
 } from 'lucide-react';
 import { StorageService } from '../services/storageService';
 import { ReadingSettings } from '../types';
@@ -28,24 +29,42 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onUpdateSettings,
   onToast
 }) => {
+  const [provider, setProvider] = useState<'gemini' | 'openai' | 'qwen' | 'custom'>('gemini');
+  const [apiKey, setApiKey] = useState('');
+  const [model, setModel] = useState('');
+  const [endpoint, setEndpoint] = useState('');
   const [apiUrl, setApiUrl] = useState('');
-  const [geminiKey, setGeminiKey] = useState('');
   const [showKey, setShowKey] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [importStatus, setImportStatus] = useState<{ success?: boolean; message?: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
+    const savedProvider = (localStorage.getItem('el_shaddai_ai_provider') as any) || 'gemini';
+    const savedKey = localStorage.getItem('el_shaddai_ai_api_key') || localStorage.getItem('el_shaddai_gemini_api_key') || StorageService.getGeminiApiKey();
+    const savedModel = localStorage.getItem('el_shaddai_ai_model') || '';
+    const savedEndpoint = localStorage.getItem('el_shaddai_ai_endpoint') || '';
+
+    setProvider(savedProvider);
+    setApiKey(savedKey);
+    setModel(savedModel);
+    setEndpoint(savedEndpoint);
     setApiUrl(StorageService.getApiUrl());
-    setGeminiKey(StorageService.getGeminiApiKey());
   }, []);
 
   const handleSaveConnection = (e: React.FormEvent) => {
     e.preventDefault();
+    localStorage.setItem('el_shaddai_ai_provider', provider);
+    localStorage.setItem('el_shaddai_ai_api_key', apiKey.trim());
+    localStorage.setItem('el_shaddai_gemini_api_key', apiKey.trim());
+    localStorage.setItem('el_shaddai_ai_model', model.trim());
+    localStorage.setItem('el_shaddai_ai_endpoint', endpoint.trim());
+
     StorageService.saveApiUrl(apiUrl);
-    StorageService.saveGeminiApiKey(geminiKey);
+    StorageService.saveGeminiApiKey(apiKey.trim());
+
     setSaveSuccess(true);
-    onToast('Configuración de conexión guardada');
+    onToast('Configuración del Mentor IA guardada');
     setTimeout(() => setSaveSuccess(false), 3000);
   };
 
@@ -122,28 +141,64 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         <p className="text-xs sm:text-[13px] text-[#454652] leading-relaxed">
-          En el dispositivo móvil (APK), la llamada local de red no está disponible de forma predeterminada. Puedes configurar cómo se comunica tu aplicación con el Mentor Teológico de dos maneras:
+          Configura tu propio proveedor y modelo de IA (Google Gemini, OpenAI / ChatGPT, Alibaba Qwen o Servidor Propio) para obtener respuestas teológicas ilimitadas sin respuestas pregrabadas ni límites diarios:
         </p>
 
         <form onSubmit={handleSaveConnection} className="space-y-4">
-          {/* Option 1: Direct Gemini API key (Client-side) */}
+          {/* Provider Selection */}
+          <div className="space-y-1.5">
+            <label className="flex items-center gap-1.5 text-xs font-label-caps text-[#454652] uppercase font-semibold">
+              <Sparkles className="w-3.5 h-3.5 text-[#767683]" />
+              Proveedor de IA
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {[
+                { id: 'gemini', label: 'Gemini', note: 'Google (Gratis)' },
+                { id: 'openai', label: 'ChatGPT', note: 'OpenAI (GPT-4o)' },
+                { id: 'qwen', label: 'Qwen', note: 'Alibaba Cloud' },
+                { id: 'custom', label: 'OpenAI Comp.', note: 'Local / Ollama' }
+              ].map((p) => (
+                <button
+                  type="button"
+                  key={p.id}
+                  onClick={() => setProvider(p.id as any)}
+                  className={`p-2.5 rounded-xl border text-left flex flex-col gap-0.5 cursor-pointer transition-all ${
+                    provider === p.id
+                      ? 'bg-[#000666]/10 border-[#000666] text-[#000666] font-bold shadow-xs'
+                      : 'bg-white border-[#C6C5D4]/60 text-[#454652] hover:border-[#000666]/40'
+                  }`}
+                >
+                  <span className="text-xs">{p.label}</span>
+                  <span className="text-[10px] opacity-70">{p.note}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* API Key */}
           <div className="space-y-1.5">
             <label className="flex items-center gap-1.5 text-xs font-label-caps text-[#454652] uppercase font-semibold">
               <Key className="w-3.5 h-3.5 text-[#767683]" />
-              Clave API de Gemini (Uso Directo Local)
+              Clave API ({provider.toUpperCase()})
             </label>
             <div className="relative flex items-center">
               <input
                 type={showKey ? 'text' : 'password'}
-                value={geminiKey}
-                onChange={(e) => setGeminiKey(e.target.value)}
-                placeholder="Introduzca su clave API de Gemini (ej. AIzaSy...)"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                placeholder={
+                  provider === 'gemini'
+                    ? 'AIzaSy...'
+                    : provider === 'openai'
+                      ? 'sk-proj-...'
+                      : 'Clave API del proveedor...'
+                }
                 className="w-full bg-[#FFFFFF] border border-[#C6C5D4] rounded-xl py-2.5 pl-3 pr-10 text-xs sm:text-sm font-mono text-[#000666] focus:outline-none focus:ring-1 focus:ring-[#000666] placeholder-[#C6C5D4]"
               />
               <button
                 type="button"
                 onClick={() => setShowKey(!showKey)}
-                className="absolute right-3 text-[#767683] hover:text-[#000666]"
+                className="absolute right-3 text-[#767683] hover:text-[#000666] cursor-pointer"
               >
                 {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -151,26 +206,74 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <p className="text-[11px] text-[#767683] leading-normal flex items-start gap-1">
               <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-[#735C00]" />
               <span>
-                <strong>Recomendado para APK:</strong> Tu dispositivo se comunicará directamente con los servidores de Google usando tu clave. Obtén una clave gratis en Google AI Studio. Se guarda de forma segura y local en tu teléfono.
+                {provider === 'gemini'
+                  ? 'Obtén tu clave de Google Gemini 100% gratis en aistudio.google.com.'
+                  : provider === 'openai'
+                    ? 'Obtén tu clave en platform.openai.com/api-keys.'
+                    : 'Las credenciales se almacenan de forma local en tu navegador / dispositivo.'}
               </span>
             </p>
           </div>
 
+          {/* Model Name (Optional) */}
+          <div className="space-y-1.5">
+            <label className="flex items-center gap-1.5 text-xs font-label-caps text-[#454652] uppercase font-semibold">
+              <Sparkles className="w-3.5 h-3.5 text-[#767683]" />
+              Modelo Específico (Opcional)
+            </label>
+            <input
+              type="text"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+              placeholder={
+                provider === 'gemini'
+                  ? 'gemini-2.5-flash (por defecto)'
+                  : provider === 'openai'
+                    ? 'gpt-4o-mini (por defecto)'
+                    : provider === 'qwen'
+                      ? 'qwen-plus / qwen-max (por defecto)'
+                      : 'nombre-del-modelo'
+              }
+              className="w-full bg-[#FFFFFF] border border-[#C6C5D4] rounded-xl py-2 px-3 text-xs sm:text-sm text-[#000666] focus:outline-none focus:ring-1 focus:ring-[#000666] placeholder-[#C6C5D4]"
+            />
+          </div>
+
+          {/* Custom Endpoint (for Qwen or Custom) */}
+          {(provider === 'qwen' || provider === 'custom') && (
+            <div className="space-y-1.5 animate-in fade-in duration-150">
+              <label className="flex items-center gap-1.5 text-xs font-label-caps text-[#454652] uppercase font-semibold">
+                <Server className="w-3.5 h-3.5 text-[#767683]" />
+                Endpoint URL compatible con OpenAI
+              </label>
+              <input
+                type="url"
+                value={endpoint}
+                onChange={(e) => setEndpoint(e.target.value)}
+                placeholder={
+                  provider === 'qwen'
+                    ? 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions'
+                    : 'http://localhost:11434/v1/chat/completions'
+                }
+                className="w-full bg-[#FFFFFF] border border-[#C6C5D4] rounded-xl py-2 px-3 text-xs sm:text-sm text-[#000666] focus:outline-none focus:ring-1 focus:ring-[#000666] placeholder-[#C6C5D4]"
+              />
+            </div>
+          )}
+
           {/* Divider */}
-          <div className="relative py-2 flex items-center justify-center">
+          <div className="relative py-1 flex items-center justify-center">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-[#C6C5D4]/40"></div>
             </div>
             <span className="relative bg-[#FBF9F4] px-3 text-[10px] font-label-caps text-[#767683] uppercase tracking-widest">
-              ó
+              ó Servidor Proxy Remoto
             </span>
           </div>
 
-          {/* Option 2: Custom Server URL */}
+          {/* Custom Backend Server URL */}
           <div className="space-y-1.5">
             <label className="flex items-center gap-1.5 text-xs font-label-caps text-[#454652] uppercase font-semibold">
               <Server className="w-3.5 h-3.5 text-[#767683]" />
-              URL del Servidor Backend (Remoto)
+              URL del Servidor Backend (Remoto / APK)
             </label>
             <input
               type="url"
@@ -182,7 +285,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <p className="text-[11px] text-[#767683] leading-normal flex items-start gap-1">
               <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-[#735C00]" />
               <span>
-                Utiliza esto si has desplegado el backend de Node (`server.ts`) en un hosting en la nube (Render, Fly.io, etc.). Si configuras un API Key local arriba, este campo será ignorado.
+                Opcional para compilaciones APK nativas si no deseas colocar la clave en el teléfono y cuentas con un backend Express desplegado en la nube.
               </span>
             </p>
           </div>
@@ -194,13 +297,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               className="px-4 py-2.5 rounded-xl bg-[#000666] text-white hover:bg-[#1A237E] transition-all font-body-ui text-xs font-bold flex items-center gap-2 cursor-pointer shadow-xs"
             >
               <Save className="w-4 h-4" />
-              Guardar Conexión
+              Guardar Credenciales de IA
             </button>
 
             {saveSuccess && (
               <span className="text-xs text-[#2E7D32] flex items-center gap-1 font-medium animate-in fade-in slide-in-from-left-2">
                 <CheckCircle className="w-4 h-4" />
-                ¡Cambios aplicados!
+                ¡Configuración aplicada!
               </span>
             )}
           </div>
