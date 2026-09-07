@@ -14,8 +14,15 @@ import '../../data/ai_mentor_service.dart';
 /// active scripture context injection, and strict alignment to biblical studies.
 class SanctuaryAiMentorView extends ConsumerStatefulWidget {
   final AppDatabase? database;
+  final String? initialVerseReference;
+  final String? initialVerseText;
 
-  const SanctuaryAiMentorView({super.key, this.database});
+  const SanctuaryAiMentorView({
+    super.key,
+    this.database,
+    this.initialVerseReference,
+    this.initialVerseText,
+  });
 
   @override
   ConsumerState<SanctuaryAiMentorView> createState() =>
@@ -28,6 +35,16 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
   bool _isLoading = false;
   int _queriesUsedToday = 0;
   final int _dailyLimit = 15;
+
+  String? _activeReference;
+  String? _activeVerseText;
+
+  @override
+  void initState() {
+    super.initState();
+    _activeReference = widget.initialVerseReference;
+    _activeVerseText = widget.initialVerseText;
+  }
 
   final List<String> _suggestedPrompts = [
     '¿Qué dice la Biblia sobre la amistad?',
@@ -370,25 +387,11 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
     final AppDatabase effectiveDb =
         widget.database ?? ref.watch(appSettingsControllerProvider).database;
 
-    // Active scripture coordinates from Riverpod
-    final currentBookId = ref.watch(appSelectedBookProvider);
-    final currentChapter = ref.watch(appSelectedChapterProvider);
-    final currentVerse = ref.watch(appSelectedVerseProvider);
-
-    final bookInfo = kBibleBooks.firstWhere(
-      (b) => b.id == currentBookId,
-      orElse: () => const BibleBookInfo(
-        number: 40,
-        id: 'MAT',
-        name: 'Mateo',
-        totalChapters: 28,
-        isNewTestament: true,
-      ),
-    );
-
-    final activeReference = currentVerse != null
-        ? '${bookInfo.name} $currentChapter:$currentVerse'
-        : '${bookInfo.name} $currentChapter';
+    // Active scripture context (only if explicitly set by user or passed as initial context)
+    final hasActiveReference =
+        _activeReference != null && _activeReference!.trim().isNotEmpty;
+    final String activeReference =
+        hasActiveReference ? _activeReference!.trim() : '';
 
     final remainingQueries = _dailyLimit - _queriesUsedToday;
 
@@ -494,13 +497,15 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
             ),
             child: Row(
               children: [
-                const Icon(
-                  LucideIcons.bookOpen,
+                Icon(
+                  hasActiveReference
+                      ? LucideIcons.bookOpen
+                      : LucideIcons.messageSquare,
                   size: 15,
                   color: SanctuaryColors.waveNavy,
                 ),
                 const SizedBox(width: 8),
-                Flexible(
+                Expanded(
                   child: RichText(
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -510,21 +515,60 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                         color: theme.colorScheme.onSurface,
                       ),
                       children: [
-                        const TextSpan(
-                          text: 'Contexto activo: ',
-                          style: TextStyle(fontWeight: FontWeight.w500),
+                        TextSpan(
+                          text: hasActiveReference
+                              ? 'Contexto activo: '
+                              : 'Contexto: ',
+                          style: const TextStyle(fontWeight: FontWeight.w500),
                         ),
                         TextSpan(
-                          text: activeReference,
-                          style: const TextStyle(
+                          text: hasActiveReference
+                              ? activeReference
+                              : 'Consulta Temática Libre (Sin versículo predefinido)',
+                          style: TextStyle(
                             fontWeight: FontWeight.w800,
-                            color: SanctuaryColors.waveNavy,
+                            color: hasActiveReference
+                                ? SanctuaryColors.waveNavy
+                                : theme.colorScheme.onSurface
+                                    .withValues(alpha: 0.8),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
+                if (hasActiveReference) ...[
+                  const SizedBox(width: 4),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        _activeReference = null;
+                        _activeVerseText = null;
+                      });
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(LucideIcons.x,
+                              size: 12, color: SanctuaryColors.sunOrange),
+                          const SizedBox(width: 2),
+                          Text(
+                            'Quitar',
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: SanctuaryColors.sunOrange,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
                 const SizedBox(width: 8),
                 Container(
                   padding:
@@ -536,11 +580,11 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(LucideIcons.shieldCheck,
+                      const Icon(LucideIcons.zap,
                           size: 11, color: Color(0xFF10B981)),
                       const SizedBox(width: 3),
                       Text(
-                        'Alineación Teológica',
+                        'Respuestas Resumidas',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(
@@ -818,7 +862,9 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                       controller: _inputController,
                       decoration: InputDecoration(
                         hintText: remainingQueries > 0
-                            ? 'Pregunta sobre teología, hebreo, griego o $activeReference...'
+                            ? (activeReference.isNotEmpty
+                                ? 'Pregunta sobre teología o $activeReference...'
+                                : 'Pregunta sobre temas bíblicos (amistad, perdón, fe)...')
                             : 'Cupo diario agotado por hoy',
                         hintStyle: GoogleFonts.inter(fontSize: 12.5),
                         contentPadding: const EdgeInsets.symmetric(
@@ -926,15 +972,22 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
             ),
             child: Row(
               children: [
-                const Icon(LucideIcons.bookMarked,
-                    size: 18, color: SanctuaryColors.waveNavy),
+                Icon(
+                  activeReference.isNotEmpty
+                      ? LucideIcons.bookMarked
+                      : LucideIcons.messageSquare,
+                  size: 18,
+                  color: SanctuaryColors.waveNavy,
+                ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Pasaje de Estudio Seleccionado',
+                        activeReference.isNotEmpty
+                            ? 'Pasaje de Estudio Seleccionado'
+                            : 'Modo de Estudio Libre',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(
@@ -944,7 +997,9 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                         ),
                       ),
                       Text(
-                        activeReference,
+                        activeReference.isNotEmpty
+                            ? activeReference
+                            : 'Consulta Temática (Sin versículo predefinido)',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(

@@ -14,7 +14,10 @@ import {
   HelpCircle,
   Bot,
   SlidersHorizontal,
-  Key
+  Key,
+  MessageSquare,
+  X,
+  Zap
 } from 'lucide-react';
 import { BibleVerse } from '../types';
 import { ShareService } from '../services/shareService';
@@ -52,6 +55,7 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
 }) => {
   const isDark = currentTheme === 'dark';
   const isSepia = currentTheme === 'sepia';
+  const [activeVerseContext, setActiveVerseContext] = useState<BibleVerse | null>(initialVerse || null);
   const [inputQuery, setInputQuery] = useState(
     initialVerse ? `Explícame el contexto histórico y teológico de ${initialVerse.bookName} ${initialVerse.chapter}:${initialVerse.verse}` : ''
   );
@@ -60,6 +64,14 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
   const [quota, setQuota] = useState<MentorQuotaInfo>(() => getMentorQuota());
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  // Sync activeVerseContext if initialVerse changes from parent
+  useEffect(() => {
+    if (initialVerse) {
+      setActiveVerseContext(initialVerse);
+      setInputQuery(`Explícame el contexto histórico y teológico de ${initialVerse.bookName} ${initialVerse.chapter}:${initialVerse.verse}`);
+    }
+  }, [initialVerse]);
 
   // Sync quota on mount and custom events
   useEffect(() => {
@@ -164,10 +176,10 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           prompt: textToSend,
-          selectedVerse: initialVerse
+          selectedVerse: activeVerseContext
             ? {
-              reference: `${initialVerse.bookName} ${initialVerse.chapter}:${initialVerse.verse}`,
-              text: initialVerse.text
+              reference: `${activeVerseContext.bookName} ${activeVerseContext.chapter}:${activeVerseContext.verse}`,
+              text: activeVerseContext.text
             }
             : undefined,
           provider: userProvider,
@@ -315,6 +327,69 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
           </div>
         </div>
       </header>
+
+      {/* Active Biblical Context Indicator Bar */}
+      <div
+        className={`flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-2xl border text-xs shadow-2xs transition-all ${
+          activeVerseContext
+            ? isDark
+              ? 'bg-[#0B2B68]/30 border-[#FED65B]/30 text-white'
+              : isSepia
+                ? 'bg-[#FAF0E2] border-[#705335]/30 text-[#3B2D1F]'
+                : 'bg-[#0B2B68]/5 border-[#0B2B68]/20 text-[#0B2B68]'
+            : isDark
+              ? 'bg-white/5 border-white/10 text-white/70'
+              : isSepia
+                ? 'bg-[#FAF6EF] border-[#705335]/15 text-[#705335]'
+                : 'bg-slate-50 border-slate-200 text-slate-600'
+        }`}
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          {activeVerseContext ? (
+            <BookOpen className="w-4 h-4 text-[#FED65B] shrink-0" />
+          ) : (
+            <MessageSquare className="w-4 h-4 text-[#0B2B68] shrink-0" />
+          )}
+          <div className="truncate">
+            {activeVerseContext ? (
+              <span>
+                <span className="font-semibold">Contexto activo:</span>{' '}
+                <span className="font-bold text-[#F25C05]">
+                  {activeVerseContext.bookName} {activeVerseContext.chapter}:{activeVerseContext.verse}
+                </span>
+                <span className="opacity-75 ml-1.5 hidden sm:inline italic">
+                  ("{activeVerseContext.text.slice(0, 45)}...")
+                </span>
+              </span>
+            ) : (
+              <span>
+                <span className="font-semibold">Contexto:</span> Consulta Temática Libre (Sin versículo predefinido)
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          {activeVerseContext && (
+            <button
+              type="button"
+              onClick={() => {
+                setActiveVerseContext(null);
+                setInputQuery('');
+              }}
+              className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-[#F25C05]/10 text-[#F25C05] hover:bg-[#F25C05]/20 transition-colors cursor-pointer flex items-center gap-1 shadow-2xs"
+              title="Quitar versículo y pasar a consulta temática libre"
+            >
+              <X className="w-3 h-3" />
+              <span>Quitar</span>
+            </button>
+          )}
+          <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+            <Zap className="w-3 h-3" />
+            <span>Respuestas Resumidas</span>
+          </span>
+        </div>
+      </div>
 
       {/* Trial Quota Notice Banner when limit reached */}
       {!quota.canQuery && (
@@ -485,11 +560,11 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
             placeholder={
-              hasCustomKey
-                ? 'Pregunta sobre temas bíblicos (ej. amistad, perdón) o pasajes (Ilimitado con tu clave)...'
-                : quota.canQuery
-                  ? `Pregunta sobre pasajes, temas bíblicos o teología (${quota.remaining} consultas restantes hoy)...`
-                  : 'Límite de prueba alcanzado. Configura tu clave en Ajustes de IA para consultas ilimitadas.'
+              !quota.canQuery && !hasCustomKey
+                ? 'Límite de prueba alcanzado. Configura tu clave en Ajustes de IA para consultas ilimitadas.'
+                : activeVerseContext
+                  ? `Pregunta sobre ${activeVerseContext.bookName} ${activeVerseContext.chapter}:${activeVerseContext.verse} o doctrina...`
+                  : 'Pregunta sobre temas bíblicos (amistad, perdón, fe, doctrina) o pasajes...'
             }
             className={`w-full border rounded-2xl pl-5 pr-14 py-3.5 text-sm sm:text-base font-body-ui shadow-sm transition-all outline-none disabled:opacity-60 disabled:cursor-not-allowed ${isDark
                 ? 'bg-[#131722] border-white/20 text-white placeholder:text-white/40 focus:border-[#FED65B] focus:ring-2 focus:ring-[#FED65B]/20'
