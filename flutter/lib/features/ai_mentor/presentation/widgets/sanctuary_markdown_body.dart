@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../core/theme/sanctuary_theme.dart';
 
 /// Renders Theological AI Mentor Markdown text with clean typography,
@@ -21,8 +22,8 @@ class SanctuaryMarkdownBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final effectiveTextColor = textColor ??
-        (isUser ? Colors.white : theme.colorScheme.onSurface);
+    final effectiveTextColor =
+        textColor ?? (isUser ? Colors.white : theme.colorScheme.onSurface);
     final effectiveBoldColor = boldColor ??
         (isUser
             ? Colors.white

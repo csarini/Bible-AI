@@ -216,11 +216,13 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
           return AlertDialog(
             title: Row(
               children: [
-                const Icon(LucideIcons.bot, color: SanctuaryColors.sunOrange, size: 22),
+                const Icon(LucideIcons.bot,
+                    color: SanctuaryColors.sunOrange, size: 22),
                 const SizedBox(width: 8),
                 Text(
                   'Ajustes del Mentor IA',
-                  style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 17),
+                  style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w700, fontSize: 17),
                 ),
               ],
             ),
@@ -231,20 +233,24 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                 children: [
                   Text(
                     'Configura tus credenciales para usar Gemini, ChatGPT o Qwen con respuestas bíblicas en tiempo real.',
-                    style: GoogleFonts.inter(fontSize: 12.5, color: Colors.grey[700]),
+                    style: GoogleFonts.inter(
+                        fontSize: 12.5, color: Colors.grey[700]),
                   ),
                   const SizedBox(height: 16),
                   Text(
                     'Proveedor de IA:',
-                    style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.inter(
+                        fontSize: 12, fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 6),
                   DropdownButtonFormField<String>(
                     value: selectedProvider,
                     isExpanded: true,
                     decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
                     ),
                     items: const [
                       DropdownMenuItem(
@@ -270,9 +276,11 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                           selectedProvider = val;
                           if (val == 'gemini' && modelController.text.isEmpty) {
                             modelController.text = 'gemini-3.6-flash';
-                          } else if (val == 'openai' && modelController.text.isEmpty) {
+                          } else if (val == 'openai' &&
+                              modelController.text.isEmpty) {
                             modelController.text = 'gpt-4o-mini';
-                          } else if (val == 'qwen' && modelController.text.isEmpty) {
+                          } else if (val == 'qwen' &&
+                              modelController.text.isEmpty) {
                             modelController.text = 'qwen/qwen-2.5-72b-instruct';
                           }
                         });
@@ -282,7 +290,8 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                   const SizedBox(height: 14),
                   Text(
                     'Clave API ($selectedProvider):',
-                    style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.inter(
+                        fontSize: 12, fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 6),
                   TextField(
@@ -294,8 +303,10 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                           : selectedProvider == 'openai'
                               ? 'sk-proj-...'
                               : 'sk-or-v1-...',
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 10),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
                       suffixIcon: IconButton(
                         icon: Icon(
                           obscureKey ? LucideIcons.eyeOff : LucideIcons.eye,
@@ -312,7 +323,8 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                   const SizedBox(height: 14),
                   Text(
                     'Modelo (opcional):',
-                    style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.inter(
+                        fontSize: 12, fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 6),
                   TextField(
@@ -323,23 +335,30 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                           : selectedProvider == 'openai'
                               ? 'gpt-4o-mini'
                               : 'qwen/qwen-2.5-72b-instruct',
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 10),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
                     ),
                   ),
-                  if (selectedProvider == 'qwen' || selectedProvider == 'custom') ...[
+                  if (selectedProvider == 'qwen' ||
+                      selectedProvider == 'custom') ...[
                     const SizedBox(height: 14),
                     Text(
                       'URL Endpoint / Proxy (opcional):',
-                      style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700),
+                      style: GoogleFonts.inter(
+                          fontSize: 12, fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 6),
                     TextField(
                       controller: endpointController,
                       decoration: InputDecoration(
-                        hintText: 'https://openrouter.ai/api/v1/chat/completions',
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        hintText:
+                            'https://openrouter.ai/api/v1/chat/completions',
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 10),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
                       ),
                     ),
                   ],
@@ -355,24 +374,29 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                 onPressed: () async {
                   await db.saveSetting('ai_provider', selectedProvider);
                   await db.saveSetting('ai_api_key', keyController.text.trim());
-                  await db.saveSetting('ai_gemini_key', keyController.text.trim());
+                  await db.saveSetting(
+                      'ai_gemini_key', keyController.text.trim());
                   if (modelController.text.trim().isNotEmpty) {
-                    await db.saveSetting('ai_model', modelController.text.trim());
+                    await db.saveSetting(
+                        'ai_model', modelController.text.trim());
                   }
                   if (endpointController.text.trim().isNotEmpty) {
-                    await db.saveSetting('ai_endpoint', endpointController.text.trim());
+                    await db.saveSetting(
+                        'ai_endpoint', endpointController.text.trim());
                   }
                   if (ctx.mounted) {
                     Navigator.of(ctx).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('✓ Credenciales y proveedor de IA guardados exitosamente.'),
+                        content: Text(
+                            '✓ Credenciales y proveedor de IA guardados exitosamente.'),
                         backgroundColor: SanctuaryColors.waveNavy,
                       ),
                     );
                   }
                 },
-                style: FilledButton.styleFrom(backgroundColor: SanctuaryColors.waveNavy),
+                style: FilledButton.styleFrom(
+                    backgroundColor: SanctuaryColors.waveNavy),
                 child: const Text('Guardar Credenciales'),
               ),
             ],
@@ -469,11 +493,6 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                 ),
               ],
             ),
-          ),
-          IconButton(
-            icon: const Icon(LucideIcons.bot),
-            tooltip: 'Ajustes de IA (Gemini / ChatGPT / Qwen)',
-            onPressed: () => _showAiSettingsDialog(effectiveDb),
           ),
           IconButton(
             icon: const Icon(LucideIcons.settings2),
