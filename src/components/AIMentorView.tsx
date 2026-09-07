@@ -20,6 +20,7 @@ import {
   Zap
 } from 'lucide-react';
 import { BibleVerse } from '../types';
+import Markdown from 'react-markdown';
 import { ShareService } from '../services/shareService';
 import { StorageService } from '../services/storageService';
 import {
@@ -93,7 +94,7 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
     {
       id: 'welcome-1',
       role: 'mentor',
-      text: '¡La paz de Cristo sea contigo! Soy tu Mentor Bíblico y Teológico. Puedes consultarme sobre temas de la vida cristiana (por ejemplo: ¿qué dice la Biblia sobre la amistad o el perdón?), o pedirme que analice cualquier versículo bíblico en su contexto histórico, raíces en griego y hebreo, y aplicación espiritual.',
+      text: '¡La paz de Cristo sea contigo! Soy tu **Mentor Bíblico y Teológico**.\n\nPuedes consultarme sobre temas de la vida cristiana (por ejemplo: *¿qué dice la Biblia sobre la amistad o el perdón?*), o pedirme que analice cualquier versículo bíblico en su contexto histórico, raíces en griego y hebreo, y aplicación espiritual.',
       insights: [
         'Consultas temáticas (Amistad, Fe, Perdón, Matrimonio, Oración, Esperanza)',
         'Análisis exegético y etimológico de versículos en hebreo, arameo y griego bíblico',
@@ -484,10 +485,123 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
                 </div>
               )}
 
-              <p className={`font-body-reading text-[15px] sm:text-[16px] leading-relaxed whitespace-pre-line ${msg.role === 'user' ? 'text-white' : isDark ? 'text-white/90' : isSepia ? 'text-[#3B2D1F]' : 'text-[#1B1C19]'
-                }`}>
-                {msg.text}
-              </p>
+              {msg.role === 'user' ? (
+                <p className="font-body-reading text-[15px] sm:text-[16px] leading-relaxed whitespace-pre-line text-white">
+                  {msg.text}
+                </p>
+              ) : (
+                <div
+                  className={`markdown-body font-body-reading text-[15px] sm:text-[16px] leading-relaxed ${
+                    isDark ? 'text-white/90' : isSepia ? 'text-[#3B2D1F]' : 'text-[#1B1C19]'
+                  }`}
+                >
+                  <Markdown
+                    components={{
+                      h1: ({ children }) => (
+                        <h1
+                          className={`font-serif font-bold text-lg sm:text-xl mt-3 mb-2 pb-1 border-b ${
+                            isDark
+                              ? 'border-white/15 text-[#FED65B]'
+                              : isSepia
+                                ? 'border-[#705335]/20 text-[#3B2D1F]'
+                                : 'border-[#0B2B68]/15 text-[#0B2B68]'
+                          }`}
+                        >
+                          {children}
+                        </h1>
+                      ),
+                      h2: ({ children }) => (
+                        <h2
+                          className={`font-serif font-bold text-base sm:text-lg mt-3 mb-1.5 ${
+                            isDark
+                              ? 'text-[#FED65B]'
+                              : isSepia
+                                ? 'text-[#705335]'
+                                : 'text-[#0B2B68]'
+                          }`}
+                        >
+                          {children}
+                        </h2>
+                      ),
+                      h3: ({ children }) => (
+                        <h3
+                          className={`font-sans font-bold text-sm sm:text-base mt-2.5 mb-1 ${
+                            isDark
+                              ? 'text-[#FED65B]'
+                              : isSepia
+                                ? 'text-[#705335]'
+                                : 'text-[#0B2B68]'
+                          }`}
+                        >
+                          {children}
+                        </h3>
+                      ),
+                      p: ({ children }) => (
+                        <p className="mb-2.5 last:mb-0 leading-relaxed">
+                          {children}
+                        </p>
+                      ),
+                      strong: ({ children }) => (
+                        <strong
+                          className={`font-bold ${
+                            isDark
+                              ? 'text-[#FED65B]'
+                              : isSepia
+                                ? 'text-[#705335]'
+                                : 'text-[#0B2B68]'
+                          }`}
+                        >
+                          {children}
+                        </strong>
+                      ),
+                      em: ({ children }) => (
+                        <em className="italic opacity-90">{children}</em>
+                      ),
+                      ul: ({ children }) => (
+                        <ul className="list-disc list-outside ml-5 my-2 space-y-1 text-[14.5px] sm:text-[15.5px]">
+                          {children}
+                        </ul>
+                      ),
+                      ol: ({ children }) => (
+                        <ol className="list-decimal list-outside ml-5 my-2 space-y-1 text-[14.5px] sm:text-[15.5px]">
+                          {children}
+                        </ol>
+                      ),
+                      li: ({ children }) => (
+                        <li className="leading-relaxed pl-1">{children}</li>
+                      ),
+                      blockquote: ({ children }) => (
+                        <blockquote
+                          className={`border-l-3 pl-3.5 my-2.5 italic text-[14px] sm:text-[15px] py-1.5 rounded-r-lg ${
+                            isDark
+                              ? 'border-[#FED65B] bg-white/5 text-white/80'
+                              : isSepia
+                                ? 'border-[#705335] bg-[#FAF0E2] text-[#3B2D1F]'
+                                : 'border-[#F25C05] bg-[#FAF8F5] text-[#1B1C19]'
+                          }`}
+                        >
+                          {children}
+                        </blockquote>
+                      ),
+                      code: ({ children }) => (
+                        <code
+                          className={`px-1.5 py-0.5 rounded text-xs font-mono font-medium ${
+                            isDark
+                              ? 'bg-white/10 text-[#FED65B]'
+                              : isSepia
+                                ? 'bg-[#EAE0D0] text-[#705335]'
+                                : 'bg-[#0B2B68]/10 text-[#0B2B68]'
+                          }`}
+                        >
+                          {children}
+                        </code>
+                      )
+                    }}
+                  >
+                    {msg.text}
+                  </Markdown>
+                </div>
+              )}
 
               {/* Greek / Hebrew Root Box */}
               {msg.greekHebrewRoot && (

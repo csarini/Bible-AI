@@ -9,6 +9,7 @@ import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 import '../../data/ai_mentor_service.dart';
+import '../widgets/sanctuary_markdown_body.dart';
 
 /// Interactive theological AI chat view with local Drift SQLite persistence,
 /// active scripture context injection, and strict alignment to biblical studies.
@@ -754,16 +755,13 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                               ],
                             ),
                             const SizedBox(height: 8),
-                            // Message Content
-                            SelectableText(
-                              msg.messageText,
-                              style: GoogleFonts.inter(
-                                fontSize: 13.5,
-                                height: 1.5,
-                                color: isUser
-                                    ? Colors.white
-                                    : theme.colorScheme.onSurface,
-                              ),
+                            // Message Content with Markdown Formatting
+                            SanctuaryMarkdownBody(
+                              data: msg.messageText,
+                              isUser: isUser,
+                              textColor: isUser
+                                  ? Colors.white
+                                  : theme.colorScheme.onSurface,
                             ),
                           ],
                         ),

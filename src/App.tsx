@@ -405,12 +405,9 @@ export default function App() {
                 setShareModalContent({
                   text: text,
                   reference: reference || title,
-                  book: 'Biblia Inteligente',
-                  chapter: 1,
-                  verse: 1,
-                  theme: title,
+                  title: title,
                   reflection: text,
-                  prayer: ''
+                  translation: 'RVR1909'
                 });
                 setIsShareModalOpen(true);
               }}

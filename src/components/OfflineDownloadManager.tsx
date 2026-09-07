@@ -224,7 +224,7 @@ export const OfflineDownloadManager: React.FC<OfflineDownloadManagerProps> = ({
                 </button>
               ) : !status.isComplete ? (
                 <button
-                  onClick={handleStartDownload}
+                  onClick={() => handleStartDownload()}
                   className="px-4 py-2 rounded-xl bg-[#000666] text-[#FED65B] text-xs font-bold hover:bg-[#000666]/90 transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
                 >
                   <Download className="w-3.5 h-3.5" />
