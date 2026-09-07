@@ -35,7 +35,7 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
   int _queriesUsedToday = 0;
-  final int _dailyLimit = 15;
+  final int _dailyLimit = 2;
 
   String? _activeReference;
   String? _activeVerseText;
@@ -51,9 +51,7 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
     '¿Qué dice la Biblia sobre la amistad?',
     '¿Qué dice la Biblia sobre el perdón y la reconciliación?',
     'Analiza Juan 3:16 y qué significa para mi vida',
-    '¿Qué significa «Shālôm» (שָׁלוֹם) en su raíz hebrea?',
     '¿Cuál es el significado del pacto en Génesis 17:1?',
-    '¿Qué significa «Qāvāh» (קָוāh) en Isaías 40:31?',
   ];
 
   @override
