@@ -1149,7 +1149,7 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.between,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           remainingQueries > 0
