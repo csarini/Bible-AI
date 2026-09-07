@@ -28,7 +28,7 @@ class SanctuaryMarkdownBody extends StatelessWidget {
         (isUser
             ? Colors.white
             : (theme.brightness == Brightness.dark
-                ? SanctuaryColors.sunGold
+                ? SanctuaryColors.amberGold
                 : SanctuaryColors.waveNavy));
 
     if (isUser) {

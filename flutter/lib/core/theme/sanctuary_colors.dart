@@ -11,6 +11,7 @@ class ElShaddaiColors {
   static const Color cyanAccent = Color(0xFF00A3E0); // Terciario, Enlaces, Elementos Informativos
   static const Color cyanSky = Color(0xFF00A3E0); // Alias Cian institucional
   static const Color amberGold = Color(0xFFFED65B); // Iconografía, Medallas de Logros, Resaltados Especiales
+  static const Color sunGold = amberGold; // Alias dorado institucional
   static const Color brandPurple = Color(0xFF4E53A4); // Categorías Secundarias, Etiquetas de Temas
   static const Color emeraldGreen = Color(0xFF10B981); // Éxito, Validaciones, Indicadores Positivos
 
@@ -89,6 +90,7 @@ class SanctuaryColors {
   static const Color cyanSky = ElShaddaiColors.cyanAccent;
   static const Color electricCyan = ElShaddaiColors.cyanAccent;
   static const Color amberGold = ElShaddaiColors.amberGold;
+  static const Color sunGold = ElShaddaiColors.sunGold;
   static const Color brandPurple = ElShaddaiColors.brandPurple;
   static const Color emeraldGreen = ElShaddaiColors.emeraldGreen;
 
