@@ -302,13 +302,13 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
                   ? isDark ? 'bg-amber-950/40 text-amber-300 border-amber-500/30' : 'bg-amber-50 text-amber-700 border-amber-200'
                   : isDark ? 'bg-rose-950/40 text-rose-300 border-rose-500/30' : 'bg-rose-50 text-rose-700 border-rose-200'
               }`}
-            title={`Límite de ${MENTOR_DAILY_LIMIT} consultas diarias para evitar gastos excesivos. Se reinicia a las 00:00 hs.`}
+            title={`Límite de ${MENTOR_DAILY_LIMIT} consultas gratuitas. Se reinicia 24 horas después de tu última pregunta.${quota.timeRemainingText ? ` (Tiempo restante: ${quota.timeRemainingText})` : ''}`}
           >
             <Clock className="w-3.5 h-3.5" />
             <span>
               {quota.remaining > 0
-                ? `${quota.remaining}/${quota.limit} consultas hoy`
-                : `0/${quota.limit} (Límite alcanzado)`}
+                ? `${quota.remaining}/${quota.limit} consultas`
+                : `0/${quota.limit} (Reinicia en ${quota.timeRemainingText || '24 hs'})`}
             </span>
           </div>
 
@@ -404,10 +404,10 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
             <AlertCircle className="w-5 h-5 text-amber-600 dark:text-rose-400 shrink-0 mt-0.5" />
             <div>
               <h4 className="text-xs sm:text-sm font-bold">
-                Límite diario de Modo Prueba alcanzado ({MENTOR_DAILY_LIMIT}/{MENTOR_DAILY_LIMIT} consultas)
+                Límite de consultas alcanzado ({MENTOR_DAILY_LIMIT}/{MENTOR_DAILY_LIMIT} consultas gratuitas)
               </h4>
               <p className="text-xs opacity-85 mt-0.5 leading-relaxed">
-                Para prevenir costos excesivos de computación, el Mentor IA está limitado a 2 consultas por día en fase de prueba. Tu cupo de 2 consultas se restablecerá automáticamente a las <strong>{quota.formattedResetTime}</strong>.
+                Has completado tus {MENTOR_DAILY_LIMIT} consultas. Tu cupo se reiniciará 24 horas después de haber hecho tu última pregunta (<strong>{quota.formattedResetTime}</strong>). Puedes configurar tu propia clave API para realizar consultas ilimitadas.
               </p>
             </div>
           </div>
@@ -429,7 +429,7 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
             Temas y pasajes recomendados
           </span>
           <span className={`text-[11px] ${subtextColor}`}>
-            {quota.remaining} de {quota.limit} consultas disponibles
+            {quota.remaining} de {quota.limit} consultas disponibles {quota.used > 0 && quota.timeRemainingText ? `• Reinicia en ${quota.timeRemainingText}` : '• Reinicia 24 hs tras última pregunta'}
           </span>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -700,8 +700,14 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
 
         {/* Small trial disclaimer below input */}
         <div className="flex items-center justify-between text-[11px] opacity-70 px-2">
-          <span>{hasCustomKey ? '✨ Consultas ilimitadas con tu propia clave' : 'Modo Prueba: Limitado a 2 consultas por día'}</span>
-          <span className="font-semibold">{hasCustomKey ? 'Activo' : `${quota.remaining} / ${quota.limit} hoy`}</span>
+          <span>{hasCustomKey ? '✨ Consultas ilimitadas con tu propia clave' : 'Modo Prueba: 2 consultas gratuitas (reinicia 24 hs tras última pregunta)'}</span>
+          <span className="font-semibold">
+            {hasCustomKey
+              ? 'Activo'
+              : quota.remaining > 0
+                ? `${quota.remaining} / ${quota.limit} disponibles`
+                : `0 / ${quota.limit} (Reinicia en ${quota.timeRemainingText || '24 hs'})`}
+          </span>
         </div>
       </form>
 

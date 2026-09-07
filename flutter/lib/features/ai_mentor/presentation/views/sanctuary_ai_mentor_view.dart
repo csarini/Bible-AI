@@ -36,6 +36,7 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
   bool _isLoading = false;
   int _queriesUsedToday = 0;
   final int _dailyLimit = 2;
+  int? _lastQueryTimestamp;
 
   String? _activeReference;
   String? _activeVerseText;
@@ -45,6 +46,69 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
     super.initState();
     _activeReference = widget.initialVerseReference;
     _activeVerseText = widget.initialVerseText;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadQuota();
+    });
+  }
+
+  AppDatabase _getEffectiveDb() {
+    return widget.database ?? ref.read(appSettingsControllerProvider).database;
+  }
+
+  Future<void> _loadQuota([AppDatabase? db]) async {
+    final effectiveDb = db ?? _getEffectiveDb();
+    try {
+      final usedStr = await effectiveDb.getSetting('ai_mentor_queries_used');
+      final lastMsStr = await effectiveDb.getSetting('ai_mentor_last_query_ms');
+
+      int used = int.tryParse(usedStr ?? '0') ?? 0;
+      int? lastMs = int.tryParse(lastMsStr ?? '');
+
+      if (lastMs != null && used > 0) {
+        final now = DateTime.now().millisecondsSinceEpoch;
+        final elapsed = now - lastMs;
+        const windowMs = 24 * 60 * 60 * 1000; // 24 hours
+
+        if (elapsed >= windowMs) {
+          // 24 hours have passed since the last question was asked: reset!
+          used = 0;
+          lastMs = null;
+          await effectiveDb.saveSetting('ai_mentor_queries_used', '0');
+          await effectiveDb.saveSetting('ai_mentor_last_query_ms', '');
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          _queriesUsedToday = used;
+          _lastQueryTimestamp = lastMs;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error al cargar cupo del Mentor IA: $e');
+    }
+  }
+
+  String _getResetRemainingText() {
+    if (_lastQueryTimestamp == null || _queriesUsedToday == 0) {
+      return '24 hs';
+    }
+    final now = DateTime.now().millisecondsSinceEpoch;
+    const windowMs = 24 * 60 * 60 * 1000;
+    final remainingMs = windowMs - (now - _lastQueryTimestamp!);
+    if (remainingMs <= 0) {
+      return 'menos de 1 minuto';
+    }
+    final totalMinutes = (remainingMs / (60 * 1000)).ceil();
+    final hours = totalMinutes ~/ 60;
+    final minutes = totalMinutes % 60;
+    if (hours > 0 && minutes > 0) {
+      return '${hours}h ${minutes}m';
+    } else if (hours > 0) {
+      return '${hours}h';
+    } else {
+      return '${minutes}m';
+    }
   }
 
   final List<String> _suggestedPrompts = [
@@ -82,6 +146,9 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
     final cleanQuery = query.trim();
     if (cleanQuery.isEmpty || _isLoading) return;
 
+    // Refresh persistent quota from SQLite
+    await _loadQuota(db);
+
     final customKey = await db.getSetting('ai_api_key') ??
         await db.getSetting('ai_gemini_key') ??
         AiMentorService.defaultGeminiApiKey;
@@ -89,14 +156,16 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
 
     if (!hasCustomKey && _queriesUsedToday >= _dailyLimit) {
       if (!mounted) return;
+      final remainingTime = _getResetRemainingText();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text(
-            'Límite de prueba alcanzado. Configura tus credenciales para consultas ilimitadas.',
+          content: Text(
+            'Límite de consultas alcanzado ($_dailyLimit/$_dailyLimit). Tu cupo se reiniciará 24 hs después de tu última pregunta (tiempo restante: $remainingTime).',
           ),
           backgroundColor: SanctuaryColors.sunOrange,
+          duration: const Duration(seconds: 4),
           action: SnackBarAction(
-            label: 'Configurar',
+            label: 'Configurar IA',
             textColor: Colors.white,
             onPressed: () => _showAiSettingsDialog(db),
           ),
@@ -106,9 +175,17 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
     }
 
     _inputController.clear();
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final newUsed = _queriesUsedToday + 1;
+
+    // Persist quota counter and latest question timestamp into SQLite database
+    await db.saveSetting('ai_mentor_queries_used', newUsed.toString());
+    await db.saveSetting('ai_mentor_last_query_ms', now.toString());
+
     setState(() {
       _isLoading = true;
-      _queriesUsedToday++;
+      _queriesUsedToday = newUsed;
+      _lastQueryTimestamp = now;
     });
     _scrollToBottom();
 
@@ -119,6 +196,30 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
         verseReference: activeReference,
         verseText: activeVerseText,
       );
+
+      if (!hasCustomKey && mounted) {
+        if (newUsed < _dailyLimit) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                '✓ Consulta $newUsed/$_dailyLimit realizada. Tu cupo se reiniciará 24 horas después de tu última pregunta.',
+              ),
+              backgroundColor: const Color(0xFF10B981),
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                '✓ Has completado tus 2 consultas. Tu cupo se reiniciará 24 horas después de tu última pregunta.',
+              ),
+              backgroundColor: SanctuaryColors.sunOrange,
+              duration: const Duration(seconds: 4),
+            ),
+          );
+        }
+      }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -451,45 +552,68 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
             tooltip: 'Borrar historial',
             onPressed: () => _confirmClearChat(effectiveDb),
           ),
-          // Quota Badge
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-            decoration: BoxDecoration(
-              color: remainingQueries > 0
-                  ? const Color(0xFF10B981).withValues(alpha: 0.15)
-                  : Colors.redAccent.withValues(alpha: 0.15),
+          // Quota Badge with 24h rolling reset tooltip and info
+          Tooltip(
+            message: remainingQueries > 0
+                ? '$remainingQueries/$_dailyLimit consultas disponibles.\nEl cupo se reinicia 24 horas después de tu última pregunta.'
+                : 'Límite alcanzado. Se reinicia en ${_getResetRemainingText()} (24 hs tras tu última consulta).',
+            child: InkWell(
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: remainingQueries > 0
-                    ? const Color(0xFF10B981).withValues(alpha: 0.4)
-                    : Colors.redAccent.withValues(alpha: 0.4),
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  LucideIcons.zap,
-                  size: 12,
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      remainingQueries > 0
+                          ? 'Te quedan $remainingQueries/$_dailyLimit consultas gratuitas. El cupo se reinicia 24 horas después de tu última pregunta.'
+                          : 'Límite alcanzado (0/$_dailyLimit). Tu cupo se reiniciará dentro de 24 horas tras tu última consulta (tiempo restante: ${_getResetRemainingText()}).',
+                    ),
+                    backgroundColor: remainingQueries > 0
+                        ? SanctuaryColors.waveNavy
+                        : SanctuaryColors.sunOrange,
+                    duration: const Duration(seconds: 4),
+                  ),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+                decoration: BoxDecoration(
                   color: remainingQueries > 0
-                      ? const Color(0xFF10B981)
-                      : Colors.redAccent,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  '$remainingQueries/$_dailyLimit',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 10.5,
+                      ? const Color(0xFF10B981).withValues(alpha: 0.15)
+                      : Colors.redAccent.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
                     color: remainingQueries > 0
-                        ? const Color(0xFF10B981)
-                        : Colors.redAccent,
+                        ? const Color(0xFF10B981).withValues(alpha: 0.4)
+                        : Colors.redAccent.withValues(alpha: 0.4),
                   ),
                 ),
-              ],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      LucideIcons.zap,
+                      size: 12,
+                      color: remainingQueries > 0
+                          ? const Color(0xFF10B981)
+                          : Colors.redAccent,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '$remainingQueries/$_dailyLimit',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 10.5,
+                        color: remainingQueries > 0
+                            ? const Color(0xFF10B981)
+                            : Colors.redAccent,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
           IconButton(
@@ -618,6 +742,80 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
             ),
           ),
 
+          // 24-Hour Quota Reset Notice Banner when limit is reached
+          if (remainingQueries <= 0)
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: theme.brightness == Brightness.dark
+                    ? Colors.amber.withValues(alpha: 0.12)
+                    : const Color(0xFFFFFBEB),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: theme.brightness == Brightness.dark
+                      ? Colors.amber.withValues(alpha: 0.35)
+                      : const Color(0xFFFDE68A),
+                ),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    LucideIcons.alertCircle,
+                    color: SanctuaryColors.sunOrange,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Límite de consultas alcanzado ($_dailyLimit/$_dailyLimit)',
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                            color: theme.brightness == Brightness.dark
+                                ? Colors.amber[200]
+                                : const Color(0xFF92400E),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Tu cupo se reiniciará 24 horas después de haber hecho tu última pregunta (tiempo restante: ${_getResetRemainingText()}).',
+                          style: GoogleFonts.inter(
+                            fontSize: 11,
+                            color: theme.brightness == Brightness.dark
+                                ? Colors.white.withValues(alpha: 0.85)
+                                : const Color(0xFF78350F),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: () => _showAiSettingsDialog(effectiveDb),
+                    style: TextButton.styleFrom(
+                      visualDensity: VisualDensity.compact,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      backgroundColor: SanctuaryColors.waveNavy,
+                      foregroundColor: SanctuaryColors.amberGold,
+                    ),
+                    child: Text(
+                      'Configurar',
+                      style: GoogleFonts.inter(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
           // Messages List connected to SQLite Drift Stream
           Expanded(
             child: StreamBuilder<List<AiChatMessageEntry>>(
@@ -636,11 +834,24 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                   return _buildEmptyState(
                     theme: theme,
                     activeReference: activeReference,
-                    onPromptSelected: (prompt) => _sendMessage(
-                      db: effectiveDb,
-                      query: prompt,
-                      activeReference: activeReference,
-                    ),
+                    onPromptSelected: (prompt) {
+                      if (remainingQueries <= 0) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Límite de consultas alcanzado ($_dailyLimit/$_dailyLimit). Tu cupo se reiniciará 24 horas después de tu última pregunta (${_getResetRemainingText()} restantes).',
+                            ),
+                            backgroundColor: SanctuaryColors.sunOrange,
+                          ),
+                        );
+                        return;
+                      }
+                      _sendMessage(
+                        db: effectiveDb,
+                        query: prompt,
+                        activeReference: activeReference,
+                      );
+                    },
                   );
                 }
 
@@ -847,17 +1058,30 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                   ),
                   onPressed: _isLoading
                       ? null
-                      : () => _sendMessage(
+                      : () {
+                          if (remainingQueries <= 0) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Límite de consultas alcanzado ($_dailyLimit/$_dailyLimit). Tu cupo se reiniciará 24 horas después de tu última pregunta (${_getResetRemainingText()} restantes).',
+                                ),
+                                backgroundColor: SanctuaryColors.sunOrange,
+                              ),
+                            );
+                            return;
+                          }
+                          _sendMessage(
                             db: effectiveDb,
                             query: prompt,
                             activeReference: activeReference,
-                          ),
+                          );
+                        },
                 );
               },
             ),
           ),
 
-          // Input Bar with Defensive Tokens
+          // Input Bar with Defensive Tokens and 24-Hour Reset Notice
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -870,51 +1094,87 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
             ),
             child: SafeArea(
               top: false,
-              child: Row(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _inputController,
-                      decoration: InputDecoration(
-                        hintText: remainingQueries > 0
-                            ? (activeReference.isNotEmpty
-                                ? 'Pregunta sobre teología o $activeReference...'
-                                : 'Pregunta sobre temas bíblicos (amistad, perdón, fe)...')
-                            : 'Cupo diario agotado por hoy',
-                        hintStyle: GoogleFonts.inter(fontSize: 12.5),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 11,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(24),
-                          borderSide: BorderSide(
-                            color: theme.colorScheme.outline
-                                .withValues(alpha: 0.3),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _inputController,
+                          decoration: InputDecoration(
+                            hintText: remainingQueries > 0
+                                ? (activeReference.isNotEmpty
+                                    ? 'Pregunta sobre teología o $activeReference...'
+                                    : 'Pregunta sobre temas bíblicos (amistad, perdón, fe)...')
+                                : 'Cupo agotado (se reinicia en ${_getResetRemainingText()})',
+                            hintStyle: GoogleFonts.inter(fontSize: 12.5),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 11,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24),
+                              borderSide: BorderSide(
+                                color: theme.colorScheme.outline
+                                    .withValues(alpha: 0.3),
+                              ),
+                            ),
+                            enabled: remainingQueries > 0 && !_isLoading,
+                          ),
+                          onSubmitted: (text) => _sendMessage(
+                            db: effectiveDb,
+                            query: text,
+                            activeReference: activeReference,
                           ),
                         ),
-                        enabled: remainingQueries > 0 && !_isLoading,
                       ),
-                      onSubmitted: (text) => _sendMessage(
-                        db: effectiveDb,
-                        query: text,
-                        activeReference: activeReference,
+                      const SizedBox(width: 8),
+                      IconButton.filled(
+                        onPressed: (remainingQueries > 0 && !_isLoading)
+                            ? () => _sendMessage(
+                                  db: effectiveDb,
+                                  query: _inputController.text,
+                                  activeReference: activeReference,
+                                )
+                            : null,
+                        style: IconButton.styleFrom(
+                          backgroundColor: SanctuaryColors.waveNavy,
+                        ),
+                        icon: const Icon(LucideIcons.send, size: 18),
                       ),
-                    ),
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                  IconButton.filled(
-                    onPressed: (remainingQueries > 0 && !_isLoading)
-                        ? () => _sendMessage(
-                              db: effectiveDb,
-                              query: _inputController.text,
-                              activeReference: activeReference,
-                            )
-                        : null,
-                    style: IconButton.styleFrom(
-                      backgroundColor: SanctuaryColors.waveNavy,
+                  const SizedBox(height: 6),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.between,
+                      children: [
+                        Text(
+                          remainingQueries > 0
+                              ? 'Modo Prueba: Reinicia 24 hs tras última pregunta'
+                              : 'Cupo agotado: Reinicia dentro de 24 hs',
+                          style: GoogleFonts.inter(
+                            fontSize: 10.5,
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.6),
+                          ),
+                        ),
+                        Text(
+                          remainingQueries > 0
+                              ? '$remainingQueries/$_dailyLimit disponibles'
+                              : '0/$_dailyLimit (restante: ${_getResetRemainingText()})',
+                          style: GoogleFonts.inter(
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w700,
+                            color: remainingQueries > 0
+                                ? const Color(0xFF10B981)
+                                : SanctuaryColors.sunOrange,
+                          ),
+                        ),
+                      ],
                     ),
-                    icon: const Icon(LucideIcons.send, size: 18),
                   ),
                 ],
               ),
