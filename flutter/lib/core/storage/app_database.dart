@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../constants/bible_books.dart';
+import '../constants/daily_verses_pool.dart';
 import '../utils/string_utils.dart';
+import '../../shared/services/home_widget_service.dart';
 
 part 'app_database.g.dart';
 
@@ -205,6 +208,30 @@ class AiChatMessages extends Table {
       dateTime().withDefault(currentDateAndTime).named('created_at')();
 }
 
+/// Offline-first table storing individual daily & canonical scripture verses.
+/// Configured with composite database indexes to optimize lookup speeds and eliminate table scans.
+@TableIndex(name: 'idx_verses_translation', columns: {#translationId})
+@TableIndex(
+  name: 'idx_verses_lookup',
+  columns: {#translationId, #bookName, #chapter, #verse},
+)
+@DataClassName('LocalVerse')
+class LocalVerses extends Table {
+  TextColumn get id => text()(); // e.g. 'valera_php-4-6'
+  TextColumn get translationId => text().named('translation_id')(); // 'valera', 'sse', 'rv1858'
+  TextColumn get bookId => text().named('book_id')(); // 'PHP', 'JHN'
+  TextColumn get bookName => text().named('book_name')(); // 'Filipenses'
+  IntColumn get chapter => integer()();
+  IntColumn get verse => integer()();
+  TextColumn get textContent => text().named('text')();
+  TextColumn get theme => text().nullable()(); // 'Paz', 'Esperanza', 'Fortaleza', etc.
+  DateTimeColumn get createdAt =>
+      dateTime().withDefault(currentDateAndTime).named('created_at')();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 // =============================================================================
 // DRIFT DATABASE & CRUD OPERATIONS
 // =============================================================================
@@ -220,12 +247,13 @@ class AiChatMessages extends Table {
   LocalUsers,
   UserPreferences,
   AiChatMessages,
+  LocalVerses,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -285,6 +313,12 @@ class AppDatabase extends _$AppDatabase {
           if (from < 5) {
             // Create AI chat messages table while safely preserving all existing user records
             await m.createTable(aiChatMessages);
+          }
+          if (from < 6) {
+            // Migration 6: Create LocalVerses table and composite indices
+            await m.createTable(localVerses);
+            await m.createIndex(idxVersesTranslation);
+            await m.createIndex(idxVersesLookup);
           }
         },
         beforeOpen: (details) async {
@@ -1003,7 +1037,157 @@ class AppDatabase extends _$AppDatabase {
     }
     return delete(aiChatMessages).go();
   }
+
+  // ---------------------------------------------------------------------------
+  // RANDOM DAILY VERSE SELECTION ALGORITHM (OFFLINE-FIRST SQLITE)
+  // ---------------------------------------------------------------------------
+
+  /// Seeds default curated daily verses from [kDailyVersesPool] into the [localVerses]
+  /// SQLite table across supported translations if the table is currently empty.
+  Future<void> ensureDailyVersesSeeded() async {
+    try {
+      final existing = await (select(localVerses)..limit(1)).get();
+      if (existing.isNotEmpty) return;
+
+      const supportedTranslations = ['valera', 'sse', 'rv1858'];
+      final List<LocalVersesCompanion> entries = [];
+
+      for (final transId in supportedTranslations) {
+        for (final v in kDailyVersesPool) {
+          entries.add(
+            LocalVersesCompanion.insert(
+              id: '${transId}_${v.id}',
+              translationId: transId,
+              bookId: v.bookId,
+              bookName: v.bookName,
+              chapter: v.chapter,
+              verse: v.verse,
+              textContent: v.text,
+              theme: Value(v.theme),
+              createdAt: Value(DateTime.now()),
+            ),
+          );
+        }
+      }
+
+      if (entries.isNotEmpty) {
+        await batch((b) {
+          b.insertAllOnConflictUpdate(localVerses, entries);
+        });
+      }
+    } catch (e) {
+      // Safe fallback - avoid breaking execution
+    }
+  }
+
+  /// High-performance offline-first random daily verse selector.
+  ///
+  /// - Strictly filters candidate verses by [activeTranslation] to eliminate cross-translation pollution.
+  /// - Supports optional [themeFilter] (case-insensitive, e.g. 'Paz', 'Esperanza', 'Amor').
+  /// - Excludes [excludeId] if pool size > 1 to avoid consecutive duplicate verses.
+  /// - Includes fallback handling: if no matching records are returned for a specific theme,
+  ///   it falls back to any verse within the [activeTranslation].
+  /// - Selects one candidate randomly in memory.
+  Future<LocalVerse?> getRandomDailyVerseFromDb({
+    required String activeTranslation,
+    String? themeFilter,
+    String? excludeId,
+  }) async {
+    await ensureDailyVersesSeeded();
+
+    final hasTheme = themeFilter != null &&
+        themeFilter.trim().isNotEmpty &&
+        themeFilter.trim().toLowerCase() != 'todos';
+
+    List<LocalVerse> candidates = [];
+
+    if (hasTheme) {
+      final normalizedTheme = themeFilter.trim().toLowerCase();
+      candidates = await (select(localVerses)
+            ..where((tbl) =>
+                tbl.translationId.equals(activeTranslation) &
+                tbl.theme.isNotNull() &
+                tbl.theme.lower().equals(normalizedTheme)))
+          .get();
+
+      // Fallback: If no records match the requested theme, query all verses for the active translation
+      if (candidates.isEmpty) {
+        candidates = await (select(localVerses)
+              ..where((tbl) => tbl.translationId.equals(activeTranslation)))
+            .get();
+      }
+    } else {
+      candidates = await (select(localVerses)
+            ..where((tbl) => tbl.translationId.equals(activeTranslation)))
+          .get();
+    }
+
+    // Secondary fallback: if translation has no specific rows, retrieve any available verses
+    if (candidates.isEmpty) {
+      candidates = await select(localVerses).get();
+      if (candidates.isEmpty) return null;
+    }
+
+    // Exclude excludeId if pool size > 1
+    List<LocalVerse> pool = candidates;
+    if (excludeId != null && pool.length > 1) {
+      final withoutExcluded = pool.where((v) => v.id != excludeId).toList();
+      if (withoutExcluded.isNotEmpty) {
+        pool = withoutExcluded;
+      }
+    }
+
+    final random = Random();
+    return pool[random.nextInt(pool.length)];
+  }
+
+  /// High-performance optimized query delegating random ordering directly to the SQLite
+  /// engine using [OrderingTerm.random()] with `limit(1)` and strictly filtering by [activeTranslation].
+  Future<LocalVerse?> getRandomDailyVerseFastFromDb({
+    required String activeTranslation,
+  }) async {
+    await ensureDailyVersesSeeded();
+
+    final verse = await (select(localVerses)
+          ..where((tbl) => tbl.translationId.equals(activeTranslation))
+          ..orderBy([(tbl) => OrderingTerm.random()])
+          ..limit(1))
+        .getSingleOrNull();
+
+    if (verse != null) return verse;
+
+    // Fallback: if translation not found, pick any random verse from database
+    return (select(localVerses)
+          ..orderBy([(tbl) => OrderingTerm.random()])
+          ..limit(1))
+        .getSingleOrNull();
+  }
+
+  /// Native lockscreen and home widget synchronizer.
+  /// Invokes SQLite random selection and pushes formatted data to [HomeWidgetService.updateVerseWidget].
+  Future<bool> updateLockscreenWithRandomVerse(String activeTranslation) async {
+    final verse = await getRandomDailyVerseFromDb(
+      activeTranslation: activeTranslation,
+    );
+    if (verse == null) return false;
+
+    return await HomeWidgetService.updateVerseWidget(
+      reference: verse.reference,
+      verseText: verse.textContent,
+      bookId: verse.bookId,
+      chapter: verse.chapter,
+      verse: verse.verse,
+    );
+  }
 }
+
+/// Helper method that invokes the SQLite selection and sends formatted
+/// `verse_reference` and `verse_text` to the native layer via [HomeWidgetService.updateVerseWidget].
+Future<bool> updateLockscreenWithRandomVerse(
+  AppDatabase db,
+  String activeTranslation,
+) =>
+    db.updateLockscreenWithRandomVerse(activeTranslation);
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {

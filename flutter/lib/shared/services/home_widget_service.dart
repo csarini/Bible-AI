@@ -129,6 +129,22 @@ class HomeWidgetService {
         verse: verse,
       );
 
+  /// Updates native Lockscreen & Home widgets with formatted verse data.
+  static Future<bool> updateVerseWidget({
+    required String reference,
+    required String verseText,
+    String? bookId,
+    int? chapter,
+    int? verse,
+  }) =>
+      updateVerseOfTheDay(
+        reference: reference,
+        verseText: verseText,
+        bookId: bookId,
+        chapter: chapter,
+        verse: verse,
+      );
+
   /// Resolves the Scripture coordinates (bookId, chapter, verse) from a widget click URI
   /// or from stored widget preferences to navigate to Reader and highlight the verse.
   static Future<({String bookId, int chapter, int verse})?>

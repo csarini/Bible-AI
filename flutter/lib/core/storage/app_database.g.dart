@@ -4367,6 +4367,489 @@ class AiChatMessagesCompanion extends UpdateCompanion<AiChatMessageEntry> {
   }
 }
 
+class $LocalVersesTable extends LocalVerses
+    with TableInfo<$LocalVersesTable, LocalVerse> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LocalVersesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _translationIdMeta =
+      const VerificationMeta('translationId');
+  @override
+  late final GeneratedColumn<String> translationId = GeneratedColumn<String>(
+      'translation_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _bookIdMeta = const VerificationMeta('bookId');
+  @override
+  late final GeneratedColumn<String> bookId = GeneratedColumn<String>(
+      'book_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _bookNameMeta =
+      const VerificationMeta('bookName');
+  @override
+  late final GeneratedColumn<String> bookName = GeneratedColumn<String>(
+      'book_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _chapterMeta =
+      const VerificationMeta('chapter');
+  @override
+  late final GeneratedColumn<int> chapter = GeneratedColumn<int>(
+      'chapter', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _verseMeta = const VerificationMeta('verse');
+  @override
+  late final GeneratedColumn<int> verse = GeneratedColumn<int>(
+      'verse', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _textContentMeta =
+      const VerificationMeta('textContent');
+  @override
+  late final GeneratedColumn<String> textContent = GeneratedColumn<String>(
+      'text', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _themeMeta = const VerificationMeta('theme');
+  @override
+  late final GeneratedColumn<String> theme = GeneratedColumn<String>(
+      'theme', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        translationId,
+        bookId,
+        bookName,
+        chapter,
+        verse,
+        textContent,
+        theme,
+        createdAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'local_verses';
+  @override
+  VerificationContext validateIntegrity(Insertable<LocalVerse> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('translation_id')) {
+      context.handle(
+          _translationIdMeta,
+          translationId.isAcceptableOrUnknown(
+              data['translation_id']!, _translationIdMeta));
+    } else if (isInserting) {
+      context.missing(_translationIdMeta);
+    }
+    if (data.containsKey('book_id')) {
+      context.handle(_bookIdMeta,
+          bookId.isAcceptableOrUnknown(data['book_id']!, _bookIdMeta));
+    } else if (isInserting) {
+      context.missing(_bookIdMeta);
+    }
+    if (data.containsKey('book_name')) {
+      context.handle(_bookNameMeta,
+          bookName.isAcceptableOrUnknown(data['book_name']!, _bookNameMeta));
+    } else if (isInserting) {
+      context.missing(_bookNameMeta);
+    }
+    if (data.containsKey('chapter')) {
+      context.handle(_chapterMeta,
+          chapter.isAcceptableOrUnknown(data['chapter']!, _chapterMeta));
+    } else if (isInserting) {
+      context.missing(_chapterMeta);
+    }
+    if (data.containsKey('verse')) {
+      context.handle(
+          _verseMeta, verse.isAcceptableOrUnknown(data['verse']!, _verseMeta));
+    } else if (isInserting) {
+      context.missing(_verseMeta);
+    }
+    if (data.containsKey('text')) {
+      context.handle(
+          _textContentMeta,
+          textContent.isAcceptableOrUnknown(
+              data['text']!, _textContentMeta));
+    } else if (isInserting) {
+      context.missing(_textContentMeta);
+    }
+    if (data.containsKey('theme')) {
+      context.handle(
+          _themeMeta, theme.isAcceptableOrUnknown(data['theme']!, _themeMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  LocalVerse map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LocalVerse(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      translationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}translation_id'])!,
+      bookId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}book_id'])!,
+      bookName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}book_name'])!,
+      chapter: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}chapter'])!,
+      verse: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}verse'])!,
+      textContent: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}text'])!,
+      theme: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}theme']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $LocalVersesTable createAlias(String alias) {
+    return $LocalVersesTable(attachedDatabase, alias);
+  }
+}
+
+class LocalVerse extends DataClass implements Insertable<LocalVerse> {
+  final String id;
+  final String translationId;
+  final String bookId;
+  final String bookName;
+  final int chapter;
+  final int verse;
+  final String textContent;
+  final String? theme;
+  final DateTime createdAt;
+
+  const LocalVerse({
+    required this.id,
+    required this.translationId,
+    required this.bookId,
+    required this.bookName,
+    required this.chapter,
+    required this.verse,
+    required this.textContent,
+    this.theme,
+    required this.createdAt,
+  });
+
+  /// Clean accessors for verse text content & reference
+  String get text => textContent;
+  String get reference => '$bookName $chapter:$verse';
+
+  /// Converts this entity into UI-compatible DailyVerseData
+  DailyVerseData toDailyVerseData() {
+    return DailyVerseData(
+      id: id,
+      bookId: bookId,
+      bookName: bookName,
+      chapter: chapter,
+      verse: verse,
+      reference: reference,
+      text: textContent,
+      theme: theme ?? 'Palabra de Dios',
+      prayer:
+          'Señor Dios todopoderoso, gracias por Tu santa Palabra que ilumina mi sendero y da fortaleza a mi vida hoy. Amén.',
+      icon: LucideIcons.sparkles,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['translation_id'] = Variable<String>(translationId);
+    map['book_id'] = Variable<String>(bookId);
+    map['book_name'] = Variable<String>(bookName);
+    map['chapter'] = Variable<int>(chapter);
+    map['verse'] = Variable<int>(verse);
+    map['text'] = Variable<String>(textContent);
+    if (!nullToAbsent || theme != null) {
+      map['theme'] = Variable<String>(theme);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  LocalVersesCompanion toCompanion(bool nullToAbsent) {
+    return LocalVersesCompanion(
+      id: Value(id),
+      translationId: Value(translationId),
+      bookId: Value(bookId),
+      bookName: Value(bookName),
+      chapter: Value(chapter),
+      verse: Value(verse),
+      textContent: Value(textContent),
+      theme: theme == null && nullToAbsent
+          ? const Value.absent()
+          : Value(theme),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory LocalVerse.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LocalVerse(
+      id: serializer.fromJson<String>(json['id']),
+      translationId: serializer.fromJson<String>(json['translationId']),
+      bookId: serializer.fromJson<String>(json['bookId']),
+      bookName: serializer.fromJson<String>(json['bookName']),
+      chapter: serializer.fromJson<int>(json['chapter']),
+      verse: serializer.fromJson<int>(json['verse']),
+      textContent: serializer.fromJson<String>(json['textContent'] ?? json['text']),
+      theme: serializer.fromJson<String?>(json['theme']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'translationId': serializer.toJson<String>(translationId),
+      'bookId': serializer.toJson<String>(bookId),
+      'bookName': serializer.toJson<String>(bookName),
+      'chapter': serializer.toJson<int>(chapter),
+      'verse': serializer.toJson<int>(verse),
+      'textContent': serializer.toJson<String>(textContent),
+      'text': serializer.toJson<String>(textContent),
+      'theme': serializer.toJson<String?>(theme),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  LocalVerse copyWith({
+    String? id,
+    String? translationId,
+    String? bookId,
+    String? bookName,
+    int? chapter,
+    int? verse,
+    String? textContent,
+    Value<String?> theme = const Value.absent(),
+    DateTime? createdAt,
+  }) =>
+      LocalVerse(
+        id: id ?? this.id,
+        translationId: translationId ?? this.translationId,
+        bookId: bookId ?? this.bookId,
+        bookName: bookName ?? this.bookName,
+        chapter: chapter ?? this.chapter,
+        verse: verse ?? this.verse,
+        textContent: textContent ?? this.textContent,
+        theme: theme.present ? theme.value : this.theme,
+        createdAt: createdAt ?? this.createdAt,
+      );
+
+  @override
+  String toString() {
+    return (StringBuffer('LocalVerse(')
+          ..write('id: $id, ')
+          ..write('translationId: $translationId, ')
+          ..write('bookId: $bookId, ')
+          ..write('bookName: $bookName, ')
+          ..write('chapter: $chapter, ')
+          ..write('verse: $verse, ')
+          ..write('textContent: $textContent, ')
+          ..write('theme: $theme, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, translationId, bookId, bookName, chapter,
+      verse, textContent, theme, createdAt);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LocalVerse &&
+          other.id == this.id &&
+          other.translationId == this.translationId &&
+          other.bookId == this.bookId &&
+          other.bookName == this.bookName &&
+          other.chapter == this.chapter &&
+          other.verse == this.verse &&
+          other.textContent == this.textContent &&
+          other.theme == this.theme &&
+          other.createdAt == this.createdAt);
+}
+
+class LocalVersesCompanion extends UpdateCompanion<LocalVerse> {
+  final Value<String> id;
+  final Value<String> translationId;
+  final Value<String> bookId;
+  final Value<String> bookName;
+  final Value<int> chapter;
+  final Value<int> verse;
+  final Value<String> textContent;
+  final Value<String?> theme;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const LocalVersesCompanion({
+    this.id = const Value.absent(),
+    this.translationId = const Value.absent(),
+    this.bookId = const Value.absent(),
+    this.bookName = const Value.absent(),
+    this.chapter = const Value.absent(),
+    this.verse = const Value.absent(),
+    this.textContent = const Value.absent(),
+    this.theme = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  LocalVersesCompanion.insert({
+    required String id,
+    required String translationId,
+    required String bookId,
+    required String bookName,
+    required int chapter,
+    required int verse,
+    required String textContent,
+    this.theme = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        translationId = Value(translationId),
+        bookId = Value(bookId),
+        bookName = Value(bookName),
+        chapter = Value(chapter),
+        verse = Value(verse),
+        textContent = Value(textContent);
+  static Insertable<LocalVerse> custom({
+    Expression<String>? id,
+    Expression<String>? translationId,
+    Expression<String>? bookId,
+    Expression<String>? bookName,
+    Expression<int>? chapter,
+    Expression<int>? verse,
+    Expression<String>? textContent,
+    Expression<String>? theme,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (translationId != null) 'translation_id': translationId,
+      if (bookId != null) 'book_id': bookId,
+      if (bookName != null) 'book_name': bookName,
+      if (chapter != null) 'chapter': chapter,
+      if (verse != null) 'verse': verse,
+      if (textContent != null) 'text': textContent,
+      if (theme != null) 'theme': theme,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  LocalVersesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? translationId,
+    Value<String>? bookId,
+    Value<String>? bookName,
+    Value<int>? chapter,
+    Value<int>? verse,
+    Value<String>? textContent,
+    Value<String?>? theme,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return LocalVersesCompanion(
+      id: id ?? this.id,
+      translationId: translationId ?? this.translationId,
+      bookId: bookId ?? this.bookId,
+      bookName: bookName ?? this.bookName,
+      chapter: chapter ?? this.chapter,
+      verse: verse ?? this.verse,
+      textContent: textContent ?? this.textContent,
+      theme: theme ?? this.theme,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (translationId.present) {
+      map['translation_id'] = Variable<String>(translationId.value);
+    }
+    if (bookId.present) {
+      map['book_id'] = Variable<String>(bookId.value);
+    }
+    if (bookName.present) {
+      map['book_name'] = Variable<String>(bookName.value);
+    }
+    if (chapter.present) {
+      map['chapter'] = Variable<int>(chapter.value);
+    }
+    if (verse.present) {
+      map['verse'] = Variable<int>(verse.value);
+    }
+    if (textContent.present) {
+      map['text'] = Variable<String>(textContent.value);
+    }
+    if (theme.present) {
+      map['theme'] = Variable<String?>(theme.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LocalVersesCompanion(')
+          ..write('id: $id, ')
+          ..write('translationId: $translationId, ')
+          ..write('bookId: $bookId, ')
+          ..write('bookName: $bookName, ')
+          ..write('chapter: $chapter, ')
+          ..write('verse: $verse, ')
+          ..write('textContent: $textContent, ')
+          ..write('theme: $theme, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -4386,6 +4869,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $UserPreferencesTable(this);
   late final $AiChatMessagesTable aiChatMessages =
       $AiChatMessagesTable(this);
+  late final $LocalVersesTable localVerses = $LocalVersesTable(this);
+  late final Index idxVersesTranslation = Index(
+      'idx_verses_translation',
+      'CREATE INDEX IF NOT EXISTS idx_verses_translation ON local_verses (translation_id);');
+  late final Index idxVersesLookup = Index(
+      'idx_verses_lookup',
+      'CREATE INDEX IF NOT EXISTS idx_verses_lookup ON local_verses (translation_id, book_name, chapter, verse);');
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4400,7 +4890,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         localBibleChapters,
         localUsers,
         userPreferences,
-        aiChatMessages
+        aiChatMessages,
+        localVerses,
+        idxVersesTranslation,
+        idxVersesLookup
       ];
 }
 

@@ -54,28 +54,82 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
     _currentVerse = getRandomDailyVerse();
     _checkIfSaved();
     _syncToWidget();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadDbVerseOnLaunch();
+    });
+  }
+
+  Future<void> _loadDbVerseOnLaunch() async {
+    if (widget.database == null || !mounted) return;
+    try {
+      final activeTranslation = ref.read(activeTranslationProvider);
+      final dbVerse = await widget.database!.getRandomDailyVerseFromDb(
+        activeTranslation: activeTranslation,
+        themeFilter: _selectedThemeFilter,
+      );
+      if (dbVerse != null && mounted) {
+        setState(() {
+          _currentVerse = dbVerse.toDailyVerseData();
+        });
+        _checkIfSaved();
+        _syncToWidget();
+      }
+    } catch (_) {}
   }
 
   void _syncToWidget() {
-    HomeWidgetService.updateVerseOfTheDay(
-      reference: _currentVerse.reference,
-      verseText: _currentVerse.text,
-      bookId: _currentVerse.bookId,
-      chapter: _currentVerse.chapter,
-      verse: _currentVerse.verse,
-    );
+    final activeTranslation = ref.read(activeTranslationProvider);
+    if (widget.database != null) {
+      updateLockscreenWithRandomVerse(widget.database!, activeTranslation);
+    } else {
+      HomeWidgetService.updateVerseWidget(
+        reference: _currentVerse.reference,
+        verseText: _currentVerse.text,
+        bookId: _currentVerse.bookId,
+        chapter: _currentVerse.chapter,
+        verse: _currentVerse.verse,
+      );
+    }
   }
 
-  void _randomizeVerse({String? theme}) {
+  Future<void> _randomizeVerse({String? theme}) async {
+    final activeTheme = theme ?? _selectedThemeFilter;
+    final activeTranslation = ref.read(activeTranslationProvider);
+
+    if (widget.database != null) {
+      try {
+        final dbVerse = await widget.database!.getRandomDailyVerseFromDb(
+          activeTranslation: activeTranslation,
+          themeFilter: activeTheme,
+          excludeId: _currentVerse.id,
+        );
+        if (dbVerse != null && mounted) {
+          setState(() {
+            _currentVerse = dbVerse.toDailyVerseData();
+            _isSavedInBookmarks = false;
+          });
+          _checkIfSaved();
+          _syncToWidget();
+          _showNewVerseSnackBar();
+          return;
+        }
+      } catch (_) {}
+    }
+
     setState(() {
       _currentVerse = getRandomDailyVerse(
-        themeFilter: theme ?? _selectedThemeFilter,
+        themeFilter: activeTheme,
         excludeId: _currentVerse.id,
       );
       _isSavedInBookmarks = false;
     });
     _checkIfSaved();
     _syncToWidget();
+    _showNewVerseSnackBar();
+  }
+
+  void _showNewVerseSnackBar() {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
@@ -195,6 +249,13 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
 
   @override
   Widget build(BuildContext context) {
+    // Listen for translation changes to dynamically update daily verse and avoid cross-translation pollution
+    ref.listen<String>(activeTranslationProvider, (previous, next) {
+      if (previous != next && mounted) {
+        _loadDbVerseOnLaunch();
+      }
+    });
+
     final theme = Theme.of(context);
     final tokens = context.sanctuaryTokens;
 

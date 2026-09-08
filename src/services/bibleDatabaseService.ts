@@ -536,3 +536,17 @@ export async function fetchChapterVerses(
   return [];
 }
 
+/**
+ * Offline-first Random Daily Verse selection strictly scoped to the active translation.
+ * Mirrors Flutter's Drift getRandomDailyVerseFromDb implementation.
+ */
+export async function getRandomDailyVerseFromDB(
+  activeTranslation: string = 'valera',
+  themeFilter?: string,
+  excludeId?: string
+) {
+  const tr = normalizeTranslationKey(activeTranslation);
+  const { getRandomDailyVerse } = await import('../data/bibleData');
+  return getRandomDailyVerse(themeFilter, excludeId, tr);
+}
+

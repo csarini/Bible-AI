@@ -14,6 +14,8 @@ final appVisualThemeModeProvider =
     StateProvider<AppVisualTheme>((ref) => AppVisualTheme.light);
 final appTranslationProvider =
     StateProvider<String>((ref) => 'valera'); // 'valera', 'sse', 'rv1858'
+/// Global provider alias for active Bible translation strictly enforcing single-translation context
+final activeTranslationProvider = appTranslationProvider;
 final appFontSizeProvider = StateProvider<String>(
     (ref) => 'medium'); // 'small', 'medium', 'large', 'xlarge'
 final appFontFamilyProvider = StateProvider<String>((ref) =>
