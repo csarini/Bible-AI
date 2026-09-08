@@ -66,14 +66,6 @@ Se utiliza `drift` como ORM para interactuar con una base de datos SQLite local.
 
 `Riverpod` se usa para manejar el estado global de la aplicación (ajustes del usuario, tema, selección actual de libro/capítulo) y el estado local de las vistas (mensajes del chatbot, versículos seleccionados, etc.), permitiendo una arquitectura desacoplada y predecible.
 
-### Sistema de Diseño: Temas y Colores
+### Inteligencia Artificial
 
-La aplicación emplea un sistema de diseño centralizado para garantizar consistencia visual y facilitar la mantenibilidad. Este sistema se encuentra definido en `lib/core/theme/`.
-
-*   **Colores (`sanctuary_colors.dart`):** Define una paleta de colores estática bajo la clase `SanctuaryColors`. Esto incluye:
-    *   **Paleta de Marca:** Colores institucionales como `waveNavy`, `sunOrange`, `cyanAccent` y `amberGold`.
-    *   **Colores por Tema:** Conjuntos específicos de colores para los fondos, superficies, texto y bordes de los temas claro, sepia y oscuro (por ejemplo, `lightBackground`, `darkSurface`, `sepiaTextPrimary`).
-    *   **Paleta de Resaltado:** Una gama de colores pastel (`highlightYellow`, `highlightGreen`, etc.) utilizada para marcar versículos en el lector bíblico, definida en `pastelPalette`.
-    *   **Funciones de Utilidad:** Métodos como `getHighlightColor(String hex)` y `colorToHex(Color color)` para convertir entre colores `Color` de Flutter y cadenas hexadecimales, facilitando la persistencia de colores personalizados por el usuario.
-
-*   **Temas (`sanctuary_theme.dart`):** Define tres métodos estáticos (`light()`, `sepia()`, `dark()`) que devuelven objetos `ThemeData` de Flutter. Estos objetos aplican los colores definidos en `SanctuaryColors` para configurar aspectos visuales como el color de fondo de la pantalla, la barra de aplicaciones, las tarjetas, los menús y el texto, creando así temas visuales coherentes y consistentes para cada modo. También se encarga de definir los estilos de texto predeterminados usando fuentes de Google como Literata, Playfair Display e Inter.
+La funcionalidad del "Mentor Teológico IA" se implementa mediante una integración con la API de `google_generative_ai` de Google, específicamente el modelo Gemini. Esta integración permite a la aplicación enviar consultas relacionadas con textos bíblicos y recibir respuestas generadas por inteligencia artificial, ofreciendo análisis y exégesis teológica. La dependencia `google_generative_ai: ^0.4.6` está definida en `pubspec.yaml` y se utiliza dentro de la feature `ai_mentor` para comunicarse con el servicio de IA remoto. Se gestionan cuidadosamente los límites de uso para cumplir con las restricciones del servicio en la versión actual de la aplicación.
