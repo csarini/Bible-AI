@@ -4822,7 +4822,7 @@ class LocalVersesCompanion extends UpdateCompanion<LocalVerse> {
       map['text'] = Variable<String>(textContent.value);
     }
     if (theme.present) {
-      map['theme'] = Variable<String?>(theme.value);
+      map['theme'] = Variable<String>(theme.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);

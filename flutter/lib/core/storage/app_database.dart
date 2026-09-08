@@ -6,6 +6,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../constants/bible_books.dart';
 import '../constants/daily_verses_pool.dart';
 import '../utils/string_utils.dart';
@@ -810,8 +811,8 @@ class AppDatabase extends _$AppDatabase {
         verse: Value(verse),
         verseText: Value(verseText),
         colorHex: Value(colorHex),
-        customTitle: Value<String?>(customTitle),
-        personalNote: Value<String?>(personalNote),
+        customTitle: Value(customTitle),
+        personalNote: Value(personalNote),
         createdAt: Value(DateTime.now()),
       ),
     );
