@@ -1173,3 +1173,26 @@ LazyDatabase _openConnection() {
     return NativeDatabase.createInBackground(file);
   });
 }
+
+/// Extension for [LocalVerse] data class to provide clean accessors and UI conversion
+/// that permanently survive Drift `build_runner` code generation.
+extension LocalVerseExtension on LocalVerse {
+  String get text => textContent;
+  String get reference => '$bookName $chapter:$verse';
+
+  DailyVerseData toDailyVerseData() {
+    return DailyVerseData(
+      id: id,
+      bookId: bookId,
+      bookName: bookName,
+      chapter: chapter,
+      verse: verse,
+      reference: reference,
+      text: textContent,
+      theme: theme ?? 'Palabra de Dios',
+      prayer:
+          'Señor Dios todopoderoso, gracias por Tu santa Palabra que ilumina mi sendero y da fortaleza a mi vida hoy. Amén.',
+      icon: LucideIcons.sparkles,
+    );
+  }
+}

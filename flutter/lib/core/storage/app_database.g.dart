@@ -4559,27 +4559,6 @@ class LocalVerse extends DataClass implements Insertable<LocalVerse> {
     required this.createdAt,
   });
 
-  /// Clean accessors for verse text content & reference
-  String get text => textContent;
-  String get reference => '$bookName $chapter:$verse';
-
-  /// Converts this entity into UI-compatible DailyVerseData
-  DailyVerseData toDailyVerseData() {
-    return DailyVerseData(
-      id: id,
-      bookId: bookId,
-      bookName: bookName,
-      chapter: chapter,
-      verse: verse,
-      reference: reference,
-      text: textContent,
-      theme: theme ?? 'Palabra de Dios',
-      prayer:
-          'Señor Dios todopoderoso, gracias por Tu santa Palabra que ilumina mi sendero y da fortaleza a mi vida hoy. Amén.',
-      icon: LucideIcons.sparkles,
-    );
-  }
-
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
