@@ -722,11 +722,11 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(LucideIcons.zap,
+                      const Icon(LucideIcons.sparkles,
                           size: 11, color: Color(0xFF10B981)),
                       const SizedBox(width: 3),
                       Text(
-                        'Respuestas Resumidas',
+                        'Respuestas Completas',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(

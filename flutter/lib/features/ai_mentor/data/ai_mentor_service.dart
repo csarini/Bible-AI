@@ -24,32 +24,31 @@ class AiMentorService {
   /// Strict theological system instruction for all AI models.
   static const String theologicalSystemPrompt = '''
 Eres el "Mentor Teológico IA" de "Biblia Inteligente (Digital Sanctuary)".
-Tu propósito fundamental es guiar y ayudar al usuario en el estudio riguroso, devocional, exegético y pastoral de las Sagradas Escrituras.
+Tu propósito fundamental es guiar y edificar al usuario en el estudio riguroso, devocional, exegético y pastoral de las Sagradas Escrituras.
 
 DIRECTIVAS CRÍTICAS DE RESPUESTA:
-1. OPTIMIZACIÓN DE COSTOS Y RESPUESTAS RESUMIDAS (OBLIGATORIO):
-   - Genera respuestas resumidas, sustanciales y de alta precisión para minimizar el consumo de tokens y optimizar los costos de computación.
-   - Longitud objetivo: máximo 2 o 3 párrafos breves o viñetas compactas.
-   - Ve directo al grano: sin preámbulos floridos, sin introducciones vacías y sin despedidas largas.
-   - Estructura condensada:
-     * Respuesta bíblica central citando 1 o 2 pasajes clave (Libro Capítulo:Versículo).
-     * Raíz etimológica clave en hebreo o griego solo si aporta luz directa al significado.
-     * Aplicación espiritual o práctica en 1 o 2 oraciones breves.
+1. COMPLETITUD ABSOLUTA Y ACABADO PERFECTO (OBLIGATORIO):
+   - Cada respuesta DEBE ser COMPLETA, coherente y concluir de manera íntegra y natural.
+   - NUNCA cortes una oración, párrafo o idea a la mitad. NUNCA termines con puntos suspensivos que indiquen un pensamiento inacabado.
+   - Si inicias una lista, explicación o análisis exegético, desarróllalo y conclúyelo satisfactoriamente.
 
-2. CONSULTAS TEMÁTICAS (ej: "¿Qué dice la Biblia sobre la amistad?", "el perdón", "la paciencia", etc.):
-   - Responde de forma sintética y fundamentada sólidamente en las Sagradas Escrituras.
-   - Cita 1 a 2 pasajes bíblicos clave del Antiguo o Nuevo Testamento con libro, capítulo y versículo.
-   - Brinda la aplicación espiritual esencial en pocas líneas.
+2. ESTRUCTURA OPTIMIZADA DE RESPUESTA (Utiliza formato Markdown claro y legible con encabezados o viñetas):
+   - 📖 **Fundamento Bíblico**: Cita y contextualiza con exactitud los pasajes centrales (Libro Capítulo:Versículo) que responden directamente a la pregunta.
+   - 🔍 **Análisis Exegético y Teológico**: Explica el significado bíblico con profundidad y claridad. Cuando aporte valor al texto, incluye el trasfondo etimológico en hebreo, arameo o griego bíblico y el contexto histórico.
+   - 🕊️ **Aplicación Pastoral y Vida Práctica**: Traduce la verdad bíblica a la vida diaria del creyente (cómo orar, actuar, perdonar, perseverar y crecer en la fe).
+   - 💡 **Reflexión de Cierre / Conclusión**: Una conclusión inspiradora, redonda y edificante que sintetice la enseñanza esencial.
 
-3. ANÁLISIS DE VERSÍCULOS ESPECÍFICOS (cuando el usuario proporciona o pregunta por un versículo puntual):
-   - Realiza un análisis exegético conciso:
-     * Contexto inmediato del pasaje en 1 o 2 frases.
-     * Término clave en hebreo/griego original y su significado teológico.
-     * Aplicación pastoral directa para el creyente.
+3. CONSULTAS TEMÁTICAS (ej: "¿Qué dice la Biblia sobre la amistad?", "el perdón", "la ansiedad", etc.):
+   - Aborda el tema de manera integral según el consejo de toda la Escritura (Antiguo y Nuevo Testamento).
+   - Proporciona pasajes clave contextualizados y su aplicación espiritual sin omitir explicaciones necesarias.
 
-4. ALCANCE BÍBLICO Y ÉTICO:
+4. ANÁLISIS DE VERSÍCULOS ESPECÍFICOS:
+   - Analiza el contexto literario e histórico inmediato del capítulo y libro.
+   - Profundiza en el significado doctrinal del texto y su relevancia para la vida cristiana contemporánea.
+
+5. ALCANCE BÍBLICO Y ÉTICO:
    - El enfoque exclusivo es el estudio bíblico, la teología, la historia de la salvación y la vida espiritual.
-   - Si la consulta es ajena a la fe o ética (ej. recetas de cocina, resultados deportivos o especulación financiera), declina amablemente diciendo: "Solo puedo responder preguntas relacionadas con el estudio bíblico, teológico y la vida espiritual."
+   - Si la consulta es completamente ajena a la fe (ej. recetas de cocina, deportes o finanzas especulativas), declina amablemente diciendo: "Solo puedo responder preguntas relacionadas con el estudio bíblico, teológico y la vida espiritual."
 ''';
 
   AiMentorService({
@@ -103,18 +102,26 @@ DIRECTIVAS CRÍTICAS DE RESPUESTA:
         await database.getSetting('ai_endpoint');
     final activeServerUrl = await database.getSetting('ai_server_url');
 
-    // 4. Build contextual prompt
+    // 4. Build optimized contextual prompt
     final buffer = StringBuffer();
     if (cleanRef.isNotEmpty) {
-      buffer.writeln('Versículo de referencia: $cleanRef');
+      buffer.writeln('### PASAJE BÍBLICO DE REFERENCIA:');
+      buffer.writeln('**Referencia:** $cleanRef');
       if (verseText != null && verseText.trim().isNotEmpty) {
-        buffer.writeln('Texto Bíblico: "${verseText.trim()}"');
+        buffer.writeln('**Texto Bíblico:** "${verseText.trim()}"');
       }
-      buffer.writeln('----------------------------------------');
-      buffer.writeln('Pregunta o consulta del usuario: $cleanQuestion');
+      buffer.writeln();
+      buffer.writeln('### SOLICITUD DEL USUARIO:');
+      buffer.writeln(cleanQuestion.isNotEmpty
+          ? cleanQuestion
+          : 'Realiza un análisis teológico, exegético y pastoral completo de este versículo, explicando su contexto histórico, significado original y aplicación práctica para la vida cristiana de hoy.');
     } else {
-      buffer.writeln('Consulta bíblica / teológica: $cleanQuestion');
+      buffer.writeln('### CONSULTA TEOLÓGICA Y BÍBLICA:');
+      buffer.writeln(cleanQuestion);
     }
+    buffer.writeln();
+    buffer.writeln('### INSTRUCCIÓN DE OPTIMIZACIÓN Y COMPLETITUD:');
+    buffer.writeln('Por favor proporciona una respuesta completa, fluida y con conclusión final. Desarrolla el Fundamento Bíblico, Análisis Exegético, Aplicación Práctica y Reflexión de cierre sin dejar oraciones truncadas.');
     final fullQuery = buffer.toString();
 
     String mentorAnswer;
@@ -208,9 +215,9 @@ DIRECTIVAS CRÍTICAS DE RESPUESTA:
 
     final candidateModels = [
       model,
-      'gemini-3.6-flash',
-      'gemini-flash-latest',
+      'gemini-3.8-flash',
       'gemini-3.1-flash-lite',
+      'gemini-flash-latest',
     ];
 
     String? lastError;
@@ -238,7 +245,7 @@ DIRECTIVAS CRÍTICAS DE RESPUESTA:
             ],
             'generationConfig': {
               'temperature': 0.3,
-              'maxOutputTokens': 500,
+              'maxOutputTokens': 2048,
             }
           }),
         ).timeout(const Duration(seconds: 30));
@@ -289,7 +296,7 @@ DIRECTIVAS CRÍTICAS DE RESPUESTA:
       body: jsonEncode({
         'model': model,
         'temperature': 0.3,
-        'max_tokens': 500,
+        'max_tokens': 2048,
         'messages': [
           {'role': 'system', 'content': theologicalSystemPrompt},
           {'role': 'user', 'content': prompt}
@@ -337,6 +344,7 @@ DIRECTIVAS CRÍTICAS DE RESPUESTA:
       body: jsonEncode({
         'model': model,
         'temperature': 0.3,
+        'max_tokens': 2048,
         'messages': [
           {'role': 'system', 'content': theologicalSystemPrompt},
           {'role': 'user', 'content': prompt}

@@ -385,9 +385,9 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
               <span>Quitar</span>
             </button>
           )}
-          <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
-            <Zap className="w-3 h-3" />
-            <span>Respuestas Resumidas</span>
+          <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" title="Generación optimizada de alta precisión y respuestas teológicas completas">
+            <Sparkles className="w-3 h-3" />
+            <span>Respuestas Completas</span>
           </span>
         </div>
       </div>
