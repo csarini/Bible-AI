@@ -254,7 +254,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 1;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -296,31 +296,7 @@ class AppDatabase extends _$AppDatabase {
               'CREATE INDEX IF NOT EXISTS idx_chapters_trans_book ON local_bible_chapters (translation_key, book_number);');
         },
         onUpgrade: (Migrator m, int from, int to) async {
-          if (from < 2) {
-            await m.createTable(localUsers);
-            await m.createTable(userPreferences);
-          }
-          if (from < 3) {
-            await m.addColumn(userEvents, userEvents.isSynced);
-            await m.addColumn(foodCourtMenus, foodCourtMenus.isSynced);
-          }
-          if (from < 4) {
-            // Safe index creation without altering tables or dropping data
-            await customStatement(
-                'CREATE INDEX IF NOT EXISTS idx_chapters_translation ON local_bible_chapters (translation_key);');
-            await customStatement(
-                'CREATE INDEX IF NOT EXISTS idx_chapters_trans_book ON local_bible_chapters (translation_key, book_number);');
-          }
-          if (from < 5) {
-            // Create AI chat messages table while safely preserving all existing user records
-            await m.createTable(aiChatMessages);
-          }
-          if (from < 6) {
-            // Migration 6: Create LocalVerses table and composite indices
-            await m.createTable(localVerses);
-            await m.createIndex(idxVersesTranslation);
-            await m.createIndex(idxVersesLookup);
-          }
+          // Future schema migrations will be handled here from v1 onwards
         },
         beforeOpen: (details) async {
           await customStatement('PRAGMA foreign_keys = ON');
