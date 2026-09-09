@@ -9,6 +9,5 @@ export 'local_bible_service.dart';
 
 // Alias for existing references
 class GetBibleService extends LocalBibleService {
-  GetBibleService({required AppDatabase database})
-      : super(database: database);
+  GetBibleService({required super.database});
 }

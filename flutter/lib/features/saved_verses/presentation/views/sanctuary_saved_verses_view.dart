@@ -104,8 +104,8 @@ class _SanctuarySavedVersesViewState extends State<SanctuarySavedVersesView> {
         backgroundColor: colorScheme.surface,
         foregroundColor: colorScheme.onSurface,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(LucideIcons.menu),
+        leading: const IconButton(
+          icon: Icon(LucideIcons.menu),
           tooltip: 'Menú Lateral',
           onPressed: openSanctuaryDrawer,
         ),

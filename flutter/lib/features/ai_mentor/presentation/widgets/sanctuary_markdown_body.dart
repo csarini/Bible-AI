@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
-import '../../../../core/theme/sanctuary_theme.dart';
 
 /// Renders Theological AI Mentor Markdown text with clean typography,
 /// hierarchical headings, styled scripture quotes, and robust inline formatting.
@@ -111,7 +110,7 @@ class SanctuaryMarkdownBody extends StatelessWidget {
             borderRadius: const BorderRadius.horizontal(
               right: Radius.circular(8),
             ),
-            border: Border(
+            border: const Border(
               left: BorderSide(
                 color: SanctuaryColors.sunOrange,
                 width: 3.5,
@@ -145,7 +144,7 @@ class SanctuaryMarkdownBody extends StatelessWidget {
                 child: Container(
                   width: 5,
                   height: 5,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: SanctuaryColors.sunOrange,
                     shape: BoxShape.circle,
                   ),

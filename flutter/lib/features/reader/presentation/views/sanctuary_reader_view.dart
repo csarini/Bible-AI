@@ -471,7 +471,10 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                         : noteController.text.trim()),
                   ),
                 );
-                Navigator.pop(dialogCtx);
+                if (dialogCtx.mounted) {
+                  Navigator.pop(dialogCtx);
+                }
+                if (!mounted) return;
                 setState(() {
                   _selectedVerse = null;
                   _selectedBookmark = null;
@@ -562,8 +565,8 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.menu),
+        leading: const IconButton(
+          icon: Icon(LucideIcons.menu),
           tooltip: 'Menú Lateral',
           onPressed: openSanctuaryDrawer,
         ),

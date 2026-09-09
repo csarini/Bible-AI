@@ -197,8 +197,8 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.menu),
+        leading: const IconButton(
+          icon: Icon(LucideIcons.menu),
           tooltip: 'Menú Lateral',
           onPressed: openSanctuaryDrawer,
         ),
@@ -2430,12 +2430,12 @@ class _SanctuaryEventsViewState extends State<SanctuaryEventsView> {
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          title: Row(
+          title: const Row(
             children: [
-              const Icon(LucideIcons.share2,
+              Icon(LucideIcons.share2,
                   size: 20, color: SanctuaryColors.waveNavy),
-              const SizedBox(width: 8),
-              const Text('Compartir Prédica'),
+              SizedBox(width: 8),
+              Text('Compartir Prédica'),
             ],
           ),
           content: Column(

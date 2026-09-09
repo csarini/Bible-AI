@@ -152,10 +152,10 @@ class _ElShaddaiEmblemPainter extends CustomPainter {
 
     // Sunburst Radiant Gradient Paint
     final sunPaint = Paint()
-      ..shader = RadialGradient(
-        center: const Alignment(0.0, 0.7),
+      ..shader = const RadialGradient(
+        center: Alignment(0.0, 0.7),
         radius: 0.8,
-        colors: const [
+        colors: [
           SanctuaryColors.sunOrange,
           Color(0xFFE65100),
         ],
@@ -164,8 +164,8 @@ class _ElShaddaiEmblemPainter extends CustomPainter {
 
     // Navy Wave Gradient Paint
     final navyWavePaint = Paint()
-      ..shader = LinearGradient(
-        colors: const [
+      ..shader = const LinearGradient(
+        colors: [
           Color(0xFF1C276E),
           SanctuaryColors.waveNavy,
           SanctuaryColors.brandPurple,
@@ -175,8 +175,8 @@ class _ElShaddaiEmblemPainter extends CustomPainter {
 
     // Vivid Cyan Wave Gradient Paint
     final cyanWavePaint = Paint()
-      ..shader = LinearGradient(
-        colors: const [
+      ..shader = const LinearGradient(
+        colors: [
           Color(0xFF0080C8),
           SanctuaryColors.cyanAccent,
           Color(0xFF38BDF8),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import '../../../../core/constants/bible_books.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
@@ -210,12 +209,12 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text(
+            const SnackBar(
+              content: Text(
                 '✓ Has completado tus 2 consultas. Tu cupo se reiniciará 24 horas después de tu última pregunta.',
               ),
               backgroundColor: SanctuaryColors.sunOrange,
-              duration: const Duration(seconds: 4),
+              duration: Duration(seconds: 4),
             ),
           );
         }
@@ -343,7 +342,7 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                   ),
                   const SizedBox(height: 6),
                   DropdownButtonFormField<String>(
-                    value: selectedProvider,
+                    initialValue: selectedProvider,
                     isExpanded: true,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(
@@ -521,8 +520,8 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.menu),
+        leading: const IconButton(
+          icon: Icon(LucideIcons.menu),
           tooltip: 'Menú Lateral',
           onPressed: openSanctuaryDrawer,
         ),
@@ -832,6 +831,7 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                         db: effectiveDb,
                         query: prompt,
                         activeReference: activeReference,
+                        activeVerseText: _activeVerseText,
                       );
                     },
                   );
@@ -1056,6 +1056,7 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                             db: effectiveDb,
                             query: prompt,
                             activeReference: activeReference,
+                            activeVerseText: _activeVerseText,
                           );
                         },
                 );
@@ -1108,6 +1109,7 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                             db: effectiveDb,
                             query: text,
                             activeReference: activeReference,
+                            activeVerseText: _activeVerseText,
                           ),
                         ),
                       ),
@@ -1118,6 +1120,7 @@ class _SanctuaryAiMentorViewState extends ConsumerState<SanctuaryAiMentorView> {
                                   db: effectiveDb,
                                   query: _inputController.text,
                                   activeReference: activeReference,
+                                  activeVerseText: _activeVerseText,
                                 )
                             : null,
                         style: IconButton.styleFrom(

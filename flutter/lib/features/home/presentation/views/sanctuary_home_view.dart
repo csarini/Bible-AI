@@ -181,7 +181,7 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
         verseText: _currentVerse.text,
         colorHex: '#FED65B',
         customTitle: Value('Versículo del Día: ${_currentVerse.theme}'),
-        personalNote: Value('Guardado desde el Inicio del Santuario Digital'),
+        personalNote: const Value('Guardado desde el Inicio del Santuario Digital'),
         createdAt: Value(DateTime.now()),
       );
 
@@ -261,8 +261,8 @@ class _SanctuaryHomeViewState extends ConsumerState<SanctuaryHomeView> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.menu),
+        leading: const IconButton(
+          icon: Icon(LucideIcons.menu),
           tooltip: 'Menú Lateral',
           onPressed: openSanctuaryDrawer,
         ),

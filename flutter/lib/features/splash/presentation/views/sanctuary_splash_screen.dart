@@ -33,7 +33,6 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
 
   double _progress = 0.0;
   String _statusMessage = 'Abriendo Santuario de las Escrituras...';
-  bool _isExiting = false;
 
   @override
   void initState() {
@@ -98,7 +97,6 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
     setState(() {
       _progress = 1.0;
       _statusMessage = '¡Bienvenido al Santuario Digital!';
-      _isExiting = true;
     });
 
     // Cierre y transición de salida
@@ -259,7 +257,7 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
                             ),
                           ],
                         ),
-                        child: SanctuaryChurchLogo(
+                        child: const SanctuaryChurchLogo(
                           size: 80,
                           variant: LogoVariant.full,
                           showText: true,

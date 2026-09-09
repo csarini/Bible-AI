@@ -271,8 +271,8 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.menu),
+        leading: const IconButton(
+          icon: Icon(LucideIcons.menu),
           tooltip: 'Menú Lateral',
           onPressed: openSanctuaryDrawer,
         ),
@@ -506,7 +506,7 @@ class _SanctuaryMapsViewState extends State<SanctuaryMapsView> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: 8),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceVariant
+                        color: theme.colorScheme.surfaceContainerHighest
                             .withValues(alpha: 0.5),
                         border: Border(
                           bottom: BorderSide(

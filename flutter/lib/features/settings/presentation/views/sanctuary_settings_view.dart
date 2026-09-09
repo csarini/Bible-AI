@@ -80,7 +80,7 @@ class SanctuarySettingsView extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.grey.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -199,7 +199,9 @@ class SanctuarySettingsView extends ConsumerWidget {
                   }
                 }
 
-                Navigator.pop(ctx);
+                if (ctx.mounted) {
+                  Navigator.pop(ctx);
+                }
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -236,8 +238,8 @@ class SanctuarySettingsView extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.menu),
+        leading: const IconButton(
+          icon: Icon(LucideIcons.menu),
           tooltip: 'Menú Lateral',
           onPressed: openSanctuaryDrawer,
         ),
@@ -280,7 +282,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                   'Elige la tonalidad visual que mejor se adapte a tu iluminación ambiental:',
                   style: GoogleFonts.inter(
                       fontSize: 13,
-                      color: theme.colorScheme.onSurface.withOpacity(0.75)),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.75)),
                 ),
                 const SizedBox(height: 14),
                 Row(
@@ -389,7 +391,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                   'Configura el tamaño de fuente, familias tipográficas (Literata, Playfair, Inter) e interlineado:',
                   style: GoogleFonts.inter(
                       fontSize: 13,
-                      color: theme.colorScheme.onSurface.withOpacity(0.75)),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.75)),
                 ),
                 const SizedBox(height: 12),
                 FilledButton.icon(
@@ -476,7 +478,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                   'Descarga o restaura una copia de seguridad con todos tus versículos guardados, notas de prédicas y categorías:',
                   style: GoogleFonts.inter(
                       fontSize: 13,
-                      color: theme.colorScheme.onSurface.withOpacity(0.75)),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.75)),
                 ),
                 const SizedBox(height: 14),
                 Row(
@@ -538,7 +540,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                   leading: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.purple.withOpacity(0.12),
+                      color: Colors.purple.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(LucideIcons.compass,
@@ -562,7 +564,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                   leading: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: SanctuaryColors.sunOrange.withOpacity(0.12),
+                      color: SanctuaryColors.sunOrange.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(LucideIcons.messageSquare,
@@ -590,10 +592,10 @@ class SanctuarySettingsView extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: SanctuaryColors.waveNavy.withOpacity(0.06),
+              color: SanctuaryColors.waveNavy.withValues(alpha: 0.06),
               borderRadius: BorderRadius.circular(16),
               border:
-                  Border.all(color: SanctuaryColors.waveNavy.withOpacity(0.2)),
+                  Border.all(color: SanctuaryColors.waveNavy.withValues(alpha: 0.2)),
             ),
             child: Row(
               children: [
@@ -628,7 +630,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(
                           fontSize: 11,
-                          color: theme.colorScheme.onSurface.withOpacity(0.65),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                         ),
                       ),
                     ],
@@ -656,7 +658,7 @@ class SanctuarySettingsView extends ConsumerWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
-        side: BorderSide(color: theme.colorScheme.outline.withOpacity(0.3)),
+        side: BorderSide(color: theme.colorScheme.outline.withValues(alpha: 0.3)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -706,7 +708,7 @@ class SanctuarySettingsView extends ConsumerWidget {
           border: Border.all(
             color: isSelected
                 ? SanctuaryColors.waveNavy
-                : Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                : Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -729,7 +731,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                 fontSize: 10,
                 color: isSelected
                     ? Colors.white70
-                    : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                    : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
           ],
@@ -790,7 +792,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: SanctuaryColors.waveNavy.withOpacity(0.1),
+                          color: SanctuaryColors.waveNavy.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
@@ -809,7 +811,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                     description,
                     style: GoogleFonts.inter(
                       fontSize: 11.5,
-                      color: theme.colorScheme.onSurface.withOpacity(0.65),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                     ),
                   ),
                 ],

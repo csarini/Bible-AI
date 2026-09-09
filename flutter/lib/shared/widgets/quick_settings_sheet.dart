@@ -486,7 +486,7 @@ class QuickSettingsSheet extends ConsumerWidget {
                   ),
                   Switch(
                     value: showVerseNumbers,
-                    activeColor: SanctuaryColors.sunOrange,
+                    activeThumbColor: SanctuaryColors.sunOrange,
                     onChanged: (val) => ref
                         .read(appSettingsControllerProvider)
                         .setShowVerseNumbers(ref, val),

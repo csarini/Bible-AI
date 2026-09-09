@@ -37,7 +37,6 @@ class VersionService {
   static final VersionService instance = VersionService._();
 
   PackageInfo? _cachedPackageInfo;
-  AppUpdateInfo? _cachedUpdateInfo;
 
   /// Obtiene los metadatos de versión local del paquete
   Future<PackageInfo> getPackageInfo() async {
@@ -64,7 +63,6 @@ class VersionService {
 
       try {
         final updateInfo = await InAppUpdate.checkForUpdate();
-        _cachedUpdateInfo = updateInfo;
 
         final isAvailable =
             updateInfo.updateAvailability == UpdateAvailability.updateAvailable;
