@@ -119,7 +119,7 @@ class _DigitalSanctuaryAppState extends ConsumerState<DigitalSanctuaryApp> {
     }
 
     return MaterialApp(
-      title: 'Biblia Inteligente (Digital Sanctuary)',
+      title: 'Biblia Inteligente',
       debugShowCheckedModeBanner: false,
       theme: activeTheme,
       darkTheme: activeTheme,
