@@ -21,7 +21,7 @@ if (isReleaseBuild && !keystorePropertiesFile.exists()) {
 android {
     namespace = "com.elshaddai.biblia_inteligente"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "28.2.13676358"
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -54,15 +54,12 @@ android {
             signingConfig = signingConfigs.release
             minifyEnabled false
             shrinkResources false
-            ndk {
-                debugSymbolLevel 'NONE'
-            }
         }
     }
 
     packaging {
-        jniLibs {
-            keepDebugSymbols += ['**/*.so']
+        resources {
+            excludes += ['/META-INF/{AL2.0,LGPL2.1}']
         }
     }
 }
