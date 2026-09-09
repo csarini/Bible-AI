@@ -1,48 +1,52 @@
-name: biblia_inteligente
-description: "Biblia Inteligente (Digital Sanctuary) - Lector bíblico y
-  santuario personal con arquitectura limpia."
+name: smart_bible
+description: "Smart Bible (Digital Sanctuary) – Bible reader and personal sanctuary with clean architecture."
 publish_to: "none"
-version: 1.0.0+1
+
+# VersionName: 1.0.1 | VersionCode: 2 (Incremented for Google Play update compatibility)
+version: 1.0.1+2
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
   flutter: ">=3.19.0"
 
 dependencies:
-  drift: ^2.16.0
+  cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
-  flutter_animate: ^4.5.0
-  flutter_markdown: ^0.7.4
+
+  # Local SQLite & Drift Persistence (CRITICAL: Preserved for database stability)
+  drift: ^2.18.0
+  sqlite3_flutter_libs: ^0.5.24
+
+  # UI, Icons, Typography & Animations
+  flutter_animate: ^4.5.2
+  flutter_markdown: ^0.7.4+1
+  google_fonts: ^6.2.1
+  lucide_icons_flutter: ^3.1.19
 
   # State Management & DI
   flutter_riverpod: ^2.5.1
 
-  # Typography & Iconography
-  google_fonts: ^6.2.1
-  google_generative_ai: ^0.4.6
-  home_widget: ^0.7.0
+  # AI & Cloud Services
+  google_generative_ai: ^0.4.7
+  http: ^1.2.2
 
-  # Networking & HTTP
-  http: ^1.2.1
+  # Native Integrations, Widgets & Review/Update
+  home_widget: ^0.7.0
   in_app_review: ^2.0.9
   in_app_update: ^4.2.3
-  lucide_icons_flutter: ^3.1.17
-  package_info_plus: ^9.0.1
-  path: ^1.9.0
-  path_provider: ^2.1.2
-
-  # Native Integrations & Sharing
+  package_info_plus: ^8.1.0
+  path: ^1.9.1
+  path_provider: ^2.1.4
   share_plus: ^10.1.4
-  sqlite3_flutter_libs: ^0.5.20
   url_launcher: ^6.3.2
 
 dev_dependencies:
-  build_runner: ^2.4.8
+  build_runner: ^2.4.11
   change_app_package_name: ^1.5.0
-  drift_dev: ^2.16.0
+  drift_dev: ^2.18.0
   flutter_launcher_icons: ^0.14.4
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
 
@@ -62,3 +66,4 @@ flutter:
     - assets/data/rv1858_json/
     - assets/data/sse_json/
     - assets/data/valera_json/
+

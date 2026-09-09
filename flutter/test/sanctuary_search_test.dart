@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:biblia_inteligente/core/storage/app_database.dart';
-import 'package:biblia_inteligente/core/utils/string_utils.dart';
-import 'package:biblia_inteligente/features/reader/domain/services/sanctuary_search_service.dart';
+import 'package:smart_bible/core/storage/app_database.dart';
+import 'package:smart_bible/core/utils/string_utils.dart';
+import 'package:smart_bible/features/reader/domain/services/sanctuary_search_service.dart';
 
 void main() {
   test('normaliza mayúsculas, acentos y espacios', () {
