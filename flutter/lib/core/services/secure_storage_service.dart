@@ -14,6 +14,7 @@ class SecureStorageService {
   static const String _keyAuthToken = 'auth_token';
   static const String _keyUserId = 'user_id';
   static const String _keyBibleApiKey = 'api_bible_key';
+  static const String _keyGeminiApiKey = 'gemini_api_key';
 
   /// Standard Android options enforcing EncryptedSharedPreferences (Hardware Keystore)
   static AndroidOptions _getAndroidOptions() => const AndroidOptions(
@@ -136,7 +137,41 @@ class SecureStorageService {
   }
 
   // ==========================================
-  // 4. Session & Storage Reset
+  // 4. Gemini AI Dynamic API Key
+  // ==========================================
+
+  /// Securely saves the private Gemini API key in hardware-backed storage.
+  Future<void> saveGeminiApiKey(String key) async {
+    try {
+      await _storage.write(key: _keyGeminiApiKey, value: key.trim());
+    } catch (e, stack) {
+      debugPrint('[SecureStorageService] Error saving Gemini API key: $e\n$stack');
+      rethrow;
+    }
+  }
+
+  /// Retrieves the persisted Gemini API key, or null if none is saved.
+  Future<String?> getGeminiApiKey() async {
+    try {
+      final key = await _storage.read(key: _keyGeminiApiKey);
+      return (key != null && key.isNotEmpty) ? key : null;
+    } catch (e, stack) {
+      debugPrint('[SecureStorageService] Error reading Gemini API key: $e\n$stack');
+      return null;
+    }
+  }
+
+  /// Deletes the Gemini API key from secure storage.
+  Future<void> deleteGeminiApiKey() async {
+    try {
+      await _storage.delete(key: _keyGeminiApiKey);
+    } catch (e, stack) {
+      debugPrint('[SecureStorageService] Error deleting Gemini API key: $e\n$stack');
+    }
+  }
+
+  // ==========================================
+  // 5. Session & Storage Reset
   // ==========================================
 
   /// Securely flushes all credentials from Hardware Keystore / Keychain.
@@ -150,6 +185,7 @@ class SecureStorageService {
       await deleteAuthToken();
       await deleteUserId();
       await deleteBibleApiKey();
+      await deleteGeminiApiKey();
     }
   }
 }
