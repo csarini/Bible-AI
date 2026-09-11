@@ -126,56 +126,6 @@ const COPYRIGHT_CATALOG: Record<string, ScriptureCopyrightInfo> = {
       'Reina-Valera 1909 (RVR1909): Texto canónico clásico en español, Dominio Público.',
     licenseSummary: 'Texto histórico de dominio público.',
   },
-  sse: {
-    translationId: 'sse',
-    abbreviation: 'SSE',
-    fullName: 'Biblia del Oso (1569)',
-    year: '1569',
-    organization: 'Casiodoro de Reina',
-    isCopyrightProtected: false,
-    standardCitation:
-      'Sagradas Escrituras 1569 (Biblia del Oso), traducción histórica por Casiodoro de Reina. Dominio Público.',
-    licenseSummary: 'Patrimonio histórico universal de dominio público.',
-  },
-  rv1858: {
-    translationId: 'rv1858',
-    abbreviation: 'RV1858',
-    fullName: 'Reina-Valera Nuevo Testamento (1858)',
-    year: '1858',
-    organization: 'Revisión histórica de 1858',
-    isCopyrightProtected: false,
-    standardCitation:
-      'Reina-Valera Nuevo Testamento 1858: Revisión histórica protestante, Dominio Público.',
-    licenseSummary: 'Texto histórico de dominio público.',
-  },
-  rvr09: {
-    translationId: 'rvr09',
-    abbreviation: 'RVR09',
-    fullName: 'Reina Valera 1909 (API.Bible)',
-    year: '1909',
-    organization: 'Sociedades Bíblicas Unidas',
-    isCopyrightProtected: false,
-    standardCitation: 'Reina Valera 1909: Dominio Público, servido vía API.Bible.',
-    apiPlatformAttribution: {
-      name: 'API.Bible',
-      url: 'https://api.bible',
-    },
-    licenseSummary: 'Texto de dominio público servido mediante API.Bible.',
-  },
-  kjv: {
-    translationId: 'kjv',
-    abbreviation: 'KJV',
-    fullName: 'King James Version',
-    year: '1611',
-    organization: 'Crown / Public Domain',
-    isCopyrightProtected: false,
-    standardCitation: 'King James Version (1611): Public Domain worldwide.',
-    apiPlatformAttribution: {
-      name: 'API.Bible',
-      url: 'https://api.bible',
-    },
-    licenseSummary: 'Public Domain text.',
-  },
   bsb: {
     translationId: 'bsb',
     abbreviation: 'BSB',
@@ -200,24 +150,20 @@ export class CopyrightGuardService {
     if (clean.includes('bes')) return 'bes';
     if (clean.includes('vbl')) return 'vbl';
     if (clean.includes('pddpt')) return 'pddpt';
-    if (clean.includes('1858') || clean === 'rv1858') return 'rv1858';
-    if (clean.includes('1569') || clean.includes('sse')) return 'sse';
+    if (clean.includes('bsb')) return 'bsb';
     if (clean.includes('1909') || clean.includes('valera')) return 'valera';
-    if (clean === 'rvr09') return 'rvr09';
-    if (clean === 'kjv') return 'kjv';
-    if (clean === 'bsb') return 'bsb';
     return clean || 'valera';
   }
 
   /**
    * Returns whether a given translation is consumed from API.Bible
-   * (Offline base translations are 'valera', 'sse', 'rv1858').
+   * (Offline base translation is 'valera').
    */
   static isApiBibleTranslation(translationId?: string): boolean {
     if (!translationId) return false;
     const key = this.normalizeKey(translationId);
-    // Explicit offline bundled translations
-    if (key === 'valera' || key === 'sse' || key === 'rv1858') {
+    // Explicit offline bundled translation
+    if (key === 'valera') {
       return false;
     }
     // Catalog entries with API.Bible attribution
@@ -226,7 +172,7 @@ export class CopyrightGuardService {
       return true;
     }
     // Known API.Bible versions
-    const apiBibleKeys = ['nvi', 'nbla', 'bes', 'vbl', 'pddpt', 'rvr09', 'kjv', 'bsb'];
+    const apiBibleKeys = ['nvi', 'nbla', 'bes', 'vbl', 'pddpt', 'bsb'];
     if (apiBibleKeys.includes(key)) {
       return true;
     }

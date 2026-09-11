@@ -43,21 +43,6 @@ export const KNOWN_API_BIBLE_VERSIONS: Record<string, { id: string; name: string
     name: 'Palabra de Dios para ti',
     abbreviation: 'PdDpt'
   },
-  rvr09: {
-    id: '592420522e16049f-01',
-    name: 'Reina Valera 1909 (API.Bible)',
-    abbreviation: 'RVR09'
-  },
-  rvr09_api: {
-    id: '592420522e16049f-01',
-    name: 'Reina Valera 1909 (API.Bible)',
-    abbreviation: 'RVR09'
-  },
-  kjv: {
-    id: 'de4e12af7f28f599-01',
-    name: 'King James Version',
-    abbreviation: 'KJV'
-  },
   bsb: {
     id: 'bba9f40183526463-01',
     name: 'Berean Standard Bible',
@@ -65,9 +50,9 @@ export const KNOWN_API_BIBLE_VERSIONS: Record<string, { id: string; name: string
   },
   // Legacy aliases mapped to the best equivalents
   rvr1960: {
-    id: '592420522e16049f-01',
-    name: 'Reina Valera 1909 (API.Bible)',
-    abbreviation: 'RVR09'
+    id: 'nvi',
+    name: 'Nueva Versión Internacional (NVI)',
+    abbreviation: 'NVI'
   },
   nvi: {
     id: 'nvi',

@@ -440,8 +440,6 @@ class AppDatabase extends _$AppDatabase {
       // 2. Seed Books for each available translation from assets/data/books_*.json
       final translationFiles = {
         'valera': 'assets/data/books_valera.json',
-        'sse': 'assets/data/books_sse.json',
-        'rv1858': 'assets/data/books_rv1858.json',
       };
 
       final allBooksToInsert = <LocalBibleBooksCompanion>[];
@@ -689,7 +687,7 @@ class AppDatabase extends _$AppDatabase {
   Future<bool> isBibleDataImported() async {
     final expectedChaptersPerTranslation = kCanonicalBookMetadata.values
         .fold<int>(0, (total, book) => total + book.chapters);
-    const expectedTranslations = ['valera', 'sse', 'rv1858'];
+    const expectedTranslations = ['valera'];
 
     for (final translation in expectedTranslations) {
       final count = await countStoredChapters(translation);
@@ -1027,7 +1025,7 @@ class AppDatabase extends _$AppDatabase {
       final existing = await (select(localVerses)..limit(1)).get();
       if (existing.isNotEmpty) return;
 
-      const supportedTranslations = ['valera', 'sse', 'rv1858'];
+      const supportedTranslations = ['valera'];
       final List<LocalVersesCompanion> entries = [];
 
       for (final transId in supportedTranslations) {

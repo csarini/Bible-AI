@@ -123,7 +123,7 @@ export interface BiblicalItinerary {
 }
 
 
-export type BibleTranslationAbbr = 'rv1858' | 'sse' | 'valera' | 'nvi' | 'nbla' | 'bes' | 'vbl' | 'pddpt' | 'rvr09' | 'kjv' | 'bsb' | string;
+export type BibleTranslationAbbr = 'valera' | 'nvi' | 'nbla' | 'bes' | 'vbl' | 'pddpt' | 'bsb' | string;
 
 export interface BibleTranslationOption {
   translation: string;
@@ -143,24 +143,6 @@ export const OFFICIAL_TRANSLATIONS: BibleTranslationOption[] = [
     name: 'Reina Valera (1909)',
     subtitle: 'Reina Valera 1909 (Edición Clásica / Valera)',
     badge: 'Base Offline',
-    source: 'offline',
-    isOffline: true,
-  },
-  {
-    translation: 'Sagradas Escrituras (1569)',
-    abbreviation: 'sse',
-    name: 'Sagradas Escrituras (1569)',
-    subtitle: 'Biblia del Oso 1569 (Casiodoro de Reina)',
-    badge: 'Histórica',
-    source: 'offline',
-    isOffline: true,
-  },
-  {
-    translation: 'Reina Valera NT (1858)',
-    abbreviation: 'rv1858',
-    name: 'Reina Valera NT (1858)',
-    subtitle: 'Nuevo Testamento Revisión 1858',
-    badge: 'NT 1858',
     source: 'offline',
     isOffline: true,
   },
@@ -215,26 +197,6 @@ export const OFFICIAL_TRANSLATIONS: BibleTranslationOption[] = [
     isOffline: false,
   },
   {
-    translation: 'Reina Valera 1909 (RVR09)',
-    abbreviation: 'rvr09',
-    name: 'Reina Valera 1909 (RVR09)',
-    subtitle: 'Reina Valera 1909 — Nube API.Bible',
-    badge: 'API.Bible / RVR09',
-    source: 'api_bible',
-    bibleId: '592420522e16049f-01',
-    isOffline: false,
-  },
-  {
-    translation: 'King James Version (KJV)',
-    abbreviation: 'kjv',
-    name: 'King James Version (KJV)',
-    subtitle: 'King James Version (English 1611) — API.Bible',
-    badge: 'API.Bible / Inglés',
-    source: 'api_bible',
-    bibleId: 'de4e12af7f28f599-01',
-    isOffline: false,
-  },
-  {
     translation: 'Berean Standard Bible (BSB)',
     abbreviation: 'bsb',
     name: 'Berean Standard Bible (BSB)',
@@ -252,7 +214,7 @@ export interface ReadingSettings {
   fontSize: 'small' | 'medium' | 'large' | 'extra-large';
   fontFamily: 'Literata' | 'Playfair' | 'Inter';
   lineHeight: 'normal' | 'relaxed' | 'spacious';
-  translation: 'valera' | 'sse' | 'rv1858' | string;
+  translation: 'valera' | string;
   themeMode: ThemeMode;
   showVerseNumbers: boolean;
 }

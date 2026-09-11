@@ -35,11 +35,7 @@ class BibleDataImportService {
     required int bookNumber,
     required int chapterNumber,
   }) async {
-    final config = switch (translationKey.toLowerCase().trim()) {
-      'sse' => (folder: 'sse_json', prefix: 'sse'),
-      'rv1858' => (folder: 'rv1858_json', prefix: 'rv1858'),
-      _ => (folder: 'valera_json', prefix: 'valera'),
-    };
+    final config = (folder: 'valera_json', prefix: 'valera');
     final assetPath =
         'assets/data/${config.folder}/${config.prefix}_$bookNumber.json';
 
@@ -136,8 +132,6 @@ class BibleDataImportService {
     onProgress(0.06, 'Indexando libros canónicos...');
     final translationFiles = {
       'valera': 'assets/data/books_valera.json',
-      'sse': 'assets/data/books_sse.json',
-      'rv1858': 'assets/data/books_rv1858.json',
     };
 
     final allBooksToInsert = <LocalBibleBooksCompanion>[];
@@ -189,18 +183,6 @@ class BibleDataImportService {
         name: 'Reina Valera (1909)',
         folder: 'valera_json',
         prefix: 'valera'
-      ),
-      (
-        key: 'sse',
-        name: 'Sagradas Escrituras (1569)',
-        folder: 'sse_json',
-        prefix: 'sse'
-      ),
-      (
-        key: 'rv1858',
-        name: 'Reina Valera NT (1858)',
-        folder: 'rv1858_json',
-        prefix: 'rv1858'
       ),
     ];
 

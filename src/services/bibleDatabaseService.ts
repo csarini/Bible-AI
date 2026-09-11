@@ -3,8 +3,6 @@
 // and queries books and genuine verses from the GetBible API and local DB.
 
 import booksValeraRaw from '../data/raw/books_valera.json';
-import booksRv1858Raw from '../data/raw/books_rv1858.json';
-import booksSseRaw from '../data/raw/books_sse.json';
 import translationsCatalogRaw from '../data/raw/translations_catalog.json';
 import { BibleVerse, BibleBook } from '../types';
 import { isOnline, fetchChapterFromApiBible } from './apiBibleService';
@@ -80,19 +78,20 @@ let isDatabaseReady = false;
 export function isBuiltInOfflineTranslation(tr?: string): boolean {
   if (!tr) return true;
   const clean = tr.toLowerCase().replace(/[^a-z0-9]/g, '');
-  return clean === 'valera' || clean === 'sse' || clean === 'rv1858' || clean.includes('1909') || clean.includes('1569') || clean.includes('1858');
+  return clean === 'valera' || clean.includes('1909');
 }
 
-// Normalize translation code (valera, sse, rv1858, nvi, rvr1960, kjv, dhh)
+// Normalize translation code (valera, nvi, nbla, bes, vbl, pddpt, bsb)
 export function normalizeTranslationKey(tr?: string): string {
   if (!tr) return 'valera';
   const clean = tr.toLowerCase().replace(/[^a-z0-9]/g, '');
-  if (clean.includes('1858') || clean === 'rv1858') return 'rv1858';
-  if (clean.includes('sse') || clean.includes('1569')) return 'sse';
-  if (clean.includes('1960') || clean === 'rvr1960') return 'rvr1960';
+  if (clean.includes('1960') || clean === 'rvr1960') return 'nvi';
   if (clean === 'nvi') return 'nvi';
-  if (clean === 'kjv') return 'kjv';
-  if (clean === 'dhh') return 'dhh';
+  if (clean === 'nbla') return 'nbla';
+  if (clean === 'bes') return 'bes';
+  if (clean === 'vbl') return 'vbl';
+  if (clean === 'pddpt') return 'pddpt';
+  if (clean === 'bsb') return 'bsb';
   if (clean.includes('valera') || clean.includes('1909')) return 'valera';
   return clean || 'valera';
 }
@@ -121,16 +120,12 @@ function transformRawBook(raw: RawBookData | any, defaultAbbr: string): StoredBi
   };
 }
 
-// Build in-memory books list from the 3 files for instant sync rendering
+// Build in-memory books list from the valera file for instant sync rendering
 function buildMemoryBookLists(): Record<string, StoredBibleBook[]> {
   const valeraList: StoredBibleBook[] = Object.values(booksValeraRaw).map(b => transformRawBook(b, 'valera'));
-  const rv1858List: StoredBibleBook[] = Object.values(booksRv1858Raw).map(b => transformRawBook(b, 'rv1858'));
-  const sseList: StoredBibleBook[] = Object.values(booksSseRaw).map(b => transformRawBook(b, 'sse'));
 
   return {
-    valera: valeraList.sort((a, b) => a.number - b.number),
-    rv1858: rv1858List.sort((a, b) => a.number - b.number),
-    sse: sseList.sort((a, b) => a.number - b.number)
+    valera: valeraList.sort((a, b) => a.number - b.number)
   };
 }
 
@@ -257,11 +252,9 @@ export async function initBibleDatabase(): Promise<void> {
         transStore.put({ ...trans, abbreviation: abbr });
       }
 
-      // 2. Insert books from the 3 files (Valera, RV1858, SSE)
+      // 2. Insert books from the built-in Valera file
       const allBooks = [
-        ...cachedBooksByTranslation.valera,
-        ...cachedBooksByTranslation.rv1858,
-        ...cachedBooksByTranslation.sse
+        ...cachedBooksByTranslation.valera
       ];
 
       for (const book of allBooks) {
@@ -308,20 +301,13 @@ async function refreshBooksCacheFromDB(): Promise<void> {
         const rows: (StoredBibleBook & { storeId: string })[] = req.result || [];
         if (rows.length > 0) {
           const valera: StoredBibleBook[] = [];
-          const rv1858: StoredBibleBook[] = [];
-          const sse: StoredBibleBook[] = [];
 
           for (const row of rows) {
-            const tr = normalizeTranslationKey(row.translation);
-            if (tr === 'rv1858') rv1858.push(row);
-            else if (tr === 'sse') sse.push(row);
-            else valera.push(row);
+            valera.push(row);
           }
 
           cachedBooksByTranslation = {
-            valera: valera.sort((a, b) => a.number - b.number),
-            rv1858: rv1858.sort((a, b) => a.number - b.number),
-            sse: sse.sort((a, b) => a.number - b.number)
+            valera: valera.sort((a, b) => a.number - b.number)
           };
         }
         resolve();
@@ -457,7 +443,7 @@ async function fetchFromGetBibleAPI(
   chapter: number,
   tr: string
 ): Promise<BibleVerse[]> {
-  const apiSlug = tr === 'rv1858' ? 'rv1858' : tr === 'sse' ? 'sse' : 'valera';
+  const apiSlug = 'valera';
 
   // Strategy 1: Fetch direct chapter JSON endpoint (e.g. https://api.getbible.net/v2/valera/40/1.json)
   const chapterUrl = `https://api.getbible.net/v2/${apiSlug}/${bookMeta.number}/${chapter}.json`;

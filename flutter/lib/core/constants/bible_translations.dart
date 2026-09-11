@@ -31,22 +31,6 @@ class BibleTranslationsCatalog {
       isOffline: true,
     ),
     BibleTranslationConfig(
-      id: 'sse',
-      abbreviation: 'sse',
-      name: 'Biblia del Oso 1569 (SSE)',
-      subtitle: 'Casiodoro de Reina, traducción histórica original',
-      badge: 'Histórica',
-      isOffline: true,
-    ),
-    BibleTranslationConfig(
-      id: 'rv1858',
-      abbreviation: 'rv1858',
-      name: 'Reina Valera NT 1858 (RV 1858)',
-      subtitle: 'Nuevo Testamento, revisión histórica de 1858',
-      badge: 'NT 1858',
-      isOffline: true,
-    ),
-    BibleTranslationConfig(
       id: 'nvi',
       abbreviation: 'nvi',
       name: 'Nueva Versión Internacional (NVI)',
@@ -92,24 +76,6 @@ class BibleTranslationsCatalog {
       bibleId: '48acedcf8595c754-01',
     ),
     BibleTranslationConfig(
-      id: 'rvr09',
-      abbreviation: 'rvr09',
-      name: 'Reina Valera 1909 (RVR09)',
-      subtitle: 'Reina Valera 1909 — Nube API.Bible',
-      badge: 'API.Bible / RVR09',
-      isOffline: false,
-      bibleId: '592420522e16049f-01',
-    ),
-    BibleTranslationConfig(
-      id: 'kjv',
-      abbreviation: 'kjv',
-      name: 'King James Version (KJV)',
-      subtitle: 'King James Version (English 1611) — API.Bible',
-      badge: 'API.Bible / Inglés',
-      isOffline: false,
-      bibleId: 'de4e12af7f28f599-01',
-    ),
-    BibleTranslationConfig(
       id: 'bsb',
       abbreviation: 'bsb',
       name: 'Berean Standard Bible (BSB)',
@@ -130,6 +96,6 @@ class BibleTranslationsCatalog {
 
   static bool isBuiltInOffline(String translationKey) {
     final clean = translationKey.toLowerCase().trim();
-    return clean == 'valera' || clean == 'sse' || clean == 'rv1858';
+    return clean == 'valera' || clean.contains('1909');
   }
 }

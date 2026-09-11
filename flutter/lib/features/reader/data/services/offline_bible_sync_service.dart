@@ -69,7 +69,7 @@ class OfflineSyncStatus {
 
 class OfflineBibleSyncService {
   final AppDatabase database;
-  static const int totalBibleChaptersAllTranslations = 3567; // 1189 * 3
+  static const int totalBibleChaptersAllTranslations = 1189;
 
   bool _isCancelled = false;
   bool _isPaused = false;
@@ -127,8 +127,6 @@ class OfflineBibleSyncService {
           ]
         : [
             (key: 'valera', folder: 'valera_json', prefix: 'valera'),
-            (key: 'sse', folder: 'sse_json', prefix: 'sse'),
-            (key: 'rv1858', folder: 'rv1858_json', prefix: 'rv1858'),
           ];
 
     try {

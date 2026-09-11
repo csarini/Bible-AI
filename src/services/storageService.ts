@@ -246,10 +246,16 @@ export const StorageService = {
       const parsed = JSON.parse(data);
       // Migrate legacy translation identifiers if needed
       let trans = parsed.translation;
-      if (trans === 'RVR1960' || trans === 'RVR1909') {
+      if (
+        trans === 'RVR1960' ||
+        trans === 'RVR1909' ||
+        trans === 'SSE' ||
+        trans === 'sse' ||
+        trans === 'rv1858' ||
+        trans === 'rvr09' ||
+        trans === 'kjv'
+      ) {
         trans = 'valera';
-      } else if (trans === 'SSE') {
-        trans = 'sse';
       }
       return { ...defaultSettings, ...parsed, translation: trans || 'valera' };
     } catch {
