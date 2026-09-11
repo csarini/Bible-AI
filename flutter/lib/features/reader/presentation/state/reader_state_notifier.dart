@@ -47,6 +47,8 @@ class ReaderState {
   final int currentChapter;
   final List<ScriptureVerseUiModel> verses;
   final String? errorMessage;
+  final bool isOfflineFallback;
+  final String? fallbackNotice;
 
   const ReaderState({
     this.status = ReaderStatus.initial,
@@ -57,6 +59,8 @@ class ReaderState {
     this.currentChapter = 1,
     this.verses = const [],
     this.errorMessage,
+    this.isOfflineFallback = false,
+    this.fallbackNotice,
   });
 
   ReaderState copyWith({
@@ -68,6 +72,9 @@ class ReaderState {
     int? currentChapter,
     List<ScriptureVerseUiModel>? verses,
     String? errorMessage,
+    bool? isOfflineFallback,
+    String? fallbackNotice,
+    bool clearFallbackNotice = false,
   }) {
     return ReaderState(
       status: status ?? this.status,
@@ -78,6 +85,8 @@ class ReaderState {
       currentChapter: currentChapter ?? this.currentChapter,
       verses: verses ?? this.verses,
       errorMessage: errorMessage ?? this.errorMessage,
+      isOfflineFallback: isOfflineFallback ?? this.isOfflineFallback,
+      fallbackNotice: clearFallbackNotice ? null : (fallbackNotice ?? this.fallbackNotice),
     );
   }
 }
@@ -97,7 +106,8 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
         bookNumber: 1, bookName: 'Génesis', bookId: 'GEN', chapterNumber: 1);
   }
 
-  /// Loads a chapter directly from local SQLite database and dynamically attaches local highlights & notes.
+  /// Loads a chapter directly from local SQLite database or API.Bible on demand,
+  /// attaching local bookmarks, notes and offline fallback indicators.
   Future<void> loadChapter({
     required int bookNumber,
     required String bookName,
@@ -113,16 +123,23 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
       currentBookId: bookId,
       currentChapter: chapterNumber,
       translationKey: translation,
+      clearFallbackNotice: true,
+      isOfflineFallback: false,
     );
 
+    String? capturedNotice;
+
     try {
-      // 1. Fetch chapter text directly from local SQLite
+      // 1. Fetch chapter text via offline-first SQLite or API.Bible
       final localData = await _localBibleService.fetchChapter(
         translationKey: translation,
         bookNumber: bookNumber,
         chapterNumber: chapterNumber,
         bookCode: bookId,
         bookName: bookName,
+        onOfflineFallbackNotice: (notice) {
+          capturedNotice = notice;
+        },
       );
 
       // 2. Fetch local bookmarks for this chapter
@@ -145,6 +162,8 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
         status: ReaderStatus.loaded,
         verses: uiVerses,
         errorMessage: null,
+        isOfflineFallback: localData.isOfflineFallback,
+        fallbackNotice: localData.fallbackNotice ?? capturedNotice,
       );
 
       // Listen for bookmark changes on this chapter

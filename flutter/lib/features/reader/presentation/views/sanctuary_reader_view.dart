@@ -10,6 +10,7 @@ import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/services/share_service.dart';
 import '../../../../shared/widgets/quick_settings_sheet.dart';
+import '../../../../shared/widgets/scripture_copyright_footer.dart';
 import '../../../shell/presentation/views/sanctuary_main_shell.dart';
 import '../../data/services/getbible_service.dart';
 import '../../domain/entities/verse_entity.dart';
@@ -135,6 +136,18 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
         chapterNumber: _currentChapter,
         bookCode: _currentBook.id,
         bookName: _currentBook.name,
+        onOfflineFallbackNotice: (notice) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(notice),
+                backgroundColor: SanctuaryColors.sunOrange,
+                behavior: SnackBarBehavior.floating,
+                duration: const Duration(seconds: 4),
+              ),
+            );
+          }
+        },
       );
 
       final verses = response.verses.map((v) {
@@ -654,8 +667,14 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
         return ListView.builder(
           controller: _scrollController,
           padding: const EdgeInsets.fromLTRB(18, 10, 18, 90),
-          itemCount: _verses.length,
+          itemCount: _verses.length + 1,
           itemBuilder: (context, index) {
+            if (index == _verses.length) {
+              return ScriptureCopyrightFooter(
+                translation: ref.watch(appTranslationProvider),
+              );
+            }
+
             final verse = _verses[index];
             final bookmark = bookmarkMap[verse.number];
             final isSelected = _selectedVerse?.number == verse.number;
@@ -880,6 +899,7 @@ class _SanctuaryReaderViewState extends ConsumerState<SanctuaryReaderView> {
                         text: _selectedVerse!.text,
                         customTitle: _selectedBookmark?.customTitle,
                         personalReflection: _selectedBookmark?.personalNote,
+                        translation: ref.read(appTranslationProvider),
                       );
                     },
                   ),

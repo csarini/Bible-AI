@@ -663,6 +663,7 @@ class AppDatabase extends _$AppDatabase {
         chapter: chapter,
         versesJson: versesJson,
         verseCount: Value(verseCount),
+        createdAt: Value(DateTime.now()),
       ),
     );
   }

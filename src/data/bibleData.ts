@@ -297,11 +297,22 @@ export async function getRandomDailyVerse(
   return getRandomDailyVerseSync(topic, excludeId);
 }
 
-// Fetch chapter verses: Queries IndexedDB local first, then GetBible, caching result in local DB
+// Fetch chapter verses: Queries IndexedDB local first, then API.Bible/GetBible, caching result in local DB
 export async function fetchBibleChapter(
   bookId: string,
   chapter: number,
-  translation: string = 'valera'
+  translation: string = 'valera',
+  onNotification?: (msg: string) => void
 ): Promise<BibleVerse[]> {
-  return await fetchChapterVerses(bookId, chapter, translation);
+  return await fetchChapterVerses(bookId, chapter, translation, onNotification);
+}
+
+export async function fetchBibleChapterWithFallback(
+  bookId: string,
+  chapter: number,
+  translation: string = 'valera',
+  onNotification?: (msg: string) => void
+) {
+  const { fetchChapterVersesWithFallback } = await import('../services/bibleDatabaseService');
+  return await fetchChapterVersesWithFallback(bookId, chapter, translation, onNotification);
 }

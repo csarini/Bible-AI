@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
+import '../../core/services/copyright_guard_service.dart';
 
 /// Centralized Native Share Service with Branding Attribution
 class ShareService {
@@ -8,6 +9,7 @@ class ShareService {
   static const String _appAttribution = '\n\n— Compartido desde Biblia Inteligente 📖✨';
 
   /// Shares a single Scripture verse with reference, optional translation and personal reflection note.
+  /// Complies with Bíblica, Inc. Standard Citation requirements for copyrighted translations.
   static Future<void> shareScripture({
     BuildContext? context,
     required String reference,
@@ -16,7 +18,9 @@ class ShareService {
     String? personalReflection,
     String? translation,
   }) async {
-    final versionStr = translation != null ? ' ($translation)' : ' (RVR1909)';
+    final trKey = translation ?? 'valera';
+    final isProtected = CopyrightGuardService.isCopyrightProtected(trKey);
+    final versionStr = ' (${trKey.toUpperCase()})';
     final buffer = StringBuffer();
 
     if (customTitle != null && customTitle.trim().isNotEmpty) {
@@ -25,6 +29,14 @@ class ShareService {
 
     buffer.writeln('"$text"');
     buffer.writeln('— $reference$versionStr');
+
+    if (isProtected) {
+      final info = CopyrightGuardService.getCopyrightInfo(trKey);
+      buffer.writeln('\n${info.standardCitation}');
+      if (info.officialLinkText != null && info.officialLinkUrl != null) {
+        buffer.writeln('${info.officialLinkText}: ${info.officialLinkUrl}');
+      }
+    }
 
     if (personalReflection != null && personalReflection.trim().isNotEmpty) {
       buffer.writeln('\n📝 Mi Reflexión:\n${personalReflection.trim()}');

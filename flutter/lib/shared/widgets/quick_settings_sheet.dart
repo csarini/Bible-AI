@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../core/constants/bible_translations.dart';
 import '../../core/providers/app_settings_providers.dart';
 import '../../core/theme/sanctuary_colors.dart';
 import '../../core/theme/sanctuary_theme.dart';
@@ -408,40 +409,25 @@ class QuickSettingsSheet extends ConsumerWidget {
             const SizedBox(height: 18),
 
             // 5. Canonical Bible Translation
-            _buildSectionLabel('5. Traducción Canónica'),
+            _buildSectionLabel('5. Traducción Canónica (Offline & API.Bible)'),
             const SizedBox(height: 8),
             Column(
-              children: [
-                _buildTranslationTile(
-                  context: context,
-                  title: 'Reina-Valera 1909 (RVR1909)',
-                  subtitle: 'Texto canónico en español clásico protestante',
-                  isSelected: translation == 'valera',
-                  onTap: () => ref
-                      .read(appSettingsControllerProvider)
-                      .setTranslation(ref, 'valera'),
-                ),
-                const SizedBox(height: 6),
-                _buildTranslationTile(
-                  context: context,
-                  title: 'Biblia del Oso 1569 (SSE)',
-                  subtitle: 'Casiodoro de Reina, traducción histórica original',
-                  isSelected: translation == 'sse',
-                  onTap: () => ref
-                      .read(appSettingsControllerProvider)
-                      .setTranslation(ref, 'sse'),
-                ),
-                const SizedBox(height: 6),
-                _buildTranslationTile(
-                  context: context,
-                  title: 'Reina Valera NT 1858 (RV 1858)',
-                  subtitle: 'Nuevo Testamento, revisión histórica de 1858',
-                  isSelected: translation == 'rv1858',
-                  onTap: () => ref
-                      .read(appSettingsControllerProvider)
-                      .setTranslation(ref, 'rv1858'),
-                ),
-              ],
+              children: BibleTranslationsCatalog.allTranslations.map((tr) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: _buildTranslationTile(
+                    context: context,
+                    title: tr.name,
+                    subtitle: tr.subtitle,
+                    badge: tr.badge,
+                    isOffline: tr.isOffline,
+                    isSelected: translation == tr.id || translation == tr.abbreviation,
+                    onTap: () => ref
+                        .read(appSettingsControllerProvider)
+                        .setTranslation(ref, tr.id),
+                  ),
+                );
+              }).toList(),
             ),
 
             const SizedBox(height: 16),
@@ -574,6 +560,8 @@ class QuickSettingsSheet extends ConsumerWidget {
     required String subtitle,
     required bool isSelected,
     required VoidCallback onTap,
+    String? badge,
+    bool isOffline = true,
   }) {
     final theme = Theme.of(context);
     final tokens = context.sanctuaryTokens;
@@ -609,19 +597,47 @@ class QuickSettingsSheet extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.inter(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: isSelected
-                          ? (tokens.activeState == SanctuaryColors.darkActive
-                              ? SanctuaryColors.amberGold
-                              : tokens.activeState)
-                          : theme.colorScheme.onSurface,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: isSelected
+                                ? (tokens.activeState == SanctuaryColors.darkActive
+                                    ? SanctuaryColors.amberGold
+                                    : tokens.activeState)
+                                : theme.colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                      if (badge != null) ...[
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: isOffline
+                                ? SanctuaryColors.emeraldGreen.withValues(alpha: 0.15)
+                                : SanctuaryColors.sunOrange.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            badge,
+                            style: GoogleFonts.inter(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w700,
+                              color: isOffline
+                                  ? SanctuaryColors.emeraldGreen
+                                  : SanctuaryColors.sunOrange,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                   Text(
                     subtitle,

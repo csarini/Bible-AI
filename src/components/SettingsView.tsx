@@ -16,7 +16,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { StorageService } from '../services/storageService';
-import { ReadingSettings } from '../types';
+import { ReadingSettings, OFFICIAL_TRANSLATIONS } from '../types';
 
 interface SettingsViewProps {
   settings: ReadingSettings;
@@ -345,62 +345,40 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <div className="space-y-1.5 sm:col-span-2">
             <div className="flex items-center justify-between">
               <span className="block text-xs font-label-caps text-[#454652] uppercase font-semibold">
-                Versión / Traducción Bíblica
+                Versión / Traducción Bíblica (Offline & API.Bible)
               </span>
               <span className="text-[11px] font-sans font-bold text-[#F47B20] bg-[#F47B20]/10 px-2 py-0.5 rounded-full">
-                GetBible Oficiales
+                {OFFICIAL_TRANSLATIONS.length} Versiones Disponibles
               </span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              {[
-                {
-                  id: 'valera',
-                  abbreviation: 'valera',
-                  translation: 'Reina Valera (1909)',
-                  title: 'Reina Valera (1909)',
-                  subtitle: 'Edición Clásica 1909 / Valera',
-                  badge: 'Predeterminada'
-                },
-                {
-                  id: 'sse',
-                  abbreviation: 'sse',
-                  translation: 'Sagradas Escrituras (1569)',
-                  title: 'Sagradas Escrituras (1569)',
-                  subtitle: 'Biblia del Oso 1569 (Casiodoro de Reina)',
-                  badge: 'sse'
-                },
-                {
-                  id: 'rv1858',
-                  abbreviation: 'rv1858',
-                  translation: 'Reina Valera NT (1858)',
-                  title: 'Reina Valera NT (1858)',
-                  subtitle: 'Nuevo Testamento Revisión 1858',
-                  badge: 'rv1858'
-                }
-              ].map((tr) => {
-                const isSelected = settings.translation === tr.id ||
-                  (tr.id === 'valera' && (settings.translation === 'RVR1909' || settings.translation === 'RVR1960')) ||
-                  (tr.id === 'sse' && settings.translation === 'SSE');
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+              {OFFICIAL_TRANSLATIONS.map((tr) => {
+                const isSelected = settings.translation === tr.abbreviation ||
+                  settings.translation === tr.translation ||
+                  (tr.abbreviation === 'valera' && (settings.translation === 'RVR1909' || settings.translation === 'RVR1960')) ||
+                  (tr.abbreviation === 'sse' && settings.translation === 'SSE');
                 return (
                   <button
-                    key={tr.id}
-                    id={`settings-trans-${tr.id}`}
+                    key={tr.abbreviation}
+                    id={`settings-trans-${tr.abbreviation}`}
                     onClick={() => {
-                      onUpdateSettings({ translation: tr.id });
-                      onToast(`Traducción actualizada a ${tr.translation}`);
+                      onUpdateSettings({ translation: tr.abbreviation });
+                      onToast(`Traducción actualizada a ${tr.name}`);
                     }}
-                    className={`p-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-left flex flex-col justify-between ${isSelected
-                        ? 'bg-[#0B2B68] text-[#FED65B] shadow-xs ring-2 ring-[#F47B20]/50 font-black'
-                        : 'bg-[#F0EEE9] text-[#454652] hover:bg-[#EAE8E3]'
+                    className={`p-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-left flex flex-col justify-between border ${isSelected
+                        ? 'bg-[#0B2B68] text-[#FED65B] border-[#0B2B68] shadow-xs ring-2 ring-[#F47B20]/50 font-black'
+                        : 'bg-[#F0EEE9] text-[#454652] border-transparent hover:bg-[#EAE8E3]'
                       }`}
                   >
                     <div className="flex items-center justify-between w-full">
-                      <span className="text-sm font-bold leading-tight">{tr.title}</span>
+                      <span className="text-sm font-bold leading-tight">{tr.name}</span>
                       <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold ${isSelected
                           ? 'bg-[#FED65B]/20 text-[#FED65B]'
-                          : 'bg-[#C6C5D4]/40 text-[#454652]'
+                          : tr.isOffline
+                            ? 'bg-emerald-500/20 text-emerald-700'
+                            : 'bg-amber-500/20 text-amber-700'
                         }`}>
-                        {tr.abbreviation}
+                        {tr.badge || (tr.isOffline ? 'Offline' : 'API.Bible')}
                       </span>
                     </div>
                     <span className="block text-[11px] font-normal opacity-80 mt-1">
@@ -465,6 +443,69 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <span className="text-[10px] font-bold text-[#F47B20] uppercase tracking-wider mb-2">Versión Tema Oscuro</span>
             <img src="/logo-dark.svg" alt="Logo El-Shaddai Tema Oscuro" className="w-40 h-auto max-h-36 object-contain" />
           </div>
+        </div>
+      </div>
+
+      {/* Mandatory Legal, Copyright & Non-Commercial Declaration Card */}
+      <div className="bg-[#FAF8F5] border border-[#C6C5D4]/80 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="flex items-center justify-between border-b border-[#C6C5D4]/40 pb-3">
+          <div className="flex items-center gap-2">
+            <Shield className="w-5 h-5 text-[#0B2B68]" />
+            <h3 className="font-display-scripture text-lg font-bold text-[#0B2B68]">
+              Avisos Legales, Derechos de Autor y Licencia
+            </h3>
+          </div>
+          <span className="text-[10px] font-sans font-bold tracking-widest text-[#059669] bg-[#059669]/10 px-2.5 py-1 rounded-full uppercase">
+            100% Sin Fines de Lucro
+          </span>
+        </div>
+
+        <div className="text-xs text-[#454652] space-y-3 leading-relaxed">
+          <p>
+            <strong>Declaración de Aplicación Gratuita y No Comercial:</strong> Biblia Inteligente (<code>com.elshaddai.biblia_inteligente</code>) es un ministerio de edificación espiritual y discipulado cristiano desarrollado exclusivamente sin fines comerciales. Esta aplicación no contiene compras integradas (in-app purchases), muros de pago, suscripciones comerciales ni publicidad intrusiva.
+          </p>
+
+          <div className="p-3.5 rounded-xl bg-[#FFFFFF] border border-[#0B2B68]/15 space-y-2">
+            <p className="font-semibold text-[#0B2B68]">
+              Cita y Reconocimiento de Bíblica, Inc.:
+            </p>
+            <p className="italic text-[11px] text-[#454652]">
+              «Las citas bíblicas marcadas con NVI © están tomadas de la Santa Biblia, NUEVA VERSIÓN INTERNACIONAL® NVI® © 1999, 2015, 2022 por Bíblica, Inc.® Usado con permiso. Todos los derechos reservados en todo el mundo.»
+            </p>
+            <p className="text-[11px]">
+              Para mayor información sobre la labor de traducción y distribución de las Sagradas Escrituras, visite el{' '}
+              <a
+                href="https://www.Biblica.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#0B2B68] font-bold underline hover:text-[#00A3E0]"
+              >
+                sitio oficial de Biblica (www.Biblica.com)
+              </a>.
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-[#FFFFFF] border border-[#0B2B68]/15 space-y-2">
+            <p className="font-semibold text-[#0B2B68]">
+              Plataforma Tecnológica y Distribución de API:
+            </p>
+            <p className="text-[11px] text-[#454652]">
+              El acceso digital a los textos bíblicos y sus divisiones canónicas se provee a través de la infraestructura autorizada de{' '}
+              <a
+                href="https://api.bible"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#0B2B68] font-bold underline hover:text-[#00A3E0]"
+              >
+                API.Bible
+              </a>
+              , un servicio de American Bible Society (ABS).
+            </p>
+          </div>
+
+          <p className="text-[11px] text-[#71717A]">
+            <strong>Protección de Integridad y Privacidad de IA (Cláusula III.B):</strong> Ningún texto con derechos de autor se altera, mutila ni se utiliza para el entrenamiento o procesamiento con modelos de Inteligencia Artificial Generativa. Toda la memoria caché local expira y se revalida automáticamente cada 30 días conforme a los términos de uso.
+          </p>
         </div>
       </div>
     </div>

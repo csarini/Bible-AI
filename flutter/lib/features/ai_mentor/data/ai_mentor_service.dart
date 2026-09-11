@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import '../../../core/storage/app_database.dart';
+import '../../../core/services/copyright_guard_service.dart';
 import '../../reader/presentation/state/reader_state_notifier.dart';
 
 /// Service responsible for theological contextual AI guidance, strictly aligned
@@ -60,11 +61,15 @@ DIRECTIVAS CRÍTICAS DE RESPUESTA:
   });
 
   /// Sends a theological query with scripture context to the configured AI provider,
+  /// Sends a theological query with scripture context to the configured AI provider,
   /// saves both user query and AI response into [database], and returns the response.
+  /// Strictly enforces Clause III.B (Bíblica, Inc.): Copyrighted verse strings are never
+  /// injected into Generative AI payloads; only canonical references are used.
   Future<String> askMentorWithContext({
     required String question,
     required String verseReference,
     String? verseText,
+    String? translationId,
   }) async {
     final cleanQuestion = question.trim();
     final cleanRef = verseReference.trim();
@@ -102,13 +107,28 @@ DIRECTIVAS CRÍTICAS DE RESPUESTA:
         await database.getSetting('ai_endpoint');
     final activeServerUrl = await database.getSetting('ai_server_url');
 
+    // Resolve active translation and sanitize according to Clause III.B
+    final activeTranslation = translationId ??
+        await database.getSetting('bible_translation') ??
+        'valera';
+    final sanitizedVerse = CopyrightGuardService.sanitizeAiMentorPayload(
+      verseReference: cleanRef,
+      verseText: verseText,
+      translationId: activeTranslation,
+    );
+    final safeVerseText = sanitizedVerse['text'] as String?;
+    final wasSanitized = sanitizedVerse['wasSanitized'] as bool? ?? false;
+
     // 4. Build optimized contextual prompt
     final buffer = StringBuffer();
     if (cleanRef.isNotEmpty) {
       buffer.writeln('### PASAJE BÍBLICO DE REFERENCIA:');
       buffer.writeln('**Referencia:** $cleanRef');
-      if (verseText != null && verseText.trim().isNotEmpty) {
-        buffer.writeln('**Texto Bíblico:** "${verseText.trim()}"');
+      if (safeVerseText != null && safeVerseText.trim().isNotEmpty) {
+        buffer.writeln('**Texto Bíblico:** "${safeVerseText.trim()}"');
+      } else if (wasSanitized) {
+        buffer.writeln(
+            '*(Aviso de Copyright: Texto protegido de ${activeTranslation.toUpperCase()} no transmitido a modelos de IA según Cláusula III.B. El análisis se genera sobre la referencia bíblica y textos de dominio público).*');
       }
       buffer.writeln();
       buffer.writeln('### SOLICITUD DEL USUARIO:');
@@ -136,11 +156,12 @@ DIRECTIVAS CRÍTICAS DE RESPUESTA:
           body: jsonEncode({
             'prompt': cleanQuestion,
             'selectedVerse': cleanRef.isNotEmpty
-                ? {'reference': cleanRef, 'text': verseText ?? ''}
+                ? {'reference': cleanRef, 'text': safeVerseText ?? ''}
                 : null,
             'provider': activeProvider,
             'apiKey': activeApiKey,
             'model': activeModel,
+            'translation': activeTranslation,
           }),
         ).timeout(const Duration(seconds: 35));
 

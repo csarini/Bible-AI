@@ -30,6 +30,7 @@ import {
   MENTOR_DAILY_LIMIT
 } from '../services/mentorQuotaService';
 import { AIMentorSettingsModal } from './AIMentorSettingsModal';
+import { CopyrightGuardService } from '../services/copyrightGuardService';
 
 interface AIMentorViewProps {
   initialVerse?: BibleVerse | null;
@@ -171,17 +172,30 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
     setLoading(true);
 
     try {
+      const currentSettings = StorageService.getSettings();
+      const currentTr = currentSettings?.translation || 'valera';
+
+      // Clause III.B Compliance: Block sending copyrighted scripture strings to Generative AI
+      const sanitizedPayload = activeVerseContext
+        ? CopyrightGuardService.sanitizeAiMentorPayload(
+            `${activeVerseContext.bookName} ${activeVerseContext.chapter}:${activeVerseContext.verse}`,
+            activeVerseContext.text,
+            currentTr
+          )
+        : null;
+
       // Call backend API /api/ai-mentor with multi-provider options
       const response = await fetch('/api/ai-mentor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           prompt: textToSend,
-          selectedVerse: activeVerseContext
+          translation: currentTr,
+          selectedVerse: sanitizedPayload
             ? {
-              reference: `${activeVerseContext.bookName} ${activeVerseContext.chapter}:${activeVerseContext.verse}`,
-              text: activeVerseContext.text
-            }
+                reference: sanitizedPayload.reference,
+                text: sanitizedPayload.text || ''
+              }
             : undefined,
           provider: userProvider,
           apiKey: userApiKey,

@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../../core/constants/bible_translations.dart';
 import '../../../../core/constants/daily_verses_pool.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
@@ -338,41 +340,26 @@ class SanctuarySettingsView extends ConsumerWidget {
             iconColor: SanctuaryColors.waveNavy,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildTranslationRow(
-                  context,
-                  title: 'Reina-Valera 1909',
-                  abbreviation: 'RVR1909',
-                  description: 'Texto canónico en español clásico protestante.',
-                  isSelected: translation == 'valera',
-                  onTap: () => ref
-                      .read(appSettingsControllerProvider)
-                      .setTranslation(ref, 'valera'),
-                ),
-                const Divider(height: 20),
-                _buildTranslationRow(
-                  context,
-                  title: 'Biblia del Oso 1569',
-                  abbreviation: 'SSE 1569',
-                  description:
-                      'Casiodoro de Reina, traducción histórica original.',
-                  isSelected: translation == 'sse',
-                  onTap: () => ref
-                      .read(appSettingsControllerProvider)
-                      .setTranslation(ref, 'sse'),
-                ),
-                const Divider(height: 20),
-                _buildTranslationRow(
-                  context,
-                  title: 'Reina Valera NT 1858',
-                  abbreviation: 'RV 1858',
-                  description: 'Nuevo Testamento, revisión histórica de 1858.',
-                  isSelected: translation == 'rv1858',
-                  onTap: () => ref
-                      .read(appSettingsControllerProvider)
-                      .setTranslation(ref, 'rv1858'),
-                ),
-              ],
+              children: BibleTranslationsCatalog.allTranslations.map((tr) {
+                final isLast = tr == BibleTranslationsCatalog.allTranslations.last;
+                return Column(
+                  children: [
+                    _buildTranslationRow(
+                      context,
+                      title: tr.name,
+                      abbreviation: tr.abbreviation.toUpperCase(),
+                      description: tr.subtitle,
+                      badge: tr.badge,
+                      isOffline: tr.isOffline,
+                      isSelected: translation == tr.id || translation == tr.abbreviation,
+                      onTap: () => ref
+                          .read(appSettingsControllerProvider)
+                          .setTranslation(ref, tr.id),
+                    ),
+                    if (!isLast) const Divider(height: 16),
+                  ],
+                );
+              }).toList(),
             ),
           ),
 
@@ -640,6 +627,168 @@ class SanctuarySettingsView extends ConsumerWidget {
             ),
           ),
 
+          const SizedBox(height: 16),
+
+          // Section 7: Mandatory Legal, Copyright & Non-Commercial Declaration Card
+          _buildCard(
+            context,
+            title: 'Avisos Legales, Derechos de Autor y Licencia',
+            icon: LucideIcons.shieldCheck,
+            iconColor: SanctuaryColors.waveNavy,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: Colors.green.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        '100% SIN FINES DE LUCRO',
+                        style: GoogleFonts.inter(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.green.shade800,
+                          letterSpacing: 0.8,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Declaración de Aplicación Gratuita y No Comercial: Biblia Inteligente (com.elshaddai.biblia_inteligente) es un ministerio de edificación espiritual y discipulado cristiano desarrollado exclusivamente sin fines comerciales. Esta aplicación no contiene compras integradas (in-app purchases), muros de pago, suscripciones comerciales ni publicidad intrusiva.',
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    height: 1.5,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+                  ),
+                ),
+                const SizedBox(height: 14),
+
+                // Bíblica citation block
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: SanctuaryColors.waveNavy.withValues(alpha: 0.2),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Cita y Reconocimiento de Bíblica, Inc.:',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: SanctuaryColors.waveNavy,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        '«Las citas bíblicas marcadas con NVI © están tomadas de la Santa Biblia, NUEVA VERSIÓN INTERNACIONAL® NVI® © 1999, 2015, 2022 por Bíblica, Inc.® Usado con permiso. Todos los derechos reservados en todo el mundo.»',
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          fontStyle: FontStyle.italic,
+                          height: 1.45,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      InkWell(
+                        onTap: () async {
+                          final uri = Uri.parse('https://www.Biblica.com');
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri, mode: LaunchMode.externalApplication);
+                          }
+                        },
+                        child: Text(
+                          'Visitar sitio oficial de Biblica (www.Biblica.com)',
+                          style: GoogleFonts.inter(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: SanctuaryColors.waveNavy,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                // API.Bible attribution block
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: SanctuaryColors.waveNavy.withValues(alpha: 0.2),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Plataforma Tecnológica de API.Bible:',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: SanctuaryColors.waveNavy,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'El acceso digital a los textos de las Sagradas Escrituras se realiza a través de la infraestructura autorizada de API.Bible, un servicio de American Bible Society (ABS).',
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          height: 1.45,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      InkWell(
+                        onTap: () async {
+                          final uri = Uri.parse('https://api.bible');
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri, mode: LaunchMode.externalApplication);
+                          }
+                        },
+                        child: Text(
+                          'Conocer más en https://api.bible',
+                          style: GoogleFonts.inter(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: SanctuaryColors.waveNavy,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+                Text(
+                  'Protección de Integridad y Privacidad de IA (Cláusula III.B): Ningún texto con derechos de autor se altera, mutila ni se utiliza para el entrenamiento o procesamiento con modelos de Inteligencia Artificial Generativa. Toda la memoria caché local expira y se revalida automáticamente cada 30 días conforme a los términos de uso.',
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    height: 1.45,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
           const SizedBox(height: 24),
         ],
       ),
@@ -747,6 +896,8 @@ class SanctuarySettingsView extends ConsumerWidget {
     required String description,
     required bool isSelected,
     required VoidCallback onTap,
+    String? badge,
+    bool isOffline = true,
   }) {
     final theme = Theme.of(context);
     return InkWell(
@@ -804,6 +955,29 @@ class SanctuarySettingsView extends ConsumerWidget {
                           ),
                         ),
                       ),
+                      if (badge != null) ...[
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: isOffline
+                                ? SanctuaryColors.emeraldGreen.withValues(alpha: 0.15)
+                                : SanctuaryColors.sunOrange.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            badge,
+                            style: GoogleFonts.inter(
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.w700,
+                              color: isOffline
+                                  ? SanctuaryColors.emeraldGreen
+                                  : SanctuaryColors.sunOrange,
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                   const SizedBox(height: 2),

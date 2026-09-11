@@ -26,11 +26,13 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { BibleVerse, BibleBook, LocalBookmark, ReadingSettings, HighlightColor, MapWaypoint, OFFICIAL_TRANSLATIONS } from '../types';
-import { fetchBibleChapter } from '../data/bibleData';
+import { fetchBibleChapter, fetchBibleChapterWithFallback } from '../data/bibleData';
 import { getLocalBooksSync, getBookByIdOrNumber } from '../services/bibleDatabaseService';
 import { ShareService, ShareContent } from '../services/shareService';
 import { findItineraryForScripture, detectPlacesInChapter, DetectedBiblicalPlace } from '../data/biblicalMapsData';
 import { BiblicalMapsView } from './BiblicalMapsView';
+import { ScriptureCopyrightFooter } from './ScriptureCopyrightFooter';
+import { CopyrightGuardService } from '../services/copyrightGuardService';
 
 interface ReaderViewProps {
   currentBookId: string;
@@ -113,11 +115,19 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
     setLoading(true);
     setFetchError(null);
 
-    fetchBibleChapter(currentBookId, currentChapter, settings.translation.toLowerCase())
-      .then((data) => {
-        setVerses(data);
+    fetchBibleChapterWithFallback(
+      currentBookId,
+      currentChapter,
+      settings.translation.toLowerCase(),
+      (msg) => onToast(msg)
+    )
+      .then((res) => {
+        setVerses(res.verses);
         setLoading(false);
-        if (!data || data.length === 0) {
+        if (res.isOfflineFallback && res.notice) {
+          onToast(res.notice);
+        }
+        if (!res.verses || res.verses.length === 0) {
           setFetchError(`No se pudieron obtener los versículos de ${bookMeta.name} ${currentChapter}`);
         }
 
@@ -135,7 +145,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
         setLoading(false);
         setFetchError(err?.message || 'Error al conectar con la API');
       });
-  }, [currentBookId, currentChapter, settings.translation, highlightedVerseNumber, bookMeta.name]);
+  }, [currentBookId, currentChapter, settings.translation, highlightedVerseNumber, bookMeta.name, onToast]);
 
   useEffect(() => {
     loadChapter();
@@ -157,6 +167,14 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
 
   // Audio Speech Reader function
   const toggleAudioReading = () => {
+    // Format conversion check (Bíblica, Inc. / Licensing restrictions)
+    if (!CopyrightGuardService.canConvertToAudio(settings.translation)) {
+      onToast(
+        'La conversión de texto a audio no está permitida para versiones bajo derechos de autor conforme a los términos de licencia de Bíblica, Inc. Disponible para traducciones de dominio público.'
+      );
+      return;
+    }
+
     if (!('speechSynthesis' in window)) {
       onToast('Lectura de voz no disponible en este navegador');
       return;
@@ -221,7 +239,11 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
   };
 
   const handleCopyVerse = async (verse: BibleVerse) => {
-    const text = `"${verse.text}"\n— ${verse.bookName} ${verse.chapter}:${verse.verse} (${settings.translation})`;
+    const isProtected = CopyrightGuardService.isCopyrightProtected(settings.translation);
+    const copyrightNotice = isProtected
+      ? `\n\n${CopyrightGuardService.getCopyrightInfo(settings.translation).standardCitation}`
+      : '';
+    const text = `"${verse.text}"\n— ${verse.bookName} ${verse.chapter}:${verse.verse} (${settings.translation})${copyrightNotice}`;
     const success = await ShareService.copyToClipboard(text);
     if (success) {
       onToast('Versículo copiado al portapapeles');
@@ -229,8 +251,12 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
   };
 
   const handleShareVerse = async (verse: BibleVerse) => {
+    const isProtected = CopyrightGuardService.isCopyrightProtected(settings.translation);
+    const copyrightNotice = isProtected
+      ? `\n\n${CopyrightGuardService.getCopyrightInfo(settings.translation).standardCitation}`
+      : '';
     const shareData: ShareContent = {
-      text: verse.text,
+      text: `${verse.text}${copyrightNotice}`,
       reference: `${verse.bookName} ${verse.chapter}:${verse.verse}`,
       translation: settings.translation
     };
@@ -512,27 +538,39 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
 
             {/* Translation Selection */}
             <div>
-              <label className="block text-xs font-label-caps uppercase mb-2 flex items-center gap-1.5 font-bold opacity-80">
-                <BookOpen className="w-3.5 h-3.5 text-[#F47B20]" />
-                Versión Bíblica Oficial
-              </label>
-              <div className={`grid grid-cols-3 gap-1.5 p-1 rounded-xl ${isDark ? 'bg-[#0B0F19]' : isSepia ? 'bg-[#EAE0D0]' : 'bg-[#F0EEE9]'}`}>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-label-caps uppercase flex items-center gap-1.5 font-bold opacity-80">
+                  <BookOpen className="w-3.5 h-3.5 text-[#F47B20]" />
+                  Versión Bíblica (Offline & API.Bible)
+                </label>
+                <span className="text-[10px] opacity-60 font-medium">Caché por Demanda</span>
+              </div>
+              <div className={`grid grid-cols-2 sm:grid-cols-4 gap-1.5 p-1.5 rounded-xl ${isDark ? 'bg-[#0B0F19]' : isSepia ? 'bg-[#EAE0D0]' : 'bg-[#F0EEE9]'}`}>
                 {OFFICIAL_TRANSLATIONS.map((tr) => (
                   <button
                     key={tr.abbreviation}
                     id={`reader-trans-${tr.abbreviation}`}
                     onClick={() => {
                       onUpdateSettings({ translation: tr.abbreviation });
-                      onToast(`Versión: ${tr.name}`);
+                      onToast(`Versión seleccionada: ${tr.name}`);
                     }}
-                    className={`py-2 px-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer text-center ${
+                    className={`p-2 rounded-lg text-xs transition-all cursor-pointer text-left border ${
                       settings.translation === tr.abbreviation || settings.translation === tr.translation
-                        ? 'bg-[#0B2B68] text-[#F47B20] shadow-xs font-bold'
-                        : 'opacity-70 hover:opacity-100'
+                        ? 'bg-[#0B2B68] text-white border-[#0B2B68] shadow-xs'
+                        : 'border-transparent opacity-75 hover:opacity-100'
                     }`}
                   >
-                    <span className="block font-bold">{tr.abbreviation.toUpperCase()}</span>
-                    <span className="block text-[10px] opacity-75 truncate">{tr.name.split('(')[0]}</span>
+                    <div className="flex items-center justify-between gap-1 mb-0.5">
+                      <span className="font-bold text-xs">{tr.abbreviation.toUpperCase()}</span>
+                      <span className={`text-[9px] px-1 py-0.2 rounded font-semibold ${
+                        tr.isOffline
+                          ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                          : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'
+                      }`}>
+                        {tr.isOffline ? 'Offline' : 'API.Bible'}
+                      </span>
+                    </div>
+                    <span className="block text-[11px] leading-tight truncate font-medium opacity-90">{tr.name.split('(')[0].trim()}</span>
                   </button>
                 ))}
               </div>
@@ -727,6 +765,9 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
           </article>
         )}
       </main>
+
+      {/* Mandatory Scripture Legal & Copyright Footer (Bíblica, Inc. / API.Bible) */}
+      <ScriptureCopyrightFooter translation={settings.translation} />
 
       {/* Bottom Chapter Navigation Bar */}
       <footer className="mt-10 pt-5 border-t border-[#0B2B68]/15 flex justify-between items-center text-sm font-label-caps">

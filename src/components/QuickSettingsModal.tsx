@@ -12,7 +12,7 @@ import {
   RotateCcw,
   Sparkles
 } from 'lucide-react';
-import { ReadingSettings, BibleBook } from '../types';
+import { ReadingSettings, BibleBook, OFFICIAL_TRANSLATIONS } from '../types';
 import { getLocalBooksSync, getBookByIdOrNumber } from '../services/bibleDatabaseService';
 
 interface QuickSettingsModalProps {
@@ -199,35 +199,44 @@ export const QuickSettingsModal: React.FC<QuickSettingsModalProps> = ({
             <div className="flex items-center justify-between">
               <label className="text-[11px] font-sans font-bold uppercase tracking-wider flex items-center gap-1.5 opacity-80">
                 <Sparkles className="w-3.5 h-3.5 text-[#F47B20]" />
-                Versión / Traducción Bíblica
+                Versión / Traducción Bíblica (Offline & API.Bible)
               </label>
               <span className="text-[10px] font-semibold text-[#F47B20] bg-[#F47B20]/10 px-2 py-0.5 rounded-full">
-                GetBible
+                {OFFICIAL_TRANSLATIONS.length} Versiones
               </span>
             </div>
-            <div className="grid grid-cols-3 gap-2">
-              {[
-                { id: 'valera', abbreviation: 'valera', title: 'Valera 1909', subtitle: 'Reina Valera' },
-                { id: 'sse', abbreviation: 'sse', title: 'SSE (1569)', subtitle: 'Sagradas Escr.' },
-                { id: 'rv1858', abbreviation: 'rv1858', title: 'RV 1858', subtitle: 'Nuevo Test.' }
-              ].map((tr) => {
-                const isSelected = settings.translation === tr.id ||
-                  (tr.id === 'valera' && (settings.translation === 'RVR1909' || settings.translation === 'RVR1960')) ||
-                  (tr.id === 'sse' && settings.translation === 'SSE');
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-60 overflow-y-auto pr-1">
+              {OFFICIAL_TRANSLATIONS.map((tr) => {
+                const isSelected = settings.translation === tr.abbreviation ||
+                  settings.translation === tr.translation ||
+                  (tr.abbreviation === 'valera' && (settings.translation === 'RVR1909' || settings.translation === 'RVR1960')) ||
+                  (tr.abbreviation === 'sse' && settings.translation === 'SSE');
                 return (
                   <button
-                    key={tr.id}
-                    id={`quick-trans-${tr.id}`}
+                    key={tr.abbreviation}
+                    id={`quick-trans-${tr.abbreviation}`}
                     type="button"
-                    onClick={() => onUpdateSettings({ translation: tr.id })}
-                    className={`p-2.5 rounded-2xl border text-center transition-all cursor-pointer ${
+                    onClick={() => {
+                      onUpdateSettings({ translation: tr.abbreviation });
+                      if (onToast) onToast(`Versión: ${tr.name}`);
+                    }}
+                    className={`p-2 rounded-xl border text-left transition-all cursor-pointer ${
                       isSelected
                         ? 'bg-[#0B2B68] text-[#FED65B] border-[#F47B20] shadow-sm ring-2 ring-[#F47B20]/40 font-bold'
                         : `${cardBg} hover:border-[#F47B20]/50`
                     }`}
                   >
-                    <span className="block font-bold text-xs">{tr.title}</span>
-                    <span className="block text-[10px] opacity-75">{tr.subtitle}</span>
+                    <div className="flex items-center justify-between gap-1 mb-0.5">
+                      <span className="font-bold text-xs">{tr.abbreviation.toUpperCase()}</span>
+                      <span className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${
+                        tr.isOffline
+                          ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                          : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'
+                      }`}>
+                        {tr.isOffline ? 'Offline' : 'API.Bible'}
+                      </span>
+                    </div>
+                    <span className="block text-[11px] leading-tight truncate opacity-85">{tr.name}</span>
                   </button>
                 );
               })}
