@@ -9,27 +9,5 @@
     "encoding": "UTF-8",
     "distribution_abbreviation": "valera",
     "url": "https://api.getbible.net/v2/valera.json"
-  },
-  "sse": {
-    "translation": "Sagradas Escrituras (1569)",
-    "abbreviation": "sse",
-    "description": "La Santa Biblia Reina-Valera (1865) con arreglos ortográficos",
-    "lang": "es",
-    "language": "Spanish",
-    "direction": "LTR",
-    "encoding": "UTF-8",
-    "distribution_abbreviation": "RV1865",
-    "url": "https://api.getbible.net/v2/sse.json"
-  },
-  "rv1858": {
-    "translation": "Reina Valera NT (1858)",
-    "abbreviation": "rv1858",
-    "description": "La Santa Biblia Reina-Valera (1909)",
-    "lang": "es",
-    "language": "Spanish",
-    "direction": "LTR",
-    "encoding": "UTF-8",
-    "distribution_abbreviation": "rv1858",
-    "url": "https://api.getbible.net/v2/rv1858.json"
   }
 }
