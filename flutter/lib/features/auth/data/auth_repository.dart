@@ -148,10 +148,16 @@ class AuthRepository {
         }).toList(),
         'events': unsyncedEvents.map((e) => {
           'id': e.id,
+          'categoryId': e.categoryId,
           'title': e.title,
           'description': e.description,
-          'startTime': e.startTime.toIso8601String(),
-          'endTime': e.endTime.toIso8601String(),
+          'eventDate': e.eventDate.toIso8601String(),
+          'linkedVersesJson': e.linkedVersesJson,
+          'hasFoodService': e.hasFoodService,
+          'foodServiceDetails': e.foodServiceDetails,
+          'hasChildCare': e.hasChildCare,
+          'hasBookSales': e.hasBookSales,
+          'createdAt': e.createdAt.toIso8601String(),
         }).toList(),
       };
 
