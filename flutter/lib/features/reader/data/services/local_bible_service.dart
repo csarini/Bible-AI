@@ -58,6 +58,10 @@ class LocalBibleChapterResponse {
   final bool isOfflineFallback;
   final String? fallbackNotice;
 
+  /// Aliases for convenience
+  int get bookNumber => bookNr;
+  int get chapterNumber => chapter;
+
   const LocalBibleChapterResponse({
     required this.translation,
     required this.abbreviation,

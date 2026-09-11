@@ -31,6 +31,10 @@ class ScriptureCopyrightInfo {
     this.apiPlatformName,
     required this.licenseSummary,
   });
+
+  /// Convenient aliases for direct official link
+  String? get officialLinkText => directLinkAnchorText;
+  String? get officialLinkUrl => directLinkUrl;
 }
 
 class CopyrightGuardService {

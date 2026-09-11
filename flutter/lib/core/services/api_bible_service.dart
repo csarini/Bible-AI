@@ -127,9 +127,10 @@ class ApiBibleService {
             return LocalBibleChapterResponse(
               translation: 'Nueva Versión Internacional (NVI) [Equivalente NBLA]',
               abbreviation: 'NVI',
-              bookNumber: bookNumber,
+              bookNr: bookNumber,
               bookName: resolvedBookName,
-              chapterNumber: chapterNumber,
+              chapter: chapterNumber,
+              name: '$resolvedBookName $chapterNumber',
               verses: verses,
             );
           }
