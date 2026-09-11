@@ -1,7 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../constants/bible_books.dart';
+import '../network/api_client.dart';
+import '../services/secure_storage_service.dart';
 import '../storage/app_database.dart';
+import '../../features/auth/data/auth_repository.dart';
 import '../../features/reader/data/services/offline_bible_sync_service.dart';
 
 enum AppVisualTheme {
@@ -110,3 +113,24 @@ final appVersionProvider = FutureProvider<String>((ref) async {
   final packageInfo = await PackageInfo.fromPlatform();
   return 'v${packageInfo.version} (+${packageInfo.buildNumber})';
 });
+
+// Secure Storage & Authentication Providers
+final secureStorageServiceProvider = Provider<SecureStorageService>((ref) {
+  return SecureStorageService();
+});
+
+final apiClientProvider = Provider<ApiClient>((ref) {
+  final secureStorage = ref.watch(secureStorageServiceProvider);
+  return ApiClient(secureStorage: secureStorage);
+});
+
+final authRepositoryProvider = Provider.family<AuthRepository, AppDatabase>((ref, database) {
+  final secureStorage = ref.watch(secureStorageServiceProvider);
+  final apiClient = ref.watch(apiClientProvider);
+  return AuthRepository(
+    secureStorage: secureStorage,
+    database: database,
+    apiClient: apiClient,
+  );
+});
+
