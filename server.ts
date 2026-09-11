@@ -7,6 +7,9 @@ import { createServer as createViteServer } from 'vite';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Preconfigured default API.Bible key
+const DEFAULT_BIBLE_API_KEY = 'pLy50et8lZi3FhERvwh_D';
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
@@ -136,13 +139,7 @@ async function startServer() {
   // Dynamic endpoint to list all Bibles associated with the user's API.Bible key
   app.get('/api/bible/account-bibles', async (req, res) => {
     try {
-      const apiKey = (req.headers['api-key'] as string) || process.env.BIBLE_API_KEY || '';
-      if (!apiKey) {
-        return res.status(401).json({
-          error: 'Missing API Key for API.Bible',
-          message: 'Configura la variable BIBLE_API_KEY en el entorno o envía la cabecera api-key.',
-        });
-      }
+      const apiKey = (req.headers['api-key'] as string) || process.env.BIBLE_API_KEY || DEFAULT_BIBLE_API_KEY;
 
       const response = await fetch('https://rest.api.bible/v1/bibles', {
         headers: {
@@ -218,15 +215,8 @@ async function startServer() {
         return res.status(400).json({ error: 'Debes especificar "bibleId" o un código de "translation" compatible con API.Bible.' });
       }
 
-      // API Key resolution: Header or server environment variable
-      const apiKey = (req.headers['api-key'] as string) || process.env.BIBLE_API_KEY || '';
-      if (!apiKey) {
-        return res.status(401).json({
-          error: 'Missing API Key for API.Bible',
-          message: 'Configura la variable BIBLE_API_KEY en el entorno o envía la cabecera api-key.',
-          requiresApiKey: true,
-        });
-      }
+      // API Key resolution: Header or server environment variable or preconfigured default
+      const apiKey = (req.headers['api-key'] as string) || process.env.BIBLE_API_KEY || DEFAULT_BIBLE_API_KEY;
 
       const apiUrl = `https://rest.api.bible/v1/bibles/${encodeURIComponent(targetBibleId)}/chapters/${encodeURIComponent(chapterId)}?content-type=json&include-verse-numbers=true&include-verse-spans=true`;
 
@@ -291,10 +281,7 @@ async function startServer() {
         return res.status(400).json({ error: 'bibleId y query son requeridos' });
       }
 
-      const apiKey = (req.headers['api-key'] as string) || process.env.BIBLE_API_KEY || '';
-      if (!apiKey) {
-        return res.status(401).json({ error: 'Falta clave api-key para API.Bible' });
-      }
+      const apiKey = (req.headers['api-key'] as string) || process.env.BIBLE_API_KEY || DEFAULT_BIBLE_API_KEY;
 
       const response = await fetch(`https://rest.api.bible/v1/bibles/${encodeURIComponent(bibleId)}/search?query=${encodeURIComponent(query)}`, {
         headers: { 'api-key': apiKey, 'Accept': 'application/json' },

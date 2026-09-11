@@ -16,6 +16,9 @@ class SecureStorageService {
   static const String _keyBibleApiKey = 'api_bible_key';
   static const String _keyGeminiApiKey = 'gemini_api_key';
 
+  /// Preconfigured default API.Bible key provided for scripture fetching
+  static const String defaultBibleApiKey = 'pLy50et8lZi3FhERvwh_D';
+
   /// Standard Android options enforcing EncryptedSharedPreferences (Hardware Keystore)
   static AndroidOptions _getAndroidOptions() => const AndroidOptions(
         encryptedSharedPreferences: true,
@@ -116,15 +119,16 @@ class SecureStorageService {
     }
   }
 
-  /// Retrieves the dynamic API.Bible key, if configured.
-  Future<String?> getBibleApiKey() async {
+  /// Retrieves the dynamic API.Bible key from secure storage, falling back to
+  /// environment variables or the preconfigured default key.
+  Future<String> getBibleApiKey() async {
     try {
       final key = await _storage.read(key: _keyBibleApiKey);
-      return (key != null && key.isNotEmpty) ? key : null;
+      if (key != null && key.isNotEmpty) return key;
     } catch (e, stack) {
       debugPrint('[SecureStorageService] Error reading API.Bible key: $e\n$stack');
-      return null;
     }
+    return const String.fromEnvironment('BIBLE_API_KEY', defaultValue: defaultBibleApiKey);
   }
 
   /// Deletes the API.Bible key.

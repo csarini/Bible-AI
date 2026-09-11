@@ -9,6 +9,9 @@ import '../../features/reader/data/services/local_bible_service.dart';
 class ApiBibleService {
   static const String defaultBaseUrl = 'https://rest.api.bible/v1';
 
+  /// Preconfigured default API.Bible key provided for scripture fetching
+  static const String defaultBibleApiKey = 'pLy50et8lZi3FhERvwh_D';
+
   // Configurable API key (can be passed via environment or settings)
   final String? apiKey;
   final String baseUrl;
@@ -82,7 +85,11 @@ class ApiBibleService {
     final resolvedCode = resolveBookCode(bookNumber, bookCode);
     final chapterId = '$resolvedCode.$chapterNumber';
 
-    final effectiveKey = activeApiKey ?? apiKey ?? '';
+    final effectiveKey = (activeApiKey != null && activeApiKey.isNotEmpty)
+        ? activeApiKey
+        : (apiKey != null && apiKey!.isNotEmpty)
+            ? apiKey!
+            : const String.fromEnvironment('BIBLE_API_KEY', defaultValue: defaultBibleApiKey);
     final url = Uri.parse(
       '$baseUrl/bibles/$bibleId/chapters/$chapterId?content-type=json&include-verse-numbers=true&include-verse-spans=true',
     );

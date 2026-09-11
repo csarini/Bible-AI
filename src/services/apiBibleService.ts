@@ -1,5 +1,7 @@
 import { BibleVerse } from '../types';
 
+export const DEFAULT_BIBLE_API_KEY = 'pLy50et8lZi3FhERvwh_D';
+
 export interface ApiBibleChapterData {
   id: string;
   bibleId: string;
@@ -228,11 +230,9 @@ export async function fetchChapterFromApiBible(
   const url = `/api/bible/chapter?bibleId=${encodeURIComponent(resolvedBibleId)}&chapterId=${encodeURIComponent(chapterId)}&translation=${encodeURIComponent(cleanTr)}`;
 
   const headers: Record<string, string> = {
-    Accept: 'application/json'
+    Accept: 'application/json',
+    'api-key': customApiKey || DEFAULT_BIBLE_API_KEY,
   };
-  if (customApiKey) {
-    headers['api-key'] = customApiKey;
-  }
 
   const response = await fetch(url, { headers });
   if (!response.ok) {
