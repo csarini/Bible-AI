@@ -1,8 +1,3 @@
-/// Copyright & Scripture Compliance Service for Flutter
-/// Strictly enforces Bíblica, Inc. License Agreement, API.Bible Terms of Use,
-/// reading volume boundaries (Clause V.F), AI processing restrictions (Clause III.B),
-/// and 30-day offline cache revalidation rules.
-
 class ScriptureCopyrightInfo {
   final String translationId;
   final String abbreviation;
@@ -91,7 +86,8 @@ class CopyrightGuardService {
       directLinkAnchorText: 'API.Bible',
       apiPlatformName: 'API.Bible',
       apiPlatformUrl: 'https://api.bible',
-      licenseSummary: 'Traducción de lenguaje sencillo accesible vía API.Bible.',
+      licenseSummary:
+          'Traducción de lenguaje sencillo accesible vía API.Bible.',
     ),
     'vbl': ScriptureCopyrightInfo(
       translationId: 'vbl',
@@ -141,7 +137,8 @@ class CopyrightGuardService {
       year: '2023',
       organization: 'Berean Bible',
       isCopyrightProtected: false,
-      standardCitation: 'Berean Standard Bible (BSB) © 2023. Dedicated to the Public Domain.',
+      standardCitation:
+          'Berean Standard Bible (BSB) © 2023. Dedicated to the Public Domain.',
       licenseSummary: 'Public domain translation.',
     ),
   };
@@ -149,7 +146,8 @@ class CopyrightGuardService {
   /// Normalizes translation string identifier
   static String normalizeKey(String? translationId) {
     if (translationId == null || translationId.isEmpty) return 'valera';
-    final clean = translationId.toLowerCase().trim().replaceAll(RegExp(r'[^a-z0-9]'), '');
+    final clean =
+        translationId.toLowerCase().trim().replaceAll(RegExp(r'[^a-z0-9]'), '');
     if (clean.contains('nvi')) return 'nvi';
     if (clean.contains('nbla')) return 'nbla';
     if (clean.contains('bes')) return 'bes';
@@ -204,7 +202,8 @@ class CopyrightGuardService {
           year: '',
           organization: 'Titular de Derechos',
           isCopyrightProtected: true,
-          standardCitation: 'Texto provisto conforme a los términos de API.Bible. Usado con permiso.',
+          standardCitation:
+              'Texto provisto conforme a los términos de API.Bible. Usado con permiso.',
           apiPlatformName: 'API.Bible',
           apiPlatformUrl: 'https://api.bible',
           licenseSummary: 'Traducción provista bajo licencia no comercial.',

@@ -35,9 +35,7 @@ class BibleDataImportService {
     required int bookNumber,
     required int chapterNumber,
   }) async {
-    final config = (folder: 'valera_json', prefix: 'valera');
-    final assetPath =
-        'assets/data/${config.folder}/${config.prefix}_$bookNumber.json';
+    final assetPath = 'assets/data/valera_json/valera_$bookNumber.json';
 
     try {
       final bookData = json.decode(await rootBundle.loadString(assetPath))

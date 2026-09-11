@@ -4116,8 +4116,7 @@ class $AiChatMessagesTable extends AiChatMessages
   String get actualTableName => $name;
   static const String $name = 'ai_chat_messages';
   @override
-  VerificationContext validateIntegrity(
-      Insertable<AiChatMessageEntry> instance,
+  VerificationContext validateIntegrity(Insertable<AiChatMessageEntry> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -4183,13 +4182,12 @@ class AiChatMessageEntry extends DataClass
   final String sender;
   final String messageText;
   final DateTime createdAt;
-  const AiChatMessageEntry({
-    required this.id,
-    this.verseReference,
-    required this.sender,
-    required this.messageText,
-    required this.createdAt,
-  });
+  const AiChatMessageEntry(
+      {required this.id,
+      this.verseReference,
+      required this.sender,
+      required this.messageText,
+      required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -4238,22 +4236,32 @@ class AiChatMessageEntry extends DataClass
     };
   }
 
-  AiChatMessageEntry copyWith({
-    int? id,
-    Value<String?> verseReference = const Value.absent(),
-    String? sender,
-    String? messageText,
-    DateTime? createdAt,
-  }) =>
+  AiChatMessageEntry copyWith(
+          {int? id,
+          Value<String?> verseReference = const Value.absent(),
+          String? sender,
+          String? messageText,
+          DateTime? createdAt}) =>
       AiChatMessageEntry(
         id: id ?? this.id,
-        verseReference: verseReference.present
-            ? verseReference.value
-            : this.verseReference,
+        verseReference:
+            verseReference.present ? verseReference.value : this.verseReference,
         sender: sender ?? this.sender,
         messageText: messageText ?? this.messageText,
         createdAt: createdAt ?? this.createdAt,
       );
+  AiChatMessageEntry copyWithCompanion(AiChatMessagesCompanion data) {
+    return AiChatMessageEntry(
+      id: data.id.present ? data.id.value : this.id,
+      verseReference: data.verseReference.present
+          ? data.verseReference.value
+          : this.verseReference,
+      sender: data.sender.present ? data.sender.value : this.sender,
+      messageText:
+          data.messageText.present ? data.messageText.value : this.messageText,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
 
   @override
   String toString() {
@@ -4485,10 +4493,8 @@ class $LocalVersesTable extends LocalVerses
       context.missing(_verseMeta);
     }
     if (data.containsKey('text')) {
-      context.handle(
-          _textContentMeta,
-          textContent.isAcceptableOrUnknown(
-              data['text']!, _textContentMeta));
+      context.handle(_textContentMeta,
+          textContent.isAcceptableOrUnknown(data['text']!, _textContentMeta));
     } else if (isInserting) {
       context.missing(_textContentMeta);
     }
@@ -4546,19 +4552,16 @@ class LocalVerse extends DataClass implements Insertable<LocalVerse> {
   final String textContent;
   final String? theme;
   final DateTime createdAt;
-
-  const LocalVerse({
-    required this.id,
-    required this.translationId,
-    required this.bookId,
-    required this.bookName,
-    required this.chapter,
-    required this.verse,
-    required this.textContent,
-    this.theme,
-    required this.createdAt,
-  });
-
+  const LocalVerse(
+      {required this.id,
+      required this.translationId,
+      required this.bookId,
+      required this.bookName,
+      required this.chapter,
+      required this.verse,
+      required this.textContent,
+      this.theme,
+      required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -4585,9 +4588,8 @@ class LocalVerse extends DataClass implements Insertable<LocalVerse> {
       chapter: Value(chapter),
       verse: Value(verse),
       textContent: Value(textContent),
-      theme: theme == null && nullToAbsent
-          ? const Value.absent()
-          : Value(theme),
+      theme:
+          theme == null && nullToAbsent ? const Value.absent() : Value(theme),
       createdAt: Value(createdAt),
     );
   }
@@ -4602,12 +4604,11 @@ class LocalVerse extends DataClass implements Insertable<LocalVerse> {
       bookName: serializer.fromJson<String>(json['bookName']),
       chapter: serializer.fromJson<int>(json['chapter']),
       verse: serializer.fromJson<int>(json['verse']),
-      textContent: serializer.fromJson<String>(json['textContent'] ?? json['text']),
+      textContent: serializer.fromJson<String>(json['textContent']),
       theme: serializer.fromJson<String?>(json['theme']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
-
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
@@ -4619,23 +4620,21 @@ class LocalVerse extends DataClass implements Insertable<LocalVerse> {
       'chapter': serializer.toJson<int>(chapter),
       'verse': serializer.toJson<int>(verse),
       'textContent': serializer.toJson<String>(textContent),
-      'text': serializer.toJson<String>(textContent),
       'theme': serializer.toJson<String?>(theme),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
-  LocalVerse copyWith({
-    String? id,
-    String? translationId,
-    String? bookId,
-    String? bookName,
-    int? chapter,
-    int? verse,
-    String? textContent,
-    Value<String?> theme = const Value.absent(),
-    DateTime? createdAt,
-  }) =>
+  LocalVerse copyWith(
+          {String? id,
+          String? translationId,
+          String? bookId,
+          String? bookName,
+          int? chapter,
+          int? verse,
+          String? textContent,
+          Value<String?> theme = const Value.absent(),
+          DateTime? createdAt}) =>
       LocalVerse(
         id: id ?? this.id,
         translationId: translationId ?? this.translationId,
@@ -4647,6 +4646,22 @@ class LocalVerse extends DataClass implements Insertable<LocalVerse> {
         theme: theme.present ? theme.value : this.theme,
         createdAt: createdAt ?? this.createdAt,
       );
+  LocalVerse copyWithCompanion(LocalVersesCompanion data) {
+    return LocalVerse(
+      id: data.id.present ? data.id.value : this.id,
+      translationId: data.translationId.present
+          ? data.translationId.value
+          : this.translationId,
+      bookId: data.bookId.present ? data.bookId.value : this.bookId,
+      bookName: data.bookName.present ? data.bookName.value : this.bookName,
+      chapter: data.chapter.present ? data.chapter.value : this.chapter,
+      verse: data.verse.present ? data.verse.value : this.verse,
+      textContent:
+          data.textContent.present ? data.textContent.value : this.textContent,
+      theme: data.theme.present ? data.theme.value : this.theme,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
 
   @override
   String toString() {
@@ -4667,7 +4682,6 @@ class LocalVerse extends DataClass implements Insertable<LocalVerse> {
   @override
   int get hashCode => Object.hash(id, translationId, bookId, bookName, chapter,
       verse, textContent, theme, createdAt);
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -4750,18 +4764,17 @@ class LocalVersesCompanion extends UpdateCompanion<LocalVerse> {
     });
   }
 
-  LocalVersesCompanion copyWith({
-    Value<String>? id,
-    Value<String>? translationId,
-    Value<String>? bookId,
-    Value<String>? bookName,
-    Value<int>? chapter,
-    Value<int>? verse,
-    Value<String>? textContent,
-    Value<String?>? theme,
-    Value<DateTime>? createdAt,
-    Value<int>? rowid,
-  }) {
+  LocalVersesCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? translationId,
+      Value<String>? bookId,
+      Value<String>? bookName,
+      Value<int>? chapter,
+      Value<int>? verse,
+      Value<String>? textContent,
+      Value<String?>? theme,
+      Value<DateTime>? createdAt,
+      Value<int>? rowid}) {
     return LocalVersesCompanion(
       id: id ?? this.id,
       translationId: translationId ?? this.translationId,
@@ -4823,7 +4836,8 @@ class LocalVersesCompanion extends UpdateCompanion<LocalVerse> {
           ..write('verse: $verse, ')
           ..write('textContent: $textContent, ')
           ..write('theme: $theme, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -4846,15 +4860,12 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $LocalUsersTable localUsers = $LocalUsersTable(this);
   late final $UserPreferencesTable userPreferences =
       $UserPreferencesTable(this);
-  late final $AiChatMessagesTable aiChatMessages =
-      $AiChatMessagesTable(this);
+  late final $AiChatMessagesTable aiChatMessages = $AiChatMessagesTable(this);
   late final $LocalVersesTable localVerses = $LocalVersesTable(this);
-  late final Index idxVersesTranslation = Index(
-      'idx_verses_translation',
-      'CREATE INDEX IF NOT EXISTS idx_verses_translation ON local_verses (translation_id);');
-  late final Index idxVersesLookup = Index(
-      'idx_verses_lookup',
-      'CREATE INDEX IF NOT EXISTS idx_verses_lookup ON local_verses (translation_id, book_name, chapter, verse);');
+  late final Index idxVersesTranslation = Index('idx_verses_translation',
+      'CREATE INDEX idx_verses_translation ON local_verses (translation_id)');
+  late final Index idxVersesLookup = Index('idx_verses_lookup',
+      'CREATE INDEX idx_verses_lookup ON local_verses (translation_id, book_name, chapter, verse)');
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -7132,6 +7143,413 @@ typedef $$UserPreferencesTableProcessedTableManager = ProcessedTableManager<
     ),
     UserPreferenceEntry,
     PrefetchHooks Function()>;
+typedef $$AiChatMessagesTableCreateCompanionBuilder = AiChatMessagesCompanion
+    Function({
+  Value<int> id,
+  Value<String?> verseReference,
+  required String sender,
+  required String messageText,
+  Value<DateTime> createdAt,
+});
+typedef $$AiChatMessagesTableUpdateCompanionBuilder = AiChatMessagesCompanion
+    Function({
+  Value<int> id,
+  Value<String?> verseReference,
+  Value<String> sender,
+  Value<String> messageText,
+  Value<DateTime> createdAt,
+});
+
+class $$AiChatMessagesTableFilterComposer
+    extends Composer<_$AppDatabase, $AiChatMessagesTable> {
+  $$AiChatMessagesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get verseReference => $composableBuilder(
+      column: $table.verseReference,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get sender => $composableBuilder(
+      column: $table.sender, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get messageText => $composableBuilder(
+      column: $table.messageText, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$AiChatMessagesTableOrderingComposer
+    extends Composer<_$AppDatabase, $AiChatMessagesTable> {
+  $$AiChatMessagesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get verseReference => $composableBuilder(
+      column: $table.verseReference,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get sender => $composableBuilder(
+      column: $table.sender, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get messageText => $composableBuilder(
+      column: $table.messageText, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$AiChatMessagesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AiChatMessagesTable> {
+  $$AiChatMessagesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get verseReference => $composableBuilder(
+      column: $table.verseReference, builder: (column) => column);
+
+  GeneratedColumn<String> get sender =>
+      $composableBuilder(column: $table.sender, builder: (column) => column);
+
+  GeneratedColumn<String> get messageText => $composableBuilder(
+      column: $table.messageText, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$AiChatMessagesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $AiChatMessagesTable,
+    AiChatMessageEntry,
+    $$AiChatMessagesTableFilterComposer,
+    $$AiChatMessagesTableOrderingComposer,
+    $$AiChatMessagesTableAnnotationComposer,
+    $$AiChatMessagesTableCreateCompanionBuilder,
+    $$AiChatMessagesTableUpdateCompanionBuilder,
+    (
+      AiChatMessageEntry,
+      BaseReferences<_$AppDatabase, $AiChatMessagesTable, AiChatMessageEntry>
+    ),
+    AiChatMessageEntry,
+    PrefetchHooks Function()> {
+  $$AiChatMessagesTableTableManager(
+      _$AppDatabase db, $AiChatMessagesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AiChatMessagesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AiChatMessagesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AiChatMessagesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String?> verseReference = const Value.absent(),
+            Value<String> sender = const Value.absent(),
+            Value<String> messageText = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              AiChatMessagesCompanion(
+            id: id,
+            verseReference: verseReference,
+            sender: sender,
+            messageText: messageText,
+            createdAt: createdAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String?> verseReference = const Value.absent(),
+            required String sender,
+            required String messageText,
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              AiChatMessagesCompanion.insert(
+            id: id,
+            verseReference: verseReference,
+            sender: sender,
+            messageText: messageText,
+            createdAt: createdAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$AiChatMessagesTable, AiChatMessageEntry>(
+                        table),
+                    BaseReferences<_$AppDatabase, $AiChatMessagesTable,
+                        AiChatMessageEntry>(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$AiChatMessagesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $AiChatMessagesTable,
+    AiChatMessageEntry,
+    $$AiChatMessagesTableFilterComposer,
+    $$AiChatMessagesTableOrderingComposer,
+    $$AiChatMessagesTableAnnotationComposer,
+    $$AiChatMessagesTableCreateCompanionBuilder,
+    $$AiChatMessagesTableUpdateCompanionBuilder,
+    (
+      AiChatMessageEntry,
+      BaseReferences<_$AppDatabase, $AiChatMessagesTable, AiChatMessageEntry>
+    ),
+    AiChatMessageEntry,
+    PrefetchHooks Function()>;
+typedef $$LocalVersesTableCreateCompanionBuilder = LocalVersesCompanion
+    Function({
+  required String id,
+  required String translationId,
+  required String bookId,
+  required String bookName,
+  required int chapter,
+  required int verse,
+  required String textContent,
+  Value<String?> theme,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+typedef $$LocalVersesTableUpdateCompanionBuilder = LocalVersesCompanion
+    Function({
+  Value<String> id,
+  Value<String> translationId,
+  Value<String> bookId,
+  Value<String> bookName,
+  Value<int> chapter,
+  Value<int> verse,
+  Value<String> textContent,
+  Value<String?> theme,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+
+class $$LocalVersesTableFilterComposer
+    extends Composer<_$AppDatabase, $LocalVersesTable> {
+  $$LocalVersesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get translationId => $composableBuilder(
+      column: $table.translationId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get bookId => $composableBuilder(
+      column: $table.bookId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get bookName => $composableBuilder(
+      column: $table.bookName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get chapter => $composableBuilder(
+      column: $table.chapter, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get verse => $composableBuilder(
+      column: $table.verse, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get textContent => $composableBuilder(
+      column: $table.textContent, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get theme => $composableBuilder(
+      column: $table.theme, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$LocalVersesTableOrderingComposer
+    extends Composer<_$AppDatabase, $LocalVersesTable> {
+  $$LocalVersesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get translationId => $composableBuilder(
+      column: $table.translationId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get bookId => $composableBuilder(
+      column: $table.bookId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get bookName => $composableBuilder(
+      column: $table.bookName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get chapter => $composableBuilder(
+      column: $table.chapter, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get verse => $composableBuilder(
+      column: $table.verse, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get textContent => $composableBuilder(
+      column: $table.textContent, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get theme => $composableBuilder(
+      column: $table.theme, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$LocalVersesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $LocalVersesTable> {
+  $$LocalVersesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get translationId => $composableBuilder(
+      column: $table.translationId, builder: (column) => column);
+
+  GeneratedColumn<String> get bookId =>
+      $composableBuilder(column: $table.bookId, builder: (column) => column);
+
+  GeneratedColumn<String> get bookName =>
+      $composableBuilder(column: $table.bookName, builder: (column) => column);
+
+  GeneratedColumn<int> get chapter =>
+      $composableBuilder(column: $table.chapter, builder: (column) => column);
+
+  GeneratedColumn<int> get verse =>
+      $composableBuilder(column: $table.verse, builder: (column) => column);
+
+  GeneratedColumn<String> get textContent => $composableBuilder(
+      column: $table.textContent, builder: (column) => column);
+
+  GeneratedColumn<String> get theme =>
+      $composableBuilder(column: $table.theme, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$LocalVersesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $LocalVersesTable,
+    LocalVerse,
+    $$LocalVersesTableFilterComposer,
+    $$LocalVersesTableOrderingComposer,
+    $$LocalVersesTableAnnotationComposer,
+    $$LocalVersesTableCreateCompanionBuilder,
+    $$LocalVersesTableUpdateCompanionBuilder,
+    (LocalVerse, BaseReferences<_$AppDatabase, $LocalVersesTable, LocalVerse>),
+    LocalVerse,
+    PrefetchHooks Function()> {
+  $$LocalVersesTableTableManager(_$AppDatabase db, $LocalVersesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$LocalVersesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LocalVersesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LocalVersesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> translationId = const Value.absent(),
+            Value<String> bookId = const Value.absent(),
+            Value<String> bookName = const Value.absent(),
+            Value<int> chapter = const Value.absent(),
+            Value<int> verse = const Value.absent(),
+            Value<String> textContent = const Value.absent(),
+            Value<String?> theme = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LocalVersesCompanion(
+            id: id,
+            translationId: translationId,
+            bookId: bookId,
+            bookName: bookName,
+            chapter: chapter,
+            verse: verse,
+            textContent: textContent,
+            theme: theme,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String translationId,
+            required String bookId,
+            required String bookName,
+            required int chapter,
+            required int verse,
+            required String textContent,
+            Value<String?> theme = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LocalVersesCompanion.insert(
+            id: id,
+            translationId: translationId,
+            bookId: bookId,
+            bookName: bookName,
+            chapter: chapter,
+            verse: verse,
+            textContent: textContent,
+            theme: theme,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$LocalVersesTable, LocalVerse>(table),
+                    BaseReferences<_$AppDatabase, $LocalVersesTable,
+                        LocalVerse>(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$LocalVersesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $LocalVersesTable,
+    LocalVerse,
+    $$LocalVersesTableFilterComposer,
+    $$LocalVersesTableOrderingComposer,
+    $$LocalVersesTableAnnotationComposer,
+    $$LocalVersesTableCreateCompanionBuilder,
+    $$LocalVersesTableUpdateCompanionBuilder,
+    (LocalVerse, BaseReferences<_$AppDatabase, $LocalVersesTable, LocalVerse>),
+    LocalVerse,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -7155,4 +7573,8 @@ class $AppDatabaseManager {
       $$LocalUsersTableTableManager(_db, _db.localUsers);
   $$UserPreferencesTableTableManager get userPreferences =>
       $$UserPreferencesTableTableManager(_db, _db.userPreferences);
+  $$AiChatMessagesTableTableManager get aiChatMessages =>
+      $$AiChatMessagesTableTableManager(_db, _db.aiChatMessages);
+  $$LocalVersesTableTableManager get localVerses =>
+      $$LocalVersesTableTableManager(_db, _db.localVerses);
 }
