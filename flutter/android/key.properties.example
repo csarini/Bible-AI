@@ -1,0 +1,8 @@
+# Plantilla para la firma de producción en Google Play
+# Copia este archivo como 'key.properties' en la misma carpeta (flutter/android/key.properties)
+# NUNCA subas tu archivo de claves (.jks/.keystore) ni tus contraseñas a Git.
+
+keyAlias=upload
+keyPassword=TU_PASSWORD_AQUI
+storePassword=TU_PASSWORD_AQUI
+storeFile=../upload-keystore.jks

@@ -59,13 +59,15 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.tuempresa.bibliainteligente</string>
+			<string>com.elshaddai.biblia_inteligente</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>sanctuary</string>
