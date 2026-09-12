@@ -189,6 +189,11 @@ class _SanctuarySplashScreenState extends ConsumerState<SanctuarySplashScreen>
             : SanctuaryColors.waveNavy.withValues(alpha: 0.70);
 
     return Scaffold(
+      backgroundColor: isDark
+          ? const Color(0xFF0B0F19)
+          : isSepia
+              ? const Color(0xFFF5EFE6)
+              : const Color(0xFFFAF8F5),
       body: Container(
         decoration: BoxDecoration(gradient: bgGradient),
         child: SafeArea(
