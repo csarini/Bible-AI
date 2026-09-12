@@ -75,15 +75,6 @@ class BibleTranslationsCatalog {
       isOffline: false,
       bibleId: '48acedcf8595c754-01',
     ),
-    BibleTranslationConfig(
-      id: 'bsb',
-      abbreviation: 'bsb',
-      name: 'Berean Standard Bible (BSB)',
-      subtitle: 'Traducción de estudio moderno en inglés — API.Bible',
-      badge: 'API.Bible / BSB',
-      isOffline: false,
-      bibleId: 'bba9f40183526463-01',
-    ),
   ];
 
   static BibleTranslationConfig findById(String id) {

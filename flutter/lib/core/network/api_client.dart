@@ -47,7 +47,7 @@ class ApiClient {
 
     if (attachBibleKey) {
       final bibleKey = await _secureStorage.getBibleApiKey();
-      if (bibleKey != null && bibleKey.isNotEmpty) {
+      if (bibleKey.isNotEmpty) {
         headers['api-key'] = bibleKey;
       }
     }
@@ -64,8 +64,11 @@ class ApiClient {
     if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
       return Uri.parse(endpoint);
     }
-    final normalizedBase = baseUrl.endsWith('/') ? baseUrl.substring(0, baseUrl.length - 1) : baseUrl;
-    final normalizedEndpoint = endpoint.startsWith('/') ? endpoint : '/$endpoint';
+    final normalizedBase = baseUrl.endsWith('/')
+        ? baseUrl.substring(0, baseUrl.length - 1)
+        : baseUrl;
+    final normalizedEndpoint =
+        endpoint.startsWith('/') ? endpoint : '/$endpoint';
     return Uri.parse('$normalizedBase$normalizedEndpoint');
   }
 
@@ -84,9 +87,8 @@ class ApiClient {
     );
 
     try {
-      final response = await _httpClient
-          .get(uri, headers: requestHeaders)
-          .timeout(timeout);
+      final response =
+          await _httpClient.get(uri, headers: requestHeaders).timeout(timeout);
       _checkResponse(response);
       return response;
     } on SocketException catch (e) {
@@ -94,7 +96,8 @@ class ApiClient {
       throw const SocketException('No hay conexión a internet.');
     } on TimeoutException {
       debugPrint('[ApiClient] Timeout on GET $uri');
-      throw TimeoutException('Tiempo de espera agotado al conectar con el servidor.');
+      throw TimeoutException(
+          'Tiempo de espera agotado al conectar con el servidor.');
     }
   }
 
@@ -113,9 +116,8 @@ class ApiClient {
       attachBibleKey: attachBibleKey,
     );
 
-    final encodedBody = (body != null && body is! String)
-        ? json.encode(body)
-        : body as String?;
+    final encodedBody =
+        (body != null && body is! String) ? json.encode(body) : body as String?;
 
     try {
       final response = await _httpClient
@@ -128,7 +130,8 @@ class ApiClient {
       throw const SocketException('No hay conexión a internet.');
     } on TimeoutException {
       debugPrint('[ApiClient] Timeout on POST $uri');
-      throw TimeoutException('Tiempo de espera agotado al conectar con el servidor.');
+      throw TimeoutException(
+          'Tiempo de espera agotado al conectar con el servidor.');
     }
   }
 
@@ -145,9 +148,8 @@ class ApiClient {
       requiresAuth: requiresAuth,
     );
 
-    final encodedBody = (body != null && body is! String)
-        ? json.encode(body)
-        : body as String?;
+    final encodedBody =
+        (body != null && body is! String) ? json.encode(body) : body as String?;
 
     try {
       final response = await _httpClient
@@ -160,7 +162,8 @@ class ApiClient {
       throw const SocketException('No hay conexión a internet.');
     } on TimeoutException {
       debugPrint('[ApiClient] Timeout on PUT $uri');
-      throw TimeoutException('Tiempo de espera agotado al conectar con el servidor.');
+      throw TimeoutException(
+          'Tiempo de espera agotado al conectar con el servidor.');
     }
   }
 
@@ -187,14 +190,16 @@ class ApiClient {
       throw const SocketException('No hay conexión a internet.');
     } on TimeoutException {
       debugPrint('[ApiClient] Timeout on DELETE $uri');
-      throw TimeoutException('Tiempo de espera agotado al conectar con el servidor.');
+      throw TimeoutException(
+          'Tiempo de espera agotado al conectar con el servidor.');
     }
   }
 
   /// Evaluates response status for automatic token expiration / 401 handling.
   void _checkResponse(http.Response response) {
     if (response.statusCode == 401) {
-      debugPrint('[ApiClient] 401 Unauthorized encountered on ${response.request?.url}. Session may be expired.');
+      debugPrint(
+          '[ApiClient] 401 Unauthorized encountered on ${response.request?.url}. Session may be expired.');
     }
   }
 
