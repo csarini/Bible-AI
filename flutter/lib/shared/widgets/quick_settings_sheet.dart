@@ -144,76 +144,6 @@ class QuickSettingsSheet extends ConsumerWidget {
 
             const SizedBox(height: 18),
 
-            // Live Preview Card
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: theme.cardTheme.color,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                    color: theme.colorScheme.outline.withValues(alpha: 0.3)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          'VISTA PREVIA EN VIVO',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.inter(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 0.8,
-                            color: SanctuaryColors.sunOrange,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Flexible(
-                        child: Text(
-                          'S. Juan 1:1 (${translation.toUpperCase()})',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.inter(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: SanctuaryColors.waveNavy,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        if (showVerseNumbers)
-                          TextSpan(
-                            text: '1 ',
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                              color: SanctuaryColors.sunOrange,
-                            ),
-                          ),
-                        TextSpan(
-                          text:
-                              'En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios.',
-                          style: previewTextStyle,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 18),
-
             // 1. Theme Selection
             _buildSectionLabel('1. Tonalidad Visual & Ambiente'),
             const SizedBox(height: 8),
@@ -421,7 +351,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                     subtitle: tr.subtitle,
                     badge: tr.badge,
                     isOffline: tr.isOffline,
-                    isSelected: translation == tr.id || translation == tr.abbreviation,
+                    isSelected:
+                        translation == tr.id || translation == tr.abbreviation,
                     onTap: () => ref
                         .read(appSettingsControllerProvider)
                         .setTranslation(ref, tr.id),
@@ -476,6 +407,76 @@ class QuickSettingsSheet extends ConsumerWidget {
                     onChanged: (val) => ref
                         .read(appSettingsControllerProvider)
                         .setShowVerseNumbers(ref, val),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 18),
+
+            // Live Preview Card
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: theme.cardTheme.color,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                    color: theme.colorScheme.outline.withValues(alpha: 0.3)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          'VISTA PREVIA EN VIVO',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.8,
+                            color: SanctuaryColors.sunOrange,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          'S. Juan 1:1 (${translation.toUpperCase()})',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: SanctuaryColors.waveNavy,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        if (showVerseNumbers)
+                          TextSpan(
+                            text: '1 ',
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                              color: SanctuaryColors.sunOrange,
+                            ),
+                          ),
+                        TextSpan(
+                          text:
+                              'En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios.',
+                          style: previewTextStyle,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -608,7 +609,8 @@ class QuickSettingsSheet extends ConsumerWidget {
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: isSelected
-                                ? (tokens.activeState == SanctuaryColors.darkActive
+                                ? (tokens.activeState ==
+                                        SanctuaryColors.darkActive
                                     ? SanctuaryColors.amberGold
                                     : tokens.activeState)
                                 : theme.colorScheme.onSurface,
@@ -618,11 +620,14 @@ class QuickSettingsSheet extends ConsumerWidget {
                       if (badge != null) ...[
                         const SizedBox(width: 6),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: isOffline
-                                ? SanctuaryColors.emeraldGreen.withValues(alpha: 0.15)
-                                : SanctuaryColors.sunOrange.withValues(alpha: 0.15),
+                                ? SanctuaryColors.emeraldGreen
+                                    .withValues(alpha: 0.15)
+                                : SanctuaryColors.sunOrange
+                                    .withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
