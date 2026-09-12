@@ -10,7 +10,8 @@ import '../../../../core/constants/bible_translations.dart';
 import '../../../../core/constants/daily_verses_pool.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
-import '../../../../core/services/secure_storage_service.dart';
+import '../../../../core/services/secure_storage_service.dart'
+    hide secureStorageServiceProvider;
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/widgets/coachmark_guide_dialog.dart';
 import '../../../../shared/widgets/feedback_dialog.dart';
@@ -249,11 +250,13 @@ class SanctuarySettingsView extends ConsumerWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Row(
           children: [
-            const Icon(LucideIcons.key, color: SanctuaryColors.sunOrange, size: 22),
+            const Icon(LucideIcons.key,
+                color: SanctuaryColors.sunOrange, size: 22),
             const SizedBox(width: 8),
             Text(
               'Credenciales y Claves API',
-              style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 16),
+              style:
+                  GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 16),
             ),
           ],
         ),
@@ -269,7 +272,8 @@ class SanctuarySettingsView extends ConsumerWidget {
               const SizedBox(height: 16),
               Text(
                 'Google Gemini API Key (Mentor IA):',
-                style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 13),
+                style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w700, fontSize: 13),
               ),
               const SizedBox(height: 6),
               TextField(
@@ -279,12 +283,14 @@ class SanctuarySettingsView extends ConsumerWidget {
                 decoration: InputDecoration(
                   hintText: 'AQ.Ab8RN... o AIzaSy...',
                   isDense: true,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
                   suffixIcon: IconButton(
                     icon: const Icon(LucideIcons.rotateCcw, size: 16),
                     tooltip: 'Restablecer clave por defecto',
                     onPressed: () {
-                      geminiController.text = SecureStorageService.defaultGeminiApiKey;
+                      geminiController.text =
+                          SecureStorageService.defaultGeminiApiKey;
                     },
                   ),
                 ),
@@ -292,7 +298,8 @@ class SanctuarySettingsView extends ConsumerWidget {
               const SizedBox(height: 14),
               Text(
                 'API.Bible Key (Traducciones y Búsqueda):',
-                style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 13),
+                style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w700, fontSize: 13),
               ),
               const SizedBox(height: 6),
               TextField(
@@ -302,12 +309,14 @@ class SanctuarySettingsView extends ConsumerWidget {
                 decoration: InputDecoration(
                   hintText: 'pLy50et8...',
                   isDense: true,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
                   suffixIcon: IconButton(
                     icon: const Icon(LucideIcons.rotateCcw, size: 16),
                     tooltip: 'Restablecer clave por defecto',
                     onPressed: () {
-                      bibleController.text = SecureStorageService.defaultBibleApiKey;
+                      bibleController.text =
+                          SecureStorageService.defaultBibleApiKey;
                     },
                   ),
                 ),
@@ -323,7 +332,8 @@ class SanctuarySettingsView extends ConsumerWidget {
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: SanctuaryColors.waveNavy,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
             ),
             onPressed: () async {
               final newGemini = geminiController.text.trim();
@@ -340,7 +350,8 @@ class SanctuarySettingsView extends ConsumerWidget {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Claves API actualizadas correctamente en SecureStorage.'),
+                    content: Text(
+                        'Claves API actualizadas correctamente en SecureStorage.'),
                     backgroundColor: Color(0xFF10B981),
                   ),
                 );
@@ -405,7 +416,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                   'Elige la tonalidad visual que mejor se adapte a tu iluminación ambiental:',
                   style: GoogleFonts.inter(
                       fontSize: 13,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.75)),
+                      color:
+                          theme.colorScheme.onSurface.withValues(alpha: 0.75)),
                 ),
                 const SizedBox(height: 14),
                 Row(
@@ -462,7 +474,8 @@ class SanctuarySettingsView extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: BibleTranslationsCatalog.allTranslations.map((tr) {
-                final isLast = tr == BibleTranslationsCatalog.allTranslations.last;
+                final isLast =
+                    tr == BibleTranslationsCatalog.allTranslations.last;
                 return Column(
                   children: [
                     _buildTranslationRow(
@@ -472,7 +485,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                       description: tr.subtitle,
                       badge: tr.badge,
                       isOffline: tr.isOffline,
-                      isSelected: translation == tr.id || translation == tr.abbreviation,
+                      isSelected: translation == tr.id ||
+                          translation == tr.abbreviation,
                       onTap: () => ref
                           .read(appSettingsControllerProvider)
                           .setTranslation(ref, tr.id),
@@ -499,7 +513,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                   'Configura el tamaño de fuente, familias tipográficas (Literata, Playfair, Inter) e interlineado:',
                   style: GoogleFonts.inter(
                       fontSize: 13,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.75)),
+                      color:
+                          theme.colorScheme.onSurface.withValues(alpha: 0.75)),
                 ),
                 const SizedBox(height: 12),
                 FilledButton.icon(
@@ -586,7 +601,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                   'Descarga o restaura una copia de seguridad con todos tus versículos guardados, notas de prédicas y categorías:',
                   style: GoogleFonts.inter(
                       fontSize: 13,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.75)),
+                      color:
+                          theme.colorScheme.onSurface.withValues(alpha: 0.75)),
                 ),
                 const SizedBox(height: 14),
                 Row(
@@ -661,11 +677,13 @@ class SanctuarySettingsView extends ConsumerWidget {
                       color: const Color(0xFF10B981).withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(LucideIcons.key, color: Color(0xFF10B981), size: 20),
+                    child: const Icon(LucideIcons.key,
+                        color: Color(0xFF10B981), size: 20),
                   ),
                   title: Text(
                     'Administrar Claves API',
-                    style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 13.5),
+                    style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w700, fontSize: 13.5),
                   ),
                   subtitle: Text(
                     'Configura o restablece tus tokens de Gemini y API.Bible',
@@ -747,8 +765,8 @@ class SanctuarySettingsView extends ConsumerWidget {
             decoration: BoxDecoration(
               color: SanctuaryColors.waveNavy.withValues(alpha: 0.06),
               borderRadius: BorderRadius.circular(16),
-              border:
-                  Border.all(color: SanctuaryColors.waveNavy.withValues(alpha: 0.2)),
+              border: Border.all(
+                  color: SanctuaryColors.waveNavy.withValues(alpha: 0.2)),
             ),
             child: Row(
               children: [
@@ -783,7 +801,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(
                           fontSize: 11,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.65),
                         ),
                       ),
                     ],
@@ -807,7 +826,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
                         color: Colors.green.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(12),
@@ -863,7 +883,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                           fontSize: 11,
                           fontStyle: FontStyle.italic,
                           height: 1.45,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.75),
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -871,7 +892,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                         onTap: () async {
                           final uri = Uri.parse('https://www.Biblica.com');
                           if (await canLaunchUrl(uri)) {
-                            await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            await launchUrl(uri,
+                                mode: LaunchMode.externalApplication);
                           }
                         },
                         child: Text(
@@ -917,7 +939,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                         style: GoogleFonts.inter(
                           fontSize: 11,
                           height: 1.45,
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.75),
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -925,7 +948,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                         onTap: () async {
                           final uri = Uri.parse('https://api.bible');
                           if (await canLaunchUrl(uri)) {
-                            await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            await launchUrl(uri,
+                                mode: LaunchMode.externalApplication);
                           }
                         },
                         child: Text(
@@ -973,7 +997,8 @@ class SanctuarySettingsView extends ConsumerWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
-        side: BorderSide(color: theme.colorScheme.outline.withValues(alpha: 0.3)),
+        side:
+            BorderSide(color: theme.colorScheme.outline.withValues(alpha: 0.3)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -1046,7 +1071,10 @@ class SanctuarySettingsView extends ConsumerWidget {
                 fontSize: 10,
                 color: isSelected
                     ? Colors.white70
-                    : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                    : Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.6),
               ),
             ),
           ],
@@ -1109,7 +1137,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: SanctuaryColors.waveNavy.withValues(alpha: 0.1),
+                          color:
+                              SanctuaryColors.waveNavy.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
@@ -1128,8 +1157,10 @@ class SanctuarySettingsView extends ConsumerWidget {
                               horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: isOffline
-                                ? SanctuaryColors.emeraldGreen.withValues(alpha: 0.15)
-                                : SanctuaryColors.sunOrange.withValues(alpha: 0.15),
+                                ? SanctuaryColors.emeraldGreen
+                                    .withValues(alpha: 0.15)
+                                : SanctuaryColors.sunOrange
+                                    .withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
@@ -1151,7 +1182,8 @@ class SanctuarySettingsView extends ConsumerWidget {
                     description,
                     style: GoogleFonts.inter(
                       fontSize: 11.5,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                      color:
+                          theme.colorScheme.onSurface.withValues(alpha: 0.65),
                     ),
                   ),
                 ],
