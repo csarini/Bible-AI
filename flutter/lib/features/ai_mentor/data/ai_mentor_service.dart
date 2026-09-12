@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import '../../../core/storage/app_database.dart';
 import '../../../core/services/copyright_guard_service.dart';
+import '../../../core/services/secure_storage_service.dart';
 import '../../reader/presentation/state/reader_state_notifier.dart';
 
 /// Service responsible for theological contextual AI guidance, strictly aligned
@@ -10,6 +11,7 @@ import '../../reader/presentation/state/reader_state_notifier.dart';
 /// Supports Google Gemini, OpenAI (ChatGPT), Qwen (OpenRouter), and local/remote proxies.
 class AiMentorService {
   final AppDatabase database;
+  final SecureStorageService? secureStorage;
   final String? apiKey;
   final String? provider;
   final String? model;
@@ -54,6 +56,7 @@ DIRECTIVAS CRÍTICAS DE RESPUESTA:
 
   AiMentorService({
     required this.database,
+    this.secureStorage,
     this.apiKey,
     this.provider,
     this.model,
@@ -91,16 +94,22 @@ DIRECTIVAS CRÍTICAS DE RESPUESTA:
       return refusalResponse;
     }
 
-    // 3. Load active AI credentials and preferences from SQLite
+    // 3. Load active AI credentials and preferences from SecureStorage, SQLite, and Environment
     final activeProvider = provider ??
         await database.getSetting('ai_provider') ??
         'gemini';
-    final activeApiKey = apiKey ??
-        await database.getSetting('ai_api_key') ??
-        await database.getSetting('ai_gemini_key') ??
-        (const String.fromEnvironment('GEMINI_API_KEY').isNotEmpty
-            ? const String.fromEnvironment('GEMINI_API_KEY')
-            : defaultGeminiApiKey);
+    final secureGeminiKey = secureStorage != null
+        ? await secureStorage!.getGeminiApiKey()
+        : null;
+    final activeApiKey = (apiKey != null && apiKey!.isNotEmpty)
+        ? apiKey!
+        : (secureGeminiKey != null && secureGeminiKey.isNotEmpty)
+            ? secureGeminiKey
+            : await database.getSetting('ai_api_key') ??
+                await database.getSetting('ai_gemini_key') ??
+                (const String.fromEnvironment('GEMINI_API_KEY').isNotEmpty
+                    ? const String.fromEnvironment('GEMINI_API_KEY')
+                    : (secureStorage != null ? SecureStorageService.defaultGeminiApiKey : defaultGeminiApiKey));
     final activeModel = model ??
         await database.getSetting('ai_model');
     final activeEndpoint = endpoint ??
@@ -429,5 +438,6 @@ DIRECTIVAS CRÍTICAS DE RESPUESTA:
 /// Riverpod provider for [AiMentorService]
 final aiMentorServiceProvider = Provider<AiMentorService>((ref) {
   final db = ref.watch(appDatabaseProvider);
-  return AiMentorService(database: db);
+  final secureStorage = ref.watch(secureStorageServiceProvider);
+  return AiMentorService(database: db, secureStorage: secureStorage);
 });

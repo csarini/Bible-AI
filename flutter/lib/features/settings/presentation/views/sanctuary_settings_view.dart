@@ -10,6 +10,7 @@ import '../../../../core/constants/bible_translations.dart';
 import '../../../../core/constants/daily_verses_pool.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
+import '../../../../core/services/secure_storage_service.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
 import '../../../../shared/widgets/coachmark_guide_dialog.dart';
 import '../../../../shared/widgets/feedback_dialog.dart';
@@ -226,6 +227,126 @@ class SanctuarySettingsView extends ConsumerWidget {
               }
             },
             child: const Text('Restaurar Ahora'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showApiKeysDialog(BuildContext context, WidgetRef ref) async {
+    final secureStorage = ref.read(secureStorageServiceProvider);
+    final currentGemini = await secureStorage.getGeminiApiKey();
+    final currentBible = await secureStorage.getBibleApiKey();
+
+    final geminiController = TextEditingController(text: currentGemini);
+    final bibleController = TextEditingController(text: currentBible);
+
+    if (!context.mounted) return;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
+          children: [
+            const Icon(LucideIcons.key, color: SanctuaryColors.sunOrange, size: 22),
+            const SizedBox(width: 8),
+            Text(
+              'Credenciales y Claves API',
+              style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 16),
+            ),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Almacenamiento seguro por hardware (EncryptedSharedPreferences / iOS Keychain). Ambos valores se gestionan de forma centralizada en SecureStorage.',
+                style: GoogleFonts.inter(fontSize: 12, height: 1.4),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Google Gemini API Key (Mentor IA):',
+                style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 13),
+              ),
+              const SizedBox(height: 6),
+              TextField(
+                controller: geminiController,
+                obscureText: true,
+                style: GoogleFonts.firaCode(fontSize: 12),
+                decoration: InputDecoration(
+                  hintText: 'AQ.Ab8RN... o AIzaSy...',
+                  isDense: true,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  suffixIcon: IconButton(
+                    icon: const Icon(LucideIcons.rotateCcw, size: 16),
+                    tooltip: 'Restablecer clave por defecto',
+                    onPressed: () {
+                      geminiController.text = SecureStorageService.defaultGeminiApiKey;
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                'API.Bible Key (Traducciones y Búsqueda):',
+                style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 13),
+              ),
+              const SizedBox(height: 6),
+              TextField(
+                controller: bibleController,
+                obscureText: true,
+                style: GoogleFonts.firaCode(fontSize: 12),
+                decoration: InputDecoration(
+                  hintText: 'pLy50et8...',
+                  isDense: true,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  suffixIcon: IconButton(
+                    icon: const Icon(LucideIcons.rotateCcw, size: 16),
+                    tooltip: 'Restablecer clave por defecto',
+                    onPressed: () {
+                      bibleController.text = SecureStorageService.defaultBibleApiKey;
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: SanctuaryColors.waveNavy,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            onPressed: () async {
+              final newGemini = geminiController.text.trim();
+              final newBible = bibleController.text.trim();
+
+              if (newGemini.isNotEmpty) {
+                await secureStorage.saveGeminiApiKey(newGemini);
+              }
+              if (newBible.isNotEmpty) {
+                await secureStorage.saveBibleApiKey(newBible);
+              }
+
+              if (ctx.mounted) Navigator.pop(ctx);
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Claves API actualizadas correctamente en SecureStorage.'),
+                    backgroundColor: Color(0xFF10B981),
+                  ),
+                );
+              }
+            },
+            child: const Text('Guardar'),
           ),
         ],
       ),
@@ -507,6 +628,51 @@ class SanctuarySettingsView extends ConsumerWidget {
                       ),
                     ),
                   ],
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Section 5: Centralized API Keys (SecureStorage)
+          _buildCard(
+            context,
+            title: 'Claves API y Seguridad Hardware',
+            icon: LucideIcons.shieldCheck,
+            iconColor: const Color(0xFF10B981),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Las credenciales de Gemini y API.Bible están centralizadas de forma segura en hardware (Keystore / Keychain) mediante SecureStorageService.',
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
+                    height: 1.4,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF10B981).withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(LucideIcons.key, color: Color(0xFF10B981), size: 20),
+                  ),
+                  title: Text(
+                    'Administrar Claves API',
+                    style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 13.5),
+                  ),
+                  subtitle: Text(
+                    'Configura o restablece tus tokens de Gemini y API.Bible',
+                    style: GoogleFonts.inter(fontSize: 11),
+                  ),
+                  trailing: const Icon(LucideIcons.chevronRight, size: 16),
+                  onTap: () => _showApiKeysDialog(context, ref),
                 ),
               ],
             ),

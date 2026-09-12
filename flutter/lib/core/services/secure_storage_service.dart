@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 /// Production-grade service encapsulating encrypted, hardware-backed
@@ -18,6 +19,9 @@ class SecureStorageService {
 
   /// Preconfigured default API.Bible key provided for scripture fetching
   static const String defaultBibleApiKey = 'pLy50et8lZi3FhERvwh_D';
+
+  /// Preconfigured default Google Gemini API key provided for theological AI guidance
+  static const String defaultGeminiApiKey = 'AQ.Ab8RN6I_vopKgtr88G9_2H0StDa0yjJIJNP6I9YRUl43AelVfQ';
 
   /// Standard Android options enforcing EncryptedSharedPreferences (Hardware Keystore)
   static AndroidOptions _getAndroidOptions() => const AndroidOptions(
@@ -154,15 +158,16 @@ class SecureStorageService {
     }
   }
 
-  /// Retrieves the persisted Gemini API key, or null if none is saved.
-  Future<String?> getGeminiApiKey() async {
+  /// Retrieves the dynamic Gemini API key from secure storage, falling back to
+  /// environment variables or the preconfigured default key.
+  Future<String> getGeminiApiKey() async {
     try {
       final key = await _storage.read(key: _keyGeminiApiKey);
-      return (key != null && key.isNotEmpty) ? key : null;
+      if (key != null && key.isNotEmpty) return key;
     } catch (e, stack) {
       debugPrint('[SecureStorageService] Error reading Gemini API key: $e\n$stack');
-      return null;
     }
+    return const String.fromEnvironment('GEMINI_API_KEY', defaultValue: defaultGeminiApiKey);
   }
 
   /// Deletes the Gemini API key from secure storage.
@@ -193,3 +198,8 @@ class SecureStorageService {
     }
   }
 }
+
+/// Global Riverpod provider for [SecureStorageService]
+final secureStorageServiceProvider = Provider<SecureStorageService>((ref) {
+  return SecureStorageService();
+});
