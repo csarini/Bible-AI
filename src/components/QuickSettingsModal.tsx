@@ -199,13 +199,13 @@ export const QuickSettingsModal: React.FC<QuickSettingsModalProps> = ({
             <div className="flex items-center justify-between">
               <label className="text-[11px] font-sans font-bold uppercase tracking-wider flex items-center gap-1.5 opacity-80">
                 <Sparkles className="w-3.5 h-3.5 text-[#F47B20]" />
-                Versión / Traducción Bíblica (Offline & API.Bible)
+                Versión / Traducción Bíblica (Modo Offline)
               </label>
               <span className="text-[10px] font-semibold text-[#F47B20] bg-[#F47B20]/10 px-2 py-0.5 rounded-full">
-                {OFFICIAL_TRANSLATIONS.length} Versiones
+                {OFFICIAL_TRANSLATIONS.length} Versión Canónica
               </span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-60 overflow-y-auto pr-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-60 overflow-y-auto pr-1">
               {OFFICIAL_TRANSLATIONS.map((tr) => {
                 const isSelected = settings.translation === tr.abbreviation ||
                   settings.translation === tr.translation ||
@@ -220,7 +220,7 @@ export const QuickSettingsModal: React.FC<QuickSettingsModalProps> = ({
                       onUpdateSettings({ translation: tr.abbreviation });
                       if (onToast) onToast(`Versión: ${tr.name}`);
                     }}
-                    className={`p-2 rounded-xl border text-left transition-all cursor-pointer ${
+                    className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                       isSelected
                         ? 'bg-[#0B2B68] text-[#FED65B] border-[#F47B20] shadow-sm ring-2 ring-[#F47B20]/40 font-bold'
                         : `${cardBg} hover:border-[#F47B20]/50`
@@ -228,12 +228,8 @@ export const QuickSettingsModal: React.FC<QuickSettingsModalProps> = ({
                   >
                     <div className="flex items-center justify-between gap-1 mb-0.5">
                       <span className="font-bold text-xs">{tr.abbreviation.toUpperCase()}</span>
-                      <span className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${
-                        tr.isOffline
-                          ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
-                          : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'
-                      }`}>
-                        {tr.isOffline ? 'Offline' : 'API.Bible'}
+                      <span className="text-[9px] px-1.5 py-0.2 rounded font-semibold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+                        {tr.badge || 'Modo Offline'}
                       </span>
                     </div>
                     <span className="block text-[11px] leading-tight truncate opacity-85">{tr.name}</span>

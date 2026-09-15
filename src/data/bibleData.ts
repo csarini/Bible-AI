@@ -297,7 +297,7 @@ export async function getRandomDailyVerse(
   return getRandomDailyVerseSync(topic, excludeId);
 }
 
-// Fetch chapter verses: Queries IndexedDB local first, then API.Bible/GetBible, caching result in local DB
+// Fetch chapter verses: Queries local IndexedDB offline storage directly
 export async function fetchBibleChapter(
   bookId: string,
   chapter: number,

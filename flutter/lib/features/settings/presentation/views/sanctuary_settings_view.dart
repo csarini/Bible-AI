@@ -237,10 +237,8 @@ class SanctuarySettingsView extends ConsumerWidget {
   Future<void> _showApiKeysDialog(BuildContext context, WidgetRef ref) async {
     final secureStorage = ref.read(secureStorageServiceProvider);
     final currentGemini = await secureStorage.getGeminiApiKey();
-    final currentBible = await secureStorage.getBibleApiKey();
 
     final geminiController = TextEditingController(text: currentGemini);
-    final bibleController = TextEditingController(text: currentBible);
 
     if (!context.mounted) return;
 
@@ -254,7 +252,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                 color: SanctuaryColors.sunOrange, size: 22),
             const SizedBox(width: 8),
             Text(
-              'Credenciales y Claves API',
+              'Credencial Gemini AI',
               style:
                   GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 16),
             ),
@@ -266,7 +264,7 @@ class SanctuarySettingsView extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Almacenamiento seguro por hardware (EncryptedSharedPreferences / iOS Keychain). Ambos valores se gestionan de forma centralizada en SecureStorage.',
+                'Almacenamiento seguro por hardware (EncryptedSharedPreferences / iOS Keychain) para el Mentor Teológico IA.',
                 style: GoogleFonts.inter(fontSize: 12, height: 1.4),
               ),
               const SizedBox(height: 16),
@@ -295,32 +293,6 @@ class SanctuarySettingsView extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 14),
-              Text(
-                'API.Bible Key (Traducciones y Búsqueda):',
-                style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w700, fontSize: 13),
-              ),
-              const SizedBox(height: 6),
-              TextField(
-                controller: bibleController,
-                obscureText: true,
-                style: GoogleFonts.firaCode(fontSize: 12),
-                decoration: InputDecoration(
-                  hintText: 'pLy50et8...',
-                  isDense: true,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  suffixIcon: IconButton(
-                    icon: const Icon(LucideIcons.rotateCcw, size: 16),
-                    tooltip: 'Restablecer clave por defecto',
-                    onPressed: () {
-                      bibleController.text =
-                          SecureStorageService.defaultBibleApiKey;
-                    },
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -337,13 +309,9 @@ class SanctuarySettingsView extends ConsumerWidget {
             ),
             onPressed: () async {
               final newGemini = geminiController.text.trim();
-              final newBible = bibleController.text.trim();
 
               if (newGemini.isNotEmpty) {
                 await secureStorage.saveGeminiApiKey(newGemini);
-              }
-              if (newBible.isNotEmpty) {
-                await secureStorage.saveBibleApiKey(newBible);
               }
 
               if (ctx.mounted) Navigator.pop(ctx);
@@ -351,7 +319,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(
-                        'Claves API actualizadas correctamente en SecureStorage.'),
+                        'Clave API de Gemini actualizada correctamente en SecureStorage.'),
                     backgroundColor: Color(0xFF10B981),
                   ),
                 );
@@ -661,7 +629,7 @@ class SanctuarySettingsView extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Las credenciales de Gemini y API.Bible están centralizadas de forma segura en hardware (Keystore / Keychain) mediante SecureStorageService.',
+                  'La credencial de Gemini AI está centralizada de forma segura en hardware (Keystore / Keychain) mediante SecureStorageService.',
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
@@ -681,12 +649,12 @@ class SanctuarySettingsView extends ConsumerWidget {
                         color: Color(0xFF10B981), size: 20),
                   ),
                   title: Text(
-                    'Administrar Claves API',
+                    'Administrar Clave API',
                     style: GoogleFonts.inter(
                         fontWeight: FontWeight.w700, fontSize: 13.5),
                   ),
                   subtitle: Text(
-                    'Configura o restablece tus tokens de Gemini y API.Bible',
+                    'Configura o restablece tu token de Gemini AI',
                     style: GoogleFonts.inter(fontSize: 11),
                   ),
                   trailing: const Icon(LucideIcons.chevronRight, size: 16),
@@ -855,7 +823,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                 ),
                 const SizedBox(height: 14),
 
-                // Bíblica citation block
+                // Almacenamiento Local y Modo 100% Offline block
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
@@ -869,7 +837,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Cita y Reconocimiento de Bíblica, Inc.:',
+                        'Almacenamiento Local y Modo 100% Offline:',
                         style: GoogleFonts.inter(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
@@ -878,88 +846,12 @@ class SanctuarySettingsView extends ConsumerWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        '«Las citas bíblicas marcadas con NVI © están tomadas de la Santa Biblia, NUEVA VERSIÓN INTERNACIONAL® NVI® © 1999, 2015, 2022 por Bíblica, Inc.® Usado con permiso. Todos los derechos reservados en todo el mundo.»',
-                        style: GoogleFonts.inter(
-                          fontSize: 11,
-                          fontStyle: FontStyle.italic,
-                          height: 1.45,
-                          color: theme.colorScheme.onSurface
-                              .withValues(alpha: 0.75),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      InkWell(
-                        onTap: () async {
-                          final uri = Uri.parse('https://www.Biblica.com');
-                          if (await canLaunchUrl(uri)) {
-                            await launchUrl(uri,
-                                mode: LaunchMode.externalApplication);
-                          }
-                        },
-                        child: Text(
-                          'Visitar sitio oficial de Biblica (www.Biblica.com)',
-                          style: GoogleFonts.inter(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            color: SanctuaryColors.waveNavy,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                // API.Bible attribution block
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surface,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: SanctuaryColors.waveNavy.withValues(alpha: 0.2),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Plataforma Tecnológica de API.Bible:',
-                        style: GoogleFonts.inter(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: SanctuaryColors.waveNavy,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'El acceso digital a los textos de las Sagradas Escrituras se realiza a través de la infraestructura autorizada de API.Bible, un servicio de American Bible Society (ABS).',
+                        'La aplicación opera de manera autónoma con las Sagradas Escrituras (Reina Valera 1909) integradas localmente en la base de datos del dispositivo, sin requerir conexión a APIs externas para la lectura de la Palabra.',
                         style: GoogleFonts.inter(
                           fontSize: 11,
                           height: 1.45,
                           color: theme.colorScheme.onSurface
                               .withValues(alpha: 0.75),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      InkWell(
-                        onTap: () async {
-                          final uri = Uri.parse('https://api.bible');
-                          if (await canLaunchUrl(uri)) {
-                            await launchUrl(uri,
-                                mode: LaunchMode.externalApplication);
-                          }
-                        },
-                        child: Text(
-                          'Conocer más en https://api.bible',
-                          style: GoogleFonts.inter(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            color: SanctuaryColors.waveNavy,
-                            decoration: TextDecoration.underline,
-                          ),
                         ),
                       ),
                     ],
@@ -968,7 +860,7 @@ class SanctuarySettingsView extends ConsumerWidget {
 
                 const SizedBox(height: 12),
                 Text(
-                  'Protección de Integridad y Privacidad de IA (Cláusula III.B): Ningún texto con derechos de autor se altera, mutila ni se utiliza para el entrenamiento o procesamiento con modelos de Inteligencia Artificial Generativa. Toda la memoria caché local expira y se revalida automáticamente cada 30 días conforme a los términos de uso.',
+                  'Protección de Integridad y Privacidad: Los textos sagrados se conservan en su pureza canónica y no se alteran ni mutilan. Toda la experiencia de lectura, notas personales y marcadores reside en su dispositivo con privacidad garantizada.',
                   style: GoogleFonts.inter(
                     fontSize: 11,
                     height: 1.45,

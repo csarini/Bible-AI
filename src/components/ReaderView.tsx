@@ -541,11 +541,11 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-label-caps uppercase flex items-center gap-1.5 font-bold opacity-80">
                   <BookOpen className="w-3.5 h-3.5 text-[#F47B20]" />
-                  Versión Bíblica (Offline & API.Bible)
+                  Versión Bíblica (Modo Offline)
                 </label>
-                <span className="text-[10px] opacity-60 font-medium">Caché por Demanda</span>
+                <span className="text-[10px] opacity-60 font-medium">Modo 100% Local</span>
               </div>
-              <div className={`grid grid-cols-2 sm:grid-cols-4 gap-1.5 p-1.5 rounded-xl ${isDark ? 'bg-[#0B0F19]' : isSepia ? 'bg-[#EAE0D0]' : 'bg-[#F0EEE9]'}`}>
+              <div className={`grid grid-cols-1 sm:grid-cols-2 gap-1.5 p-1.5 rounded-xl ${isDark ? 'bg-[#0B0F19]' : isSepia ? 'bg-[#EAE0D0]' : 'bg-[#F0EEE9]'}`}>
                 {OFFICIAL_TRANSLATIONS.map((tr) => (
                   <button
                     key={tr.abbreviation}
@@ -562,12 +562,8 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
                   >
                     <div className="flex items-center justify-between gap-1 mb-0.5">
                       <span className="font-bold text-xs">{tr.abbreviation.toUpperCase()}</span>
-                      <span className={`text-[9px] px-1 py-0.2 rounded font-semibold ${
-                        tr.isOffline
-                          ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
-                          : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'
-                      }`}>
-                        {tr.isOffline ? 'Offline' : 'API.Bible'}
+                      <span className="text-[9px] px-1 py-0.2 rounded font-semibold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+                        {tr.badge || 'Offline'}
                       </span>
                     </div>
                     <span className="block text-[11px] leading-tight truncate font-medium opacity-90">{tr.name.split('(')[0].trim()}</span>
@@ -766,7 +762,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
         )}
       </main>
 
-      {/* Mandatory Scripture Legal & Copyright Footer (Bíblica, Inc. / API.Bible) */}
+      {/* Scripture Legal & Copyright Footer */}
       <ScriptureCopyrightFooter translation={settings.translation} />
 
       {/* Bottom Chapter Navigation Bar */}

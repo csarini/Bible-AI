@@ -7,9 +7,6 @@ import { createServer as createViteServer } from 'vite';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Preconfigured default API.Bible key
-const DEFAULT_BIBLE_API_KEY = 'pLy50et8lZi3FhERvwh_D';
-
 async function startServer() {
   const app = express();
   const PORT = 3000;
@@ -21,15 +18,15 @@ async function startServer() {
     res.json({ status: 'ok', service: 'Biblia Inteligente' });
   });
 
-  // Catalog of Available Bible Translations (Offline + API.Bible)
+  // Catalog of Available Bible Translations (Modo Offline)
   const BIBLE_CATALOG = [
     {
       id: 'valera',
       abbreviation: 'valera',
       name: 'Reina Valera (1909)',
-      subtitle: 'Reina Valera 1909 (Edición Clásica / Valera)',
+      subtitle: 'Reina Valera 1909 (Edición Canónica / Valera)',
       source: 'offline',
-      badge: 'Base Offline',
+      badge: 'Modo Offline',
       isOffline: true,
     },
     {
@@ -38,7 +35,7 @@ async function startServer() {
       name: 'Sagradas Escrituras (1569)',
       subtitle: 'Biblia del Oso 1569 (Casiodoro de Reina)',
       source: 'offline',
-      badge: 'Histórica',
+      badge: 'Histórica Offline',
       isOffline: true,
     },
     {
@@ -47,251 +44,13 @@ async function startServer() {
       name: 'Reina Valera NT (1858)',
       subtitle: 'Nuevo Testamento Revisión 1858',
       source: 'offline',
-      badge: 'NT 1858',
+      badge: 'NT Offline',
       isOffline: true,
-    },
-    {
-      id: 'nvi',
-      abbreviation: 'nvi',
-      name: 'Nueva Versión Internacional (NVI)',
-      subtitle: 'Traducción contemporánea de gran difusión — Biblica',
-      source: 'api_bible',
-      bibleId: 'nvi',
-      badge: 'API.Bible / NVI',
-      isOffline: false,
-    },
-    {
-      id: 'nbla',
-      abbreviation: 'nbla',
-      name: 'Nueva Biblia de las Américas (NBLA)',
-      subtitle: 'Traducción fiel y contemporánea en español latinoamericano',
-      source: 'api_bible',
-      bibleId: 'ce11b813f9a27e20-01',
-      badge: 'API.Bible / NBLA',
-      isOffline: false,
-    },
-    {
-      id: 'bes',
-      abbreviation: 'bes',
-      name: 'La Biblia en Español Sencillo (BES)',
-      subtitle: 'Lenguaje claro, directo y accesible para todos',
-      source: 'api_bible',
-      bibleId: 'b32b9d1b64b4ef29-01',
-      badge: 'API.Bible / BES',
-      isOffline: false,
-    },
-    {
-      id: 'vbl',
-      abbreviation: 'vbl',
-      name: 'Versión Biblia Libre (VBL)',
-      subtitle: 'Traducción contemporánea protestante abierta (AT y NT)',
-      source: 'api_bible',
-      bibleId: '482ddd53705278cc-02',
-      badge: 'API.Bible / VBL',
-      isOffline: false,
-    },
-    {
-      id: 'pddpt',
-      abbreviation: 'pddpt',
-      name: 'Palabra de Dios para ti (PdDpt)',
-      subtitle: 'Traducción hispana contemporánea completa',
-      source: 'api_bible',
-      bibleId: '48acedcf8595c754-01',
-      badge: 'API.Bible / PdDpt',
-      isOffline: false,
-    },
-    {
-      id: 'rvr09',
-      abbreviation: 'rvr09',
-      name: 'Reina Valera 1909 (RVR09)',
-      subtitle: 'Reina Valera 1909 — Nube API.Bible',
-      source: 'api_bible',
-      bibleId: '592420522e16049f-01',
-      badge: 'API.Bible / RVR09',
-      isOffline: false,
-    },
-    {
-      id: 'kjv',
-      abbreviation: 'kjv',
-      name: 'King James Version (KJV)',
-      subtitle: 'King James Version (English 1611) — API.Bible',
-      source: 'api_bible',
-      bibleId: 'de4e12af7f28f599-01',
-      badge: 'API.Bible / Inglés',
-      isOffline: false,
-    },
-    {
-      id: 'bsb',
-      abbreviation: 'bsb',
-      name: 'Berean Standard Bible (BSB)',
-      subtitle: 'Traducción de estudio moderno en inglés — API.Bible',
-      source: 'api_bible',
-      bibleId: 'bba9f40183526463-01',
-      badge: 'API.Bible / BSB',
-      isOffline: false,
     },
   ];
 
   app.get('/api/bible/translations', (req, res) => {
     res.json({ translations: BIBLE_CATALOG });
-  });
-
-  // Dynamic endpoint to list all Bibles associated with the user's API.Bible key
-  app.get('/api/bible/account-bibles', async (req, res) => {
-    try {
-      const apiKey = (req.headers['api-key'] as string) || process.env.BIBLE_API_KEY || DEFAULT_BIBLE_API_KEY;
-
-      const response = await fetch('https://rest.api.bible/v1/bibles', {
-        headers: {
-          'api-key': apiKey,
-          'Accept': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        return res.status(response.status).json({
-          error: 'Error al consultar las biblias de la cuenta en API.Bible',
-          status: response.status,
-        });
-      }
-
-      const data = await response.json();
-      const rawBibles = (data.data || []) as any[];
-
-      // Highlight Spanish and major versions
-      const spanishBibles = rawBibles.filter(b => 
-        (b.language?.id && b.language.id.toLowerCase().includes('spa')) ||
-        (b.language?.name && b.language.name.toLowerCase().includes('spanish'))
-      );
-
-      res.json({
-        total: rawBibles.length,
-        spanishCount: spanishBibles.length,
-        spanishBibles: spanishBibles.map(b => ({
-          id: b.id,
-          name: b.nameLocal || b.name,
-          abbreviation: b.abbreviationLocal || b.abbreviation,
-          description: b.descriptionLocal || b.description,
-          language: b.language?.name || 'Español',
-        })),
-        catalog: BIBLE_CATALOG,
-        allBibles: rawBibles.map(b => ({
-          id: b.id,
-          name: b.name,
-          abbreviation: b.abbreviation,
-          language: b.language?.name,
-          languageId: b.language?.id,
-        })),
-      });
-    } catch (err: any) {
-      console.error('Error in /api/bible/account-bibles:', err);
-      res.status(500).json({ error: 'Fallo de conexión con API.Bible', details: err.message });
-    }
-  });
-
-  // API.Bible Chapter Proxy Endpoint (Secure Server-Side API Key)
-  app.get('/api/bible/chapter', async (req, res) => {
-    try {
-      const { bibleId: queryBibleId, chapterId, translation } = req.query as {
-        bibleId?: string;
-        chapterId?: string;
-        translation?: string;
-      };
-
-      if (!chapterId) {
-        return res.status(400).json({ error: 'El parámetro "chapterId" es obligatorio (ej. MAT.1, GEN.1).' });
-      }
-
-      // Resolve Bible ID from query or translation catalog
-      let targetBibleId = queryBibleId;
-      if (!targetBibleId && translation) {
-        const found = BIBLE_CATALOG.find(t => t.id === translation.toLowerCase() || t.abbreviation === translation.toLowerCase());
-        if (found && found.bibleId) {
-          targetBibleId = found.bibleId;
-        }
-      }
-
-      if (!targetBibleId) {
-        return res.status(400).json({ error: 'Debes especificar "bibleId" o un código de "translation" compatible con API.Bible.' });
-      }
-
-      // API Key resolution: Header or server environment variable or preconfigured default
-      const apiKey = (req.headers['api-key'] as string) || process.env.BIBLE_API_KEY || DEFAULT_BIBLE_API_KEY;
-
-      const apiUrl = `https://rest.api.bible/v1/bibles/${encodeURIComponent(targetBibleId)}/chapters/${encodeURIComponent(chapterId)}?content-type=json&include-verse-numbers=true&include-verse-spans=true`;
-
-      const response = await fetch(apiUrl, {
-        headers: {
-          'api-key': apiKey,
-          'Accept': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        // If NVI returned 403 Forbidden (requires individual commercial license on API.Bible console),
-        // fallback smoothly to NBLA (Nueva Biblia de las Américas)
-        if (response.status === 403 && (targetBibleId === 'nvi' || targetBibleId === '61fd76eafa1577c2-03' || translation?.toLowerCase() === 'nvi')) {
-          console.warn(`[API.Bible Proxy]: NVI returned 403 Forbidden. Providing fallback to NBLA.`);
-          const fallbackBibleId = 'ce11b813f9a27e20-01'; // NBLA
-          const fbUrl = `https://rest.api.bible/v1/bibles/${encodeURIComponent(fallbackBibleId)}/chapters/${encodeURIComponent(chapterId)}?content-type=json&include-verse-numbers=true&include-verse-spans=true`;
-          try {
-            const fbRes = await fetch(fbUrl, {
-              headers: {
-                'api-key': apiKey,
-                'Accept': 'application/json',
-              },
-            });
-            if (fbRes.ok) {
-              const fbData = await fbRes.json();
-              return res.json({
-                ...fbData,
-                notice: 'La versión NVI oficial de Biblica requiere activación en la consola de API.Bible. Mostrando Nueva Biblia de las Américas (NBLA) como texto contemporáneo equivalente.',
-                isFallback: true,
-              });
-            }
-          } catch (fbErr) {
-            console.error('[Fallback NBLA error]:', fbErr);
-          }
-        }
-
-        const errText = await response.text();
-        return res.status(response.status).json({
-          error: `API.Bible respondió con código ${response.status}`,
-          details: errText,
-          status: response.status,
-        });
-      }
-
-      const data = await response.json();
-      return res.json(data);
-    } catch (err: any) {
-      console.error('[API.Bible Chapter Proxy Error]:', err);
-      return res.status(500).json({
-        error: 'Error de conexión con API.Bible',
-        details: err?.message || String(err),
-      });
-    }
-  });
-
-  // API.Bible Search Proxy Endpoint
-  app.get('/api/bible/search', async (req, res) => {
-    try {
-      const { bibleId, query } = req.query as { bibleId?: string; query?: string };
-      if (!bibleId || !query) {
-        return res.status(400).json({ error: 'bibleId y query son requeridos' });
-      }
-
-      const apiKey = (req.headers['api-key'] as string) || process.env.BIBLE_API_KEY || DEFAULT_BIBLE_API_KEY;
-
-      const response = await fetch(`https://rest.api.bible/v1/bibles/${encodeURIComponent(bibleId)}/search?query=${encodeURIComponent(query)}`, {
-        headers: { 'api-key': apiKey, 'Accept': 'application/json' },
-      });
-
-      const data = await response.json();
-      return res.status(response.status).json(data);
-    } catch (err: any) {
-      return res.status(500).json({ error: err?.message || String(err) });
-    }
   });
 
   // AI Mentor endpoint with Multi-Provider Support (Gemini, ChatGPT, Qwen, Custom)

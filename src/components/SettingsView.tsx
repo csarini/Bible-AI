@@ -345,10 +345,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <div className="space-y-1.5 sm:col-span-2">
             <div className="flex items-center justify-between">
               <span className="block text-xs font-label-caps text-[#454652] uppercase font-semibold">
-                Versión / Traducción Bíblica (Offline & API.Bible)
+                Versión / Traducción Bíblica (Modo Offline)
               </span>
               <span className="text-[11px] font-sans font-bold text-[#F47B20] bg-[#F47B20]/10 px-2 py-0.5 rounded-full">
-                {OFFICIAL_TRANSLATIONS.length} Versiones Disponibles
+                {OFFICIAL_TRANSLATIONS.length} Versión Canónica
               </span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
@@ -374,11 +374,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                       <span className="text-sm font-bold leading-tight">{tr.name}</span>
                       <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold ${isSelected
                           ? 'bg-[#FED65B]/20 text-[#FED65B]'
-                          : tr.isOffline
-                            ? 'bg-emerald-500/20 text-emerald-700'
-                            : 'bg-amber-500/20 text-amber-700'
+                          : 'bg-emerald-500/20 text-emerald-700'
                         }`}>
-                        {tr.badge || (tr.isOffline ? 'Offline' : 'API.Bible')}
+                        {tr.badge || 'Modo Offline'}
                       </span>
                     </div>
                     <span className="block text-[11px] font-normal opacity-80 mt-1">
@@ -467,44 +465,15 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           <div className="p-3.5 rounded-xl bg-[#FFFFFF] border border-[#0B2B68]/15 space-y-2">
             <p className="font-semibold text-[#0B2B68]">
-              Cita y Reconocimiento de Bíblica, Inc.:
-            </p>
-            <p className="italic text-[11px] text-[#454652]">
-              «Las citas bíblicas marcadas con NVI © están tomadas de la Santa Biblia, NUEVA VERSIÓN INTERNACIONAL® NVI® © 1999, 2015, 2022 por Bíblica, Inc.® Usado con permiso. Todos los derechos reservados en todo el mundo.»
-            </p>
-            <p className="text-[11px]">
-              Para mayor información sobre la labor de traducción y distribución de las Sagradas Escrituras, visite el{' '}
-              <a
-                href="https://www.Biblica.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#0B2B68] font-bold underline hover:text-[#00A3E0]"
-              >
-                sitio oficial de Biblica (www.Biblica.com)
-              </a>.
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-[#FFFFFF] border border-[#0B2B68]/15 space-y-2">
-            <p className="font-semibold text-[#0B2B68]">
-              Plataforma Tecnológica y Distribución de API:
+              Almacenamiento Local y Modo 100% Offline:
             </p>
             <p className="text-[11px] text-[#454652]">
-              El acceso digital a los textos bíblicos y sus divisiones canónicas se provee a través de la infraestructura autorizada de{' '}
-              <a
-                href="https://api.bible"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#0B2B68] font-bold underline hover:text-[#00A3E0]"
-              >
-                API.Bible
-              </a>
-              , un servicio de American Bible Society (ABS).
+              La aplicación opera de manera autónoma con las Sagradas Escrituras (Reina Valera 1909) integradas localmente en la base de datos del dispositivo, sin requerir conexión a APIs externas para la lectura de la Palabra.
             </p>
           </div>
 
           <p className="text-[11px] text-[#71717A]">
-            <strong>Protección de Integridad y Privacidad de IA (Cláusula III.B):</strong> Ningún texto con derechos de autor se altera, mutila ni se utiliza para el entrenamiento o procesamiento con modelos de Inteligencia Artificial Generativa. Toda la memoria caché local expira y se revalida automáticamente cada 30 días conforme a los términos de uso.
+            <strong>Protección de Integridad y Privacidad:</strong> Los textos sagrados se conservan en su pureza canónica y no se alteran ni mutilan. Toda la experiencia de lectura, notas personales y marcadores reside en su dispositivo con privacidad garantizada.
           </p>
         </div>
       </div>

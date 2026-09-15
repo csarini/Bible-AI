@@ -6,9 +6,8 @@ import '../../core/services/copyright_guard_service.dart';
 import '../../core/theme/sanctuary_colors.dart';
 
 /// ScriptureCopyrightFooter
-/// Renders mandatory legal attribution, standard copyright citation,
-/// active direct hyperlink to Biblica.com (with the mandatory word "Biblica"),
-/// API.Bible platform attribution, and strict non-commercial disclaimer.
+/// Renders legal attribution, standard copyright citation,
+/// and non-commercial disclaimer for biblical translations.
 /// Styled according to the "Digital Sanctuary" Design System.
 class ScriptureCopyrightFooter extends StatelessWidget {
   final String? translation;
@@ -40,7 +39,7 @@ class ScriptureCopyrightFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Only display footer for translations consumed from API.Bible
+    // Only display footer if required by translation
     if (!CopyrightGuardService.isApiBibleTranslation(translation)) {
       return const SizedBox.shrink();
     }
@@ -162,24 +161,6 @@ class ScriptureCopyrightFooter extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (info.apiPlatformUrl != null) ...[
-                  InkWell(
-                    borderRadius: BorderRadius.circular(6),
-                    onTap: () => _openUrl(context, info.apiPlatformUrl!),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: Text(
-                        'Servido vía ${info.apiPlatformName ?? 'API.Bible'}',
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w500,
-                          color: deepNavy.withValues(alpha: 0.70),
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
               ],
             ),
             const SizedBox(height: 10),

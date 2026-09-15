@@ -339,7 +339,7 @@ class QuickSettingsSheet extends ConsumerWidget {
             const SizedBox(height: 18),
 
             // 5. Canonical Bible Translation
-            _buildSectionLabel('5. Traducción Canónica (Offline & API.Bible)'),
+            _buildSectionLabel('5. Traducción Canónica (Modo Offline)'),
             const SizedBox(height: 8),
             Column(
               children: BibleTranslationsCatalog.allTranslations.map((tr) {

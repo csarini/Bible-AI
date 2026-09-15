@@ -14,11 +14,7 @@ class SecureStorageService {
   // Strict constant keys to prevent typos and collisions across environments
   static const String _keyAuthToken = 'auth_token';
   static const String _keyUserId = 'user_id';
-  static const String _keyBibleApiKey = 'api_bible_key';
   static const String _keyGeminiApiKey = 'gemini_api_key';
-
-  /// Preconfigured default API.Bible key provided for scripture fetching
-  static const String defaultBibleApiKey = 'pLy50et8lZi3FhERvwh_D';
 
   /// Preconfigured default Google Gemini API key provided for theological AI guidance
   static const String defaultGeminiApiKey = 'AQ.Ab8RN6I_vopKgtr88G9_2H0StDa0yjJIJNP6I9YRUl43AelVfQ';
@@ -110,42 +106,7 @@ class SecureStorageService {
   }
 
   // ==========================================
-  // 3. API.Bible Dynamic Header Key
-  // ==========================================
-
-  /// Securely stores dynamic API.Bible credentials for scripture fetching.
-  Future<void> saveBibleApiKey(String key) async {
-    try {
-      await _storage.write(key: _keyBibleApiKey, value: key.trim());
-    } catch (e, stack) {
-      debugPrint('[SecureStorageService] Error saving API.Bible key: $e\n$stack');
-      rethrow;
-    }
-  }
-
-  /// Retrieves the dynamic API.Bible key from secure storage, falling back to
-  /// environment variables or the preconfigured default key.
-  Future<String> getBibleApiKey() async {
-    try {
-      final key = await _storage.read(key: _keyBibleApiKey);
-      if (key != null && key.isNotEmpty) return key;
-    } catch (e, stack) {
-      debugPrint('[SecureStorageService] Error reading API.Bible key: $e\n$stack');
-    }
-    return const String.fromEnvironment('BIBLE_API_KEY', defaultValue: defaultBibleApiKey);
-  }
-
-  /// Deletes the API.Bible key.
-  Future<void> deleteBibleApiKey() async {
-    try {
-      await _storage.delete(key: _keyBibleApiKey);
-    } catch (e, stack) {
-      debugPrint('[SecureStorageService] Error deleting API.Bible key: $e\n$stack');
-    }
-  }
-
-  // ==========================================
-  // 4. Gemini AI Dynamic API Key
+  // 3. Gemini AI Dynamic API Key
   // ==========================================
 
   /// Securely saves the private Gemini API key in hardware-backed storage.
@@ -180,7 +141,7 @@ class SecureStorageService {
   }
 
   // ==========================================
-  // 5. Session & Storage Reset
+  // 4. Session & Storage Reset
   // ==========================================
 
   /// Securely flushes all credentials from Hardware Keystore / Keychain.
@@ -193,7 +154,6 @@ class SecureStorageService {
       // Fallback: individually delete critical keys if deleteAll fails
       await deleteAuthToken();
       await deleteUserId();
-      await deleteBibleApiKey();
       await deleteGeminiApiKey();
     }
   }

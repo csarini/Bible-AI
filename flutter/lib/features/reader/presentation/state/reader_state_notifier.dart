@@ -106,8 +106,8 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
         bookNumber: 1, bookName: 'Génesis', bookId: 'GEN', chapterNumber: 1);
   }
 
-  /// Loads a chapter directly from local SQLite database or API.Bible on demand,
-  /// attaching local bookmarks, notes and offline fallback indicators.
+  /// Loads a chapter directly from local SQLite database,
+  /// attaching local bookmarks, notes and offline indicators.
   Future<void> loadChapter({
     required int bookNumber,
     required String bookName,
@@ -130,7 +130,7 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
     String? capturedNotice;
 
     try {
-      // 1. Fetch chapter text via offline-first SQLite or API.Bible
+      // 1. Fetch chapter text from local database
       final localData = await _localBibleService.fetchChapter(
         translationKey: translation,
         bookNumber: bookNumber,

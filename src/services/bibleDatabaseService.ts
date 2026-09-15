@@ -5,8 +5,6 @@
 import booksValeraRaw from '../data/raw/books_valera.json';
 import translationsCatalogRaw from '../data/raw/translations_catalog.json';
 import { BibleVerse, BibleBook } from '../types';
-import { isOnline, fetchChapterFromApiBible } from './apiBibleService';
-import { CopyrightGuardService } from './copyrightGuardService';
 
 export const DB_NAME = 'biblia_inteligente_offline_db';
 export const DB_VERSION = 3;
@@ -380,17 +378,6 @@ export async function getChapterFromDB(
       const req = store.get(`${tr}_${bookId}_${chapter}`);
       req.onsuccess = () => {
         if (req.result && isGenuineVerses(req.result.verses)) {
-          // 30-Day Cache Revalidation Policy (API.Bible / Bíblica, Inc. Terms)
-          if (CopyrightGuardService.isCopyrightProtected(tr)) {
-            const cacheDate = req.result.updatedAt || req.result.cachedAt;
-            if (CopyrightGuardService.isCacheExpired(cacheDate)) {
-              console.info(
-                `[Copyright Guard] Caché de "${tr}" (${bookId} ${chapter}) expirada (>30 días). Revalidando contra API.Bible.`
-              );
-              resolve(null);
-              return;
-            }
-          }
           resolve(req.result.verses);
         } else {
           resolve(null);
@@ -529,26 +516,18 @@ export interface FetchChapterResult {
   loadedTranslation: string;
 }
 
-// Flowchart Implementation:
+// Flowchart Implementation (Modo 100% Offline):
 // [ SELECCIÓN DE VERSIÓN Y CAPÍTULO ]
 //                  │
 //                  ▼
-//  ¿Versión instalada/offline en SQLite?
+//  [ Lectura Directa desde IndexedDB / SQLite ]
+//                  │
+//       ¿Encontrado en DB local?
 //         /                \
 //       SÍ                  NO
 //       /                    \
 //      ▼                      ▼
-// [ Lectura Directa ]    ¿Hay conexión a Internet?
-// [  desde SQLite   ]          /          \
-//                            SÍ            NO
-//                            /              \
-//                           ▼                ▼
-//              [ Fetch HTTP API.Bible ]   [ Notificar Offline ]
-//              [ (Header: api-key)   ]   [ Usar Versión Base ]
-//                           │
-//                           ▼
-//               [ Guardar en SQLite ]
-//               [ (Caché por Demanda) ]
+// [ Retornar Versículos ]  [ Sincronizar Versión Base / Fallback 'valera' ]
 export async function fetchChapterVersesWithFallback(
   bookId: string,
   chapter: number,
@@ -557,7 +536,7 @@ export async function fetchChapterVersesWithFallback(
 ): Promise<FetchChapterResult> {
   const tr = normalizeTranslationKey(translation);
 
-  // 1. ¿Versión instalada / offline en SQLite (IndexedDB)?
+  // 1. Lectura directa desde base de datos local (IndexedDB)
   const localVerses = await getChapterFromDB(bookId, chapter, tr);
   if (localVerses && isGenuineVerses(localVerses)) {
     return {
@@ -566,88 +545,34 @@ export async function fetchChapterVersesWithFallback(
     };
   }
 
-  // Si no está en SQLite:
-  // 2. ¿Hay conexión a Internet?
-  const online = isOnline();
-
-  if (!online) {
-    // [ Notificar Offline ] -> [ Usar Versión Base ] ('valera')
-    const fallbackMsg = `Sin conexión a Internet para descargar '${translation.toUpperCase()}'. Mostrando versión base disponible.`;
-    if (onNotification) onNotification(fallbackMsg);
-
-    const baseVerses = await getChapterFromDB(bookId, chapter, 'valera');
-    if (baseVerses && isGenuineVerses(baseVerses)) {
-      return {
-        verses: baseVerses,
-        isOfflineFallback: true,
-        notice: fallbackMsg,
-        loadedTranslation: 'valera',
-      };
-    }
-
-    // Fallback a libro base si no está en cache
-    const bookMeta = getBookByIdOrNumber(bookId, 'valera');
+  // 2. Si no está en IndexedDB para la versión histórica solicitada, intentar cargar del endpoint público GetBible
+  const bookMeta = getBookByIdOrNumber(bookId, tr);
+  const apiVerses = await fetchFromGetBibleAPI(bookMeta, chapter, tr);
+  if (apiVerses && isGenuineVerses(apiVerses)) {
     return {
-      verses: [],
+      verses: apiVerses,
+      loadedTranslation: tr,
+    };
+  }
+
+  // 3. Fallback seguro a la versión canónica base 'valera'
+  const fallbackVerses = await getChapterFromDB(bookId, chapter, 'valera');
+  if (fallbackVerses && isGenuineVerses(fallbackVerses)) {
+    return {
+      verses: fallbackVerses,
       isOfflineFallback: true,
-      notice: fallbackMsg,
+      notice: 'Mostrando versión canónica offline disponible.',
       loadedTranslation: 'valera',
     };
   }
 
-  // 3. Con conexión a Internet:
-  // Si es versión de API.Bible (ej: 'nvi', 'rvr1960', 'kjv', 'dhh')
-  if (!isBuiltInOfflineTranslation(tr)) {
-    try {
-      const bookMeta = getBookByIdOrNumber(bookId, 'valera');
-      const apiResult = await fetchChapterFromApiBible(tr, bookId, chapter, bookMeta.name);
-      if (apiResult.verses && isGenuineVerses(apiResult.verses)) {
-        // [ Guardar en SQLite ] (Caché por Demanda)
-        await saveChapterToDB(bookId, chapter, apiResult.verses, tr);
-        return {
-          verses: apiResult.verses,
-          loadedTranslation: tr,
-        };
-      }
-    } catch (err: any) {
-      console.warn(`[API.Bible fetch failed for ${tr} ${bookId}:${chapter}]:`, err?.message || err);
-      const isAuthErr = String(err?.message || '').includes('UNAUTHORIZED');
-      const fallbackMsg = isAuthErr
-        ? `Se requiere clave válida para '${translation.toUpperCase()}' en API.Bible. Mostrando versión base disponible.`
-        : `No se pudo descargar '${translation.toUpperCase()}'. Mostrando versión base disponible.`;
-      if (onNotification) onNotification(fallbackMsg);
-
-      const baseVerses = await getChapterFromDB(bookId, chapter, 'valera');
-      if (baseVerses && isGenuineVerses(baseVerses)) {
-        return {
-          verses: baseVerses,
-          isOfflineFallback: true,
-          notice: fallbackMsg,
-          loadedTranslation: 'valera',
-        };
-      }
-    }
-  } else {
-    // Si es versión local histórica (valera, sse, rv1858) que requiera sincronización
-    const bookMeta = getBookByIdOrNumber(bookId, tr);
-    const apiVerses = await fetchFromGetBibleAPI(bookMeta, chapter, tr);
-    if (apiVerses && isGenuineVerses(apiVerses)) {
-      return {
-        verses: apiVerses,
-        loadedTranslation: tr,
-      };
-    }
-  }
-
-  // Fallback seguro final a versión base
-  const fallbackVerses = await getChapterFromDB(bookId, chapter, 'valera');
   return {
-    verses: fallbackVerses || [],
+    verses: [],
     loadedTranslation: 'valera',
   };
 }
 
-// Fetch chapter verses: Consults local DB first, then queries API.Bible or GetBible
+// Fetch chapter verses: Consults local DB first, falling back to base offline translation
 export async function fetchChapterVerses(
   bookId: string,
   chapter: number,

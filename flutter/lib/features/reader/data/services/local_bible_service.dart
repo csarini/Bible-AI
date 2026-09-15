@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import '../../../../core/storage/app_database.dart';
-import '../../../../core/services/api_bible_service.dart';
 import '../../../../core/services/copyright_guard_service.dart';
 
 // =============================================================================
-// DTOs FOR SCRIPTURE READS FROM LOCAL SQLITE DATABASE & API.BIBLE
+// DTOs FOR SCRIPTURE READS FROM LOCAL SQLITE DATABASE
 // =============================================================================
 
 class LocalBibleVerseDto {
@@ -103,24 +102,19 @@ typedef GetBibleVerseDto = LocalBibleVerseDto;
 typedef GetBibleResponseDto = LocalBibleChapterResponse;
 
 // =============================================================================
-// LOCAL BIBLE SERVICE - OFFLINE-FIRST ORCHESTRATOR WITH API.BIBLE ON-DEMAND CACHE
+// LOCAL BIBLE SERVICE - 100% OFFLINE SQLITE SCRIPTURE PROVIDER
 // =============================================================================
 
 class LocalBibleService {
   final AppDatabase database;
-  final ApiBibleService apiBibleService;
 
   LocalBibleService({
     required this.database,
-    ApiBibleService? apiBibleService,
-  }) : apiBibleService = apiBibleService ?? ApiBibleService();
+  });
 
-  /// Orchestrates scripture access according to the user-defined flowchart:
-  /// 1. ¿Versión instalada/offline en SQLite? (ej: 'rv1858', 'sse', 'valera' o datos en caché)
-  ///    - SÍ: [ Lectura Directa desde SQLite ]
-  ///    - NO: ¿Hay conexión a Internet?
-  ///          - SÍ: [ Fetch HTTP API.Bible (Header: api-key) ] -> [ Guardar en SQLite (Caché por Demanda) ]
-  ///          - NO: [ Notificar Offline ] -> [ Usar Versión Base ] ('valera')
+  /// Reads scripture directly from the local SQLite database.
+  /// If the requested translation is not present, falls back cleanly to the
+  /// base canonical 'valera' translation stored locally.
   Future<LocalBibleChapterResponse> fetchChapter({
     required String translationKey,
     required int bookNumber,
@@ -132,7 +126,7 @@ class LocalBibleService {
   }) async {
     final cleanTranslation = translationKey.toLowerCase().trim();
 
-    // 1. ¿Versión instalada / offline en SQLite? (ej: 'valera', 'sse', 'rv1858' o datos en caché)
+    // 1. Direct local SQLite query
     try {
       final localEntry = await database.getChapter(
         cleanTranslation,
@@ -141,107 +135,41 @@ class LocalBibleService {
       );
 
       if (localEntry != null && localEntry.versesJson.isNotEmpty) {
-        final isProtected = CopyrightGuardService.isCopyrightProtected(cleanTranslation);
-        final isExpired = isProtected && CopyrightGuardService.isCacheExpired(localEntry.createdAt);
+        final decodedList = json.decode(localEntry.versesJson) as List<dynamic>;
+        final verses = decodedList
+            .map((v) => LocalBibleVerseDto.fromJson(v as Map<String, dynamic>))
+            .toList();
 
-        if (isExpired) {
-          debugPrint(
-            'Caché de "$cleanTranslation" ($bookNumber:$chapterNumber) expirada (>30 días). Revalidando contra API.Bible según términos de licencia.',
+        if (verses.isNotEmpty) {
+          final resolvedBookName = localEntry.bookName.isNotEmpty
+              ? localEntry.bookName
+              : (bookName ?? 'Libro $bookNumber');
+
+          return LocalBibleChapterResponse(
+            translation: localEntry.translationKey,
+            abbreviation: localEntry.translationKey,
+            bookNr: localEntry.bookNumber,
+            bookName: resolvedBookName,
+            chapter: localEntry.chapter,
+            name: '$resolvedBookName ${localEntry.chapter}',
+            verses: verses,
           );
-        } else {
-          final decodedList = json.decode(localEntry.versesJson) as List<dynamic>;
-          final verses = decodedList
-              .map((v) => LocalBibleVerseDto.fromJson(v as Map<String, dynamic>))
-              .toList();
-
-          if (verses.isNotEmpty) {
-            final resolvedBookName = localEntry.bookName.isNotEmpty
-                ? localEntry.bookName
-                : (bookName ?? 'Libro $bookNumber');
-
-            // [ Lectura Directa desde SQLite ]
-            return LocalBibleChapterResponse(
-              translation: localEntry.translationKey,
-              abbreviation: localEntry.translationKey,
-              bookNr: localEntry.bookNumber,
-              bookName: resolvedBookName,
-              chapter: localEntry.chapter,
-              name: '$resolvedBookName ${localEntry.chapter}',
-              verses: verses,
-            );
-          }
         }
       }
     } catch (e) {
       debugPrint('Error leyendo capítulo desde SQLite ($cleanTranslation $bookNumber:$chapterNumber): $e');
     }
 
-    // 2. NO ESTÁ EN SQLITE (ej: 'NVI', 'RVR1960', 'KJV' sin cachear aún)
-    // -> ¿Hay conexión a Internet?
-    final hasInternet = await apiBibleService.checkInternetConnection();
+    // 2. Fallback to base canonical offline version ('valera')
+    final notice = 'Mostrando versión canónica local Reina-Valera 1909.';
+    onOfflineFallbackNotice?.call(notice);
 
-    if (!hasInternet) {
-      // [ Notificar Offline ] -> [ Usar Versión Base ]
-      final notice = 'Sin conexión a Internet para descargar "${translationKey.toUpperCase()}". Mostrando versión base disponible.';
-      onOfflineFallbackNotice?.call(notice);
-
-      return _loadBaseOfflineFallback(
-        bookNumber: bookNumber,
-        chapterNumber: chapterNumber,
-        bookCode: bookCode,
-        bookName: bookName,
-        fallbackNotice: notice,
-      );
-    }
-
-    // 3. CON CONEXIÓN A INTERNET:
-    // -> [ Fetch HTTP API.Bible (Header: api-key) ]
-    try {
-      final remoteChapter = await apiBibleService.fetchChapter(
-        translationKey: cleanTranslation,
-        bookNumber: bookNumber,
-        chapterNumber: chapterNumber,
-        bookCode: bookCode,
-        bookName: bookName,
-        activeApiKey: apiKey,
-      );
-
-      if (remoteChapter.verses.isNotEmpty) {
-        // -> [ Guardar en SQLite (Caché por Demanda) ]
-        final versesJson = json.encode(remoteChapter.verses.map((v) => v.toJson()).toList());
-        await database.saveChapter(
-          translationKey: cleanTranslation,
-          bookNumber: bookNumber,
-          bookCode: bookCode ?? ApiBibleService.resolveBookCode(bookNumber),
-          bookName: remoteChapter.bookName,
-          chapter: chapterNumber,
-          versesJson: versesJson,
-          verseCount: remoteChapter.verses.length,
-        );
-
-        return remoteChapter;
-      }
-    } catch (e) {
-      debugPrint('Error descargando desde API.Bible ($cleanTranslation $bookNumber:$chapterNumber): $e');
-      final notice = 'No se pudo descargar "$translationKey" ($e). Mostrando versión base disponible.';
-      onOfflineFallbackNotice?.call(notice);
-
-      return _loadBaseOfflineFallback(
-        bookNumber: bookNumber,
-        chapterNumber: chapterNumber,
-        bookCode: bookCode,
-        bookName: bookName,
-        fallbackNotice: notice,
-      );
-    }
-
-    // Fallback de seguridad final a versión base
     return _loadBaseOfflineFallback(
       bookNumber: bookNumber,
       chapterNumber: chapterNumber,
       bookCode: bookCode,
       bookName: bookName,
-      fallbackNotice: 'Mostrando versión base disponible.',
+      fallbackNotice: notice,
     );
   }
 
@@ -283,5 +211,5 @@ class LocalBibleService {
   }
 }
 
-// Backward compatibility alias for any existing code
+// Backward compatibility alias for existing code
 typedef GetBibleService = LocalBibleService;

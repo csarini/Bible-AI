@@ -10,8 +10,7 @@ interface ScriptureCopyrightFooterProps {
 
 /**
  * ScriptureCopyrightFooter
- * Enforces mandatory copyright notices, direct Biblica/API.Bible attribution,
- * and the non-commercial disclaimer as required by license terms.
+ * Enforces legal notices and attribution for biblical scripture translations.
  * Styled in the "Digital Sanctuary" design system (Parchment #F9F6F0, Deep Navy #002147).
  */
 export const ScriptureCopyrightFooter: React.FC<ScriptureCopyrightFooterProps> = ({
@@ -19,7 +18,7 @@ export const ScriptureCopyrightFooter: React.FC<ScriptureCopyrightFooterProps> =
   className = '',
   isCompact = false,
 }) => {
-  // Only show footer for versions consumed from API.Bible
+  // Only show footer if required by translation
   if (!CopyrightGuardService.isApiBibleTranslation(translation)) {
     return null;
   }
@@ -63,7 +62,7 @@ export const ScriptureCopyrightFooter: React.FC<ScriptureCopyrightFooterProps> =
           "{info.standardCitation}"
         </p>
 
-        {/* Mandatory Direct Link for Biblica and Publishers */}
+        {/* Mandatory Direct Link for Publishers */}
         {info.directLinkUrl && (
           <div className="flex items-center flex-wrap gap-x-4 gap-y-1.5 pt-1 text-[11px]">
             <a
@@ -75,20 +74,6 @@ export const ScriptureCopyrightFooter: React.FC<ScriptureCopyrightFooterProps> =
               <span>{info.directLinkAnchorText || 'Visitar sitio oficial'}</span>
               <ExternalLink className="w-3 h-3 text-[#F25C05]" />
             </a>
-
-            {info.apiPlatformAttribution && (
-              <span className="text-[#002147]/70 flex items-center gap-1">
-                Servido a través de{' '}
-                <a
-                  href={info.apiPlatformAttribution.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-medium text-[#002147] hover:text-[#F25C05] underline transition-colors"
-                >
-                  {info.apiPlatformAttribution.name}
-                </a>
-              </span>
-            )}
           </div>
         )}
 

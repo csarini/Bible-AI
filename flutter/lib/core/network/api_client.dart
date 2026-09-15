@@ -11,7 +11,6 @@ import '../services/secure_storage_service.dart';
 /// Features:
 /// - Intercepts outgoing requests to attach `Authorization: Bearer <token>` automatically
 ///   from [SecureStorageService].
-/// - Attaches `api-key` header when calling API.Bible or endpoints requiring dynamic API keys.
 /// - Enforces timeouts and handles connection/unauthorized errors defensively.
 class ApiClient {
   final http.Client _httpClient;
@@ -31,7 +30,6 @@ class ApiClient {
   Future<Map<String, String>> _buildHeaders({
     Map<String, String>? additionalHeaders,
     bool requiresAuth = true,
-    bool attachBibleKey = false,
   }) async {
     final headers = <String, String>{
       'Content-Type': 'application/json',
@@ -42,13 +40,6 @@ class ApiClient {
       final token = await _secureStorage.getAuthToken();
       if (token != null && token.isNotEmpty) {
         headers['Authorization'] = 'Bearer $token';
-      }
-    }
-
-    if (attachBibleKey) {
-      final bibleKey = await _secureStorage.getBibleApiKey();
-      if (bibleKey.isNotEmpty) {
-        headers['api-key'] = bibleKey;
       }
     }
 
@@ -77,13 +68,11 @@ class ApiClient {
     String endpoint, {
     Map<String, String>? headers,
     bool requiresAuth = true,
-    bool attachBibleKey = false,
   }) async {
     final uri = _resolveUri(endpoint);
     final requestHeaders = await _buildHeaders(
       additionalHeaders: headers,
       requiresAuth: requiresAuth,
-      attachBibleKey: attachBibleKey,
     );
 
     try {
@@ -107,13 +96,11 @@ class ApiClient {
     Object? body,
     Map<String, String>? headers,
     bool requiresAuth = true,
-    bool attachBibleKey = false,
   }) async {
     final uri = _resolveUri(endpoint);
     final requestHeaders = await _buildHeaders(
       additionalHeaders: headers,
       requiresAuth: requiresAuth,
-      attachBibleKey: attachBibleKey,
     );
 
     final encodedBody =
