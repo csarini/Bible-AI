@@ -232,7 +232,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   }`}
                 >
                   <div className="flex items-center justify-between w-full">
-                    <span className="text-sm font-bold leading-tight">{tr.name}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold leading-tight">{tr.name}</span>
+                      {tr.abbreviation === 'rvr1960' && (
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded font-sans font-extrabold uppercase ${
+                          isSelected ? 'bg-[#FED65B] text-[#0B2B68]' : 'bg-[#FED65B]/20 text-[#745C00]'
+                        }`}>
+                          Por Defecto
+                        </span>
+                      )}
+                    </div>
                     <span
                       className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold ${
                         isSelected
@@ -240,7 +249,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                           : 'bg-emerald-500/20 text-emerald-700'
                       }`}
                     >
-                      {tr.badge || 'Offline Canónico'}
+                      {isSelected ? '✓ Activa' : tr.badge || 'Offline Canónico'}
                     </span>
                   </div>
                   <span className="block text-[11px] font-normal opacity-85 mt-1.5 leading-snug">

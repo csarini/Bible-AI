@@ -244,25 +244,20 @@ export const StorageService = {
       const data = localStorage.getItem(SETTINGS_STORAGE_KEY);
       if (!data) return defaultSettings;
       const parsed = JSON.parse(data);
-      // Migrate legacy translation identifiers if needed
-      let trans = parsed.translation;
-      if (
-        !trans ||
-        trans === 'valera' ||
-        trans === 'RVR1909' ||
-        trans === 'SSE' ||
-        trans === 'sse' ||
-        trans === 'rv1858' ||
-        trans === 'rvr09' ||
-        trans === 'kjv'
-      ) {
-        trans = 'rvr1960';
-      } else if (trans === 'RVR1960') {
-        trans = 'rvr1960';
-      } else if (trans === 'RVA2015') {
+      // Canonical translations are 'rvr1960' (default) and 'rva2015'
+      let trans = (parsed.translation || '').toLowerCase();
+      if (trans === 'rva2015' || trans.includes('2015')) {
         trans = 'rva2015';
+      } else {
+        trans = 'rvr1960';
       }
-      return { ...defaultSettings, ...parsed, translation: trans || 'rvr1960' };
+      const updated = { ...defaultSettings, ...parsed, translation: trans };
+      if (parsed.translation !== trans) {
+        try {
+          localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(updated));
+        } catch {}
+      }
+      return updated;
     } catch {
       return defaultSettings;
     }

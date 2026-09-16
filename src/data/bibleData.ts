@@ -7,15 +7,15 @@ import {
   StoredBibleBook
 } from '../services/bibleDatabaseService';
 
-// Default books list (Reina Valera 1909) read from the JSON schema
-export const BIBLE_BOOKS: BibleBook[] = getLocalBooksSync('valera');
+// Default books list (Reina-Valera 1960) read from the JSON schema
+export const BIBLE_BOOKS: BibleBook[] = getLocalBooksSync('rvr1960');
 
 // Dynamic query to get books for any translation from local DB or synchronous memory cache
-export function getBibleBooks(translation: string = 'valera'): BibleBook[] {
+export function getBibleBooks(translation: string = 'rvr1960'): BibleBook[] {
   return getLocalBooksSync(translation);
 }
 
-export async function fetchBibleBooksAsync(translation: string = 'valera'): Promise<BibleBook[]> {
+export async function fetchBibleBooksAsync(translation: string = 'rvr1960'): Promise<BibleBook[]> {
   return await getBooksFromDB(translation);
 }
 
@@ -234,7 +234,7 @@ export function getRandomDailyVerseSync(topic?: string, excludeId?: string): Dai
 
 // Random scripture lookup from the Bible database / GetBible API
 export async function getRandomDailyVerse(
-  translation: string = 'valera',
+  translation: string = 'rvr1960',
   topic?: string,
   excludeId?: string
 ): Promise<DailyVerse> {
@@ -301,7 +301,7 @@ export async function getRandomDailyVerse(
 export async function fetchBibleChapter(
   bookId: string,
   chapter: number,
-  translation: string = 'valera',
+  translation: string = 'rvr1960',
   onNotification?: (msg: string) => void
 ): Promise<BibleVerse[]> {
   return await fetchChapterVerses(bookId, chapter, translation, onNotification);
@@ -310,7 +310,7 @@ export async function fetchBibleChapter(
 export async function fetchBibleChapterWithFallback(
   bookId: string,
   chapter: number,
-  translation: string = 'valera',
+  translation: string = 'rvr1960',
   onNotification?: (msg: string) => void
 ) {
   const { fetchChapterVersesWithFallback } = await import('../services/bibleDatabaseService');

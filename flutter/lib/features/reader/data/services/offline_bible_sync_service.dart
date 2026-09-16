@@ -153,9 +153,11 @@ class OfflineBibleSyncService {
           ];
 
           String? jsonString;
+          String? loadedPath;
           for (final p in possiblePaths) {
             try {
               jsonString = await rootBundle.loadString(p);
+              loadedPath = p;
               break;
             } catch (_) {}
           }
@@ -209,7 +211,7 @@ class OfflineBibleSyncService {
               await database.saveChaptersBatch(chaptersToInsert);
             }
           } catch (e) {
-            debugPrint('Local sync error for $filePath: $e');
+            debugPrint('Local sync error for ${loadedPath ?? config.key}: $e');
           }
 
           final count = await database.countStoredChapters();

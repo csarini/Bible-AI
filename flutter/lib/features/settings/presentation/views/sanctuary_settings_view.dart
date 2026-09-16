@@ -451,7 +451,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                       title: tr.name,
                       abbreviation: tr.abbreviation.toUpperCase(),
                       description: tr.subtitle,
-                      badge: tr.badge,
+                      badge: tr.id == 'rvr1960' ? 'POR DEFECTO' : tr.badge,
                       isOffline: tr.isOffline,
                       isSelected: translation == tr.id ||
                           translation == tr.abbreviation,

@@ -173,7 +173,7 @@ export const AIMentorView: React.FC<AIMentorViewProps> = ({
 
     try {
       const currentSettings = StorageService.getSettings();
-      const currentTr = currentSettings?.translation || 'valera';
+      const currentTr = currentSettings?.translation || 'rvr1960';
 
       // Clause III.B Compliance: Block sending copyrighted scripture strings to Generative AI
       const sanitizedPayload = activeVerseContext

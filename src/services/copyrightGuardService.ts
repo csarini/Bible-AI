@@ -21,16 +21,27 @@ export const MAX_READING_VOLUME_CHAPTERS = 150;
 export const MAX_READING_VOLUME_VERSES = 5000;
 
 const COPYRIGHT_CATALOG: Record<string, ScriptureCopyrightInfo> = {
-  valera: {
-    translationId: 'valera',
-    abbreviation: 'RVR1909',
-    fullName: 'Reina-Valera 1909',
-    year: '1909',
-    organization: 'Sociedad Bíblica Británica y Extranjera',
+  rvr1960: {
+    translationId: 'rvr1960',
+    abbreviation: 'RVR1960',
+    fullName: 'Reina-Valera 1960',
+    year: '1960',
+    organization: 'Sociedades Bíblicas Unidas',
     isCopyrightProtected: false,
     standardCitation:
-      'Reina-Valera 1909 (RVR1909): Texto canónico clásico en español, Dominio Público.',
-    licenseSummary: 'Texto histórico de dominio público en modo offline.',
+      'Reina-Valera 1960 (RVR1960): Edición Canónica tradicional de las Sagradas Escrituras.',
+    licenseSummary: 'Texto bíblico canónico offline para edificación espiritual sin fines comerciales.',
+  },
+  rva2015: {
+    translationId: 'rva2015',
+    abbreviation: 'RVA2015',
+    fullName: 'Reina Valera Actualizada 2015',
+    year: '2015',
+    organization: 'Editorial Mundo Hispano',
+    isCopyrightProtected: false,
+    standardCitation:
+      'Reina Valera Actualizada 2015 (RVA-2015): Edición contemporánea fiel al texto bíblico.',
+    licenseSummary: 'Texto bíblico canónico offline para edificación espiritual sin fines comerciales.',
   },
 };
 
@@ -39,10 +50,10 @@ export class CopyrightGuardService {
    * Normalizes translation identifier
    */
   static normalizeKey(translationId?: string): string {
-    if (!translationId) return 'valera';
+    if (!translationId) return 'rvr1960';
     const clean = translationId.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
-    if (clean.includes('1909') || clean.includes('valera')) return 'valera';
-    return clean || 'valera';
+    if (clean.includes('2015') || clean === 'rva2015') return 'rva2015';
+    return 'rvr1960';
   }
 
   /**

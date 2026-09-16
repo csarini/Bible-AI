@@ -423,7 +423,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
                   {bookMeta.testament === 'OT' ? 'Antiguo Testamento' : 'Nuevo Testamento'}
                 </span>
                 <span className="text-[11px] font-semibold opacity-75">
-                  {OFFICIAL_TRANSLATIONS.find(t => t.abbreviation === settings.translation || t.translation === settings.translation)?.name || (settings.translation === 'valera' ? 'Reina Valera (1909)' : settings.translation)}
+                  {OFFICIAL_TRANSLATIONS.find(t => t.abbreviation === settings.translation || t.translation === settings.translation)?.name || (settings.translation === 'rvr1960' || settings.translation === 'valera' ? 'Reina-Valera 1960' : settings.translation)}
                 </span>
               </div>
               <h2 className={`font-serif italic font-bold text-2xl sm:text-3xl md:text-4xl tracking-tight mt-0.5 ${headingTextClass}`}>
