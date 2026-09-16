@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import '../../../../core/storage/app_database.dart';
-import '../../../../core/services/copyright_guard_service.dart';
 
 // =============================================================================
 // DTOs FOR SCRIPTURE READS FROM LOCAL SQLITE DATABASE
@@ -157,7 +156,8 @@ class LocalBibleService {
         }
       }
     } catch (e) {
-      debugPrint('Error leyendo capítulo desde SQLite ($cleanTranslation $bookNumber:$chapterNumber): $e');
+      debugPrint(
+          'Error leyendo capítulo desde SQLite ($cleanTranslation $bookNumber:$chapterNumber): $e');
     }
 
     // 2. Fallback to base canonical offline version ('rvr1960')
@@ -181,7 +181,8 @@ class LocalBibleService {
     required String fallbackNotice,
   }) async {
     const baseTranslation = 'rvr1960';
-    final baseEntry = await database.getChapter(baseTranslation, bookNumber, chapterNumber);
+    final baseEntry =
+        await database.getChapter(baseTranslation, bookNumber, chapterNumber);
     if (baseEntry != null && baseEntry.versesJson.isNotEmpty) {
       final decodedList = json.decode(baseEntry.versesJson) as List<dynamic>;
       final verses = decodedList
