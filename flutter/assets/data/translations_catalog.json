@@ -1,13 +1,25 @@
 {
-  "valera": {
-    "translation": "Reina Valera (1909)",
+  "RVR1960": {
+    "translation": "Biblia Reina Valera 1960",
     "abbreviation": "valera",
     "description": "Reina-Valera 1909 con números de Strong",
     "lang": "es",
     "language": "Spanish",
     "direction": "LTR",
     "encoding": "UTF-8",
-    "distribution_abbreviation": "valera",
-    "url": "https://api.getbible.net/v2/valera.json"
+    "distribution_abbreviation": "rvr1960",
+    "url": "https://api.getbible.net/v2/rvr1960.json"
+  },
+  "RVA2015": {
+    "translation": "Reina Valera Actualizada (2015)",
+    "abbreviation": "valera",
+    "description": "Reina-Valera 1909 con números de Strong",
+    "lang": "es",
+    "language": "Spanish",
+    "direction": "LTR",
+    "encoding": "UTF-8",
+    "distribution_abbreviation": "rva2015",
+    "url": "https://api.getbible.net/v2/rva2015.json"
   }
+
 }
