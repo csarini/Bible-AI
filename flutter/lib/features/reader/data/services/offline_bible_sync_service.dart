@@ -29,7 +29,7 @@ class OfflineSyncStatus {
     this.downloadedChapters = 0,
     this.progressPercent = 0.0,
     this.isComplete = false,
-    this.activeTranslation = 'valera',
+    this.activeTranslation = 'rvr1960',
     this.activeBookName = '',
     this.activeChapter = 0,
     this.lastError,
@@ -122,11 +122,12 @@ class OfflineBibleSyncService {
             (
               key: specificTranslation,
               folder: '${specificTranslation}_json',
-              prefix: specificTranslation
+              prefix: 'book'
             )
           ]
         : [
-            (key: 'valera', folder: 'valera_json', prefix: 'valera'),
+            (key: 'rvr1960', folder: 'rvr1960_json', prefix: 'book'),
+            (key: 'rva2015', folder: 'rva2015_json', prefix: 'book'),
           ];
 
     try {
@@ -146,11 +147,22 @@ class OfflineBibleSyncService {
             if (_isCancelled) break;
           }
 
-          final filePath =
-              'assets/data/${config.folder}/${config.prefix}_$bookNr.json';
+          final possiblePaths = [
+            'assets/data/${config.folder}/book_$bookNr.json',
+            'assets/data/${config.folder}/${config.key}_$bookNr.json',
+          ];
+
+          String? jsonString;
+          for (final p in possiblePaths) {
+            try {
+              jsonString = await rootBundle.loadString(p);
+              break;
+            } catch (_) {}
+          }
+
+          if (jsonString == null) continue;
 
           try {
-            final jsonString = await rootBundle.loadString(filePath);
             final bookMap = json.decode(jsonString) as Map<String, dynamic>;
             final bookName = bookMap['name'] as String? ?? 'Libro $bookNr';
             final meta = kCanonicalBookMetadata[bookNr] ??

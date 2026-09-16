@@ -103,13 +103,16 @@ class _SanctuarySearchLibraryViewState
 
   String _getTranslationLabel(String translationKey) {
     switch (translationKey) {
+      case 'rvr1960':
+        return 'Reina Valera 1960';
+      case 'rva2015':
+        return 'Reina Valera 2015';
       case 'sse':
         return 'Biblia del Oso 1569';
       case 'rv1858':
         return 'Reina Valera NT 1858';
-      case 'valera':
       default:
-        return 'Reina Valera 1909';
+        return 'Reina Valera 1960';
     }
   }
 

@@ -119,7 +119,7 @@ DIRECTIVAS CRÍTICAS DE RESPUESTA:
     // Resolve active translation and sanitize according to Clause III.B
     final activeTranslation = translationId ??
         await database.getSetting('bible_translation') ??
-        'valera';
+        'rvr1960';
     final sanitizedVerse = CopyrightGuardService.sanitizeAiMentorPayload(
       verseReference: cleanRef,
       verseText: verseText,

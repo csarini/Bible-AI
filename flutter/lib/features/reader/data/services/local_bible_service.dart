@@ -81,7 +81,7 @@ class LocalBibleChapterResponse {
     final rawVerses = json['verses'] as List<dynamic>? ?? [];
     return LocalBibleChapterResponse(
       translation: json['translation'] as String? ?? '',
-      abbreviation: json['abbreviation'] as String? ?? 'valera',
+      abbreviation: json['abbreviation'] as String? ?? 'rvr1960',
       lang: json['lang'] as String? ?? 'es',
       language: json['language'] as String? ?? 'Spanish',
       direction: json['direction'] as String? ?? 'LTR',
@@ -114,7 +114,7 @@ class LocalBibleService {
 
   /// Reads scripture directly from the local SQLite database.
   /// If the requested translation is not present, falls back cleanly to the
-  /// base canonical 'valera' translation stored locally.
+  /// base canonical 'rvr1960' translation stored locally.
   Future<LocalBibleChapterResponse> fetchChapter({
     required String translationKey,
     required int bookNumber,
@@ -160,8 +160,8 @@ class LocalBibleService {
       debugPrint('Error leyendo capítulo desde SQLite ($cleanTranslation $bookNumber:$chapterNumber): $e');
     }
 
-    // 2. Fallback to base canonical offline version ('valera')
-    final notice = 'Mostrando versión canónica local Reina-Valera 1909.';
+    // 2. Fallback to base canonical offline version ('rvr1960')
+    final notice = 'Mostrando versión canónica local Reina-Valera 1960.';
     onOfflineFallbackNotice?.call(notice);
 
     return _loadBaseOfflineFallback(
@@ -180,7 +180,7 @@ class LocalBibleService {
     String? bookName,
     required String fallbackNotice,
   }) async {
-    const baseTranslation = 'valera';
+    const baseTranslation = 'rvr1960';
     final baseEntry = await database.getChapter(baseTranslation, bookNumber, chapterNumber);
     if (baseEntry != null && baseEntry.versesJson.isNotEmpty) {
       final decodedList = json.decode(baseEntry.versesJson) as List<dynamic>;

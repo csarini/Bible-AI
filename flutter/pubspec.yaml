@@ -64,5 +64,6 @@ flutter:
     - assets/images/
     - assets/icon/
     - assets/data/
-    - assets/data/valera_json/
+    - assets/data/rvr1960_json/
+    - assets/data/rva2015_json/
 

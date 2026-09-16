@@ -76,22 +76,23 @@ let isDatabaseReady = false;
 export function isBuiltInOfflineTranslation(tr?: string): boolean {
   if (!tr) return true;
   const clean = tr.toLowerCase().replace(/[^a-z0-9]/g, '');
-  return clean === 'valera' || clean.includes('1909');
+  return clean === 'rvr1960' || clean.includes('1960') || clean === 'rva2015' || clean.includes('2015');
 }
 
-// Normalize translation code (valera, nvi, nbla, bes, vbl, pddpt, bsb)
+// Normalize translation code (rvr1960, rva2015, etc.)
 export function normalizeTranslationKey(tr?: string): string {
-  if (!tr) return 'valera';
+  if (!tr) return 'rvr1960';
   const clean = tr.toLowerCase().replace(/[^a-z0-9]/g, '');
-  if (clean.includes('1960') || clean === 'rvr1960') return 'nvi';
+  if (clean === 'rvr1960' || clean.includes('1960')) return 'rvr1960';
+  if (clean === 'rva2015' || clean.includes('2015')) return 'rva2015';
   if (clean === 'nvi') return 'nvi';
   if (clean === 'nbla') return 'nbla';
   if (clean === 'bes') return 'bes';
   if (clean === 'vbl') return 'vbl';
   if (clean === 'pddpt') return 'pddpt';
   if (clean === 'bsb') return 'bsb';
-  if (clean.includes('valera') || clean.includes('1909')) return 'valera';
-  return clean || 'valera';
+  if (clean.includes('valera') || clean.includes('1909')) return 'rvr1960';
+  return clean || 'rvr1960';
 }
 
 // Convert raw JSON entry from data/raw/ to full StoredBibleBook
@@ -531,7 +532,7 @@ export interface FetchChapterResult {
 export async function fetchChapterVersesWithFallback(
   bookId: string,
   chapter: number,
-  translation: string = 'valera',
+  translation: string = 'rvr1960',
   onNotification?: (msg: string) => void
 ): Promise<FetchChapterResult> {
   const tr = normalizeTranslationKey(translation);
@@ -555,20 +556,20 @@ export async function fetchChapterVersesWithFallback(
     };
   }
 
-  // 3. Fallback seguro a la versión canónica base 'valera'
-  const fallbackVerses = await getChapterFromDB(bookId, chapter, 'valera');
+  // 3. Fallback seguro a la versión canónica base 'rvr1960'
+  const fallbackVerses = await getChapterFromDB(bookId, chapter, 'rvr1960');
   if (fallbackVerses && isGenuineVerses(fallbackVerses)) {
     return {
       verses: fallbackVerses,
       isOfflineFallback: true,
       notice: 'Mostrando versión canónica offline disponible.',
-      loadedTranslation: 'valera',
+      loadedTranslation: 'rvr1960',
     };
   }
 
   return {
     verses: [],
-    loadedTranslation: 'valera',
+    loadedTranslation: 'rvr1960',
   };
 }
 
@@ -576,7 +577,7 @@ export async function fetchChapterVersesWithFallback(
 export async function fetchChapterVerses(
   bookId: string,
   chapter: number,
-  translation: string = 'valera',
+  translation: string = 'rvr1960',
   onNotification?: (msg: string) => void
 ): Promise<BibleVerse[]> {
   const res = await fetchChapterVersesWithFallback(bookId, chapter, translation, onNotification);
@@ -588,7 +589,7 @@ export async function fetchChapterVerses(
  * Mirrors Flutter's Drift getRandomDailyVerseFromDb implementation.
  */
 export async function getRandomDailyVerseFromDB(
-  activeTranslation: string = 'valera',
+  activeTranslation: string = 'rvr1960',
   themeFilter?: string,
   excludeId?: string
 ) {

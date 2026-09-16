@@ -846,7 +846,7 @@ class SanctuarySettingsView extends ConsumerWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'La aplicación opera de manera autónoma con las Sagradas Escrituras (Reina Valera 1909) integradas localmente en la base de datos del dispositivo, sin requerir conexión a APIs externas para la lectura de la Palabra.',
+                        'La aplicación opera de manera autónoma con las Sagradas Escrituras (Reina-Valera 1960 y Reina Valera 2015) integradas localmente en la base de datos del dispositivo, sin requerir conexión a APIs externas para la lectura de la Palabra.',
                         style: GoogleFonts.inter(
                           fontSize: 11,
                           height: 1.45,

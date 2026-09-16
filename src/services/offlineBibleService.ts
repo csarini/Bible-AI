@@ -31,7 +31,7 @@ export async function saveChapterOffline(
   bookId: string,
   chapter: number,
   verses: BibleVerse[],
-  translation: string = 'valera'
+  translation: string = 'rvr1960'
 ): Promise<void> {
   await saveChapterToDB(bookId, chapter, verses, translation);
 }
@@ -40,7 +40,7 @@ export async function saveChapterOffline(
 export async function getChapterOffline(
   bookId: string,
   chapter: number,
-  translation: string = 'valera'
+  translation: string = 'rvr1960'
 ): Promise<BibleVerse[] | null> {
   return await getChapterFromDB(bookId, chapter, translation);
 }
@@ -125,7 +125,7 @@ class BackgroundBibleDownloader {
   private downloadedCount = 0;
   private activeBookName = '';
   private activeChapterNum = 0;
-  private activeTranslation = 'valera';
+  private activeTranslation = 'rvr1960';
 
   constructor() {
     this.init();
@@ -193,7 +193,7 @@ class BackgroundBibleDownloader {
     }
   }
 
-  public async startDownload(translation: string = 'valera') {
+  public async startDownload(translation: string = 'rvr1960') {
     this.activeTranslation = normalizeTranslationKey(translation);
 
     if (this.isRunning) {

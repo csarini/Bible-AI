@@ -76,7 +76,7 @@ export const QuickSettingsModal: React.FC<QuickSettingsModalProps> = ({
       fontSize: 'medium',
       fontFamily: 'Literata',
       lineHeight: 'relaxed',
-      translation: 'RVR1960',
+      translation: 'rvr1960',
       themeMode: 'light',
       showVerseNumbers: true
     });

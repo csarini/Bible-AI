@@ -18,7 +18,7 @@ class ShareService {
     String? personalReflection,
     String? translation,
   }) async {
-    final trKey = translation ?? 'valera';
+    final trKey = translation ?? 'rvr1960';
     final isProtected = CopyrightGuardService.isCopyrightProtected(trKey);
     final versionStr = ' (${trKey.toUpperCase()})';
     final buffer = StringBuffer();

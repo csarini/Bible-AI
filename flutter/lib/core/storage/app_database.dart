@@ -38,9 +38,9 @@ class BibleVerseSearchResult {
 
 @DataClassName('BibleBookEntry')
 class LocalBibleBooks extends Table {
-  TextColumn get id => text()(); // e.g. 'valera_1', 'sse_40'
+  TextColumn get id => text()(); // e.g. 'rvr1960_1', 'rva2015_40'
   TextColumn get translationKey =>
-      text().named('translation_key')(); // 'valera', 'sse', 'rv1858'
+      text().named('translation_key')(); // 'rvr1960', 'rva2015'
   IntColumn get bookNumber => integer().named('book_number')(); // 1..66
   TextColumn get bookCode => text().named('book_code')(); // 'GEN', 'MAT', etc.
   TextColumn get name => text()(); // 'Génesis', 'San Mateo'
@@ -58,9 +58,9 @@ class LocalBibleBooks extends Table {
 
 @DataClassName('BibleTranslationEntry')
 class LocalBibleTranslations extends Table {
-  TextColumn get id => text()(); // 'valera', 'sse', 'rv1858'
-  TextColumn get name => text()(); // 'Reina Valera (1909)'
-  TextColumn get abbreviation => text()(); // 'valera'
+  TextColumn get id => text()(); // 'rvr1960', 'rva2015'
+  TextColumn get name => text()(); // 'Biblia Reina Valera 1960'
+  TextColumn get abbreviation => text()(); // 'rvr1960'
   TextColumn get description => text().nullable()();
   TextColumn get language => text().withDefault(const Constant('Spanish'))();
   TextColumn get direction => text().withDefault(const Constant('LTR'))();
@@ -156,7 +156,7 @@ class FoodCourtMenus extends Table {
 
 @DataClassName('BibleChapterEntry')
 class LocalBibleChapters extends Table {
-  TextColumn get id => text()(); // e.g. 'valera_40_1' or 'rv1858_1_1'
+  TextColumn get id => text()(); // e.g. 'rvr1960_40_1' or 'rva2015_1_1'
   TextColumn get translationKey => text().named('translation_key')();
   IntColumn get bookNumber => integer().named('book_number')();
   TextColumn get bookCode => text().named('book_code')();
@@ -218,8 +218,8 @@ class AiChatMessages extends Table {
 )
 @DataClassName('LocalVerse')
 class LocalVerses extends Table {
-  TextColumn get id => text()(); // e.g. 'valera_php-4-6'
-  TextColumn get translationId => text().named('translation_id')(); // 'valera', 'sse', 'rv1858'
+  TextColumn get id => text()(); // e.g. 'rvr1960_php-4-6'
+  TextColumn get translationId => text().named('translation_id')(); // 'rvr1960', 'rva2015'
   TextColumn get bookId => text().named('book_id')(); // 'PHP', 'JHN'
   TextColumn get bookName => text().named('book_name')(); // 'Filipenses'
   IntColumn get chapter => integer()();
@@ -413,15 +413,18 @@ class AppDatabase extends _$AppDatabase {
         final translationsList = <LocalBibleTranslationsCompanion>[];
         catalogJson.forEach((key, val) {
           if (val is Map<String, dynamic>) {
+            final abbr =
+                (val['abbreviation'] as String? ?? key).toLowerCase().trim();
+            final name = val['translation'] as String? ?? key;
             translationsList.add(LocalBibleTranslationsCompanion.insert(
-              id: key,
-              name: val['translation'] as String? ?? key,
-              abbreviation: val['abbreviation'] as String? ?? key,
+              id: abbr,
+              name: name,
+              abbreviation: abbr,
               description: Value(val['description'] as String?),
               language: Value(val['language'] as String? ?? 'Spanish'),
               direction: Value(val['direction'] as String? ?? 'LTR'),
               distributionAbbreviation:
-                  Value(val['distribution_abbreviation'] as String?),
+                  Value(val['distribution_abbreviation'] as String? ?? abbr),
               url: Value(val['url'] as String?),
             ));
           }
@@ -437,45 +440,66 @@ class AppDatabase extends _$AppDatabase {
         // Log error silently and continue with books
       }
 
-      // 2. Seed Books for each available translation from assets/data/books_*.json
-      final translationFiles = {
-        'valera': 'assets/data/books_valera.json',
-      };
-
+      // 2. Seed Books for each available translation dynamically from translations_catalog.json
       final allBooksToInsert = <LocalBibleBooksCompanion>[];
 
-      for (final entry in translationFiles.entries) {
-        final transKey = entry.key;
-        final assetPath = entry.value;
+      try {
+        final catalogString = await rootBundle
+            .loadString('assets/data/translations_catalog.json');
+        final catalogJson = json.decode(catalogString) as Map<String, dynamic>;
 
-        try {
-          final booksString = await rootBundle.loadString(assetPath);
-          final booksJson = json.decode(booksString) as Map<String, dynamic>;
+        for (final entry in catalogJson.entries) {
+          final catalogKey = entry.key;
+          final val = entry.value;
+          if (val is! Map<String, dynamic>) continue;
 
-          booksJson.forEach((key, val) {
-            if (val is Map<String, dynamic>) {
-              final nr = val['nr'] as int? ?? int.tryParse(key) ?? 1;
-              final name = val['name'] as String? ?? '';
-              final meta = kCanonicalBookMetadata[nr] ??
-                  (code: 'BK$nr', chapters: 1, isNT: nr >= 40);
+          final abbr = (val['abbreviation'] as String? ?? catalogKey)
+              .toLowerCase()
+              .trim();
+          final possibleBookPaths = [
+            'assets/data/books_$abbr.json',
+            'assets/data/books_${catalogKey.toLowerCase()}.json',
+          ];
 
-              allBooksToInsert.add(LocalBibleBooksCompanion.insert(
-                id: '${transKey}_$nr',
-                translationKey: transKey,
-                bookNumber: nr,
-                bookCode: meta.code,
-                name: name,
-                totalChapters: meta.chapters,
-                isNewTestament: Value(meta.isNT),
-                url: Value(val['url'] as String?),
-                sha: Value(val['sha'] as String?),
-              ));
+          String? booksString;
+          for (final p in possibleBookPaths) {
+            try {
+              booksString = await rootBundle.loadString(p);
+              break;
+            } catch (_) {}
+          }
+
+          if (booksString != null) {
+            try {
+              final booksJson =
+                  json.decode(booksString) as Map<String, dynamic>;
+
+              booksJson.forEach((key, bVal) {
+                if (bVal is Map<String, dynamic>) {
+                  final nr = bVal['nr'] as int? ?? int.tryParse(key) ?? 1;
+                  final name = bVal['name'] as String? ?? '';
+                  final meta = kCanonicalBookMetadata[nr] ??
+                      (code: 'BK$nr', chapters: 1, isNT: nr >= 40);
+
+                  allBooksToInsert.add(LocalBibleBooksCompanion.insert(
+                    id: '${abbr}_$nr',
+                    translationKey: abbr,
+                    bookNumber: nr,
+                    bookCode: meta.code,
+                    name: name.isNotEmpty ? name : meta.code,
+                    totalChapters: meta.chapters,
+                    isNewTestament: Value(meta.isNT),
+                    url: Value(bVal['url'] as String?),
+                    sha: Value(bVal['sha'] as String?),
+                  ));
+                }
+              });
+            } catch (e) {
+              // Continue to next translation file if any issue
             }
-          });
-        } catch (e) {
-          // Continue to next translation file if any issue
+          }
         }
-      }
+      } catch (_) {}
 
       if (allBooksToInsert.isNotEmpty) {
         await batch((b) {
@@ -684,12 +708,32 @@ class AppDatabase extends _$AppDatabase {
     return result.read(countExp) ?? 0;
   }
 
-  Future<bool> isBibleDataImported() async {
+  Future<bool> isBibleDataImported([List<String>? expectedTranslations]) async {
     final expectedChaptersPerTranslation = kCanonicalBookMetadata.values
         .fold<int>(0, (total, book) => total + book.chapters);
-    const expectedTranslations = ['valera'];
 
-    for (final translation in expectedTranslations) {
+    List<String> translationsToCheck = expectedTranslations ?? [];
+    if (translationsToCheck.isEmpty) {
+      try {
+        final catalogString = await rootBundle
+            .loadString('assets/data/translations_catalog.json');
+        final catalogJson = json.decode(catalogString) as Map<String, dynamic>;
+        for (final entry in catalogJson.entries) {
+          final val = entry.value;
+          if (val is Map<String, dynamic>) {
+            final abbr = (val['abbreviation'] as String? ?? entry.key)
+                .toLowerCase()
+                .trim();
+            translationsToCheck.add(abbr);
+          }
+        }
+      } catch (_) {}
+    }
+    if (translationsToCheck.isEmpty) {
+      translationsToCheck = ['rvr1960', 'rva2015'];
+    }
+
+    for (final translation in translationsToCheck) {
       final count = await countStoredChapters(translation);
       if (count < expectedChaptersPerTranslation) return false;
     }
@@ -1025,7 +1069,7 @@ class AppDatabase extends _$AppDatabase {
       final existing = await (select(localVerses)..limit(1)).get();
       if (existing.isNotEmpty) return;
 
-      const supportedTranslations = ['valera'];
+      const supportedTranslations = ['rvr1960', 'rva2015'];
       final List<LocalVersesCompanion> entries = [];
 
       for (final transId in supportedTranslations) {

@@ -16,7 +16,7 @@ enum AppVisualTheme {
 final appVisualThemeModeProvider =
     StateProvider<AppVisualTheme>((ref) => AppVisualTheme.light);
 final appTranslationProvider =
-    StateProvider<String>((ref) => 'valera'); // 'valera', 'sse', 'rv1858'
+    StateProvider<String>((ref) => 'rvr1960'); // 'rvr1960', 'rva2015'
 /// Global provider alias for active Bible translation strictly enforcing single-translation context
 final activeTranslationProvider = appTranslationProvider;
 final appFontSizeProvider = StateProvider<String>(

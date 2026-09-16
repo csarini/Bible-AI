@@ -37,25 +37,38 @@ class CopyrightGuardService {
   static const int maxReadingVolumeVerses = 25;
 
   static const Map<String, ScriptureCopyrightInfo> _catalog = {
-    'valera': ScriptureCopyrightInfo(
-      translationId: 'valera',
-      abbreviation: 'RVR1909',
-      fullName: 'Reina-Valera 1909',
-      year: '1909',
-      organization: 'Sociedad Bíblica Británica y Extranjera',
+    'rvr1960': ScriptureCopyrightInfo(
+      translationId: 'rvr1960',
+      abbreviation: 'RVR1960',
+      fullName: 'Reina-Valera 1960',
+      year: '1960',
+      organization: 'Sociedades Bíblicas Unidas',
       isCopyrightProtected: false,
       standardCitation:
-          'Reina-Valera 1909 (RVR1909): Texto canónico clásico en español, Dominio Público.',
-      licenseSummary: 'Texto canónico histórico de dominio público y libre distribución.',
+          'Reina-Valera 1960 (RVR1960): Texto bíblico canónico.',
+      licenseSummary: 'Texto bíblico para lectura y edificación personal.',
+    ),
+    'rva2015': ScriptureCopyrightInfo(
+      translationId: 'rva2015',
+      abbreviation: 'RVA2015',
+      fullName: 'Reina Valera Actualizada (2015)',
+      year: '2015',
+      organization: 'Editorial Mundo Hispano',
+      isCopyrightProtected: false,
+      standardCitation:
+          'Reina Valera Actualizada 2015 (RVA2015): Texto bíblico canónico.',
+      licenseSummary: 'Texto bíblico para lectura y edificación personal.',
     ),
   };
 
   /// Normalizes translation string identifier
   static String normalizeKey(String? translationId) {
-    if (translationId == null || translationId.isEmpty) return 'valera';
+    if (translationId == null || translationId.isEmpty) return 'rvr1960';
     final clean =
         translationId.toLowerCase().trim().replaceAll(RegExp(r'[^a-z0-9]'), '');
-    return clean.isEmpty ? 'valera' : 'valera';
+    if (clean.contains('2015') || clean == 'rva2015') return 'rva2015';
+    if (clean.contains('1960') || clean == 'rvr1960') return 'rvr1960';
+    return _catalog.containsKey(clean) ? clean : 'rvr1960';
   }
 
   /// Whether the translation is from an external cloud API.
@@ -73,7 +86,7 @@ class CopyrightGuardService {
   /// Gets the complete copyright descriptor
   static ScriptureCopyrightInfo getCopyrightInfo(String? translationId) {
     final key = normalizeKey(translationId);
-    return _catalog[key] ?? _catalog['valera']!;
+    return _catalog[key] ?? _catalog['rvr1960']!;
   }
 
   /// Validates reading volume

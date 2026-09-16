@@ -52,7 +52,7 @@ class ReaderState {
 
   const ReaderState({
     this.status = ReaderStatus.initial,
-    this.translationKey = 'valera',
+    this.translationKey = 'rvr1960',
     this.currentBookNumber = 1,
     this.currentBookName = 'Génesis',
     this.currentBookId = 'GEN',

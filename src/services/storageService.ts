@@ -236,7 +236,7 @@ export const StorageService = {
       fontSize: 'medium',
       fontFamily: 'Literata',
       lineHeight: 'relaxed',
-      translation: 'valera',
+      translation: 'rvr1960',
       themeMode: 'light',
       showVerseNumbers: true
     };
@@ -247,7 +247,8 @@ export const StorageService = {
       // Migrate legacy translation identifiers if needed
       let trans = parsed.translation;
       if (
-        trans === 'RVR1960' ||
+        !trans ||
+        trans === 'valera' ||
         trans === 'RVR1909' ||
         trans === 'SSE' ||
         trans === 'sse' ||
@@ -255,9 +256,13 @@ export const StorageService = {
         trans === 'rvr09' ||
         trans === 'kjv'
       ) {
-        trans = 'valera';
+        trans = 'rvr1960';
+      } else if (trans === 'RVR1960') {
+        trans = 'rvr1960';
+      } else if (trans === 'RVA2015') {
+        trans = 'rva2015';
       }
-      return { ...defaultSettings, ...parsed, translation: trans || 'valera' };
+      return { ...defaultSettings, ...parsed, translation: trans || 'rvr1960' };
     } catch {
       return defaultSettings;
     }

@@ -21,10 +21,18 @@ class BibleTranslationConfig {
 class BibleTranslationsCatalog {
   static const List<BibleTranslationConfig> allTranslations = [
     BibleTranslationConfig(
-      id: 'valera',
-      abbreviation: 'valera',
-      name: 'Reina-Valera 1909 (RVR1909)',
-      subtitle: 'Texto canónico en español clásico protestante',
+      id: 'rvr1960',
+      abbreviation: 'rvr1960',
+      name: 'Biblia Reina Valera 1960',
+      subtitle: 'Reina-Valera 1960 con números de Strong',
+      badge: '100% Offline',
+      isOffline: true,
+    ),
+    BibleTranslationConfig(
+      id: 'rva2015',
+      abbreviation: 'rva2015',
+      name: 'Reina Valera Actualizada (2015)',
+      subtitle: 'Reina-Valera 2015 con números de Strong',
       badge: '100% Offline',
       isOffline: true,
     ),

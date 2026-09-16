@@ -12,11 +12,15 @@ import {
   Upload,
   HardDrive,
   FileJson,
-  RefreshCw,
-  Sparkles
+  Sparkles,
+  Palette,
+  Type,
+  Sliders,
+  Check,
+  AlertCircle
 } from 'lucide-react';
 import { StorageService } from '../services/storageService';
-import { ReadingSettings, OFFICIAL_TRANSLATIONS } from '../types';
+import { ReadingSettings, OFFICIAL_TRANSLATIONS, ThemeMode } from '../types';
 
 interface SettingsViewProps {
   settings: ReadingSettings;
@@ -115,7 +119,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       }
     };
     reader.readAsText(file);
-    // Reset file input so user can re-upload same file if needed
     e.target.value = '';
   };
 
@@ -127,11 +130,222 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           Configuración
         </h2>
         <p className="text-[12px] font-label-caps text-[#767683] uppercase tracking-wider">
-          Personalización del Santuario y Conexión de IA
+          Personalización del Santuario, Lectura y Conexión de IA
         </p>
       </div>
 
-      {/* AI Connection Settings Card */}
+      {/* Section 1: Apariencia & Tonalidad Visual */}
+      <div className="bg-[#FBF9F4] border border-[#C6C5D4] rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="flex items-center justify-between border-b border-[#C6C5D4]/50 pb-3">
+          <div className="flex items-center gap-2.5 text-[#000666]">
+            <Palette className="w-5 h-5 text-[#F47B20]" />
+            <h3 className="font-display-scripture text-lg font-bold">
+              Apariencia & Tonalidad Visual
+            </h3>
+          </div>
+          <span className="text-[10px] font-sans font-bold text-[#0B2B68] bg-[#0B2B68]/10 px-2.5 py-0.5 rounded-full uppercase">
+            3 Modos
+          </span>
+        </div>
+
+        <p className="text-xs text-[#454652] leading-relaxed">
+          Elige la tonalidad visual que mejor se adapte a tu iluminación ambiental:
+        </p>
+
+        <div className="grid grid-cols-3 gap-2.5 sm:gap-3 pt-1">
+          {[
+            { id: 'light', label: '☀️ Claro', subtitle: 'Pergamino', bg: 'bg-[#FBF9F4]', text: 'text-[#0B2B68]' },
+            { id: 'sepia', label: '📜 Sepia', subtitle: 'Cálido', bg: 'bg-[#F4EBD9]', text: 'text-[#4A3B32]' },
+            { id: 'dark', label: '🌙 Oscuro', subtitle: 'Noche', bg: 'bg-[#141824]', text: 'text-[#E2E8F0]' }
+          ].map((theme) => {
+            const isSelected = settings.themeMode === theme.id;
+            return (
+              <button
+                key={theme.id}
+                id={`settings-theme-${theme.id}`}
+                onClick={() => {
+                  onUpdateSettings({ themeMode: theme.id as ThemeMode });
+                  onToast(`Tema ${theme.subtitle} aplicado`);
+                }}
+                className={`p-3 sm:p-3.5 rounded-xl border text-center flex flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
+                  isSelected
+                    ? 'border-[#0B2B68] ring-2 ring-[#F47B20] bg-white shadow-xs font-bold'
+                    : 'border-[#C6C5D4]/60 bg-white/70 hover:border-[#0B2B68]/40'
+                }`}
+              >
+                <span className="text-sm font-bold">{theme.label}</span>
+                <span className="text-[11px] text-[#767683]">{theme.subtitle}</span>
+                {isSelected && (
+                  <span className="mt-1 inline-flex items-center gap-1 text-[10px] font-sans font-bold text-[#059669]">
+                    <Check className="w-3 h-3" /> Activo
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Section 2: Preferencias de Lectura & Traducción Canónica */}
+      <div className="bg-[#FBF9F4] border border-[#C6C5D4] rounded-2xl p-5 sm:p-6 shadow-xs space-y-5">
+        <div className="flex items-center justify-between border-b border-[#C6C5D4]/50 pb-3">
+          <div className="flex items-center gap-2.5 text-[#000666]">
+            <Sliders className="w-5 h-5 text-[#00A3E0]" />
+            <h3 className="font-display-scripture text-lg font-bold">
+              Preferencias de Lectura & Tipografía
+            </h3>
+          </div>
+          <span className="text-[11px] font-sans font-bold text-[#059669] bg-[#059669]/10 px-2.5 py-0.5 rounded-full">
+            100% Offline
+          </span>
+        </div>
+
+        {/* Translation Preference */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="block text-xs font-label-caps text-[#454652] uppercase font-semibold">
+              Versión / Traducción Bíblica Canónica
+            </span>
+            <span className="text-[11px] font-sans font-bold text-[#F47B20] bg-[#F47B20]/10 px-2 py-0.5 rounded-full">
+              {OFFICIAL_TRANSLATIONS.length} Versiones Locales
+            </span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {OFFICIAL_TRANSLATIONS.map((tr) => {
+              const isSelected =
+                settings.translation === tr.abbreviation ||
+                settings.translation === tr.translation ||
+                (tr.abbreviation === 'rvr1960' && (settings.translation === 'valera' || settings.translation === 'RVR1960' || settings.translation === 'RVR1909')) ||
+                (tr.abbreviation === 'rva2015' && (settings.translation === 'RVA2015' || settings.translation === 'rva2015'));
+              return (
+                <button
+                  key={tr.abbreviation}
+                  id={`settings-trans-${tr.abbreviation}`}
+                  onClick={() => {
+                    onUpdateSettings({ translation: tr.abbreviation });
+                    onToast(`Traducción actualizada a ${tr.name}`);
+                  }}
+                  className={`p-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer text-left flex flex-col justify-between border ${
+                    isSelected
+                      ? 'bg-[#0B2B68] text-[#FED65B] border-[#0B2B68] shadow-xs ring-2 ring-[#F47B20]/60 font-black'
+                      : 'bg-white text-[#454652] border-[#C6C5D4]/70 hover:border-[#0B2B68]/40'
+                  }`}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span className="text-sm font-bold leading-tight">{tr.name}</span>
+                    <span
+                      className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold ${
+                        isSelected
+                          ? 'bg-[#FED65B]/25 text-[#FED65B]'
+                          : 'bg-emerald-500/20 text-emerald-700'
+                      }`}
+                    >
+                      {tr.badge || 'Offline Canónico'}
+                    </span>
+                  </div>
+                  <span className="block text-[11px] font-normal opacity-85 mt-1.5 leading-snug">
+                    {tr.subtitle}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-[#C6C5D4]/40">
+          {/* FontSize Preference */}
+          <div className="space-y-1.5">
+            <span className="block text-xs font-label-caps text-[#454652] uppercase font-semibold">
+              Tamaño de Fuente
+            </span>
+            <div className="grid grid-cols-4 gap-1">
+              {(['small', 'medium', 'large', 'extra-large'] as const).map((size) => (
+                <button
+                  key={size}
+                  onClick={() => onUpdateSettings({ fontSize: size })}
+                  className={`py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    settings.fontSize === size
+                      ? 'bg-[#FED65B] text-[#745C00] font-black shadow-xs'
+                      : 'bg-white text-[#454652] border border-[#C6C5D4]/60 hover:bg-[#EAE8E3]'
+                  }`}
+                >
+                  {size === 'small' ? 'A-' : size === 'medium' ? 'A' : size === 'large' ? 'A+' : 'A++'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Typography Family */}
+          <div className="space-y-1.5">
+            <span className="block text-xs font-label-caps text-[#454652] uppercase font-semibold">
+              Tipografía Bíblica
+            </span>
+            <div className="grid grid-cols-3 gap-1">
+              {(['Literata', 'Playfair', 'Inter'] as const).map((font) => (
+                <button
+                  key={font}
+                  onClick={() => onUpdateSettings({ fontFamily: font })}
+                  className={`py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    settings.fontFamily === font
+                      ? 'bg-[#0B2B68] text-[#FED65B] font-bold shadow-xs'
+                      : 'bg-white text-[#454652] border border-[#C6C5D4]/60 hover:bg-[#EAE8E3]'
+                  }`}
+                >
+                  {font === 'Literata' ? 'Bíblica' : font === 'Playfair' ? 'Clásica' : 'Moderna'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Line Height */}
+          <div className="space-y-1.5">
+            <span className="block text-xs font-label-caps text-[#454652] uppercase font-semibold">
+              Interlineado
+            </span>
+            <div className="grid grid-cols-3 gap-1">
+              {(['normal', 'relaxed', 'spacious'] as const).map((lh) => (
+                <button
+                  key={lh}
+                  onClick={() => onUpdateSettings({ lineHeight: lh })}
+                  className={`py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    settings.lineHeight === lh
+                      ? 'bg-[#00A3E0] text-white font-bold shadow-xs'
+                      : 'bg-white text-[#454652] border border-[#C6C5D4]/60 hover:bg-[#EAE8E3]'
+                  }`}
+                >
+                  {lh === 'normal' ? '1.5x' : lh === 'relaxed' ? '1.75x' : '2.0x'}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Verses Option & Confirmation */}
+        <div className="space-y-1.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-[#C6C5D4]/30">
+          <label className="flex items-center gap-3 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={settings.showVerseNumbers}
+              onChange={(e) => onUpdateSettings({ showVerseNumbers: e.target.checked })}
+              className="w-4 h-4 accent-[#0B2B68] border-[#C6C5D4] rounded cursor-pointer"
+            />
+            <span className="text-xs sm:text-sm font-body-ui text-[#454652] font-medium">
+              Mostrar números de versículo en la lectura
+            </span>
+          </label>
+
+          <button
+            type="button"
+            id="settings-done-preferences-btn"
+            onClick={() => onToast(`Preferencias aplicadas (Versión: ${settings.translation.toUpperCase()})`)}
+            className="self-end px-4 py-2 rounded-xl bg-[#0B2B68] hover:bg-[#082255] text-[#FED65B] text-xs font-bold transition-all cursor-pointer shadow-xs flex items-center gap-1.5 active:scale-95"
+          >
+            <span>Listo</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Section 3: AI Connection Settings Card */}
       <div className="bg-[#FBF9F4] border border-[#C6C5D4] rounded-2xl p-5 sm:p-6 shadow-xs space-y-5">
         <div className="flex items-center gap-2.5 text-[#000666] border-b border-[#C6C5D4]/50 pb-3">
           <Shield className="w-5 h-5 text-[#735C00]" />
@@ -310,111 +524,74 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </form>
       </div>
 
-      {/* General Reading Preferences Card */}
+      {/* Section 4: Copia de Seguridad & Respaldo JSON */}
       <div className="bg-[#FBF9F4] border border-[#C6C5D4] rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
-        <div className="flex items-center gap-2.5 text-[#000666] border-b border-[#C6C5D4]/50 pb-3">
-          <Info className="w-5 h-5 text-[#735C00]" />
-          <h3 className="font-display-scripture text-lg font-bold">
-            Preferencias de Lectura
-          </h3>
+        <div className="flex items-center justify-between border-b border-[#C6C5D4]/50 pb-3">
+          <div className="flex items-center gap-2.5 text-[#000666]">
+            <HardDrive className="w-5 h-5 text-[#F47B20]" />
+            <h3 className="font-display-scripture text-lg font-bold">
+              Copia de Seguridad & Respaldo JSON
+            </h3>
+          </div>
+          <span className="text-[10px] font-sans font-bold text-[#0B2B68] bg-[#0B2B68]/10 px-2.5 py-0.5 rounded-full uppercase">
+            Portabilidad Total
+          </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {/* FontSize Preference */}
-          <div className="space-y-1.5">
-            <span className="block text-xs font-label-caps text-[#454652] uppercase font-semibold">
-              Tamaño de la Fuente
-            </span>
-            <div className="grid grid-cols-4 gap-1.5">
-              {(['small', 'medium', 'large', 'extra-large'] as const).map((size) => (
-                <button
-                  key={size}
-                  onClick={() => onUpdateSettings({ fontSize: size })}
-                  className={`py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${settings.fontSize === size
-                      ? 'bg-[#FED65B] text-[#745C00] shadow-xs'
-                      : 'bg-[#F0EEE9] text-[#454652] hover:bg-[#EAE8E3]'
-                    }`}
-                >
-                  {size === 'small' ? 'A-' : size === 'medium' ? 'A' : size === 'large' ? 'A+' : 'A++'}
-                </button>
-              ))}
-            </div>
+        <p className="text-xs text-[#454652] leading-relaxed">
+          Exporta todos tus versículos guardados, notas de estudio, eventos y configuraciones en un archivo JSON seguro, o restaura un respaldo previo sin pérdida de datos.
+        </p>
+
+        {importStatus && (
+          <div
+            className={`p-3 rounded-xl text-xs flex items-center gap-2 ${
+              importStatus.success
+                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                : 'bg-rose-50 text-rose-800 border border-rose-200'
+            }`}
+          >
+            {importStatus.success ? (
+              <CheckCircle className="w-4 h-4 flex-shrink-0 text-emerald-600" />
+            ) : (
+              <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600" />
+            )}
+            <span>{importStatus.message}</span>
           </div>
+        )}
 
-          {/* Translation Preference */}
-          <div className="space-y-1.5 sm:col-span-2">
-            <div className="flex items-center justify-between">
-              <span className="block text-xs font-label-caps text-[#454652] uppercase font-semibold">
-                Versión / Traducción Bíblica (Modo Offline)
-              </span>
-              <span className="text-[11px] font-sans font-bold text-[#F47B20] bg-[#F47B20]/10 px-2 py-0.5 rounded-full">
-                {OFFICIAL_TRANSLATIONS.length} Versión Canónica
-              </span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-              {OFFICIAL_TRANSLATIONS.map((tr) => {
-                const isSelected = settings.translation === tr.abbreviation ||
-                  settings.translation === tr.translation ||
-                  (tr.abbreviation === 'valera' && (settings.translation === 'RVR1909' || settings.translation === 'RVR1960')) ||
-                  (tr.abbreviation === 'sse' && settings.translation === 'SSE');
-                return (
-                  <button
-                    key={tr.abbreviation}
-                    id={`settings-trans-${tr.abbreviation}`}
-                    onClick={() => {
-                      onUpdateSettings({ translation: tr.abbreviation });
-                      onToast(`Traducción actualizada a ${tr.name}`);
-                    }}
-                    className={`p-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-left flex flex-col justify-between border ${isSelected
-                        ? 'bg-[#0B2B68] text-[#FED65B] border-[#0B2B68] shadow-xs ring-2 ring-[#F47B20]/50 font-black'
-                        : 'bg-[#F0EEE9] text-[#454652] border-transparent hover:bg-[#EAE8E3]'
-                      }`}
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <span className="text-sm font-bold leading-tight">{tr.name}</span>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold ${isSelected
-                          ? 'bg-[#FED65B]/20 text-[#FED65B]'
-                          : 'bg-emerald-500/20 text-emerald-700'
-                        }`}>
-                        {tr.badge || 'Modo Offline'}
-                      </span>
-                    </div>
-                    <span className="block text-[11px] font-normal opacity-80 mt-1">
-                      {tr.subtitle}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          {/* Export Button */}
+          <button
+            type="button"
+            onClick={handleExportBackup}
+            className="p-3.5 rounded-xl border border-[#0B2B68]/30 bg-white hover:bg-[#0B2B68]/5 text-[#0B2B68] text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs active:scale-98"
+          >
+            <Download className="w-4 h-4 text-[#F47B20]" />
+            <span>Descargar Respaldo (.json)</span>
+          </button>
 
-          {/* Verses Option */}
-          <div className="space-y-1.5 sm:col-span-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-[#C6C5D4]/30">
-            <label className="flex items-center gap-3 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={settings.showVerseNumbers}
-                onChange={(e) => onUpdateSettings({ showVerseNumbers: e.target.checked })}
-                className="w-4 h-4 accent-[#000666] border-[#C6C5D4] rounded cursor-pointer"
-              />
-              <span className="text-xs sm:text-sm font-body-ui text-[#454652] font-medium">
-                Mostrar números de versículo
-              </span>
-            </label>
-
+          {/* Import Button */}
+          <div>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              accept=".json"
+              className="hidden"
+            />
             <button
               type="button"
-              id="settings-done-preferences-btn"
-              onClick={() => onToast(`Preferencias aplicadas (Versión: ${settings.translation})`)}
-              className="self-end px-4 py-2 rounded-xl bg-[#0B2B68] hover:bg-[#082255] text-[#FED65B] text-xs font-bold transition-all cursor-pointer shadow-xs flex items-center gap-1.5 active:scale-95"
+              onClick={() => fileInputRef.current?.click()}
+              className="w-full p-3.5 rounded-xl border border-[#0B2B68] bg-[#0B2B68] hover:bg-[#082255] text-[#FED65B] text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs active:scale-98"
             >
-              <span>Listo</span>
+              <Upload className="w-4 h-4 text-[#FED65B]" />
+              <span>Restaurar desde Archivo JSON</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Official El-Shaddai Church Branding Card */}
+      {/* Section 5: Official El-Shaddai Church Branding Card */}
       <div className="bg-[#FFFFFF] border border-[#C6C5D4]/80 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
         <div className="flex items-center justify-between border-b border-[#C6C5D4]/40 pb-3">
           <h3 className="font-display-scripture text-lg font-bold text-[#1C276E]">
@@ -444,7 +621,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
       </div>
 
-      {/* Mandatory Legal, Copyright & Non-Commercial Declaration Card */}
+      {/* Section 6: Mandatory Legal, Copyright & Non-Commercial Declaration Card */}
       <div className="bg-[#FAF8F5] border border-[#C6C5D4]/80 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
         <div className="flex items-center justify-between border-b border-[#C6C5D4]/40 pb-3">
           <div className="flex items-center gap-2">
@@ -468,7 +645,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               Almacenamiento Local y Modo 100% Offline:
             </p>
             <p className="text-[11px] text-[#454652]">
-              La aplicación opera de manera autónoma con las Sagradas Escrituras (Reina Valera 1909) integradas localmente en la base de datos del dispositivo, sin requerir conexión a APIs externas para la lectura de la Palabra.
+              La aplicación opera de manera autónoma con las Sagradas Escrituras en sus versiones canónicas (Reina-Valera 1960 y Reina Valera 2015) integradas localmente en la base de datos del dispositivo, sin requerir conexión a APIs externas para la lectura de la Palabra.
             </p>
           </div>
 

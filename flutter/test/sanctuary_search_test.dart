@@ -27,7 +27,7 @@ void main() {
     addTearDown(database.close);
 
     await database.saveChapter(
-      translationKey: 'valera',
+      translationKey: 'rvr1960',
       bookNumber: 43,
       bookCode: 'JHN',
       bookName: 'Juan',
@@ -50,7 +50,7 @@ void main() {
     addTearDown(database.close);
 
     await database.saveChapter(
-      translationKey: 'valera',
+      translationKey: 'rvr1960',
       bookNumber: 43,
       bookCode: 'JHN',
       bookName: 'Juan',
@@ -77,12 +77,12 @@ void main() {
       verseCount: 1,
     );
 
-    final valeraResults = await database.searchVersesByKeywordAndTranslation(
+    final rvr1960Results = await database.searchVersesByKeywordAndTranslation(
       keyword: 'mundo',
-      activeTranslation: 'valera',
+      activeTranslation: 'rvr1960',
     );
-    expect(valeraResults, hasLength(1));
-    expect(valeraResults.single.translationKey, 'valera');
+    expect(rvr1960Results, hasLength(1));
+    expect(rvr1960Results.single.translationKey, 'rvr1960');
 
     final rv1858Results = await database.searchVersesByKeywordAndTranslation(
       keyword: 'mundo',

@@ -123,7 +123,7 @@ export interface BiblicalItinerary {
 }
 
 
-export type BibleTranslationAbbr = 'valera' | string;
+export type BibleTranslationAbbr = 'rvr1960' | 'rva2015' | string;
 
 export interface BibleTranslationOption {
   translation: string;
@@ -137,11 +137,20 @@ export interface BibleTranslationOption {
 
 export const OFFICIAL_TRANSLATIONS: BibleTranslationOption[] = [
   {
-    translation: 'Reina Valera (1909)',
-    abbreviation: 'valera',
-    name: 'Reina Valera (1909)',
-    subtitle: 'Reina Valera 1909 (Edición Canónica / Valera)',
-    badge: 'Modo Offline',
+    translation: 'Biblia Reina Valera 1960',
+    abbreviation: 'rvr1960',
+    name: 'Reina-Valera 1960',
+    subtitle: 'Edición Canónica RVR1960 (Texto Tradicional)',
+    badge: 'Offline Canónico',
+    source: 'offline',
+    isOffline: true,
+  },
+  {
+    translation: 'Reina Valera Actualizada (2015)',
+    abbreviation: 'rva2015',
+    name: 'Reina Valera 2015',
+    subtitle: 'Edición Canónica RVA-2015 (Claridad Contemporánea)',
+    badge: 'Offline Canónico',
     source: 'offline',
     isOffline: true,
   },
@@ -153,7 +162,7 @@ export interface ReadingSettings {
   fontSize: 'small' | 'medium' | 'large' | 'extra-large';
   fontFamily: 'Literata' | 'Playfair' | 'Inter';
   lineHeight: 'normal' | 'relaxed' | 'spacious';
-  translation: 'valera' | string;
+  translation: 'rvr1960' | 'rva2015' | string;
   themeMode: ThemeMode;
   showVerseNumbers: boolean;
 }

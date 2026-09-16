@@ -42,7 +42,11 @@ void main() {
             (ref) => _parseVisualTheme(savedSettings[appSettingThemeKey]),
           ),
           appTranslationProvider.overrideWith(
-            (ref) => savedSettings[appSettingTranslationKey] ?? 'valera',
+            (ref) {
+              final saved = savedSettings[appSettingTranslationKey];
+              if (saved == null || saved == 'valera') return 'rvr1960';
+              return saved;
+            },
           ),
           appFontSizeProvider.overrideWith(
             (ref) => savedSettings[appSettingFontSizeKey] ?? 'medium',
