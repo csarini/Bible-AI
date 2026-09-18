@@ -8,10 +8,12 @@
   "nr": 48,
   "name": "Gálatas",
   "totalVerses": 149,
+  "totalChapters": 6,
   "chapters": [
     {
       "chapter": 1,
       "name": "Gálatas 1",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 1,
@@ -162,6 +164,7 @@
     {
       "chapter": 2,
       "name": "Gálatas 2",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 2,
@@ -294,6 +297,7 @@
     {
       "chapter": 3,
       "name": "Gálatas 3",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 3,
@@ -474,6 +478,7 @@
     {
       "chapter": 4,
       "name": "Gálatas 4",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 4,
@@ -666,6 +671,7 @@
     {
       "chapter": 5,
       "name": "Gálatas 5",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 5,
@@ -828,6 +834,7 @@
     {
       "chapter": 6,
       "name": "Gálatas 6",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 6,

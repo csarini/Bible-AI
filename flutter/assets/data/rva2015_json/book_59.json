@@ -8,10 +8,12 @@
   "nr": 59,
   "name": "Santiago",
   "totalVerses": 108,
+  "totalChapters": 5,
   "chapters": [
     {
       "chapter": 1,
       "name": "Santiago 1",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 1,
@@ -180,6 +182,7 @@
     {
       "chapter": 2,
       "name": "Santiago 2",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 2,
@@ -342,6 +345,7 @@
     {
       "chapter": 3,
       "name": "Santiago 3",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 3,
@@ -456,6 +460,7 @@
     {
       "chapter": 4,
       "name": "Santiago 4",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 4,
@@ -564,6 +569,7 @@
     {
       "chapter": 5,
       "name": "Santiago 5",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 5,

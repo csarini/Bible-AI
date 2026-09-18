@@ -8,10 +8,12 @@
   "nr": 26,
   "name": "Ezequiel",
   "totalVerses": 1273,
+  "totalChapters": 48,
   "chapters": [
     {
       "chapter": 1,
       "name": "Ezequiel 1",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 1,
@@ -186,6 +188,7 @@
     {
       "chapter": 2,
       "name": "Ezequiel 2",
+      "totalVerses": 10,
       "verses": [
         {
           "chapter": 2,
@@ -252,6 +255,7 @@
     {
       "chapter": 3,
       "name": "Ezequiel 3",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 3,
@@ -420,6 +424,7 @@
     {
       "chapter": 4,
       "name": "Ezequiel 4",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 4,
@@ -528,6 +533,7 @@
     {
       "chapter": 5,
       "name": "Ezequiel 5",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 5,
@@ -636,6 +642,7 @@
     {
       "chapter": 6,
       "name": "Ezequiel 6",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 6,
@@ -726,6 +733,7 @@
     {
       "chapter": 7,
       "name": "Ezequiel 7",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 7,
@@ -894,6 +902,7 @@
     {
       "chapter": 8,
       "name": "Ezequiel 8",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 8,
@@ -1008,6 +1017,7 @@
     {
       "chapter": 9,
       "name": "Ezequiel 9",
+      "totalVerses": 11,
       "verses": [
         {
           "chapter": 9,
@@ -1080,6 +1090,7 @@
     {
       "chapter": 10,
       "name": "Ezequiel 10",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 10,
@@ -1218,6 +1229,7 @@
     {
       "chapter": 11,
       "name": "Ezequiel 11",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 11,
@@ -1374,6 +1386,7 @@
     {
       "chapter": 12,
       "name": "Ezequiel 12",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 12,
@@ -1548,6 +1561,7 @@
     {
       "chapter": 13,
       "name": "Ezequiel 13",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 13,
@@ -1692,6 +1706,7 @@
     {
       "chapter": 14,
       "name": "Ezequiel 14",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 14,
@@ -1836,6 +1851,7 @@
     {
       "chapter": 15,
       "name": "Ezequiel 15",
+      "totalVerses": 8,
       "verses": [
         {
           "chapter": 15,
@@ -1890,6 +1906,7 @@
     {
       "chapter": 16,
       "name": "Ezequiel 16",
+      "totalVerses": 63,
       "verses": [
         {
           "chapter": 16,
@@ -2274,6 +2291,7 @@
     {
       "chapter": 17,
       "name": "Ezequiel 17",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 17,
@@ -2424,6 +2442,7 @@
     {
       "chapter": 18,
       "name": "Ezequiel 18",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 18,
@@ -2622,6 +2641,7 @@
     {
       "chapter": 19,
       "name": "Ezequiel 19",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 19,
@@ -2712,6 +2732,7 @@
     {
       "chapter": 20,
       "name": "Ezequiel 20",
+      "totalVerses": 49,
       "verses": [
         {
           "chapter": 20,
@@ -3012,6 +3033,7 @@
     {
       "chapter": 21,
       "name": "Ezequiel 21",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 21,
@@ -3210,6 +3232,7 @@
     {
       "chapter": 22,
       "name": "Ezequiel 22",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 22,
@@ -3402,6 +3425,7 @@
     {
       "chapter": 23,
       "name": "Ezequiel 23",
+      "totalVerses": 49,
       "verses": [
         {
           "chapter": 23,
@@ -3702,6 +3726,7 @@
     {
       "chapter": 24,
       "name": "Ezequiel 24",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 24,
@@ -3870,6 +3895,7 @@
     {
       "chapter": 25,
       "name": "Ezequiel 25",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 25,
@@ -3978,6 +4004,7 @@
     {
       "chapter": 26,
       "name": "Ezequiel 26",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 26,
@@ -4110,6 +4137,7 @@
     {
       "chapter": 27,
       "name": "Ezequiel 27",
+      "totalVerses": 36,
       "verses": [
         {
           "chapter": 27,
@@ -4332,6 +4360,7 @@
     {
       "chapter": 28,
       "name": "Ezequiel 28",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 28,
@@ -4494,6 +4523,7 @@
     {
       "chapter": 29,
       "name": "Ezequiel 29",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 29,
@@ -4626,6 +4656,7 @@
     {
       "chapter": 30,
       "name": "Ezequiel 30",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 30,
@@ -4788,6 +4819,7 @@
     {
       "chapter": 31,
       "name": "Ezequiel 31",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 31,
@@ -4902,6 +4934,7 @@
     {
       "chapter": 32,
       "name": "Ezequiel 32",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 32,
@@ -5100,6 +5133,7 @@
     {
       "chapter": 33,
       "name": "Ezequiel 33",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 33,
@@ -5304,6 +5338,7 @@
     {
       "chapter": 34,
       "name": "Ezequiel 34",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 34,
@@ -5496,6 +5531,7 @@
     {
       "chapter": 35,
       "name": "Ezequiel 35",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 35,
@@ -5592,6 +5628,7 @@
     {
       "chapter": 36,
       "name": "Ezequiel 36",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 36,
@@ -5826,6 +5863,7 @@
     {
       "chapter": 37,
       "name": "Ezequiel 37",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 37,
@@ -6000,6 +6038,7 @@
     {
       "chapter": 38,
       "name": "Ezequiel 38",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 38,
@@ -6144,6 +6183,7 @@
     {
       "chapter": 39,
       "name": "Ezequiel 39",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 39,
@@ -6324,6 +6364,7 @@
     {
       "chapter": 40,
       "name": "Ezequiel 40",
+      "totalVerses": 49,
       "verses": [
         {
           "chapter": 40,
@@ -6624,6 +6665,7 @@
     {
       "chapter": 41,
       "name": "Ezequiel 41",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 41,
@@ -6786,6 +6828,7 @@
     {
       "chapter": 42,
       "name": "Ezequiel 42",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 42,
@@ -6912,6 +6955,7 @@
     {
       "chapter": 43,
       "name": "Ezequiel 43",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 43,
@@ -7080,6 +7124,7 @@
     {
       "chapter": 44,
       "name": "Ezequiel 44",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 44,
@@ -7272,6 +7317,7 @@
     {
       "chapter": 45,
       "name": "Ezequiel 45",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 45,
@@ -7428,6 +7474,7 @@
     {
       "chapter": 46,
       "name": "Ezequiel 46",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 46,
@@ -7578,6 +7625,7 @@
     {
       "chapter": 47,
       "name": "Ezequiel 47",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 47,
@@ -7722,6 +7770,7 @@
     {
       "chapter": 48,
       "name": "Ezequiel 48",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 48,

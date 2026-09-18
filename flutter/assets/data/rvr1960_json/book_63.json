@@ -8,10 +8,12 @@
   "nr": 63,
   "name": "2 Juan",
   "totalVerses": 26,
+  "totalChapters": 2,
   "chapters": [
     {
       "chapter": 1,
       "name": "2 Juan 1",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 1,
@@ -96,6 +98,7 @@
     {
       "chapter": 2,
       "name": "2 Juan 2",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 2,

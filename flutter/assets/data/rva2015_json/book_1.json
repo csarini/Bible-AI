@@ -8,10 +8,12 @@
   "nr": 1,
   "name": "Génesis",
   "totalVerses": 1536,
+  "totalChapters": 50,
   "chapters": [
     {
       "chapter": 1,
       "name": "Génesis 1",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 1,
@@ -204,6 +206,7 @@
     {
       "chapter": 2,
       "name": "Génesis 2",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 2,
@@ -366,6 +369,7 @@
     {
       "chapter": 3,
       "name": "Génesis 3",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 3,
@@ -516,6 +520,7 @@
     {
       "chapter": 4,
       "name": "Génesis 4",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 4,
@@ -678,6 +683,7 @@
     {
       "chapter": 5,
       "name": "Génesis 5",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 5,
@@ -876,6 +882,7 @@
     {
       "chapter": 6,
       "name": "Génesis 6",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 6,
@@ -1014,6 +1021,7 @@
     {
       "chapter": 7,
       "name": "Génesis 7",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 7,
@@ -1164,6 +1172,7 @@
     {
       "chapter": 8,
       "name": "Génesis 8",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 8,
@@ -1302,6 +1311,7 @@
     {
       "chapter": 9,
       "name": "Génesis 9",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 9,
@@ -1482,6 +1492,7 @@
     {
       "chapter": 10,
       "name": "Génesis 10",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 10,
@@ -1680,6 +1691,7 @@
     {
       "chapter": 11,
       "name": "Génesis 11",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 11,
@@ -1878,6 +1890,7 @@
     {
       "chapter": 12,
       "name": "Génesis 12",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 12,
@@ -2004,6 +2017,7 @@
     {
       "chapter": 13,
       "name": "Génesis 13",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 13,
@@ -2118,6 +2132,7 @@
     {
       "chapter": 14,
       "name": "Génesis 14",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 14,
@@ -2268,6 +2283,7 @@
     {
       "chapter": 15,
       "name": "Génesis 15",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 15,
@@ -2400,6 +2416,7 @@
     {
       "chapter": 16,
       "name": "Génesis 16",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 16,
@@ -2502,6 +2519,7 @@
     {
       "chapter": 17,
       "name": "Génesis 17",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 17,
@@ -2670,6 +2688,7 @@
     {
       "chapter": 18,
       "name": "Génesis 18",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 18,
@@ -2874,6 +2893,7 @@
     {
       "chapter": 19,
       "name": "Génesis 19",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 19,
@@ -3108,6 +3128,7 @@
     {
       "chapter": 20,
       "name": "Génesis 20",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 20,
@@ -3222,6 +3243,7 @@
     {
       "chapter": 21,
       "name": "Génesis 21",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 21,
@@ -3432,6 +3454,7 @@
     {
       "chapter": 22,
       "name": "Génesis 22",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 22,
@@ -3582,6 +3605,7 @@
     {
       "chapter": 23,
       "name": "Génesis 23",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 23,
@@ -3708,6 +3732,7 @@
     {
       "chapter": 24,
       "name": "Génesis 24",
+      "totalVerses": 67,
       "verses": [
         {
           "chapter": 24,
@@ -4116,6 +4141,7 @@
     {
       "chapter": 25,
       "name": "Génesis 25",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 25,
@@ -4326,6 +4352,7 @@
     {
       "chapter": 26,
       "name": "Génesis 26",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 26,
@@ -4542,6 +4569,7 @@
     {
       "chapter": 27,
       "name": "Génesis 27",
+      "totalVerses": 46,
       "verses": [
         {
           "chapter": 27,
@@ -4824,6 +4852,7 @@
     {
       "chapter": 28,
       "name": "Génesis 28",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 28,
@@ -4962,6 +4991,7 @@
     {
       "chapter": 29,
       "name": "Génesis 29",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 29,
@@ -5178,6 +5208,7 @@
     {
       "chapter": 30,
       "name": "Génesis 30",
+      "totalVerses": 43,
       "verses": [
         {
           "chapter": 30,
@@ -5442,6 +5473,7 @@
     {
       "chapter": 31,
       "name": "Génesis 31",
+      "totalVerses": 55,
       "verses": [
         {
           "chapter": 31,
@@ -5778,6 +5810,7 @@
     {
       "chapter": 32,
       "name": "Génesis 32",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 32,
@@ -5976,6 +6009,7 @@
     {
       "chapter": 33,
       "name": "Génesis 33",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 33,
@@ -6102,6 +6136,7 @@
     {
       "chapter": 34,
       "name": "Génesis 34",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 34,
@@ -6294,6 +6329,7 @@
     {
       "chapter": 35,
       "name": "Génesis 35",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 35,
@@ -6480,6 +6516,7 @@
     {
       "chapter": 36,
       "name": "Génesis 36",
+      "totalVerses": 43,
       "verses": [
         {
           "chapter": 36,
@@ -6744,6 +6781,7 @@
     {
       "chapter": 37,
       "name": "Génesis 37",
+      "totalVerses": 36,
       "verses": [
         {
           "chapter": 37,
@@ -6966,6 +7004,7 @@
     {
       "chapter": 38,
       "name": "Génesis 38",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 38,
@@ -7152,6 +7191,7 @@
     {
       "chapter": 39,
       "name": "Génesis 39",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 39,
@@ -7302,6 +7342,7 @@
     {
       "chapter": 40,
       "name": "Génesis 40",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 40,
@@ -7446,6 +7487,7 @@
     {
       "chapter": 41,
       "name": "Génesis 41",
+      "totalVerses": 57,
       "verses": [
         {
           "chapter": 41,
@@ -7794,6 +7836,7 @@
     {
       "chapter": 42,
       "name": "Génesis 42",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 42,
@@ -8028,6 +8071,7 @@
     {
       "chapter": 43,
       "name": "Génesis 43",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 43,
@@ -8238,6 +8282,7 @@
     {
       "chapter": 44,
       "name": "Génesis 44",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 44,
@@ -8448,6 +8493,7 @@
     {
       "chapter": 45,
       "name": "Génesis 45",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 45,
@@ -8622,6 +8668,7 @@
     {
       "chapter": 46,
       "name": "Génesis 46",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 46,
@@ -8832,6 +8879,7 @@
     {
       "chapter": 47,
       "name": "Génesis 47",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 47,
@@ -9024,6 +9072,7 @@
     {
       "chapter": 48,
       "name": "Génesis 48",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 48,
@@ -9162,6 +9211,7 @@
     {
       "chapter": 49,
       "name": "Génesis 49",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 49,
@@ -9366,6 +9416,7 @@
     {
       "chapter": 50,
       "name": "Génesis 50",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 50,

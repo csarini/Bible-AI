@@ -8,10 +8,12 @@
   "nr": 56,
   "name": "Tito",
   "totalVerses": 47,
+  "totalChapters": 3,
   "chapters": [
     {
       "chapter": 1,
       "name": "Tito 1",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 1,
@@ -114,6 +116,7 @@
     {
       "chapter": 2,
       "name": "Tito 2",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 2,
@@ -210,6 +213,7 @@
     {
       "chapter": 3,
       "name": "Tito 3",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 3,

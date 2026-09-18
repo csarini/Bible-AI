@@ -8,10 +8,12 @@
   "nr": 31,
   "name": "Abdías",
   "totalVerses": 42,
+  "totalChapters": 2,
   "chapters": [
     {
       "chapter": 1,
       "name": "Abdías 1",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 1,
@@ -144,6 +146,7 @@
     {
       "chapter": 2,
       "name": "Abdías 2",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 2,

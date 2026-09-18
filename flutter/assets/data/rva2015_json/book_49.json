@@ -8,10 +8,12 @@
   "nr": 49,
   "name": "Efesios",
   "totalVerses": 155,
+  "totalChapters": 6,
   "chapters": [
     {
       "chapter": 1,
       "name": "Efesios 1",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 1,
@@ -156,6 +158,7 @@
     {
       "chapter": 2,
       "name": "Efesios 2",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 2,
@@ -294,6 +297,7 @@
     {
       "chapter": 3,
       "name": "Efesios 3",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 3,
@@ -426,6 +430,7 @@
     {
       "chapter": 4,
       "name": "Efesios 4",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 4,
@@ -624,6 +629,7 @@
     {
       "chapter": 5,
       "name": "Efesios 5",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 5,
@@ -828,6 +834,7 @@
     {
       "chapter": 6,
       "name": "Efesios 6",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 6,

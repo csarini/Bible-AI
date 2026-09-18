@@ -8,10 +8,12 @@
   "nr": 15,
   "name": "Esdras",
   "totalVerses": 280,
+  "totalChapters": 10,
   "chapters": [
     {
       "chapter": 1,
       "name": "Esdras 1",
+      "totalVerses": 11,
       "verses": [
         {
           "chapter": 1,
@@ -84,6 +86,7 @@
     {
       "chapter": 2,
       "name": "Esdras 2",
+      "totalVerses": 70,
       "verses": [
         {
           "chapter": 2,
@@ -510,6 +513,7 @@
     {
       "chapter": 3,
       "name": "Esdras 3",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 3,
@@ -594,6 +598,7 @@
     {
       "chapter": 4,
       "name": "Esdras 4",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 4,
@@ -744,6 +749,7 @@
     {
       "chapter": 5,
       "name": "Esdras 5",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 5,
@@ -852,6 +858,7 @@
     {
       "chapter": 6,
       "name": "Esdras 6",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 6,
@@ -990,6 +997,7 @@
     {
       "chapter": 7,
       "name": "Esdras 7",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 7,
@@ -1164,6 +1172,7 @@
     {
       "chapter": 8,
       "name": "Esdras 8",
+      "totalVerses": 36,
       "verses": [
         {
           "chapter": 8,
@@ -1386,6 +1395,7 @@
     {
       "chapter": 9,
       "name": "Esdras 9",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 9,
@@ -1482,6 +1492,7 @@
     {
       "chapter": 10,
       "name": "Esdras 10",
+      "totalVerses": 44,
       "verses": [
         {
           "chapter": 10,

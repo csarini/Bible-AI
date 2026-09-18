@@ -8,10 +8,12 @@
   "nr": 55,
   "name": "2 Timoteo",
   "totalVerses": 83,
+  "totalChapters": 4,
   "chapters": [
     {
       "chapter": 1,
       "name": "2 Timoteo 1",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 1,
@@ -126,6 +128,7 @@
     {
       "chapter": 2,
       "name": "2 Timoteo 2",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 2,
@@ -288,6 +291,7 @@
     {
       "chapter": 3,
       "name": "2 Timoteo 3",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 3,
@@ -396,6 +400,7 @@
     {
       "chapter": 4,
       "name": "2 Timoteo 4",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 4,

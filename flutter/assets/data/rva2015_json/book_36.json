@@ -8,10 +8,12 @@
   "nr": 36,
   "name": "Sofonías",
   "totalVerses": 53,
+  "totalChapters": 3,
   "chapters": [
     {
       "chapter": 1,
       "name": "Sofonías 1",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 1,
@@ -126,6 +128,7 @@
     {
       "chapter": 2,
       "name": "Sofonías 2",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 2,
@@ -222,6 +225,7 @@
     {
       "chapter": 3,
       "name": "Sofonías 3",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 3,

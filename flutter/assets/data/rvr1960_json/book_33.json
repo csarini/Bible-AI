@@ -8,10 +8,12 @@
   "nr": 33,
   "name": "Miqueas",
   "totalVerses": 105,
+  "totalChapters": 7,
   "chapters": [
     {
       "chapter": 1,
       "name": "Miqueas 1",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 1,
@@ -114,6 +116,7 @@
     {
       "chapter": 2,
       "name": "Miqueas 2",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 2,
@@ -198,6 +201,7 @@
     {
       "chapter": 3,
       "name": "Miqueas 3",
+      "totalVerses": 12,
       "verses": [
         {
           "chapter": 3,
@@ -276,6 +280,7 @@
     {
       "chapter": 4,
       "name": "Miqueas 4",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 4,
@@ -360,6 +365,7 @@
     {
       "chapter": 5,
       "name": "Miqueas 5",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 5,
@@ -456,6 +462,7 @@
     {
       "chapter": 6,
       "name": "Miqueas 6",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 6,
@@ -558,6 +565,7 @@
     {
       "chapter": 7,
       "name": "Miqueas 7",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 7,

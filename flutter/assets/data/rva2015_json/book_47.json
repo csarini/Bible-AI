@@ -8,10 +8,12 @@
   "nr": 47,
   "name": "2 Corintios",
   "totalVerses": 257,
+  "totalChapters": 13,
   "chapters": [
     {
       "chapter": 1,
       "name": "2 Corintios 1",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 1,
@@ -162,6 +164,7 @@
     {
       "chapter": 2,
       "name": "2 Corintios 2",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 2,
@@ -270,6 +273,7 @@
     {
       "chapter": 3,
       "name": "2 Corintios 3",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 3,
@@ -384,6 +388,7 @@
     {
       "chapter": 4,
       "name": "2 Corintios 4",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 4,
@@ -498,6 +503,7 @@
     {
       "chapter": 5,
       "name": "2 Corintios 5",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 5,
@@ -630,6 +636,7 @@
     {
       "chapter": 6,
       "name": "2 Corintios 6",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 6,
@@ -744,6 +751,7 @@
     {
       "chapter": 7,
       "name": "2 Corintios 7",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 7,
@@ -846,6 +854,7 @@
     {
       "chapter": 8,
       "name": "2 Corintios 8",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 8,
@@ -996,6 +1005,7 @@
     {
       "chapter": 9,
       "name": "2 Corintios 9",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 9,
@@ -1092,6 +1102,7 @@
     {
       "chapter": 10,
       "name": "2 Corintios 10",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 10,
@@ -1206,6 +1217,7 @@
     {
       "chapter": 11,
       "name": "2 Corintios 11",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 11,
@@ -1410,6 +1422,7 @@
     {
       "chapter": 12,
       "name": "2 Corintios 12",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 12,
@@ -1542,6 +1555,7 @@
     {
       "chapter": 13,
       "name": "2 Corintios 13",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 13,

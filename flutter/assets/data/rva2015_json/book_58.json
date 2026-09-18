@@ -8,10 +8,12 @@
   "nr": 58,
   "name": "Hebreos",
   "totalVerses": 303,
+  "totalChapters": 13,
   "chapters": [
     {
       "chapter": 1,
       "name": "Hebreos 1",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 1,
@@ -102,6 +104,7 @@
     {
       "chapter": 2,
       "name": "Hebreos 2",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 2,
@@ -216,6 +219,7 @@
     {
       "chapter": 3,
       "name": "Hebreos 3",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 3,
@@ -336,6 +340,7 @@
     {
       "chapter": 4,
       "name": "Hebreos 4",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 4,
@@ -438,6 +443,7 @@
     {
       "chapter": 5,
       "name": "Hebreos 5",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 5,
@@ -528,6 +534,7 @@
     {
       "chapter": 6,
       "name": "Hebreos 6",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 6,
@@ -654,6 +661,7 @@
     {
       "chapter": 7,
       "name": "Hebreos 7",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 7,
@@ -828,6 +836,7 @@
     {
       "chapter": 8,
       "name": "Hebreos 8",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 8,
@@ -912,6 +921,7 @@
     {
       "chapter": 9,
       "name": "Hebreos 9",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 9,
@@ -1086,6 +1096,7 @@
     {
       "chapter": 10,
       "name": "Hebreos 10",
+      "totalVerses": 39,
       "verses": [
         {
           "chapter": 10,
@@ -1326,6 +1337,7 @@
     {
       "chapter": 11,
       "name": "Hebreos 11",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 11,
@@ -1572,6 +1584,7 @@
     {
       "chapter": 12,
       "name": "Hebreos 12",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 12,
@@ -1752,6 +1765,7 @@
     {
       "chapter": 13,
       "name": "Hebreos 13",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 13,

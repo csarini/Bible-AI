@@ -8,10 +8,12 @@
   "nr": 6,
   "name": "Josué",
   "totalVerses": 658,
+  "totalChapters": 24,
   "chapters": [
     {
       "chapter": 1,
       "name": "Josué 1",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 1,
@@ -126,6 +128,7 @@
     {
       "chapter": 2,
       "name": "Josué 2",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 2,
@@ -276,6 +279,7 @@
     {
       "chapter": 3,
       "name": "Josué 3",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 3,
@@ -384,6 +388,7 @@
     {
       "chapter": 4,
       "name": "Josué 4",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 4,
@@ -534,6 +539,7 @@
     {
       "chapter": 5,
       "name": "Josué 5",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 5,
@@ -630,6 +636,7 @@
     {
       "chapter": 6,
       "name": "Josué 6",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 6,
@@ -798,6 +805,7 @@
     {
       "chapter": 7,
       "name": "Josué 7",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 7,
@@ -960,6 +968,7 @@
     {
       "chapter": 8,
       "name": "Josué 8",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 8,
@@ -1176,6 +1185,7 @@
     {
       "chapter": 9,
       "name": "Josué 9",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 9,
@@ -1344,6 +1354,7 @@
     {
       "chapter": 10,
       "name": "Josué 10",
+      "totalVerses": 43,
       "verses": [
         {
           "chapter": 10,
@@ -1608,6 +1619,7 @@
     {
       "chapter": 11,
       "name": "Josué 11",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 11,
@@ -1752,6 +1764,7 @@
     {
       "chapter": 12,
       "name": "Josué 12",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 12,
@@ -1902,6 +1915,7 @@
     {
       "chapter": 13,
       "name": "Josué 13",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 13,
@@ -2106,6 +2120,7 @@
     {
       "chapter": 14,
       "name": "Josué 14",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 14,
@@ -2202,6 +2217,7 @@
     {
       "chapter": 15,
       "name": "Josué 15",
+      "totalVerses": 63,
       "verses": [
         {
           "chapter": 15,
@@ -2586,6 +2602,7 @@
     {
       "chapter": 16,
       "name": "Josué 16",
+      "totalVerses": 10,
       "verses": [
         {
           "chapter": 16,
@@ -2652,6 +2669,7 @@
     {
       "chapter": 17,
       "name": "Josué 17",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 17,
@@ -2766,6 +2784,7 @@
     {
       "chapter": 18,
       "name": "Josué 18",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 18,
@@ -2940,6 +2959,7 @@
     {
       "chapter": 19,
       "name": "Josué 19",
+      "totalVerses": 51,
       "verses": [
         {
           "chapter": 19,
@@ -3252,6 +3272,7 @@
     {
       "chapter": 20,
       "name": "Josué 20",
+      "totalVerses": 9,
       "verses": [
         {
           "chapter": 20,
@@ -3312,6 +3333,7 @@
     {
       "chapter": 21,
       "name": "Josué 21",
+      "totalVerses": 45,
       "verses": [
         {
           "chapter": 21,
@@ -3588,6 +3610,7 @@
     {
       "chapter": 22,
       "name": "Josué 22",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 22,
@@ -3798,6 +3821,7 @@
     {
       "chapter": 23,
       "name": "Josué 23",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 23,
@@ -3900,6 +3924,7 @@
     {
       "chapter": 24,
       "name": "Josué 24",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 24,

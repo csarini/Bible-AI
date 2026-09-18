@@ -8,10 +8,12 @@
   "nr": 11,
   "name": "1 Reyes",
   "totalVerses": 816,
+  "totalChapters": 22,
   "chapters": [
     {
       "chapter": 1,
       "name": "1 Reyes 1",
+      "totalVerses": 53,
       "verses": [
         {
           "chapter": 1,
@@ -336,6 +338,7 @@
     {
       "chapter": 2,
       "name": "1 Reyes 2",
+      "totalVerses": 46,
       "verses": [
         {
           "chapter": 2,
@@ -618,6 +621,7 @@
     {
       "chapter": 3,
       "name": "1 Reyes 3",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 3,
@@ -792,6 +796,7 @@
     {
       "chapter": 4,
       "name": "1 Reyes 4",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 4,
@@ -1002,6 +1007,7 @@
     {
       "chapter": 5,
       "name": "1 Reyes 5",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 5,
@@ -1116,6 +1122,7 @@
     {
       "chapter": 6,
       "name": "1 Reyes 6",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 6,
@@ -1350,6 +1357,7 @@
     {
       "chapter": 7,
       "name": "1 Reyes 7",
+      "totalVerses": 51,
       "verses": [
         {
           "chapter": 7,
@@ -1662,6 +1670,7 @@
     {
       "chapter": 8,
       "name": "1 Reyes 8",
+      "totalVerses": 66,
       "verses": [
         {
           "chapter": 8,
@@ -2064,6 +2073,7 @@
     {
       "chapter": 9,
       "name": "1 Reyes 9",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 9,
@@ -2238,6 +2248,7 @@
     {
       "chapter": 10,
       "name": "1 Reyes 10",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 10,
@@ -2418,6 +2429,7 @@
     {
       "chapter": 11,
       "name": "1 Reyes 11",
+      "totalVerses": 43,
       "verses": [
         {
           "chapter": 11,
@@ -2682,6 +2694,7 @@
     {
       "chapter": 12,
       "name": "1 Reyes 12",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 12,
@@ -2886,6 +2899,7 @@
     {
       "chapter": 13,
       "name": "1 Reyes 13",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 13,
@@ -3096,6 +3110,7 @@
     {
       "chapter": 14,
       "name": "1 Reyes 14",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 14,
@@ -3288,6 +3303,7 @@
     {
       "chapter": 15,
       "name": "1 Reyes 15",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 15,
@@ -3498,6 +3514,7 @@
     {
       "chapter": 16,
       "name": "1 Reyes 16",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 16,
@@ -3708,6 +3725,7 @@
     {
       "chapter": 17,
       "name": "1 Reyes 17",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 17,
@@ -3858,6 +3876,7 @@
     {
       "chapter": 18,
       "name": "1 Reyes 18",
+      "totalVerses": 46,
       "verses": [
         {
           "chapter": 18,
@@ -4140,6 +4159,7 @@
     {
       "chapter": 19,
       "name": "1 Reyes 19",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 19,
@@ -4272,6 +4292,7 @@
     {
       "chapter": 20,
       "name": "1 Reyes 20",
+      "totalVerses": 43,
       "verses": [
         {
           "chapter": 20,
@@ -4536,6 +4557,7 @@
     {
       "chapter": 21,
       "name": "1 Reyes 21",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 21,
@@ -4716,6 +4738,7 @@
     {
       "chapter": 22,
       "name": "1 Reyes 22",
+      "totalVerses": 53,
       "verses": [
         {
           "chapter": 22,

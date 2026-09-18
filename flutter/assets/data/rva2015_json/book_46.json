@@ -8,10 +8,12 @@
   "nr": 46,
   "name": "1 Corintios",
   "totalVerses": 437,
+  "totalChapters": 16,
   "chapters": [
     {
       "chapter": 1,
       "name": "1 Corintios 1",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 1,
@@ -204,6 +206,7 @@
     {
       "chapter": 2,
       "name": "1 Corintios 2",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 2,
@@ -306,6 +309,7 @@
     {
       "chapter": 3,
       "name": "1 Corintios 3",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 3,
@@ -450,6 +454,7 @@
     {
       "chapter": 4,
       "name": "1 Corintios 4",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 4,
@@ -582,6 +587,7 @@
     {
       "chapter": 5,
       "name": "1 Corintios 5",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 5,
@@ -666,6 +672,7 @@
     {
       "chapter": 6,
       "name": "1 Corintios 6",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 6,
@@ -792,6 +799,7 @@
     {
       "chapter": 7,
       "name": "1 Corintios 7",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 7,
@@ -1038,6 +1046,7 @@
     {
       "chapter": 8,
       "name": "1 Corintios 8",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 8,
@@ -1122,6 +1131,7 @@
     {
       "chapter": 9,
       "name": "1 Corintios 9",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 9,
@@ -1290,6 +1300,7 @@
     {
       "chapter": 10,
       "name": "1 Corintios 10",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 10,
@@ -1494,6 +1505,7 @@
     {
       "chapter": 11,
       "name": "1 Corintios 11",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 11,
@@ -1704,6 +1716,7 @@
     {
       "chapter": 12,
       "name": "1 Corintios 12",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 12,
@@ -1896,6 +1909,7 @@
     {
       "chapter": 13,
       "name": "1 Corintios 13",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 13,
@@ -1980,6 +1994,7 @@
     {
       "chapter": 14,
       "name": "1 Corintios 14",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 14,
@@ -2226,6 +2241,7 @@
     {
       "chapter": 15,
       "name": "1 Corintios 15",
+      "totalVerses": 58,
       "verses": [
         {
           "chapter": 15,
@@ -2580,6 +2596,7 @@
     {
       "chapter": 16,
       "name": "1 Corintios 16",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 16,

@@ -8,10 +8,12 @@
   "nr": 17,
   "name": "Ester",
   "totalVerses": 167,
+  "totalChapters": 10,
   "chapters": [
     {
       "chapter": 1,
       "name": "Ester 1",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 1,
@@ -150,6 +152,7 @@
     {
       "chapter": 2,
       "name": "Ester 2",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 2,
@@ -294,6 +297,7 @@
     {
       "chapter": 3,
       "name": "Ester 3",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 3,
@@ -390,6 +394,7 @@
     {
       "chapter": 4,
       "name": "Ester 4",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 4,
@@ -498,6 +503,7 @@
     {
       "chapter": 5,
       "name": "Ester 5",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 5,
@@ -588,6 +594,7 @@
     {
       "chapter": 6,
       "name": "Ester 6",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 6,
@@ -678,6 +685,7 @@
     {
       "chapter": 7,
       "name": "Ester 7",
+      "totalVerses": 10,
       "verses": [
         {
           "chapter": 7,
@@ -744,6 +752,7 @@
     {
       "chapter": 8,
       "name": "Ester 8",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 8,
@@ -852,6 +861,7 @@
     {
       "chapter": 9,
       "name": "Ester 9",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 9,
@@ -1050,6 +1060,7 @@
     {
       "chapter": 10,
       "name": "Ester 10",
+      "totalVerses": 3,
       "verses": [
         {
           "chapter": 10,

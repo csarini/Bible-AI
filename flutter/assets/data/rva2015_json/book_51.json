@@ -8,10 +8,12 @@
   "nr": 51,
   "name": "Colosenses",
   "totalVerses": 96,
+  "totalChapters": 4,
   "chapters": [
     {
       "chapter": 1,
       "name": "Colosenses 1",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 1,
@@ -198,6 +200,7 @@
     {
       "chapter": 2,
       "name": "Colosenses 2",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 2,
@@ -342,6 +345,7 @@
     {
       "chapter": 3,
       "name": "Colosenses 3",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 3,
@@ -498,6 +502,7 @@
     {
       "chapter": 4,
       "name": "Colosenses 4",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 4,

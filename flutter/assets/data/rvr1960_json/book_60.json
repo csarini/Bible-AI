@@ -8,10 +8,12 @@
   "nr": 60,
   "name": "1 Pedro",
   "totalVerses": 105,
+  "totalChapters": 5,
   "chapters": [
     {
       "chapter": 1,
       "name": "1 Pedro 1",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 1,
@@ -168,6 +170,7 @@
     {
       "chapter": 2,
       "name": "1 Pedro 2",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 2,
@@ -324,6 +327,7 @@
     {
       "chapter": 3,
       "name": "1 Pedro 3",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 3,
@@ -462,6 +466,7 @@
     {
       "chapter": 4,
       "name": "1 Pedro 4",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 4,
@@ -582,6 +587,7 @@
     {
       "chapter": 5,
       "name": "1 Pedro 5",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 5,

@@ -8,10 +8,12 @@
   "nr": 42,
   "name": "S. Lucas",
   "totalVerses": 1152,
+  "totalChapters": 24,
   "chapters": [
     {
       "chapter": 1,
       "name": "S. Lucas 1",
+      "totalVerses": 80,
       "verses": [
         {
           "chapter": 1,
@@ -498,6 +500,7 @@
     {
       "chapter": 2,
       "name": "S. Lucas 2",
+      "totalVerses": 52,
       "verses": [
         {
           "chapter": 2,
@@ -816,6 +819,7 @@
     {
       "chapter": 3,
       "name": "S. Lucas 3",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 3,
@@ -1050,6 +1054,7 @@
     {
       "chapter": 4,
       "name": "S. Lucas 4",
+      "totalVerses": 44,
       "verses": [
         {
           "chapter": 4,
@@ -1320,6 +1325,7 @@
     {
       "chapter": 5,
       "name": "S. Lucas 5",
+      "totalVerses": 39,
       "verses": [
         {
           "chapter": 5,
@@ -1560,6 +1566,7 @@
     {
       "chapter": 6,
       "name": "S. Lucas 6",
+      "totalVerses": 49,
       "verses": [
         {
           "chapter": 6,
@@ -1860,6 +1867,7 @@
     {
       "chapter": 7,
       "name": "S. Lucas 7",
+      "totalVerses": 50,
       "verses": [
         {
           "chapter": 7,
@@ -2166,6 +2174,7 @@
     {
       "chapter": 8,
       "name": "S. Lucas 8",
+      "totalVerses": 56,
       "verses": [
         {
           "chapter": 8,
@@ -2508,6 +2517,7 @@
     {
       "chapter": 9,
       "name": "S. Lucas 9",
+      "totalVerses": 63,
       "verses": [
         {
           "chapter": 9,
@@ -2892,6 +2902,7 @@
     {
       "chapter": 10,
       "name": "S. Lucas 10",
+      "totalVerses": 42,
       "verses": [
         {
           "chapter": 10,
@@ -3150,6 +3161,7 @@
     {
       "chapter": 11,
       "name": "S. Lucas 11",
+      "totalVerses": 54,
       "verses": [
         {
           "chapter": 11,
@@ -3480,6 +3492,7 @@
     {
       "chapter": 12,
       "name": "S. Lucas 12",
+      "totalVerses": 59,
       "verses": [
         {
           "chapter": 12,
@@ -3840,6 +3853,7 @@
     {
       "chapter": 13,
       "name": "S. Lucas 13",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 13,
@@ -4056,6 +4070,7 @@
     {
       "chapter": 14,
       "name": "S. Lucas 14",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 14,
@@ -4272,6 +4287,7 @@
     {
       "chapter": 15,
       "name": "S. Lucas 15",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 15,
@@ -4470,6 +4486,7 @@
     {
       "chapter": 16,
       "name": "S. Lucas 16",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 16,
@@ -4662,6 +4679,7 @@
     {
       "chapter": 17,
       "name": "S. Lucas 17",
+      "totalVerses": 37,
       "verses": [
         {
           "chapter": 17,
@@ -4890,6 +4908,7 @@
     {
       "chapter": 18,
       "name": "S. Lucas 18",
+      "totalVerses": 43,
       "verses": [
         {
           "chapter": 18,
@@ -5154,6 +5173,7 @@
     {
       "chapter": 19,
       "name": "S. Lucas 19",
+      "totalVerses": 48,
       "verses": [
         {
           "chapter": 19,
@@ -5448,6 +5468,7 @@
     {
       "chapter": 20,
       "name": "S. Lucas 20",
+      "totalVerses": 47,
       "verses": [
         {
           "chapter": 20,
@@ -5736,6 +5757,7 @@
     {
       "chapter": 21,
       "name": "S. Lucas 21",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 21,
@@ -5970,6 +5992,7 @@
     {
       "chapter": 22,
       "name": "S. Lucas 22",
+      "totalVerses": 71,
       "verses": [
         {
           "chapter": 22,
@@ -6402,6 +6425,7 @@
     {
       "chapter": 23,
       "name": "S. Lucas 23",
+      "totalVerses": 56,
       "verses": [
         {
           "chapter": 23,
@@ -6744,6 +6768,7 @@
     {
       "chapter": 24,
       "name": "S. Lucas 24",
+      "totalVerses": 53,
       "verses": [
         {
           "chapter": 24,

@@ -8,10 +8,12 @@
   "nr": 44,
   "name": "Hechos",
   "totalVerses": 1009,
+  "totalChapters": 28,
   "chapters": [
     {
       "chapter": 1,
       "name": "Hechos 1",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 1,
@@ -174,6 +176,7 @@
     {
       "chapter": 2,
       "name": "Hechos 2",
+      "totalVerses": 47,
       "verses": [
         {
           "chapter": 2,
@@ -462,6 +465,7 @@
     {
       "chapter": 3,
       "name": "Hechos 3",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 3,
@@ -624,6 +628,7 @@
     {
       "chapter": 4,
       "name": "Hechos 4",
+      "totalVerses": 37,
       "verses": [
         {
           "chapter": 4,
@@ -852,6 +857,7 @@
     {
       "chapter": 5,
       "name": "Hechos 5",
+      "totalVerses": 42,
       "verses": [
         {
           "chapter": 5,
@@ -1110,6 +1116,7 @@
     {
       "chapter": 6,
       "name": "Hechos 6",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 6,
@@ -1206,6 +1213,7 @@
     {
       "chapter": 7,
       "name": "Hechos 7",
+      "totalVerses": 60,
       "verses": [
         {
           "chapter": 7,
@@ -1572,6 +1580,7 @@
     {
       "chapter": 8,
       "name": "Hechos 8",
+      "totalVerses": 41,
       "verses": [
         {
           "chapter": 8,
@@ -1824,6 +1833,7 @@
     {
       "chapter": 9,
       "name": "Hechos 9",
+      "totalVerses": 44,
       "verses": [
         {
           "chapter": 9,
@@ -2094,6 +2104,7 @@
     {
       "chapter": 10,
       "name": "Hechos 10",
+      "totalVerses": 48,
       "verses": [
         {
           "chapter": 10,
@@ -2388,6 +2399,7 @@
     {
       "chapter": 11,
       "name": "Hechos 11",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 11,
@@ -2574,6 +2586,7 @@
     {
       "chapter": 12,
       "name": "Hechos 12",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 12,
@@ -2730,6 +2743,7 @@
     {
       "chapter": 13,
       "name": "Hechos 13",
+      "totalVerses": 52,
       "verses": [
         {
           "chapter": 13,
@@ -3048,6 +3062,7 @@
     {
       "chapter": 14,
       "name": "Hechos 14",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 14,
@@ -3222,6 +3237,7 @@
     {
       "chapter": 15,
       "name": "Hechos 15",
+      "totalVerses": 41,
       "verses": [
         {
           "chapter": 15,
@@ -3474,6 +3490,7 @@
     {
       "chapter": 16,
       "name": "Hechos 16",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 16,
@@ -3720,6 +3737,7 @@
     {
       "chapter": 17,
       "name": "Hechos 17",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 17,
@@ -3930,6 +3948,7 @@
     {
       "chapter": 18,
       "name": "Hechos 18",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 18,
@@ -4104,6 +4123,7 @@
     {
       "chapter": 19,
       "name": "Hechos 19",
+      "totalVerses": 41,
       "verses": [
         {
           "chapter": 19,
@@ -4356,6 +4376,7 @@
     {
       "chapter": 20,
       "name": "Hechos 20",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 20,
@@ -4590,6 +4611,7 @@
     {
       "chapter": 21,
       "name": "Hechos 21",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 21,
@@ -4836,6 +4858,7 @@
     {
       "chapter": 22,
       "name": "Hechos 22",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 22,
@@ -5022,6 +5045,7 @@
     {
       "chapter": 23,
       "name": "Hechos 23",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 23,
@@ -5238,6 +5262,7 @@
     {
       "chapter": 24,
       "name": "Hechos 24",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 24,
@@ -5406,6 +5431,7 @@
     {
       "chapter": 25,
       "name": "Hechos 25",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 25,
@@ -5574,6 +5600,7 @@
     {
       "chapter": 26,
       "name": "Hechos 26",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 26,
@@ -5772,6 +5799,7 @@
     {
       "chapter": 27,
       "name": "Hechos 27",
+      "totalVerses": 44,
       "verses": [
         {
           "chapter": 27,
@@ -6042,6 +6070,7 @@
     {
       "chapter": 28,
       "name": "Hechos 28",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 28,

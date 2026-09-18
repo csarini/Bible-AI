@@ -8,10 +8,12 @@
   "nr": 64,
   "name": "3 Juan",
   "totalVerses": 30,
+  "totalChapters": 2,
   "chapters": [
     {
       "chapter": 1,
       "name": "3 Juan 1",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 1,
@@ -108,6 +110,7 @@
     {
       "chapter": 2,
       "name": "3 Juan 2",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 2,

@@ -8,10 +8,12 @@
   "nr": 2,
   "name": "Éxodo",
   "totalVerses": 1213,
+  "totalChapters": 40,
   "chapters": [
     {
       "chapter": 1,
       "name": "Éxodo 1",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 1,
@@ -150,6 +152,7 @@
     {
       "chapter": 2,
       "name": "Éxodo 2",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 2,
@@ -306,6 +309,7 @@
     {
       "chapter": 3,
       "name": "Éxodo 3",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 3,
@@ -444,6 +448,7 @@
     {
       "chapter": 4,
       "name": "Éxodo 4",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 4,
@@ -636,6 +641,7 @@
     {
       "chapter": 5,
       "name": "Éxodo 5",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 5,
@@ -780,6 +786,7 @@
     {
       "chapter": 6,
       "name": "Éxodo 6",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 6,
@@ -966,6 +973,7 @@
     {
       "chapter": 7,
       "name": "Éxodo 7",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 7,
@@ -1122,6 +1130,7 @@
     {
       "chapter": 8,
       "name": "Éxodo 8",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 8,
@@ -1320,6 +1329,7 @@
     {
       "chapter": 9,
       "name": "Éxodo 9",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 9,
@@ -1536,6 +1546,7 @@
     {
       "chapter": 10,
       "name": "Éxodo 10",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 10,
@@ -1716,6 +1727,7 @@
     {
       "chapter": 11,
       "name": "Éxodo 11",
+      "totalVerses": 10,
       "verses": [
         {
           "chapter": 11,
@@ -1782,6 +1794,7 @@
     {
       "chapter": 12,
       "name": "Éxodo 12",
+      "totalVerses": 51,
       "verses": [
         {
           "chapter": 12,
@@ -2094,6 +2107,7 @@
     {
       "chapter": 13,
       "name": "Éxodo 13",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 13,
@@ -2232,6 +2246,7 @@
     {
       "chapter": 14,
       "name": "Éxodo 14",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 14,
@@ -2424,6 +2439,7 @@
     {
       "chapter": 15,
       "name": "Éxodo 15",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 15,
@@ -2592,6 +2608,7 @@
     {
       "chapter": 16,
       "name": "Éxodo 16",
+      "totalVerses": 36,
       "verses": [
         {
           "chapter": 16,
@@ -2814,6 +2831,7 @@
     {
       "chapter": 17,
       "name": "Éxodo 17",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 17,
@@ -2916,6 +2934,7 @@
     {
       "chapter": 18,
       "name": "Éxodo 18",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 18,
@@ -3084,6 +3103,7 @@
     {
       "chapter": 19,
       "name": "Éxodo 19",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 19,
@@ -3240,6 +3260,7 @@
     {
       "chapter": 20,
       "name": "Éxodo 20",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 20,
@@ -3402,6 +3423,7 @@
     {
       "chapter": 21,
       "name": "Éxodo 21",
+      "totalVerses": 36,
       "verses": [
         {
           "chapter": 21,
@@ -3624,6 +3646,7 @@
     {
       "chapter": 22,
       "name": "Éxodo 22",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 22,
@@ -3816,6 +3839,7 @@
     {
       "chapter": 23,
       "name": "Éxodo 23",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 23,
@@ -4020,6 +4044,7 @@
     {
       "chapter": 24,
       "name": "Éxodo 24",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 24,
@@ -4134,6 +4159,7 @@
     {
       "chapter": 25,
       "name": "Éxodo 25",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 25,
@@ -4380,6 +4406,7 @@
     {
       "chapter": 26,
       "name": "Éxodo 26",
+      "totalVerses": 37,
       "verses": [
         {
           "chapter": 26,
@@ -4608,6 +4635,7 @@
     {
       "chapter": 27,
       "name": "Éxodo 27",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 27,
@@ -4740,6 +4768,7 @@
     {
       "chapter": 28,
       "name": "Éxodo 28",
+      "totalVerses": 43,
       "verses": [
         {
           "chapter": 28,
@@ -5004,6 +5033,7 @@
     {
       "chapter": 29,
       "name": "Éxodo 29",
+      "totalVerses": 46,
       "verses": [
         {
           "chapter": 29,
@@ -5286,6 +5316,7 @@
     {
       "chapter": 30,
       "name": "Éxodo 30",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 30,
@@ -5520,6 +5551,7 @@
     {
       "chapter": 31,
       "name": "Éxodo 31",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 31,
@@ -5634,6 +5666,7 @@
     {
       "chapter": 32,
       "name": "Éxodo 32",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 32,
@@ -5850,6 +5883,7 @@
     {
       "chapter": 33,
       "name": "Éxodo 33",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 33,
@@ -5994,6 +6028,7 @@
     {
       "chapter": 34,
       "name": "Éxodo 34",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 34,
@@ -6210,6 +6245,7 @@
     {
       "chapter": 35,
       "name": "Éxodo 35",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 35,
@@ -6426,6 +6462,7 @@
     {
       "chapter": 36,
       "name": "Éxodo 36",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 36,
@@ -6660,6 +6697,7 @@
     {
       "chapter": 37,
       "name": "Éxodo 37",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 37,
@@ -6840,6 +6878,7 @@
     {
       "chapter": 38,
       "name": "Éxodo 38",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 38,
@@ -7032,6 +7071,7 @@
     {
       "chapter": 39,
       "name": "Éxodo 39",
+      "totalVerses": 43,
       "verses": [
         {
           "chapter": 39,
@@ -7296,6 +7336,7 @@
     {
       "chapter": 40,
       "name": "Éxodo 40",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 40,

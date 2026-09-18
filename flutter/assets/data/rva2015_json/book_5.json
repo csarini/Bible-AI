@@ -8,10 +8,12 @@
   "nr": 5,
   "name": "Deuteronomio",
   "totalVerses": 959,
+  "totalChapters": 34,
   "chapters": [
     {
       "chapter": 1,
       "name": "Deuteronomio 1",
+      "totalVerses": 46,
       "verses": [
         {
           "chapter": 1,
@@ -294,6 +296,7 @@
     {
       "chapter": 2,
       "name": "Deuteronomio 2",
+      "totalVerses": 37,
       "verses": [
         {
           "chapter": 2,
@@ -522,6 +525,7 @@
     {
       "chapter": 3,
       "name": "Deuteronomio 3",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 3,
@@ -702,6 +706,7 @@
     {
       "chapter": 4,
       "name": "Deuteronomio 4",
+      "totalVerses": 49,
       "verses": [
         {
           "chapter": 4,
@@ -1002,6 +1007,7 @@
     {
       "chapter": 5,
       "name": "Deuteronomio 5",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 5,
@@ -1206,6 +1212,7 @@
     {
       "chapter": 6,
       "name": "Deuteronomio 6",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 6,
@@ -1362,6 +1369,7 @@
     {
       "chapter": 7,
       "name": "Deuteronomio 7",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 7,
@@ -1524,6 +1532,7 @@
     {
       "chapter": 8,
       "name": "Deuteronomio 8",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 8,
@@ -1650,6 +1659,7 @@
     {
       "chapter": 9,
       "name": "Deuteronomio 9",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 9,
@@ -1830,6 +1840,7 @@
     {
       "chapter": 10,
       "name": "Deuteronomio 10",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 10,
@@ -1968,6 +1979,7 @@
     {
       "chapter": 11,
       "name": "Deuteronomio 11",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 11,
@@ -2166,6 +2178,7 @@
     {
       "chapter": 12,
       "name": "Deuteronomio 12",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 12,
@@ -2364,6 +2377,7 @@
     {
       "chapter": 13,
       "name": "Deuteronomio 13",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 13,
@@ -2478,6 +2492,7 @@
     {
       "chapter": 14,
       "name": "Deuteronomio 14",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 14,
@@ -2658,6 +2673,7 @@
     {
       "chapter": 15,
       "name": "Deuteronomio 15",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 15,
@@ -2802,6 +2818,7 @@
     {
       "chapter": 16,
       "name": "Deuteronomio 16",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 16,
@@ -2940,6 +2957,7 @@
     {
       "chapter": 17,
       "name": "Deuteronomio 17",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 17,
@@ -3066,6 +3084,7 @@
     {
       "chapter": 18,
       "name": "Deuteronomio 18",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 18,
@@ -3204,6 +3223,7 @@
     {
       "chapter": 19,
       "name": "Deuteronomio 19",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 19,
@@ -3336,6 +3356,7 @@
     {
       "chapter": 20,
       "name": "Deuteronomio 20",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 20,
@@ -3462,6 +3483,7 @@
     {
       "chapter": 21,
       "name": "Deuteronomio 21",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 21,
@@ -3606,6 +3628,7 @@
     {
       "chapter": 22,
       "name": "Deuteronomio 22",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 22,
@@ -3792,6 +3815,7 @@
     {
       "chapter": 23,
       "name": "Deuteronomio 23",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 23,
@@ -3948,6 +3972,7 @@
     {
       "chapter": 24,
       "name": "Deuteronomio 24",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 24,
@@ -4086,6 +4111,7 @@
     {
       "chapter": 25,
       "name": "Deuteronomio 25",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 25,
@@ -4206,6 +4232,7 @@
     {
       "chapter": 26,
       "name": "Deuteronomio 26",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 26,
@@ -4326,6 +4353,7 @@
     {
       "chapter": 27,
       "name": "Deuteronomio 27",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 27,
@@ -4488,6 +4516,7 @@
     {
       "chapter": 28,
       "name": "Deuteronomio 28",
+      "totalVerses": 68,
       "verses": [
         {
           "chapter": 28,
@@ -4902,6 +4931,7 @@
     {
       "chapter": 29,
       "name": "Deuteronomio 29",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 29,
@@ -5082,6 +5112,7 @@
     {
       "chapter": 30,
       "name": "Deuteronomio 30",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 30,
@@ -5208,6 +5239,7 @@
     {
       "chapter": 31,
       "name": "Deuteronomio 31",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 31,
@@ -5394,6 +5426,7 @@
     {
       "chapter": 32,
       "name": "Deuteronomio 32",
+      "totalVerses": 52,
       "verses": [
         {
           "chapter": 32,
@@ -5712,6 +5745,7 @@
     {
       "chapter": 33,
       "name": "Deuteronomio 33",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 33,
@@ -5892,6 +5926,7 @@
     {
       "chapter": 34,
       "name": "Deuteronomio 34",
+      "totalVerses": 12,
       "verses": [
         {
           "chapter": 34,

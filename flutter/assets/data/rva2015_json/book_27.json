@@ -8,10 +8,12 @@
   "nr": 27,
   "name": "Daniel",
   "totalVerses": 357,
+  "totalChapters": 12,
   "chapters": [
     {
       "chapter": 1,
       "name": "Daniel 1",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 1,
@@ -144,6 +146,7 @@
     {
       "chapter": 2,
       "name": "Daniel 2",
+      "totalVerses": 49,
       "verses": [
         {
           "chapter": 2,
@@ -444,6 +447,7 @@
     {
       "chapter": 3,
       "name": "Daniel 3",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 3,
@@ -630,6 +634,7 @@
     {
       "chapter": 4,
       "name": "Daniel 4",
+      "totalVerses": 37,
       "verses": [
         {
           "chapter": 4,
@@ -858,6 +863,7 @@
     {
       "chapter": 5,
       "name": "Daniel 5",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 5,
@@ -1050,6 +1056,7 @@
     {
       "chapter": 6,
       "name": "Daniel 6",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 6,
@@ -1224,6 +1231,7 @@
     {
       "chapter": 7,
       "name": "Daniel 7",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 7,
@@ -1398,6 +1406,7 @@
     {
       "chapter": 8,
       "name": "Daniel 8",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 8,
@@ -1566,6 +1575,7 @@
     {
       "chapter": 9,
       "name": "Daniel 9",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 9,
@@ -1734,6 +1744,7 @@
     {
       "chapter": 10,
       "name": "Daniel 10",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 10,
@@ -1866,6 +1877,7 @@
     {
       "chapter": 11,
       "name": "Daniel 11",
+      "totalVerses": 45,
       "verses": [
         {
           "chapter": 11,
@@ -2142,6 +2154,7 @@
     {
       "chapter": 12,
       "name": "Daniel 12",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 12,

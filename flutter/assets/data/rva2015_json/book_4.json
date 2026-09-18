@@ -8,10 +8,12 @@
   "nr": 4,
   "name": "Números",
   "totalVerses": 1289,
+  "totalChapters": 36,
   "chapters": [
     {
       "chapter": 1,
       "name": "Números 1",
+      "totalVerses": 54,
       "verses": [
         {
           "chapter": 1,
@@ -342,6 +344,7 @@
     {
       "chapter": 2,
       "name": "Números 2",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 2,
@@ -552,6 +555,7 @@
     {
       "chapter": 3,
       "name": "Números 3",
+      "totalVerses": 51,
       "verses": [
         {
           "chapter": 3,
@@ -864,6 +868,7 @@
     {
       "chapter": 4,
       "name": "Números 4",
+      "totalVerses": 49,
       "verses": [
         {
           "chapter": 4,
@@ -1164,6 +1169,7 @@
     {
       "chapter": 5,
       "name": "Números 5",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 5,
@@ -1356,6 +1362,7 @@
     {
       "chapter": 6,
       "name": "Números 6",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 6,
@@ -1524,6 +1531,7 @@
     {
       "chapter": 7,
       "name": "Números 7",
+      "totalVerses": 89,
       "verses": [
         {
           "chapter": 7,
@@ -2064,6 +2072,7 @@
     {
       "chapter": 8,
       "name": "Números 8",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 8,
@@ -2226,6 +2235,7 @@
     {
       "chapter": 9,
       "name": "Números 9",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 9,
@@ -2370,6 +2380,7 @@
     {
       "chapter": 10,
       "name": "Números 10",
+      "totalVerses": 36,
       "verses": [
         {
           "chapter": 10,
@@ -2592,6 +2603,7 @@
     {
       "chapter": 11,
       "name": "Números 11",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 11,
@@ -2808,6 +2820,7 @@
     {
       "chapter": 12,
       "name": "Números 12",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 12,
@@ -2910,6 +2923,7 @@
     {
       "chapter": 13,
       "name": "Números 13",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 13,
@@ -3114,6 +3128,7 @@
     {
       "chapter": 14,
       "name": "Números 14",
+      "totalVerses": 45,
       "verses": [
         {
           "chapter": 14,
@@ -3390,6 +3405,7 @@
     {
       "chapter": 15,
       "name": "Números 15",
+      "totalVerses": 41,
       "verses": [
         {
           "chapter": 15,
@@ -3642,6 +3658,7 @@
     {
       "chapter": 16,
       "name": "Números 16",
+      "totalVerses": 50,
       "verses": [
         {
           "chapter": 16,
@@ -3948,6 +3965,7 @@
     {
       "chapter": 17,
       "name": "Números 17",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 17,
@@ -4032,6 +4050,7 @@
     {
       "chapter": 18,
       "name": "Números 18",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 18,
@@ -4230,6 +4249,7 @@
     {
       "chapter": 19,
       "name": "Números 19",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 19,
@@ -4368,6 +4388,7 @@
     {
       "chapter": 20,
       "name": "Números 20",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 20,
@@ -4548,6 +4569,7 @@
     {
       "chapter": 21,
       "name": "Números 21",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 21,
@@ -4764,6 +4786,7 @@
     {
       "chapter": 22,
       "name": "Números 22",
+      "totalVerses": 42,
       "verses": [
         {
           "chapter": 22,
@@ -5022,6 +5045,7 @@
     {
       "chapter": 23,
       "name": "Números 23",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 23,
@@ -5208,6 +5232,7 @@
     {
       "chapter": 24,
       "name": "Números 24",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 24,
@@ -5364,6 +5389,7 @@
     {
       "chapter": 25,
       "name": "Números 25",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 25,
@@ -5478,6 +5504,7 @@
     {
       "chapter": 26,
       "name": "Números 26",
+      "totalVerses": 65,
       "verses": [
         {
           "chapter": 26,
@@ -5874,6 +5901,7 @@
     {
       "chapter": 27,
       "name": "Números 27",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 27,
@@ -6018,6 +6046,7 @@
     {
       "chapter": 28,
       "name": "Números 28",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 28,
@@ -6210,6 +6239,7 @@
     {
       "chapter": 29,
       "name": "Números 29",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 29,
@@ -6456,6 +6486,7 @@
     {
       "chapter": 30,
       "name": "Números 30",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 30,
@@ -6558,6 +6589,7 @@
     {
       "chapter": 31,
       "name": "Números 31",
+      "totalVerses": 54,
       "verses": [
         {
           "chapter": 31,
@@ -6888,6 +6920,7 @@
     {
       "chapter": 32,
       "name": "Números 32",
+      "totalVerses": 42,
       "verses": [
         {
           "chapter": 32,
@@ -7146,6 +7179,7 @@
     {
       "chapter": 33,
       "name": "Números 33",
+      "totalVerses": 56,
       "verses": [
         {
           "chapter": 33,
@@ -7488,6 +7522,7 @@
     {
       "chapter": 34,
       "name": "Números 34",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 34,
@@ -7668,6 +7703,7 @@
     {
       "chapter": 35,
       "name": "Números 35",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 35,
@@ -7878,6 +7914,7 @@
     {
       "chapter": 36,
       "name": "Números 36",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 36,

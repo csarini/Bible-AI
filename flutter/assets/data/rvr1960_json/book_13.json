@@ -8,10 +8,12 @@
   "nr": 13,
   "name": "1 Crónicas",
   "totalVerses": 942,
+  "totalChapters": 29,
   "chapters": [
     {
       "chapter": 1,
       "name": "1 Crónicas 1",
+      "totalVerses": 54,
       "verses": [
         {
           "chapter": 1,
@@ -342,6 +344,7 @@
     {
       "chapter": 2,
       "name": "1 Crónicas 2",
+      "totalVerses": 55,
       "verses": [
         {
           "chapter": 2,
@@ -678,6 +681,7 @@
     {
       "chapter": 3,
       "name": "1 Crónicas 3",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 3,
@@ -828,6 +832,7 @@
     {
       "chapter": 4,
       "name": "1 Crónicas 4",
+      "totalVerses": 43,
       "verses": [
         {
           "chapter": 4,
@@ -1092,6 +1097,7 @@
     {
       "chapter": 5,
       "name": "1 Crónicas 5",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 5,
@@ -1254,6 +1260,7 @@
     {
       "chapter": 6,
       "name": "1 Crónicas 6",
+      "totalVerses": 81,
       "verses": [
         {
           "chapter": 6,
@@ -1746,6 +1753,7 @@
     {
       "chapter": 7,
       "name": "1 Crónicas 7",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 7,
@@ -1992,6 +2000,7 @@
     {
       "chapter": 8,
       "name": "1 Crónicas 8",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 8,
@@ -2238,6 +2247,7 @@
     {
       "chapter": 9,
       "name": "1 Crónicas 9",
+      "totalVerses": 44,
       "verses": [
         {
           "chapter": 9,
@@ -2508,6 +2518,7 @@
     {
       "chapter": 10,
       "name": "1 Crónicas 10",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 10,
@@ -2598,6 +2609,7 @@
     {
       "chapter": 11,
       "name": "1 Crónicas 11",
+      "totalVerses": 47,
       "verses": [
         {
           "chapter": 11,
@@ -2886,6 +2898,7 @@
     {
       "chapter": 12,
       "name": "1 Crónicas 12",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 12,
@@ -3132,6 +3145,7 @@
     {
       "chapter": 13,
       "name": "1 Crónicas 13",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 13,
@@ -3222,6 +3236,7 @@
     {
       "chapter": 14,
       "name": "1 Crónicas 14",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 14,
@@ -3330,6 +3345,7 @@
     {
       "chapter": 15,
       "name": "1 Crónicas 15",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 15,
@@ -3510,6 +3526,7 @@
     {
       "chapter": 16,
       "name": "1 Crónicas 16",
+      "totalVerses": 43,
       "verses": [
         {
           "chapter": 16,
@@ -3774,6 +3791,7 @@
     {
       "chapter": 17,
       "name": "1 Crónicas 17",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 17,
@@ -3942,6 +3960,7 @@
     {
       "chapter": 18,
       "name": "1 Crónicas 18",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 18,
@@ -4050,6 +4069,7 @@
     {
       "chapter": 19,
       "name": "1 Crónicas 19",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 19,
@@ -4170,6 +4190,7 @@
     {
       "chapter": 20,
       "name": "1 Crónicas 20",
+      "totalVerses": 8,
       "verses": [
         {
           "chapter": 20,
@@ -4224,6 +4245,7 @@
     {
       "chapter": 21,
       "name": "1 Crónicas 21",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 21,
@@ -4410,6 +4432,7 @@
     {
       "chapter": 22,
       "name": "1 Crónicas 22",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 22,
@@ -4530,6 +4553,7 @@
     {
       "chapter": 23,
       "name": "1 Crónicas 23",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 23,
@@ -4728,6 +4752,7 @@
     {
       "chapter": 24,
       "name": "1 Crónicas 24",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 24,
@@ -4920,6 +4945,7 @@
     {
       "chapter": 25,
       "name": "1 Crónicas 25",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 25,
@@ -5112,6 +5138,7 @@
     {
       "chapter": 26,
       "name": "1 Crónicas 26",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 26,
@@ -5310,6 +5337,7 @@
     {
       "chapter": 27,
       "name": "1 Crónicas 27",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 27,
@@ -5520,6 +5548,7 @@
     {
       "chapter": 28,
       "name": "1 Crónicas 28",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 28,
@@ -5652,6 +5681,7 @@
     {
       "chapter": 29,
       "name": "1 Crónicas 29",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 29,

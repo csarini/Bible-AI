@@ -8,10 +8,12 @@
   "nr": 29,
   "name": "Joel",
   "totalVerses": 73,
+  "totalChapters": 3,
   "chapters": [
     {
       "chapter": 1,
       "name": "Joel 1",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 1,
@@ -138,6 +140,7 @@
     {
       "chapter": 2,
       "name": "Joel 2",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 2,
@@ -336,6 +339,7 @@
     {
       "chapter": 3,
       "name": "Joel 3",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 3,

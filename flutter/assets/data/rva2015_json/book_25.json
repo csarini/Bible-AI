@@ -8,10 +8,12 @@
   "nr": 25,
   "name": "Lamentaciones",
   "totalVerses": 154,
+  "totalChapters": 5,
   "chapters": [
     {
       "chapter": 1,
       "name": "Lamentaciones 1",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 1,
@@ -150,6 +152,7 @@
     {
       "chapter": 2,
       "name": "Lamentaciones 2",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 2,
@@ -288,6 +291,7 @@
     {
       "chapter": 3,
       "name": "Lamentaciones 3",
+      "totalVerses": 66,
       "verses": [
         {
           "chapter": 3,
@@ -690,6 +694,7 @@
     {
       "chapter": 4,
       "name": "Lamentaciones 4",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 4,
@@ -828,6 +833,7 @@
     {
       "chapter": 5,
       "name": "Lamentaciones 5",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 5,

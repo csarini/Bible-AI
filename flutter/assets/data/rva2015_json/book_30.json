@@ -8,10 +8,12 @@
   "nr": 30,
   "name": "Amós",
   "totalVerses": 146,
+  "totalChapters": 9,
   "chapters": [
     {
       "chapter": 1,
       "name": "Amós 1",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 1,
@@ -108,6 +110,7 @@
     {
       "chapter": 2,
       "name": "Amós 2",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 2,
@@ -210,6 +213,7 @@
     {
       "chapter": 3,
       "name": "Amós 3",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 3,
@@ -306,6 +310,7 @@
     {
       "chapter": 4,
       "name": "Amós 4",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 4,
@@ -390,6 +395,7 @@
     {
       "chapter": 5,
       "name": "Amós 5",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 5,
@@ -558,6 +564,7 @@
     {
       "chapter": 6,
       "name": "Amós 6",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 6,
@@ -648,6 +655,7 @@
     {
       "chapter": 7,
       "name": "Amós 7",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 7,
@@ -756,6 +764,7 @@
     {
       "chapter": 8,
       "name": "Amós 8",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 8,
@@ -846,6 +855,7 @@
     {
       "chapter": 9,
       "name": "Amós 9",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 9,

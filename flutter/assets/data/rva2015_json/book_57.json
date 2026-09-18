@@ -8,10 +8,12 @@
   "nr": 57,
   "name": "Filemón",
   "totalVerses": 25,
+  "totalChapters": 1,
   "chapters": [
     {
       "chapter": 1,
       "name": "Filemón 1",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 1,

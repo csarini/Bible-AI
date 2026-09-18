@@ -8,10 +8,12 @@
   "nr": 21,
   "name": "Eclesiastés",
   "totalVerses": 222,
+  "totalChapters": 12,
   "chapters": [
     {
       "chapter": 1,
       "name": "Eclesiastés 1",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 1,
@@ -126,6 +128,7 @@
     {
       "chapter": 2,
       "name": "Eclesiastés 2",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 2,
@@ -288,6 +291,7 @@
     {
       "chapter": 3,
       "name": "Eclesiastés 3",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 3,
@@ -426,6 +430,7 @@
     {
       "chapter": 4,
       "name": "Eclesiastés 4",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 4,
@@ -528,6 +533,7 @@
     {
       "chapter": 5,
       "name": "Eclesiastés 5",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 5,
@@ -654,6 +660,7 @@
     {
       "chapter": 6,
       "name": "Eclesiastés 6",
+      "totalVerses": 12,
       "verses": [
         {
           "chapter": 6,
@@ -732,6 +739,7 @@
     {
       "chapter": 7,
       "name": "Eclesiastés 7",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 7,
@@ -912,6 +920,7 @@
     {
       "chapter": 8,
       "name": "Eclesiastés 8",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 8,
@@ -1020,6 +1029,7 @@
     {
       "chapter": 9,
       "name": "Eclesiastés 9",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 9,
@@ -1134,6 +1144,7 @@
     {
       "chapter": 10,
       "name": "Eclesiastés 10",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 10,
@@ -1260,6 +1271,7 @@
     {
       "chapter": 11,
       "name": "Eclesiastés 11",
+      "totalVerses": 10,
       "verses": [
         {
           "chapter": 11,
@@ -1326,6 +1338,7 @@
     {
       "chapter": 12,
       "name": "Eclesiastés 12",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 12,

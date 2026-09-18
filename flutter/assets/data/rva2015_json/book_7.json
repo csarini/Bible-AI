@@ -8,10 +8,12 @@
   "nr": 7,
   "name": "Jueces",
   "totalVerses": 620,
+  "totalChapters": 21,
   "chapters": [
     {
       "chapter": 1,
       "name": "Jueces 1",
+      "totalVerses": 36,
       "verses": [
         {
           "chapter": 1,
@@ -234,6 +236,7 @@
     {
       "chapter": 2,
       "name": "Jueces 2",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 2,
@@ -384,6 +387,7 @@
     {
       "chapter": 3,
       "name": "Jueces 3",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 3,
@@ -576,6 +580,7 @@
     {
       "chapter": 4,
       "name": "Jueces 4",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 4,
@@ -726,6 +731,7 @@
     {
       "chapter": 5,
       "name": "Jueces 5",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 5,
@@ -918,6 +924,7 @@
     {
       "chapter": 6,
       "name": "Jueces 6",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 6,
@@ -1164,6 +1171,7 @@
     {
       "chapter": 7,
       "name": "Jueces 7",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 7,
@@ -1320,6 +1328,7 @@
     {
       "chapter": 8,
       "name": "Jueces 8",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 8,
@@ -1536,6 +1545,7 @@
     {
       "chapter": 9,
       "name": "Jueces 9",
+      "totalVerses": 57,
       "verses": [
         {
           "chapter": 9,
@@ -1884,6 +1894,7 @@
     {
       "chapter": 10,
       "name": "Jueces 10",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 10,
@@ -1998,6 +2009,7 @@
     {
       "chapter": 11,
       "name": "Jueces 11",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 11,
@@ -2244,6 +2256,7 @@
     {
       "chapter": 12,
       "name": "Jueces 12",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 12,
@@ -2340,6 +2353,7 @@
     {
       "chapter": 13,
       "name": "Jueces 13",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 13,
@@ -2496,6 +2510,7 @@
     {
       "chapter": 14,
       "name": "Jueces 14",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 14,
@@ -2622,6 +2637,7 @@
     {
       "chapter": 15,
       "name": "Jueces 15",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 15,
@@ -2748,6 +2764,7 @@
     {
       "chapter": 16,
       "name": "Jueces 16",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 16,
@@ -2940,6 +2957,7 @@
     {
       "chapter": 17,
       "name": "Jueces 17",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 17,
@@ -3024,6 +3042,7 @@
     {
       "chapter": 18,
       "name": "Jueces 18",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 18,
@@ -3216,6 +3235,7 @@
     {
       "chapter": 19,
       "name": "Jueces 19",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 19,
@@ -3408,6 +3428,7 @@
     {
       "chapter": 20,
       "name": "Jueces 20",
+      "totalVerses": 48,
       "verses": [
         {
           "chapter": 20,
@@ -3702,6 +3723,7 @@
     {
       "chapter": 21,
       "name": "Jueces 21",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 21,

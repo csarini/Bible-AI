@@ -8,10 +8,12 @@
   "nr": 43,
   "name": "Juan",
   "totalVerses": 882,
+  "totalChapters": 21,
   "chapters": [
     {
       "chapter": 1,
       "name": "Juan 1",
+      "totalVerses": 51,
       "verses": [
         {
           "chapter": 1,
@@ -324,6 +326,7 @@
     {
       "chapter": 2,
       "name": "Juan 2",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 2,
@@ -480,6 +483,7 @@
     {
       "chapter": 3,
       "name": "Juan 3",
+      "totalVerses": 36,
       "verses": [
         {
           "chapter": 3,
@@ -702,6 +706,7 @@
     {
       "chapter": 4,
       "name": "Juan 4",
+      "totalVerses": 54,
       "verses": [
         {
           "chapter": 4,
@@ -1032,6 +1037,7 @@
     {
       "chapter": 5,
       "name": "Juan 5",
+      "totalVerses": 47,
       "verses": [
         {
           "chapter": 5,
@@ -1320,6 +1326,7 @@
     {
       "chapter": 6,
       "name": "Juan 6",
+      "totalVerses": 71,
       "verses": [
         {
           "chapter": 6,
@@ -1752,6 +1759,7 @@
     {
       "chapter": 7,
       "name": "Juan 7",
+      "totalVerses": 53,
       "verses": [
         {
           "chapter": 7,
@@ -2076,6 +2084,7 @@
     {
       "chapter": 8,
       "name": "Juan 8",
+      "totalVerses": 59,
       "verses": [
         {
           "chapter": 8,
@@ -2436,6 +2445,7 @@
     {
       "chapter": 9,
       "name": "Juan 9",
+      "totalVerses": 41,
       "verses": [
         {
           "chapter": 9,
@@ -2688,6 +2698,7 @@
     {
       "chapter": 10,
       "name": "Juan 10",
+      "totalVerses": 42,
       "verses": [
         {
           "chapter": 10,
@@ -2946,6 +2957,7 @@
     {
       "chapter": 11,
       "name": "Juan 11",
+      "totalVerses": 57,
       "verses": [
         {
           "chapter": 11,
@@ -3294,6 +3306,7 @@
     {
       "chapter": 12,
       "name": "Juan 12",
+      "totalVerses": 50,
       "verses": [
         {
           "chapter": 12,
@@ -3600,6 +3613,7 @@
     {
       "chapter": 13,
       "name": "Juan 13",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 13,
@@ -3834,6 +3848,7 @@
     {
       "chapter": 14,
       "name": "Juan 14",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 14,
@@ -4026,6 +4041,7 @@
     {
       "chapter": 15,
       "name": "Juan 15",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 15,
@@ -4194,6 +4210,7 @@
     {
       "chapter": 16,
       "name": "Juan 16",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 16,
@@ -4404,6 +4421,7 @@
     {
       "chapter": 17,
       "name": "Juan 17",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 17,
@@ -4566,6 +4584,7 @@
     {
       "chapter": 18,
       "name": "Juan 18",
+      "totalVerses": 41,
       "verses": [
         {
           "chapter": 18,
@@ -4818,6 +4837,7 @@
     {
       "chapter": 19,
       "name": "Juan 19",
+      "totalVerses": 43,
       "verses": [
         {
           "chapter": 19,
@@ -5082,6 +5102,7 @@
     {
       "chapter": 20,
       "name": "Juan 20",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 20,
@@ -5274,6 +5295,7 @@
     {
       "chapter": 21,
       "name": "Juan 21",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 21,

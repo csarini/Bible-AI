@@ -8,10 +8,12 @@
   "nr": 22,
   "name": "Cantares",
   "totalVerses": 120,
+  "totalChapters": 8,
   "chapters": [
     {
       "chapter": 1,
       "name": "Cantares 1",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 1,
@@ -126,6 +128,7 @@
     {
       "chapter": 2,
       "name": "Cantares 2",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 2,
@@ -234,6 +237,7 @@
     {
       "chapter": 3,
       "name": "Cantares 3",
+      "totalVerses": 11,
       "verses": [
         {
           "chapter": 3,
@@ -306,6 +310,7 @@
     {
       "chapter": 4,
       "name": "Cantares 4",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 4,
@@ -408,6 +413,7 @@
     {
       "chapter": 5,
       "name": "Cantares 5",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 5,
@@ -510,6 +516,7 @@
     {
       "chapter": 6,
       "name": "Cantares 6",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 6,
@@ -600,6 +607,7 @@
     {
       "chapter": 7,
       "name": "Cantares 7",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 7,
@@ -684,6 +692,7 @@
     {
       "chapter": 8,
       "name": "Cantares 8",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 8,

@@ -8,10 +8,12 @@
   "nr": 28,
   "name": "Oseas",
   "totalVerses": 197,
+  "totalChapters": 14,
   "chapters": [
     {
       "chapter": 1,
       "name": "Oseas 1",
+      "totalVerses": 11,
       "verses": [
         {
           "chapter": 1,
@@ -84,6 +86,7 @@
     {
       "chapter": 2,
       "name": "Oseas 2",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 2,
@@ -228,6 +231,7 @@
     {
       "chapter": 3,
       "name": "Oseas 3",
+      "totalVerses": 5,
       "verses": [
         {
           "chapter": 3,
@@ -264,6 +268,7 @@
     {
       "chapter": 4,
       "name": "Oseas 4",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 4,
@@ -384,6 +389,7 @@
     {
       "chapter": 5,
       "name": "Oseas 5",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 5,
@@ -480,6 +486,7 @@
     {
       "chapter": 6,
       "name": "Oseas 6",
+      "totalVerses": 11,
       "verses": [
         {
           "chapter": 6,
@@ -552,6 +559,7 @@
     {
       "chapter": 7,
       "name": "Oseas 7",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 7,
@@ -654,6 +662,7 @@
     {
       "chapter": 8,
       "name": "Oseas 8",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 8,
@@ -744,6 +753,7 @@
     {
       "chapter": 9,
       "name": "Oseas 9",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 9,
@@ -852,6 +862,7 @@
     {
       "chapter": 10,
       "name": "Oseas 10",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 10,
@@ -948,6 +959,7 @@
     {
       "chapter": 11,
       "name": "Oseas 11",
+      "totalVerses": 12,
       "verses": [
         {
           "chapter": 11,
@@ -1026,6 +1038,7 @@
     {
       "chapter": 12,
       "name": "Oseas 12",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 12,
@@ -1116,6 +1129,7 @@
     {
       "chapter": 13,
       "name": "Oseas 13",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 13,
@@ -1218,6 +1232,7 @@
     {
       "chapter": 14,
       "name": "Oseas 14",
+      "totalVerses": 9,
       "verses": [
         {
           "chapter": 14,

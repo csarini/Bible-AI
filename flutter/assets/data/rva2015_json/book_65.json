@@ -8,10 +8,12 @@
   "nr": 65,
   "name": "Judas",
   "totalVerses": 25,
+  "totalChapters": 1,
   "chapters": [
     {
       "chapter": 1,
       "name": "Judas 1",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 1,
