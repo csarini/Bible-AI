@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../../core/constants/bible_books.dart';
+import '../../../../core/constants/bible_chapter_verses.dart';
 import '../../../../core/providers/app_settings_providers.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/sanctuary_colors.dart';
@@ -505,6 +506,7 @@ class _SanctuarySearchLibraryViewState
       backgroundColor: Colors.transparent,
       builder: (ctx) => _BookChapterVersePickerSheet(
         book: book,
+        database: widget.database,
         onSelectPassage: (ch, verse) {
           Navigator.pop(ctx);
           _selectPassage(book.id, ch, verse);
@@ -1315,11 +1317,13 @@ class _SanctuarySearchLibraryViewState
 // 2-Step Chapter and Verse Selection Bottom Sheet
 class _BookChapterVersePickerSheet extends StatefulWidget {
   final BibleBookInfo book;
+  final AppDatabase? database;
   final Function(int chapter, int? verse) onSelectPassage;
 
   const _BookChapterVersePickerSheet({
     required this.book,
     required this.onSelectPassage,
+    this.database,
   });
 
   @override
@@ -1331,6 +1335,29 @@ class _BookChapterVersePickerSheetState
     extends State<_BookChapterVersePickerSheet> {
   int _selectedChapter = 1;
   int _step = 1; // 1: Chapters, 2: Verses
+  Map<int, int> _chapterVerseCounts = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadChapterVerseCounts();
+  }
+
+  Future<void> _loadChapterVerseCounts() async {
+    if (widget.database == null) return;
+    try {
+      final chapters = await (widget.database!.select(widget.database!.localBibleChapters)
+            ..where((c) => c.bookNumber.equals(widget.book.number)))
+          .get();
+      if (chapters.isNotEmpty && mounted) {
+        setState(() {
+          _chapterVerseCounts = {
+            for (final ch in chapters) ch.chapter: ch.verseCount
+          };
+        });
+      }
+    } catch (_) {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1374,17 +1401,39 @@ class _BookChapterVersePickerSheetState
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      widget.book.isNewTestament
-                          ? 'Nuevo Testamento'
-                          : 'Antiguo Testamento',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.inter(
-                        fontSize: 11,
-                        color:
-                            theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          widget.book.isNewTestament
+                              ? 'Nuevo Testamento'
+                              : 'Antiguo Testamento',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: 11,
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.6),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 1),
+                          decoration: BoxDecoration(
+                            color: SanctuaryColors.pineGreen
+                                .withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            'BD Local • ${widget.book.totalChapters} Caps',
+                            style: GoogleFonts.inter(
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                              color: SanctuaryColors.pineGreen,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -1416,7 +1465,7 @@ class _BookChapterVersePickerSheetState
             Expanded(
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 6,
+                  crossAxisCount: 5,
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
                 ),
@@ -1424,6 +1473,8 @@ class _BookChapterVersePickerSheetState
                 itemBuilder: (context, index) {
                   final chNum = index + 1;
                   final isSelected = chNum == _selectedChapter;
+                  final verseCount = _chapterVerseCounts[chNum] ??
+                      getCanonicalVerseCount(widget.book.number, chNum);
                   return InkWell(
                     onTap: () {
                       setState(() {
@@ -1446,12 +1497,29 @@ class _BookChapterVersePickerSheetState
                                   .withValues(alpha: 0.25),
                         ),
                       ),
-                      child: Text(
-                        '$chNum',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: isSelected ? Colors.white : null,
-                        ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '$chNum',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: isSelected ? Colors.white : null,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '${verseCount}v',
+                            style: TextStyle(
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.w600,
+                              color: isSelected
+                                  ? Colors.white.withValues(alpha: 0.9)
+                                  : theme.colorScheme.primary,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   );
@@ -1472,12 +1540,14 @@ class _BookChapterVersePickerSheetState
             ),
           ] else ...[
             // Step 2: Verses Grid
+            final totalVerses = _chapterVerseCounts[_selectedChapter] ??
+                getCanonicalVerseCount(widget.book.number, _selectedChapter);
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Text(
-                    'Capítulo $_selectedChapter: Selecciona un versículo',
+                    '${widget.book.name} $_selectedChapter ($totalVerses versículos en BD local)',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.inter(
@@ -1503,7 +1573,7 @@ class _BookChapterVersePickerSheetState
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
                 ),
-                itemCount: 35, // standard estimated chapter verses
+                itemCount: totalVerses,
                 itemBuilder: (context, index) {
                   final vNum = index + 1;
                   return InkWell(
@@ -1545,6 +1615,9 @@ class _BookChapterVersePickerSheetState
   Widget _buildStepButton(
       int stepNumber, String label, SanctuaryThemeExtension tokens) {
     final isCurrent = _step == stepNumber;
+    final displayLabel = stepNumber == 2
+        ? 'Versículos (${getCanonicalVerseCount(widget.book.number, _selectedChapter)})'
+        : label;
     return GestureDetector(
       onTap: () => setState(() => _step = stepNumber),
       child: Container(
@@ -1554,7 +1627,7 @@ class _BookChapterVersePickerSheetState
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
-          label,
+          displayLabel,
           style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w700,

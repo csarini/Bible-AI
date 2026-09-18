@@ -7,10 +7,13 @@
   "encoding": "UTF-8",
   "nr": 32,
   "name": "Jonás",
+  "totalVerses": 48,
+  "totalChapters": 4,
   "chapters": [
     {
       "chapter": 1,
       "name": "Jonás 1",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 1,
@@ -119,6 +122,7 @@
     {
       "chapter": 2,
       "name": "Jonás 2",
+      "totalVerses": 10,
       "verses": [
         {
           "chapter": 2,
@@ -185,6 +189,7 @@
     {
       "chapter": 3,
       "name": "Jonás 3",
+      "totalVerses": 10,
       "verses": [
         {
           "chapter": 3,
@@ -251,6 +256,7 @@
     {
       "chapter": 4,
       "name": "Jonás 4",
+      "totalVerses": 11,
       "verses": [
         {
           "chapter": 4,

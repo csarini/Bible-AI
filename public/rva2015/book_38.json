@@ -7,10 +7,13 @@
   "encoding": "UTF-8",
   "nr": 38,
   "name": "Zacarías",
+  "totalVerses": 211,
+  "totalChapters": 14,
   "chapters": [
     {
       "chapter": 1,
       "name": "Zacarías 1",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 1,
@@ -143,6 +146,7 @@
     {
       "chapter": 2,
       "name": "Zacarías 2",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 2,
@@ -227,6 +231,7 @@
     {
       "chapter": 3,
       "name": "Zacarías 3",
+      "totalVerses": 10,
       "verses": [
         {
           "chapter": 3,
@@ -293,6 +298,7 @@
     {
       "chapter": 4,
       "name": "Zacarías 4",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 4,
@@ -383,6 +389,7 @@
     {
       "chapter": 5,
       "name": "Zacarías 5",
+      "totalVerses": 11,
       "verses": [
         {
           "chapter": 5,
@@ -455,6 +462,7 @@
     {
       "chapter": 6,
       "name": "Zacarías 6",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 6,
@@ -551,6 +559,7 @@
     {
       "chapter": 7,
       "name": "Zacarías 7",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 7,
@@ -641,6 +650,7 @@
     {
       "chapter": 8,
       "name": "Zacarías 8",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 8,
@@ -785,6 +795,7 @@
     {
       "chapter": 9,
       "name": "Zacarías 9",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 9,
@@ -893,6 +904,7 @@
     {
       "chapter": 10,
       "name": "Zacarías 10",
+      "totalVerses": 12,
       "verses": [
         {
           "chapter": 10,
@@ -971,6 +983,7 @@
     {
       "chapter": 11,
       "name": "Zacarías 11",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 11,
@@ -1079,6 +1092,7 @@
     {
       "chapter": 12,
       "name": "Zacarías 12",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 12,
@@ -1169,6 +1183,7 @@
     {
       "chapter": 13,
       "name": "Zacarías 13",
+      "totalVerses": 9,
       "verses": [
         {
           "chapter": 13,
@@ -1229,6 +1244,7 @@
     {
       "chapter": 14,
       "name": "Zacarías 14",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 14,

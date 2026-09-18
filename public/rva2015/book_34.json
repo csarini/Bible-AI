@@ -7,10 +7,13 @@
   "encoding": "UTF-8",
   "nr": 34,
   "name": "Nahúm",
+  "totalVerses": 47,
+  "totalChapters": 3,
   "chapters": [
     {
       "chapter": 1,
       "name": "Nahúm 1",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 1,
@@ -107,6 +110,7 @@
     {
       "chapter": 2,
       "name": "Nahúm 2",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 2,
@@ -191,6 +195,7 @@
     {
       "chapter": 3,
       "name": "Nahúm 3",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 3,

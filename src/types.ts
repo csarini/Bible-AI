@@ -7,6 +7,8 @@ export interface BibleBook {
   englishName: string;
   testament: 'OT' | 'NT'; // Antiguo o Nuevo Testamento
   chaptersCount: number;
+  totalChapters?: number;
+  totalVerses?: number;
   abbreviation: string;
   category: 'Pentateuco' | 'Históricos' | 'Poéticos' | 'Profetas Mayores' | 'Profetas Menores' | 'Evangelios' | 'Historia' | 'Epístolas Paulinas' | 'Epístolas Generales' | 'Profecía';
 }
@@ -25,6 +27,7 @@ export interface BibleChapterData {
   chapter: number;
   verses: BibleVerse[];
   translation: string;
+  totalVerses?: number;
 }
 
 export interface LocalBookmark {
@@ -154,6 +157,15 @@ export const OFFICIAL_TRANSLATIONS: BibleTranslationOption[] = [
     source: 'offline',
     isOffline: true,
   },
+  {
+    translation: 'Reina Valera 1909',
+    abbreviation: 'valera',
+    name: 'Reina-Valera 1909',
+    subtitle: 'Edición Histórica Valera 1909 (Texto Clásico)',
+    badge: 'Offline Canónico',
+    source: 'offline',
+    isOffline: true,
+  },
 ];
 
 export type ThemeMode = 'light' | 'sepia' | 'dark';
@@ -162,7 +174,7 @@ export interface ReadingSettings {
   fontSize: 'small' | 'medium' | 'large' | 'extra-large';
   fontFamily: 'Literata' | 'Playfair' | 'Inter';
   lineHeight: 'normal' | 'relaxed' | 'spacious';
-  translation: 'rvr1960' | 'rva2015' | string;
+  translation: 'rvr1960' | 'rva2015' | 'valera' | string;
   themeMode: ThemeMode;
   showVerseNumbers: boolean;
 }

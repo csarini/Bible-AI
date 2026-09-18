@@ -213,10 +213,11 @@ class BibleDataImportService {
           final booksJson = json.decode(booksString) as Map<String, dynamic>;
           booksJson.forEach((key, bVal) {
             if (bVal is Map<String, dynamic>) {
-              final nr = bVal['nr'] as int? ?? int.tryParse(key) ?? 1;
+              final nr = _readInt(bVal['nr'], fallback: int.tryParse(key) ?? 1);
               final name = bVal['name'] as String? ?? '';
               final meta = kCanonicalBookMetadata[nr] ??
                   (code: 'BK$nr', chapters: 1, isNT: nr >= 40);
+              final chapters = _readInt(bVal['totalChapters'], fallback: meta.chapters);
 
               allBooksToInsert.add(LocalBibleBooksCompanion.insert(
                 id: '${abbr}_$nr',
@@ -224,7 +225,7 @@ class BibleDataImportService {
                 bookNumber: nr,
                 bookCode: meta.code,
                 name: name.isNotEmpty ? name : meta.code,
-                totalChapters: meta.chapters,
+                totalChapters: chapters,
                 isNewTestament: Value(meta.isNT),
                 url: Value(bVal['url'] as String?),
                 sha: Value(bVal['sha'] as String?),
@@ -308,19 +309,22 @@ class BibleDataImportService {
 
             for (final chItem in chaptersList) {
               if (chItem is Map<String, dynamic>) {
-                final chNum = chItem['chapter'] as int? ?? 1;
+                final chNum = _readInt(chItem['chapter'], fallback: 1);
                 final rawVerses = chItem['verses'] as List<dynamic>? ?? [];
+                final totalVersesFromJson = _readInt(chItem['totalVerses'], fallback: rawVerses.length);
 
                 final versesData = rawVerses.map((v) {
                   return {
                     'chapter': chNum,
-                    'verse': v['verse'] ?? 1,
+                    'verse': _readInt(v['verse'], fallback: 1),
                     'name': v['name'] ?? '',
                     'text': (v['text'] as String? ?? '').trim(),
                   };
                 }).toList();
 
-                if (versesData.isNotEmpty) {
+                final count = versesData.isNotEmpty ? versesData.length : totalVersesFromJson;
+
+                if (count > 0 || versesData.isNotEmpty) {
                   chaptersToInsert.add(LocalBibleChaptersCompanion.insert(
                     id: '${config.key}_${bookNr}_$chNum',
                     translationKey: config.key,
@@ -329,7 +333,7 @@ class BibleDataImportService {
                     bookName: bookName,
                     chapter: chNum,
                     versesJson: json.encode(versesData),
-                    verseCount: Value(versesData.length),
+                    verseCount: Value(count),
                   ));
                 }
               }

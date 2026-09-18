@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Book, Sparkles, BookOpen, ChevronRight, X, ArrowLeft, Check, Compass, Layers } from 'lucide-react';
+import { Search, Book, Sparkles, BookOpen, ChevronRight, X, ArrowLeft, Check, Compass, Layers, Database } from 'lucide-react';
 import { fetchBibleChapter } from '../data/bibleData';
-import { getLocalBooksSync } from '../services/bibleDatabaseService';
+import { getCanonicalVerseCount } from '../data/canonicalVerseCounts';
+import { getLocalBooksSync, getChaptersForBookFromDB } from '../services/bibleDatabaseService';
 import { StorageService } from '../services/storageService';
 import { BibleBook, BibleVerse } from '../types';
 
@@ -83,6 +84,23 @@ export const SearchView: React.FC<SearchViewProps> = ({
   // Chapter verses state for the verse picker
   const [chapterVerses, setChapterVerses] = useState<BibleVerse[]>([]);
   const [loadingVerses, setLoadingVerses] = useState<boolean>(false);
+  const [bookChaptersMeta, setBookChaptersMeta] = useState<{ chapter: number; totalVerses: number }[]>([]);
+  const [bookTotalVerses, setBookTotalVerses] = useState<number>(0);
+
+  // Load chapter and verse statistics from local DB for the selected book
+  useEffect(() => {
+    let isCurrent = true;
+    getChaptersForBookFromDB(selectedBook.id, currentTranslation).then((meta) => {
+      if (isCurrent) {
+        setBookChaptersMeta(meta);
+        const total = selectedBook.totalVerses || meta.reduce((acc, c) => acc + c.totalVerses, 0);
+        setBookTotalVerses(total);
+      }
+    });
+    return () => {
+      isCurrent = false;
+    };
+  }, [selectedBook.id, selectedBook.totalVerses, currentTranslation]);
 
   const oldTestament = useMemo(() => {
     const seen = new Set<string>();
@@ -227,18 +245,30 @@ export const SearchView: React.FC<SearchViewProps> = ({
     let isCurrent = true;
     setLoadingVerses(true);
 
-    fetchBibleChapter(selectedBook.id, selectedChapter)
+    fetchBibleChapter(selectedBook.id, selectedChapter, currentTranslation)
       .then((verses) => {
         if (isCurrent) {
-          setChapterVerses(verses);
+          if (verses && verses.length > 0) {
+            setChapterVerses(verses);
+          } else {
+            const canonicalCount = getCanonicalVerseCount(selectedBook.number, selectedChapter);
+            const dummyVerses: BibleVerse[] = Array.from({ length: canonicalCount }, (_, i) => ({
+              bookId: selectedBook.id,
+              bookName: selectedBook.name,
+              chapter: selectedChapter,
+              verse: i + 1,
+              text: `Versículo ${i + 1}`
+            }));
+            setChapterVerses(dummyVerses);
+          }
           setLoadingVerses(false);
         }
       })
       .catch(() => {
         if (isCurrent) {
-          // Fallback estimated verses if offline
-          const fallbackCount = 25;
-          const dummyVerses: BibleVerse[] = Array.from({ length: fallbackCount }, (_, i) => ({
+          // Fallback exact canonical verses if offline
+          const canonicalCount = getCanonicalVerseCount(selectedBook.number, selectedChapter);
+          const dummyVerses: BibleVerse[] = Array.from({ length: canonicalCount }, (_, i) => ({
             bookId: selectedBook.id,
             bookName: selectedBook.name,
             chapter: selectedChapter,
@@ -253,7 +283,7 @@ export const SearchView: React.FC<SearchViewProps> = ({
     return () => {
       isCurrent = false;
     };
-  }, [selectedBook.id, selectedChapter]);
+  }, [selectedBook.id, selectedBook.number, selectedChapter, currentTranslation]);
 
   // When clicking on a book card
   const handleBookClick = (book: BibleBook) => {
@@ -491,7 +521,7 @@ export const SearchView: React.FC<SearchViewProps> = ({
                   </div>
                   <div className="flex items-center justify-between mt-1.5">
                     <span className={`font-body-ui text-xs ${subtextColor}`}>
-                      {book.chaptersCount} Capítulos
+                      {book.chaptersCount} Cap.{book.totalVerses ? ` • ${book.totalVerses.toLocaleString()} vers.` : ''}
                     </span>
                     <span className="text-[10px] font-label-caps text-[#F25C05] bg-[#F25C05]/15 px-1.5 py-0.5 rounded">
                       {book.abbreviation}
@@ -537,7 +567,7 @@ export const SearchView: React.FC<SearchViewProps> = ({
                   </div>
                   <div className="flex items-center justify-between mt-1.5">
                     <span className={`font-body-ui text-xs ${subtextColor}`}>
-                      {book.chaptersCount} Capítulos
+                      {book.chaptersCount} Cap.{book.totalVerses ? ` • ${book.totalVerses.toLocaleString()} vers.` : ''}
                     </span>
                     <span className="text-[10px] font-label-caps text-[#0B2B68] bg-[#0B2B68]/15 px-1.5 py-0.5 rounded">
                       {book.abbreviation}
@@ -558,9 +588,15 @@ export const SearchView: React.FC<SearchViewProps> = ({
       >
         <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 border-b pb-4 ${isDark ? 'border-white/10' : 'border-[#C6C5D4]/70'}`}>
           <div>
-            <span className="text-xs font-label-caps text-[#F25C05] uppercase tracking-wider block mb-1">
-              Libro Seleccionado • {selectedBook.testament === 'OT' ? 'Antiguo Testamento' : 'Nuevo Testamento'}
-            </span>
+            <div className="flex flex-wrap items-center gap-2 mb-1.5">
+              <span className="text-xs font-label-caps text-[#F25C05] uppercase tracking-wider">
+                Libro Seleccionado • {selectedBook.testament === 'OT' ? 'Antiguo Testamento' : 'Nuevo Testamento'}
+              </span>
+              <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#10B981]/15 text-[#047857] dark:text-[#34D399] border border-[#10B981]/30">
+                <Database className="w-3 h-3" />
+                BD Local: {selectedBook.chaptersCount} Capítulos • {bookTotalVerses > 0 ? `${bookTotalVerses.toLocaleString()} Versículos` : ''}
+              </span>
+            </div>
             <h3 className={`font-display-scripture text-2xl sm:text-3xl font-semibold flex items-center gap-2.5 ${headerTitleColor}`}>
               <BookOpen className="w-6 h-6 text-[#F25C05]" />
               {selectedBook.name}
@@ -587,7 +623,7 @@ export const SearchView: React.FC<SearchViewProps> = ({
                   : `${subtextColor} hover:${headerTitleColor}`
               }`}
             >
-              2. Versículos (Cap. {selectedChapter})
+              2. Versículos ({chapterVerses.length > 0 ? `${chapterVerses.length}` : `Cap. ${selectedChapter}`})
             </button>
           </div>
         </div>
@@ -595,26 +631,38 @@ export const SearchView: React.FC<SearchViewProps> = ({
         {/* Step 1: Chapters Grid */}
         {selectorStep === 'chapters' && (
           <div>
-            <p className={`text-xs font-body-ui mb-3 ${subtextColor}`}>
-              Selecciona un capítulo de {selectedBook.name}:
-            </p>
+            <div className="flex items-center justify-between mb-3">
+              <p className={`text-xs font-body-ui ${subtextColor}`}>
+                Selecciona un capítulo de {selectedBook.name} (información de versículos desde BD local):
+              </p>
+              <span className="text-[11px] font-label-caps text-[#0B2B68] dark:text-[#FED65B] bg-[#0B2B68]/10 dark:bg-[#FED65B]/15 px-2 py-0.5 rounded">
+                {selectedBook.chaptersCount} caps totales
+              </span>
+            </div>
             <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 sm:gap-2.5 max-h-80 overflow-y-auto pr-1">
               {Array.from({ length: selectedBook.chaptersCount }, (_, i) => i + 1).map((chNum) => {
                 const isChSelected = selectedChapter === chNum;
+                const chMeta = bookChaptersMeta.find(c => c.chapter === chNum);
+                const versesCount = chMeta?.totalVerses ?? getCanonicalVerseCount(selectedBook.number, chNum);
                 return (
                   <button
                     key={chNum}
                     id={`chapter-btn-${selectedBook.id}-${chNum}`}
                     onClick={() => handleChapterSelect(chNum)}
-                    className={`py-3 sm:py-3.5 flex flex-col items-center justify-center rounded-xl font-body-ui text-sm sm:text-base font-semibold transition-all cursor-pointer shadow-xs border ${
+                    className={`py-2.5 sm:py-3 px-1.5 flex flex-col items-center justify-center rounded-xl font-body-ui transition-all cursor-pointer shadow-xs border ${
                       isChSelected
                         ? 'bg-[#FED65B] border-[#735C00] text-[#1B1C19] scale-105 shadow-md font-bold'
                         : gridItemBg
                     }`}
-                    title={`Capítulo ${chNum} de ${selectedBook.name}`}
+                    title={`Capítulo ${chNum} de ${selectedBook.name}: ${versesCount} versículos guardados en BD local`}
                   >
-                    <span className="text-xs font-label-caps opacity-70 mb-0.5">Cap.</span>
-                    <span className="text-base sm:text-lg">{chNum}</span>
+                    <span className="text-[10px] font-label-caps opacity-70 mb-0.5">Cap.</span>
+                    <span className="text-base sm:text-lg font-bold leading-tight">{chNum}</span>
+                    <span className={`text-[10px] font-semibold mt-0.5 whitespace-nowrap ${
+                      isChSelected ? 'text-[#745C00]' : 'text-[#0B2B68] dark:text-[#FED65B]/90'
+                    }`}>
+                      {versesCount} v.
+                    </span>
                   </button>
                 );
               })}
@@ -721,8 +769,12 @@ export const SearchView: React.FC<SearchViewProps> = ({
                   <h3 className={`font-display-scripture text-2xl font-bold ${headerTitleColor}`}>
                     {selectedBook.name}
                   </h3>
-                  <p className={`text-xs font-label-caps ${subtextColor}`}>
-                    {selectedBook.testament === 'OT' ? 'Antiguo Testamento' : 'Nuevo Testamento'} • {selectedBook.chaptersCount} Capítulos
+                  <p className={`text-xs font-label-caps flex items-center gap-1.5 mt-0.5 ${subtextColor}`}>
+                    <span>{selectedBook.testament === 'OT' ? 'Antiguo Testamento' : 'Nuevo Testamento'}</span>
+                    <span>•</span>
+                    <span className="text-[#047857] dark:text-[#34D399] font-medium">
+                      BD Local: {selectedBook.chaptersCount} Caps • {bookTotalVerses > 0 ? `${bookTotalVerses.toLocaleString()} Vers.` : ''}
+                    </span>
                   </p>
                 </div>
               </div>
@@ -750,7 +802,7 @@ export const SearchView: React.FC<SearchViewProps> = ({
                       : `${subtextColor} hover:opacity-80`
                   }`}
                 >
-                  1. Capítulos
+                  1. Capítulos ({selectedBook.chaptersCount})
                 </button>
                 <ChevronRight className="w-3.5 h-3.5 text-[#767683]" />
                 <button
@@ -761,7 +813,7 @@ export const SearchView: React.FC<SearchViewProps> = ({
                       : `${subtextColor} hover:opacity-80`
                   }`}
                 >
-                  2. Versículos ({selectedBook.name} {selectedChapter})
+                  2. Versículos ({chapterVerses.length > 0 ? `${chapterVerses.length}` : `${selectedBook.name} ${selectedChapter}`})
                 </button>
               </div>
 
@@ -779,24 +831,37 @@ export const SearchView: React.FC<SearchViewProps> = ({
             <div className={`p-4 sm:p-6 overflow-y-auto flex-1 ${modalBg}`}>
               {selectorStep === 'chapters' ? (
                 <div>
-                  <h4 className={`font-label-caps text-xs uppercase tracking-wider mb-3 ${subtextColor}`}>
-                    Selecciona el capítulo:
-                  </h4>
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className={`font-label-caps text-xs uppercase tracking-wider ${subtextColor}`}>
+                      Selecciona el capítulo:
+                    </h4>
+                    <span className="text-[11px] font-label-caps text-[#047857] dark:text-[#34D399] font-medium">
+                      Información de versículos desde BD Local
+                    </span>
+                  </div>
                   <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-7 gap-2.5">
                     {Array.from({ length: selectedBook.chaptersCount }, (_, i) => i + 1).map((chNum) => {
                       const isChSelected = selectedChapter === chNum;
+                      const chMeta = bookChaptersMeta.find(c => c.chapter === chNum);
+                      const versesCount = chMeta?.totalVerses ?? getCanonicalVerseCount(selectedBook.number, chNum);
                       return (
                         <button
                           key={chNum}
                           onClick={() => handleChapterSelect(chNum)}
-                          className={`py-3.5 rounded-xl font-body-ui text-base font-bold transition-all cursor-pointer border flex flex-col items-center justify-center ${
+                          className={`py-2.5 sm:py-3 rounded-xl font-body-ui transition-all cursor-pointer border flex flex-col items-center justify-center ${
                             isChSelected
                               ? 'bg-[#FED65B] border-[#735C00] text-[#1B1C19] shadow-md scale-105'
                               : gridItemBg
                           }`}
+                          title={`Capítulo ${chNum}: ${versesCount} versículos guardados en BD local`}
                         >
                           <span className={`text-[10px] font-normal ${subtextColor}`}>Cap.</span>
-                          {chNum}
+                          <span className="text-base font-bold leading-tight">{chNum}</span>
+                          <span className={`text-[10px] font-semibold mt-0.5 whitespace-nowrap ${
+                            isChSelected ? 'text-[#745C00]' : 'text-[#0B2B68] dark:text-[#FED65B]/90'
+                          }`}>
+                            {versesCount} v.
+                          </span>
                         </button>
                       );
                     })}
@@ -806,7 +871,7 @@ export const SearchView: React.FC<SearchViewProps> = ({
                 <div>
                   <div className="flex items-center justify-between mb-3.5">
                     <h4 className={`font-label-caps text-xs uppercase tracking-wider ${subtextColor}`}>
-                      Versículos de {selectedBook.name} {selectedChapter}:
+                      Versículos de {selectedBook.name} {selectedChapter}{chapterVerses.length > 0 ? ` (${chapterVerses.length} versículos en BD local)` : ''}:
                     </h4>
                     <button
                       onClick={() => setSelectorStep('chapters')}

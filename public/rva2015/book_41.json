@@ -7,10 +7,13 @@
   "encoding": "UTF-8",
   "nr": 41,
   "name": "Marcos",
+  "totalVerses": 678,
+  "totalChapters": 16,
   "chapters": [
     {
       "chapter": 1,
       "name": "Marcos 1",
+      "totalVerses": 45,
       "verses": [
         {
           "chapter": 1,
@@ -287,6 +290,7 @@
     {
       "chapter": 2,
       "name": "Marcos 2",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 2,
@@ -461,6 +465,7 @@
     {
       "chapter": 3,
       "name": "Marcos 3",
+      "totalVerses": 36,
       "verses": [
         {
           "chapter": 3,
@@ -683,6 +688,7 @@
     {
       "chapter": 4,
       "name": "Marcos 4",
+      "totalVerses": 41,
       "verses": [
         {
           "chapter": 4,
@@ -935,6 +941,7 @@
     {
       "chapter": 5,
       "name": "Marcos 5",
+      "totalVerses": 43,
       "verses": [
         {
           "chapter": 5,
@@ -1199,6 +1206,7 @@
     {
       "chapter": 6,
       "name": "Marcos 6",
+      "totalVerses": 56,
       "verses": [
         {
           "chapter": 6,
@@ -1541,6 +1549,7 @@
     {
       "chapter": 7,
       "name": "Marcos 7",
+      "totalVerses": 36,
       "verses": [
         {
           "chapter": 7,
@@ -1763,6 +1772,7 @@
     {
       "chapter": 8,
       "name": "Marcos 8",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 8,
@@ -1997,6 +2007,7 @@
     {
       "chapter": 9,
       "name": "Marcos 9",
+      "totalVerses": 50,
       "verses": [
         {
           "chapter": 9,
@@ -2303,6 +2314,7 @@
     {
       "chapter": 10,
       "name": "Marcos 10",
+      "totalVerses": 52,
       "verses": [
         {
           "chapter": 10,
@@ -2621,6 +2633,7 @@
     {
       "chapter": 11,
       "name": "Marcos 11",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 11,
@@ -2825,6 +2838,7 @@
     {
       "chapter": 12,
       "name": "Marcos 12",
+      "totalVerses": 44,
       "verses": [
         {
           "chapter": 12,
@@ -3095,6 +3109,7 @@
     {
       "chapter": 13,
       "name": "Marcos 13",
+      "totalVerses": 37,
       "verses": [
         {
           "chapter": 13,
@@ -3323,6 +3338,7 @@
     {
       "chapter": 14,
       "name": "Marcos 14",
+      "totalVerses": 72,
       "verses": [
         {
           "chapter": 14,
@@ -3761,6 +3777,7 @@
     {
       "chapter": 15,
       "name": "Marcos 15",
+      "totalVerses": 47,
       "verses": [
         {
           "chapter": 15,
@@ -4049,6 +4066,7 @@
     {
       "chapter": 16,
       "name": "Marcos 16",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 16,

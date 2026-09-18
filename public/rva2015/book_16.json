@@ -7,10 +7,13 @@
   "encoding": "UTF-8",
   "nr": 16,
   "name": "Nehemías",
+  "totalVerses": 407,
+  "totalChapters": 13,
   "chapters": [
     {
       "chapter": 1,
       "name": "Nehemías 1",
+      "totalVerses": 11,
       "verses": [
         {
           "chapter": 1,
@@ -83,6 +86,7 @@
     {
       "chapter": 2,
       "name": "Nehemías 2",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 2,
@@ -209,6 +213,7 @@
     {
       "chapter": 3,
       "name": "Nehemías 3",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 3,
@@ -407,6 +412,7 @@
     {
       "chapter": 4,
       "name": "Nehemías 4",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 4,
@@ -551,6 +557,7 @@
     {
       "chapter": 5,
       "name": "Nehemías 5",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 5,
@@ -671,6 +678,7 @@
     {
       "chapter": 6,
       "name": "Nehemías 6",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 6,
@@ -791,6 +799,7 @@
     {
       "chapter": 7,
       "name": "Nehemías 7",
+      "totalVerses": 74,
       "verses": [
         {
           "chapter": 7,
@@ -1241,6 +1250,7 @@
     {
       "chapter": 8,
       "name": "Nehemías 8",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 8,
@@ -1355,6 +1365,7 @@
     {
       "chapter": 9,
       "name": "Nehemías 9",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 9,
@@ -1589,6 +1600,7 @@
     {
       "chapter": 10,
       "name": "Nehemías 10",
+      "totalVerses": 39,
       "verses": [
         {
           "chapter": 10,
@@ -1829,6 +1841,7 @@
     {
       "chapter": 11,
       "name": "Nehemías 11",
+      "totalVerses": 36,
       "verses": [
         {
           "chapter": 11,
@@ -2051,6 +2064,7 @@
     {
       "chapter": 12,
       "name": "Nehemías 12",
+      "totalVerses": 47,
       "verses": [
         {
           "chapter": 12,
@@ -2339,6 +2353,7 @@
     {
       "chapter": 13,
       "name": "Nehemías 13",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 13,

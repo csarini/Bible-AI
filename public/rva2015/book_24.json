@@ -7,10 +7,13 @@
   "encoding": "UTF-8",
   "nr": 24,
   "name": "Jeremías",
+  "totalVerses": 1364,
+  "totalChapters": 52,
   "chapters": [
     {
       "chapter": 1,
       "name": "Jeremías 1",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 1,
@@ -131,6 +134,7 @@
     {
       "chapter": 2,
       "name": "Jeremías 2",
+      "totalVerses": 37,
       "verses": [
         {
           "chapter": 2,
@@ -359,6 +363,7 @@
     {
       "chapter": 3,
       "name": "Jeremías 3",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 3,
@@ -515,6 +520,7 @@
     {
       "chapter": 4,
       "name": "Jeremías 4",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 4,
@@ -707,6 +713,7 @@
     {
       "chapter": 5,
       "name": "Jeremías 5",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 5,
@@ -899,6 +906,7 @@
     {
       "chapter": 6,
       "name": "Jeremías 6",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 6,
@@ -1085,6 +1093,7 @@
     {
       "chapter": 7,
       "name": "Jeremías 7",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 7,
@@ -1295,6 +1304,7 @@
     {
       "chapter": 8,
       "name": "Jeremías 8",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 8,
@@ -1433,6 +1443,7 @@
     {
       "chapter": 9,
       "name": "Jeremías 9",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 9,
@@ -1595,6 +1606,7 @@
     {
       "chapter": 10,
       "name": "Jeremías 10",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 10,
@@ -1751,6 +1763,7 @@
     {
       "chapter": 11,
       "name": "Jeremías 11",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 11,
@@ -1895,6 +1908,7 @@
     {
       "chapter": 12,
       "name": "Jeremías 12",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 12,
@@ -2003,6 +2017,7 @@
     {
       "chapter": 13,
       "name": "Jeremías 13",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 13,
@@ -2171,6 +2186,7 @@
     {
       "chapter": 14,
       "name": "Jeremías 14",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 14,
@@ -2309,6 +2325,7 @@
     {
       "chapter": 15,
       "name": "Jeremías 15",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 15,
@@ -2441,6 +2458,7 @@
     {
       "chapter": 16,
       "name": "Jeremías 16",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 16,
@@ -2573,6 +2591,7 @@
     {
       "chapter": 17,
       "name": "Jeremías 17",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 17,
@@ -2741,6 +2760,7 @@
     {
       "chapter": 18,
       "name": "Jeremías 18",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 18,
@@ -2885,6 +2905,7 @@
     {
       "chapter": 19,
       "name": "Jeremías 19",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 19,
@@ -2981,6 +3002,7 @@
     {
       "chapter": 20,
       "name": "Jeremías 20",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 20,
@@ -3095,6 +3117,7 @@
     {
       "chapter": 21,
       "name": "Jeremías 21",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 21,
@@ -3185,6 +3208,7 @@
     {
       "chapter": 22,
       "name": "Jeremías 22",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 22,
@@ -3371,6 +3395,7 @@
     {
       "chapter": 23,
       "name": "Jeremías 23",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 23,
@@ -3617,6 +3642,7 @@
     {
       "chapter": 24,
       "name": "Jeremías 24",
+      "totalVerses": 10,
       "verses": [
         {
           "chapter": 24,
@@ -3683,6 +3709,7 @@
     {
       "chapter": 25,
       "name": "Jeremías 25",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 25,
@@ -3917,6 +3944,7 @@
     {
       "chapter": 26,
       "name": "Jeremías 26",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 26,
@@ -4067,6 +4095,7 @@
     {
       "chapter": 27,
       "name": "Jeremías 27",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 27,
@@ -4205,6 +4234,7 @@
     {
       "chapter": 28,
       "name": "Jeremías 28",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 28,
@@ -4313,6 +4343,7 @@
     {
       "chapter": 29,
       "name": "Jeremías 29",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 29,
@@ -4511,6 +4542,7 @@
     {
       "chapter": 30,
       "name": "Jeremías 30",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 30,
@@ -4661,6 +4693,7 @@
     {
       "chapter": 31,
       "name": "Jeremías 31",
+      "totalVerses": 40,
       "verses": [
         {
           "chapter": 31,
@@ -4907,6 +4940,7 @@
     {
       "chapter": 32,
       "name": "Jeremías 32",
+      "totalVerses": 44,
       "verses": [
         {
           "chapter": 32,
@@ -5177,6 +5211,7 @@
     {
       "chapter": 33,
       "name": "Jeremías 33",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 33,
@@ -5339,6 +5374,7 @@
     {
       "chapter": 34,
       "name": "Jeremías 34",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 34,
@@ -5477,6 +5513,7 @@
     {
       "chapter": 35,
       "name": "Jeremías 35",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 35,
@@ -5597,6 +5634,7 @@
     {
       "chapter": 36,
       "name": "Jeremías 36",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 36,
@@ -5795,6 +5833,7 @@
     {
       "chapter": 37,
       "name": "Jeremías 37",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 37,
@@ -5927,6 +5966,7 @@
     {
       "chapter": 38,
       "name": "Jeremías 38",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 38,
@@ -6101,6 +6141,7 @@
     {
       "chapter": 39,
       "name": "Jeremías 39",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 39,
@@ -6215,6 +6256,7 @@
     {
       "chapter": 40,
       "name": "Jeremías 40",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 40,
@@ -6317,6 +6359,7 @@
     {
       "chapter": 41,
       "name": "Jeremías 41",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 41,
@@ -6431,6 +6474,7 @@
     {
       "chapter": 42,
       "name": "Jeremías 42",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 42,
@@ -6569,6 +6613,7 @@
     {
       "chapter": 43,
       "name": "Jeremías 43",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 43,
@@ -6653,6 +6698,7 @@
     {
       "chapter": 44,
       "name": "Jeremías 44",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 44,
@@ -6839,6 +6885,7 @@
     {
       "chapter": 45,
       "name": "Jeremías 45",
+      "totalVerses": 5,
       "verses": [
         {
           "chapter": 45,
@@ -6875,6 +6922,7 @@
     {
       "chapter": 46,
       "name": "Jeremías 46",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 46,
@@ -7049,6 +7097,7 @@
     {
       "chapter": 47,
       "name": "Jeremías 47",
+      "totalVerses": 7,
       "verses": [
         {
           "chapter": 47,
@@ -7097,6 +7146,7 @@
     {
       "chapter": 48,
       "name": "Jeremías 48",
+      "totalVerses": 47,
       "verses": [
         {
           "chapter": 48,
@@ -7385,6 +7435,7 @@
     {
       "chapter": 49,
       "name": "Jeremías 49",
+      "totalVerses": 39,
       "verses": [
         {
           "chapter": 49,
@@ -7625,6 +7676,7 @@
     {
       "chapter": 50,
       "name": "Jeremías 50",
+      "totalVerses": 46,
       "verses": [
         {
           "chapter": 50,
@@ -7907,6 +7959,7 @@
     {
       "chapter": 51,
       "name": "Jeremías 51",
+      "totalVerses": 64,
       "verses": [
         {
           "chapter": 51,
@@ -8297,6 +8350,7 @@
     {
       "chapter": 52,
       "name": "Jeremías 52",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 52,

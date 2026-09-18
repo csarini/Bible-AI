@@ -128,6 +128,7 @@ class OfflineBibleSyncService {
         : [
             (key: 'rvr1960', folder: 'rvr1960_json', prefix: 'book'),
             (key: 'rva2015', folder: 'rva2015_json', prefix: 'book'),
+            (key: 'valera', folder: 'valera_json', prefix: 'valera'),
           ];
 
     try {

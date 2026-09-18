@@ -7,10 +7,13 @@
   "encoding": "UTF-8",
   "nr": 23,
   "name": "Isaías",
+  "totalVerses": 1292,
+  "totalChapters": 66,
   "chapters": [
     {
       "chapter": 1,
       "name": "Isaías 1",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 1,
@@ -203,6 +206,7 @@
     {
       "chapter": 2,
       "name": "Isaías 2",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 2,
@@ -341,6 +345,7 @@
     {
       "chapter": 3,
       "name": "Isaías 3",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 3,
@@ -503,6 +508,7 @@
     {
       "chapter": 4,
       "name": "Isaías 4",
+      "totalVerses": 6,
       "verses": [
         {
           "chapter": 4,
@@ -545,6 +551,7 @@
     {
       "chapter": 5,
       "name": "Isaías 5",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 5,
@@ -731,6 +738,7 @@
     {
       "chapter": 6,
       "name": "Isaías 6",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 6,
@@ -815,6 +823,7 @@
     {
       "chapter": 7,
       "name": "Isaías 7",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 7,
@@ -971,6 +980,7 @@
     {
       "chapter": 8,
       "name": "Isaías 8",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 8,
@@ -1109,6 +1119,7 @@
     {
       "chapter": 9,
       "name": "Isaías 9",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 9,
@@ -1241,6 +1252,7 @@
     {
       "chapter": 10,
       "name": "Isaías 10",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 10,
@@ -1451,6 +1463,7 @@
     {
       "chapter": 11,
       "name": "Isaías 11",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 11,
@@ -1553,6 +1566,7 @@
     {
       "chapter": 12,
       "name": "Isaías 12",
+      "totalVerses": 6,
       "verses": [
         {
           "chapter": 12,
@@ -1595,6 +1609,7 @@
     {
       "chapter": 13,
       "name": "Isaías 13",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 13,
@@ -1733,6 +1748,7 @@
     {
       "chapter": 14,
       "name": "Isaías 14",
+      "totalVerses": 32,
       "verses": [
         {
           "chapter": 14,
@@ -1931,6 +1947,7 @@
     {
       "chapter": 15,
       "name": "Isaías 15",
+      "totalVerses": 9,
       "verses": [
         {
           "chapter": 15,
@@ -1991,6 +2008,7 @@
     {
       "chapter": 16,
       "name": "Isaías 16",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 16,
@@ -2081,6 +2099,7 @@
     {
       "chapter": 17,
       "name": "Isaías 17",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 17,
@@ -2171,6 +2190,7 @@
     {
       "chapter": 18,
       "name": "Isaías 18",
+      "totalVerses": 7,
       "verses": [
         {
           "chapter": 18,
@@ -2219,6 +2239,7 @@
     {
       "chapter": 19,
       "name": "Isaías 19",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 19,
@@ -2375,6 +2396,7 @@
     {
       "chapter": 20,
       "name": "Isaías 20",
+      "totalVerses": 6,
       "verses": [
         {
           "chapter": 20,
@@ -2417,6 +2439,7 @@
     {
       "chapter": 21,
       "name": "Isaías 21",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 21,
@@ -2525,6 +2548,7 @@
     {
       "chapter": 22,
       "name": "Isaías 22",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 22,
@@ -2681,6 +2705,7 @@
     {
       "chapter": 23,
       "name": "Isaías 23",
+      "totalVerses": 18,
       "verses": [
         {
           "chapter": 23,
@@ -2795,6 +2820,7 @@
     {
       "chapter": 24,
       "name": "Isaías 24",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 24,
@@ -2939,6 +2965,7 @@
     {
       "chapter": 25,
       "name": "Isaías 25",
+      "totalVerses": 12,
       "verses": [
         {
           "chapter": 25,
@@ -3017,6 +3044,7 @@
     {
       "chapter": 26,
       "name": "Isaías 26",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 26,
@@ -3149,6 +3177,7 @@
     {
       "chapter": 27,
       "name": "Isaías 27",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 27,
@@ -3233,6 +3262,7 @@
     {
       "chapter": 28,
       "name": "Isaías 28",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 28,
@@ -3413,6 +3443,7 @@
     {
       "chapter": 29,
       "name": "Isaías 29",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 29,
@@ -3563,6 +3594,7 @@
     {
       "chapter": 30,
       "name": "Isaías 30",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 30,
@@ -3767,6 +3799,7 @@
     {
       "chapter": 31,
       "name": "Isaías 31",
+      "totalVerses": 9,
       "verses": [
         {
           "chapter": 31,
@@ -3827,6 +3860,7 @@
     {
       "chapter": 32,
       "name": "Isaías 32",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 32,
@@ -3953,6 +3987,7 @@
     {
       "chapter": 33,
       "name": "Isaías 33",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 33,
@@ -4103,6 +4138,7 @@
     {
       "chapter": 34,
       "name": "Isaías 34",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 34,
@@ -4211,6 +4247,7 @@
     {
       "chapter": 35,
       "name": "Isaías 35",
+      "totalVerses": 10,
       "verses": [
         {
           "chapter": 35,
@@ -4277,6 +4314,7 @@
     {
       "chapter": 36,
       "name": "Isaías 36",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 36,
@@ -4415,6 +4453,7 @@
     {
       "chapter": 37,
       "name": "Isaías 37",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 37,
@@ -4649,6 +4688,7 @@
     {
       "chapter": 38,
       "name": "Isaías 38",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 38,
@@ -4787,6 +4827,7 @@
     {
       "chapter": 39,
       "name": "Isaías 39",
+      "totalVerses": 8,
       "verses": [
         {
           "chapter": 39,
@@ -4841,6 +4882,7 @@
     {
       "chapter": 40,
       "name": "Isaías 40",
+      "totalVerses": 31,
       "verses": [
         {
           "chapter": 40,
@@ -5033,6 +5075,7 @@
     {
       "chapter": 41,
       "name": "Isaías 41",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 41,
@@ -5213,6 +5256,7 @@
     {
       "chapter": 42,
       "name": "Isaías 42",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 42,
@@ -5369,6 +5413,7 @@
     {
       "chapter": 43,
       "name": "Isaías 43",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 43,
@@ -5543,6 +5588,7 @@
     {
       "chapter": 44,
       "name": "Isaías 44",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 44,
@@ -5717,6 +5763,7 @@
     {
       "chapter": 45,
       "name": "Isaías 45",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 45,
@@ -5873,6 +5920,7 @@
     {
       "chapter": 46,
       "name": "Isaías 46",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 46,
@@ -5957,6 +6005,7 @@
     {
       "chapter": 47,
       "name": "Isaías 47",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 47,
@@ -6053,6 +6102,7 @@
     {
       "chapter": 48,
       "name": "Isaías 48",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 48,
@@ -6191,6 +6241,7 @@
     {
       "chapter": 49,
       "name": "Isaías 49",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 49,
@@ -6353,6 +6404,7 @@
     {
       "chapter": 50,
       "name": "Isaías 50",
+      "totalVerses": 11,
       "verses": [
         {
           "chapter": 50,
@@ -6425,6 +6477,7 @@
     {
       "chapter": 51,
       "name": "Isaías 51",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 51,
@@ -6569,6 +6622,7 @@
     {
       "chapter": 52,
       "name": "Isaías 52",
+      "totalVerses": 15,
       "verses": [
         {
           "chapter": 52,
@@ -6665,6 +6719,7 @@
     {
       "chapter": 53,
       "name": "Isaías 53",
+      "totalVerses": 12,
       "verses": [
         {
           "chapter": 53,
@@ -6743,6 +6798,7 @@
     {
       "chapter": 54,
       "name": "Isaías 54",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 54,
@@ -6851,6 +6907,7 @@
     {
       "chapter": 55,
       "name": "Isaías 55",
+      "totalVerses": 13,
       "verses": [
         {
           "chapter": 55,
@@ -6935,6 +6992,7 @@
     {
       "chapter": 56,
       "name": "Isaías 56",
+      "totalVerses": 12,
       "verses": [
         {
           "chapter": 56,
@@ -7013,6 +7071,7 @@
     {
       "chapter": 57,
       "name": "Isaías 57",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 57,
@@ -7145,6 +7204,7 @@
     {
       "chapter": 58,
       "name": "Isaías 58",
+      "totalVerses": 14,
       "verses": [
         {
           "chapter": 58,
@@ -7235,6 +7295,7 @@
     {
       "chapter": 59,
       "name": "Isaías 59",
+      "totalVerses": 21,
       "verses": [
         {
           "chapter": 59,
@@ -7367,6 +7428,7 @@
     {
       "chapter": 60,
       "name": "Isaías 60",
+      "totalVerses": 22,
       "verses": [
         {
           "chapter": 60,
@@ -7505,6 +7567,7 @@
     {
       "chapter": 61,
       "name": "Isaías 61",
+      "totalVerses": 11,
       "verses": [
         {
           "chapter": 61,
@@ -7577,6 +7640,7 @@
     {
       "chapter": 62,
       "name": "Isaías 62",
+      "totalVerses": 12,
       "verses": [
         {
           "chapter": 62,
@@ -7655,6 +7719,7 @@
     {
       "chapter": 63,
       "name": "Isaías 63",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 63,
@@ -7775,6 +7840,7 @@
     {
       "chapter": 64,
       "name": "Isaías 64",
+      "totalVerses": 12,
       "verses": [
         {
           "chapter": 64,
@@ -7853,6 +7919,7 @@
     {
       "chapter": 65,
       "name": "Isaías 65",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 65,
@@ -8009,6 +8076,7 @@
     {
       "chapter": 66,
       "name": "Isaías 66",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 66,

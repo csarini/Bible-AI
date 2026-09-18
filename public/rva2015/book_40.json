@@ -7,10 +7,13 @@
   "encoding": "UTF-8",
   "nr": 40,
   "name": "Mateo",
+  "totalVerses": 1069,
+  "totalChapters": 28,
   "chapters": [
     {
       "chapter": 1,
       "name": "Mateo 1",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 1,
@@ -167,6 +170,7 @@
     {
       "chapter": 2,
       "name": "Mateo 2",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 2,
@@ -311,6 +315,7 @@
     {
       "chapter": 3,
       "name": "Mateo 3",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 3,
@@ -419,6 +424,7 @@
     {
       "chapter": 4,
       "name": "Mateo 4",
+      "totalVerses": 25,
       "verses": [
         {
           "chapter": 4,
@@ -575,6 +581,7 @@
     {
       "chapter": 5,
       "name": "Mateo 5",
+      "totalVerses": 48,
       "verses": [
         {
           "chapter": 5,
@@ -869,6 +876,7 @@
     {
       "chapter": 6,
       "name": "Mateo 6",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 6,
@@ -1079,6 +1087,7 @@
     {
       "chapter": 7,
       "name": "Mateo 7",
+      "totalVerses": 29,
       "verses": [
         {
           "chapter": 7,
@@ -1259,6 +1268,7 @@
     {
       "chapter": 8,
       "name": "Mateo 8",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 8,
@@ -1469,6 +1479,7 @@
     {
       "chapter": 9,
       "name": "Mateo 9",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 9,
@@ -1703,6 +1714,7 @@
     {
       "chapter": 10,
       "name": "Mateo 10",
+      "totalVerses": 42,
       "verses": [
         {
           "chapter": 10,
@@ -1961,6 +1973,7 @@
     {
       "chapter": 11,
       "name": "Mateo 11",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 11,
@@ -2147,6 +2160,7 @@
     {
       "chapter": 12,
       "name": "Mateo 12",
+      "totalVerses": 50,
       "verses": [
         {
           "chapter": 12,
@@ -2453,6 +2467,7 @@
     {
       "chapter": 13,
       "name": "Mateo 13",
+      "totalVerses": 58,
       "verses": [
         {
           "chapter": 13,
@@ -2807,6 +2822,7 @@
     {
       "chapter": 14,
       "name": "Mateo 14",
+      "totalVerses": 36,
       "verses": [
         {
           "chapter": 14,
@@ -3029,6 +3045,7 @@
     {
       "chapter": 15,
       "name": "Mateo 15",
+      "totalVerses": 39,
       "verses": [
         {
           "chapter": 15,
@@ -3269,6 +3286,7 @@
     {
       "chapter": 16,
       "name": "Mateo 16",
+      "totalVerses": 28,
       "verses": [
         {
           "chapter": 16,
@@ -3443,6 +3461,7 @@
     {
       "chapter": 17,
       "name": "Mateo 17",
+      "totalVerses": 26,
       "verses": [
         {
           "chapter": 17,
@@ -3605,6 +3624,7 @@
     {
       "chapter": 18,
       "name": "Mateo 18",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 18,
@@ -3815,6 +3835,7 @@
     {
       "chapter": 19,
       "name": "Mateo 19",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 19,
@@ -4001,6 +4022,7 @@
     {
       "chapter": 20,
       "name": "Mateo 20",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 20,
@@ -4211,6 +4233,7 @@
     {
       "chapter": 21,
       "name": "Mateo 21",
+      "totalVerses": 46,
       "verses": [
         {
           "chapter": 21,
@@ -4493,6 +4516,7 @@
     {
       "chapter": 22,
       "name": "Mateo 22",
+      "totalVerses": 46,
       "verses": [
         {
           "chapter": 22,
@@ -4775,6 +4799,7 @@
     {
       "chapter": 23,
       "name": "Mateo 23",
+      "totalVerses": 39,
       "verses": [
         {
           "chapter": 23,
@@ -5015,6 +5040,7 @@
     {
       "chapter": 24,
       "name": "Mateo 24",
+      "totalVerses": 51,
       "verses": [
         {
           "chapter": 24,
@@ -5327,6 +5353,7 @@
     {
       "chapter": 25,
       "name": "Mateo 25",
+      "totalVerses": 46,
       "verses": [
         {
           "chapter": 25,
@@ -5609,6 +5636,7 @@
     {
       "chapter": 26,
       "name": "Mateo 26",
+      "totalVerses": 75,
       "verses": [
         {
           "chapter": 26,
@@ -6065,6 +6093,7 @@
     {
       "chapter": 27,
       "name": "Mateo 27",
+      "totalVerses": 66,
       "verses": [
         {
           "chapter": 27,
@@ -6467,6 +6496,7 @@
     {
       "chapter": 28,
       "name": "Mateo 28",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 28,

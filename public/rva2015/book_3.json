@@ -7,10 +7,13 @@
   "encoding": "UTF-8",
   "nr": 3,
   "name": "Levítico",
+  "totalVerses": 859,
+  "totalChapters": 27,
   "chapters": [
     {
       "chapter": 1,
       "name": "Levítico 1",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 1,
@@ -119,6 +122,7 @@
     {
       "chapter": 2,
       "name": "Levítico 2",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 2,
@@ -221,6 +225,7 @@
     {
       "chapter": 3,
       "name": "Levítico 3",
+      "totalVerses": 17,
       "verses": [
         {
           "chapter": 3,
@@ -329,6 +334,7 @@
     {
       "chapter": 4,
       "name": "Levítico 4",
+      "totalVerses": 35,
       "verses": [
         {
           "chapter": 4,
@@ -545,6 +551,7 @@
     {
       "chapter": 5,
       "name": "Levítico 5",
+      "totalVerses": 19,
       "verses": [
         {
           "chapter": 5,
@@ -665,6 +672,7 @@
     {
       "chapter": 6,
       "name": "Levítico 6",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 6,
@@ -851,6 +859,7 @@
     {
       "chapter": 7,
       "name": "Levítico 7",
+      "totalVerses": 38,
       "verses": [
         {
           "chapter": 7,
@@ -1085,6 +1094,7 @@
     {
       "chapter": 8,
       "name": "Levítico 8",
+      "totalVerses": 36,
       "verses": [
         {
           "chapter": 8,
@@ -1307,6 +1317,7 @@
     {
       "chapter": 9,
       "name": "Levítico 9",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 9,
@@ -1457,6 +1468,7 @@
     {
       "chapter": 10,
       "name": "Levítico 10",
+      "totalVerses": 20,
       "verses": [
         {
           "chapter": 10,
@@ -1583,6 +1595,7 @@
     {
       "chapter": 11,
       "name": "Levítico 11",
+      "totalVerses": 47,
       "verses": [
         {
           "chapter": 11,
@@ -1871,6 +1884,7 @@
     {
       "chapter": 12,
       "name": "Levítico 12",
+      "totalVerses": 8,
       "verses": [
         {
           "chapter": 12,
@@ -1925,6 +1939,7 @@
     {
       "chapter": 13,
       "name": "Levítico 13",
+      "totalVerses": 59,
       "verses": [
         {
           "chapter": 13,
@@ -2285,6 +2300,7 @@
     {
       "chapter": 14,
       "name": "Levítico 14",
+      "totalVerses": 57,
       "verses": [
         {
           "chapter": 14,
@@ -2633,6 +2649,7 @@
     {
       "chapter": 15,
       "name": "Levítico 15",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 15,
@@ -2837,6 +2854,7 @@
     {
       "chapter": 16,
       "name": "Levítico 16",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 16,
@@ -3047,6 +3065,7 @@
     {
       "chapter": 17,
       "name": "Levítico 17",
+      "totalVerses": 16,
       "verses": [
         {
           "chapter": 17,
@@ -3149,6 +3168,7 @@
     {
       "chapter": 18,
       "name": "Levítico 18",
+      "totalVerses": 30,
       "verses": [
         {
           "chapter": 18,
@@ -3335,6 +3355,7 @@
     {
       "chapter": 19,
       "name": "Levítico 19",
+      "totalVerses": 37,
       "verses": [
         {
           "chapter": 19,
@@ -3563,6 +3584,7 @@
     {
       "chapter": 20,
       "name": "Levítico 20",
+      "totalVerses": 27,
       "verses": [
         {
           "chapter": 20,
@@ -3731,6 +3753,7 @@
     {
       "chapter": 21,
       "name": "Levítico 21",
+      "totalVerses": 24,
       "verses": [
         {
           "chapter": 21,
@@ -3881,6 +3904,7 @@
     {
       "chapter": 22,
       "name": "Levítico 22",
+      "totalVerses": 33,
       "verses": [
         {
           "chapter": 22,
@@ -4085,6 +4109,7 @@
     {
       "chapter": 23,
       "name": "Levítico 23",
+      "totalVerses": 44,
       "verses": [
         {
           "chapter": 23,
@@ -4355,6 +4380,7 @@
     {
       "chapter": 24,
       "name": "Levítico 24",
+      "totalVerses": 23,
       "verses": [
         {
           "chapter": 24,
@@ -4499,6 +4525,7 @@
     {
       "chapter": 25,
       "name": "Levítico 25",
+      "totalVerses": 55,
       "verses": [
         {
           "chapter": 25,
@@ -4835,6 +4862,7 @@
     {
       "chapter": 26,
       "name": "Levítico 26",
+      "totalVerses": 46,
       "verses": [
         {
           "chapter": 26,
@@ -5117,6 +5145,7 @@
     {
       "chapter": 27,
       "name": "Levítico 27",
+      "totalVerses": 34,
       "verses": [
         {
           "chapter": 27,

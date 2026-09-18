@@ -6,6 +6,7 @@ import booksValeraRaw from '../data/raw/books_valera.json';
 import booksRvr1960Raw from '../data/raw/books_rvr1960.json';
 import booksRva2015Raw from '../data/raw/books_rva2015.json';
 import translationsCatalogRaw from '../data/raw/translations_catalog.json';
+import { CANONICAL_VERSE_COUNTS } from '../data/canonicalVerseCounts';
 import { BibleVerse, BibleBook } from '../types';
 
 export const DB_NAME = 'biblia_inteligente_offline_db';
@@ -64,10 +65,18 @@ function getCategoryByBookNumber(nr: number): BibleBook['category'] {
   return 'Profecía';
 }
 
+export interface ChapterMetaItem {
+  chapter: number;
+  totalVerses: number;
+}
+
 export interface StoredBibleBook extends BibleBook {
   translation: string;
   url?: string;
   sha?: string;
+  totalChapters: number;
+  totalVerses: number;
+  chaptersMetadata?: ChapterMetaItem[];
 }
 
 let dbPromise: Promise<IDBDatabase> | null = null;
@@ -81,20 +90,20 @@ export function isBuiltInOfflineTranslation(tr?: string): boolean {
   return clean === 'valera' || clean.includes('1909') || clean === 'rvr1960' || clean.includes('1960') || clean === 'rva2015' || clean.includes('2015');
 }
 
-// Normalize translation code (valera, rvr1960, rva2015, etc.)
+// Normalize translation code (rvr1960, rva2015, valera, etc.)
 export function normalizeTranslationKey(tr?: string): string {
-  if (!tr) return 'valera';
+  if (!tr) return 'rvr1960';
   const clean = tr.toLowerCase().replace(/[^a-z0-9]/g, '');
-  if (clean.includes('valera') || clean.includes('1909')) return 'valera';
   if (clean === 'rvr1960' || clean.includes('1960')) return 'rvr1960';
   if (clean === 'rva2015' || clean.includes('2015')) return 'rva2015';
+  if (clean.includes('valera') || clean.includes('1909')) return 'valera';
   if (clean === 'nvi') return 'nvi';
   if (clean === 'nbla') return 'nbla';
   if (clean === 'bes') return 'bes';
   if (clean === 'vbl') return 'vbl';
   if (clean === 'pddpt') return 'pddpt';
   if (clean === 'bsb') return 'bsb';
-  return clean || 'valera';
+  return clean || 'rvr1960';
 }
 
 // Convert raw JSON entry from data/raw/ to full StoredBibleBook
@@ -102,9 +111,27 @@ function transformRawBook(raw: RawBookData | any, defaultAbbr: string): StoredBi
   const nr = Number(raw.nr);
   const idx = nr - 1;
   const bookId = BOOK_USFM_CODES[idx] || `BK${nr}`;
-  const chaptersCount = BOOK_CHAPTERS_COUNT[idx] || 1;
   const abbreviation = raw.name ? raw.name.slice(0, 3) : bookId;
   const category = getCategoryByBookNumber(nr);
+
+  const rawChapters = Array.isArray(raw.chapters) ? raw.chapters : [];
+  const canonicalVersesArr = CANONICAL_VERSE_COUNTS[nr] || [];
+  const canonicalTotalVerses = canonicalVersesArr.reduce((a, b) => a + b, 0);
+
+  const totalChapters = Number(raw.totalChapters) || rawChapters.length || BOOK_CHAPTERS_COUNT[idx] || 1;
+  const totalVerses = Number(raw.totalVerses) || (rawChapters.length > 0
+    ? rawChapters.reduce((acc: number, c: any) => acc + (Number(c.totalVerses) || (c.verses ? c.verses.length : 0)), 0)
+    : canonicalTotalVerses);
+
+  const chaptersMetadata: ChapterMetaItem[] = rawChapters.length > 0
+    ? rawChapters.map((c: any, i: number) => ({
+        chapter: Number(c.chapter) || i + 1,
+        totalVerses: Number(c.totalVerses) || (c.verses ? c.verses.length : (canonicalVersesArr[i] || 25))
+      }))
+    : canonicalVersesArr.map((vCount, i) => ({
+        chapter: i + 1,
+        totalVerses: vCount
+      }));
 
   return {
     id: bookId,
@@ -112,7 +139,10 @@ function transformRawBook(raw: RawBookData | any, defaultAbbr: string): StoredBi
     name: raw.name,
     englishName: raw.name,
     testament: nr <= 39 ? 'OT' : 'NT',
-    chaptersCount,
+    chaptersCount: totalChapters,
+    totalChapters,
+    totalVerses,
+    chaptersMetadata,
     abbreviation,
     category,
     translation: raw.abbreviation || defaultAbbr,
@@ -234,7 +264,7 @@ export async function initBibleDatabase(): Promise<void> {
     const isSeeded = await new Promise<boolean>((resolve) => {
       const tx = db.transaction([STORE_META, STORE_BOOKS], 'readonly');
       const metaStore = tx.objectStore(STORE_META);
-      const req = metaStore.get('books_seeded_v5');
+      const req = metaStore.get('books_seeded_v6');
       req.onsuccess = () => {
         if (req.result && req.result.value === true) {
           resolve(true);
@@ -246,7 +276,7 @@ export async function initBibleDatabase(): Promise<void> {
     });
 
     if (!isSeeded) {
-      console.log('📖 Inicializando libros y metadatos de las 3 versiones en IndexedDB local...');
+      console.log('📖 Inicializando libros y metadatos con totalChapters y totalVerses en IndexedDB local...');
       const tx = db.transaction([STORE_BOOKS, STORE_TRANSLATIONS, STORE_META], 'readwrite');
       const booksStore = tx.objectStore(STORE_BOOKS);
       const transStore = tx.objectStore(STORE_TRANSLATIONS);
@@ -275,7 +305,7 @@ export async function initBibleDatabase(): Promise<void> {
 
       // 3. Mark seeded
       metaStore.put({
-        key: 'books_seeded_v5',
+        key: 'books_seeded_v6',
         value: true,
         seededAt: new Date().toISOString(),
         totalBooks: allBooks.length
@@ -285,7 +315,7 @@ export async function initBibleDatabase(): Promise<void> {
         tx.oncomplete = () => resolve();
         tx.onerror = () => reject(tx.error);
       });
-      console.log('✅ Base de datos de libros inicializada correctamente.');
+      console.log('✅ Base de datos de libros con totalChapters y totalVerses inicializada correctamente.');
     }
 
     // Refresh memory cache from DB to ensure synchronization
@@ -441,7 +471,7 @@ export async function saveChapterToDB(
   bookId: string,
   chapter: number,
   verses: BibleVerse[],
-  translation: string = 'valera'
+  translation: string = 'rvr1960'
 ): Promise<void> {
   if (!isGenuineVerses(verses)) return;
 
@@ -458,6 +488,8 @@ export async function saveChapterToDB(
         bookId,
         chapter,
         verses,
+        totalVerses: verses.length,
+        verseCount: verses.length,
         updatedAt: now,
         cachedAt: now
       };
@@ -470,17 +502,117 @@ export async function saveChapterToDB(
   }
 }
 
+// Bulk save an entire book's chapters into local DB in a single fast transaction
+export async function saveAllChaptersToDB(
+  bookId: string,
+  chapters: { chapter: number; verses: BibleVerse[] }[],
+  translation: string = 'rvr1960'
+): Promise<void> {
+  try {
+    const tr = normalizeTranslationKey(translation);
+    const db = await getBibleDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_CHAPTERS, 'readwrite');
+      const store = tx.objectStore(STORE_CHAPTERS);
+      const now = Date.now();
+      for (const { chapter, verses } of chapters) {
+        if (isGenuineVerses(verses)) {
+          store.put({
+            id: `${tr}_${bookId}_${chapter}`,
+            translation: tr,
+            bookId,
+            chapter,
+            verses,
+            totalVerses: verses.length,
+            verseCount: verses.length,
+            updatedAt: now,
+            cachedAt: now
+          });
+        }
+      }
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  } catch (err) {
+    console.warn('Error guardando lote de capítulos en DB local:', err);
+  }
+}
+
+// Query all chapter metadata (chapter and totalVerses) for a book from local DB
+export async function getChaptersForBookFromDB(
+  bookId: string,
+  translation: string = 'rvr1960'
+): Promise<ChapterMetaItem[]> {
+  const tr = normalizeTranslationKey(translation);
+  const book = getBookByIdOrNumber(bookId, tr);
+  if (!book) return [];
+
+  // 1. If present in in-memory book list
+  if (book.chaptersMetadata && book.chaptersMetadata.length > 0) {
+    return book.chaptersMetadata;
+  }
+
+  // 2. Query IndexedDB STORE_BOOKS
+  try {
+    const db = await getBibleDB();
+    const tx = db.transaction(STORE_BOOKS, 'readonly');
+    const store = tx.objectStore(STORE_BOOKS);
+    const stored = await new Promise<StoredBibleBook | null>((resolve) => {
+      const req = store.get(`${tr}_${book.id}`);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => resolve(null);
+    });
+
+    if (stored && stored.chaptersMetadata && stored.chaptersMetadata.length > 0) {
+      return stored.chaptersMetadata;
+    }
+  } catch {
+    // Continue
+  }
+
+  // 3. Fallback to canonical verse counts
+  const canonicalVerses = CANONICAL_VERSE_COUNTS[book.number] || [];
+  return canonicalVerses.map((vCount, i) => ({
+    chapter: i + 1,
+    totalVerses: vCount
+  }));
+}
+
+// Get full book statistics from local DB
+export async function getBookStatsFromDB(
+  bookId: string,
+  translation: string = 'rvr1960'
+): Promise<{ totalChapters: number; totalVerses: number; chapters: ChapterMetaItem[] } | null> {
+  const tr = normalizeTranslationKey(translation);
+  const book = getBookByIdOrNumber(bookId, tr);
+  if (!book) return null;
+
+  const chapters = await getChaptersForBookFromDB(bookId, tr);
+  const totalChapters = book.totalChapters || chapters.length || book.chaptersCount;
+  const totalVerses = book.totalVerses || chapters.reduce((acc, c) => acc + c.totalVerses, 0);
+
+  return {
+    totalChapters,
+    totalVerses,
+    chapters
+  };
+}
+
 // Direct fetch from GetBible API or local bundled translation JSON assets
 async function fetchFromGetBibleAPI(
   bookMeta: StoredBibleBook,
   chapter: number,
   tr: string
 ): Promise<BibleVerse[]> {
-  // Strategy 0: Fetch from local bundled static assets (100% offline support for rvr1960 and rva2015)
+  // Strategy 0: Fetch from local bundled static assets (100% offline support for rvr1960, rva2015, and valera)
   const localAssetPaths = [
     `/${tr}/book_${bookMeta.number}.json`,
+    `/${tr}/${tr}_${bookMeta.number}.json`,
     `/data/${tr}/book_${bookMeta.number}.json`,
-    `/rvr1960/book_${bookMeta.number}.json`
+    `/rvr1960/book_${bookMeta.number}.json`,
+    `/rva2015/book_${bookMeta.number}.json`,
+    `/valera/valera_${bookMeta.number}.json`,
+    `/valera/book_${bookMeta.number}.json`
   ];
 
   for (const assetPath of localAssetPaths) {
@@ -490,6 +622,8 @@ async function fetchFromGetBibleAPI(
         const data = await localRes.json();
         if (data && data.chapters && Array.isArray(data.chapters)) {
           let requestedChapterVerses: BibleVerse[] = [];
+          const chaptersToSave: { chapter: number; verses: BibleVerse[] }[] = [];
+
           for (const chObj of data.chapters) {
             const chNum = Number(chObj.chapter);
             if (chObj.verses && Array.isArray(chObj.verses)) {
@@ -502,13 +636,18 @@ async function fetchFromGetBibleAPI(
               }));
 
               if (isGenuineVerses(chVerses)) {
-                await saveChapterToDB(bookMeta.id, chNum, chVerses, tr);
+                chaptersToSave.push({ chapter: chNum, verses: chVerses });
                 if (chNum === chapter) {
                   requestedChapterVerses = chVerses;
                 }
               }
             }
           }
+
+          if (chaptersToSave.length > 0) {
+            saveAllChaptersToDB(bookMeta.id, chaptersToSave, tr).catch(() => {});
+          }
+
           if (requestedChapterVerses.length > 0) {
             return requestedChapterVerses;
           }
@@ -650,9 +789,23 @@ export async function fetchChapterVersesWithFallback(
     return {
       verses: fallbackVerses,
       isOfflineFallback: true,
-      notice: 'Mostrando versión canónica offline disponible.',
+      notice: 'Mostrando versión canónica offline disponible (RVR1960).',
       loadedTranslation: 'rvr1960',
     };
+  }
+
+  // 4. Si rvr1960 aún no estaba en IndexedDB, cargar desde assets estáticos locales
+  if (tr !== 'rvr1960') {
+    const fallbackMeta = getBookByIdOrNumber(bookId, 'rvr1960');
+    const fallbackLoaded = await fetchFromGetBibleAPI(fallbackMeta, chapter, 'rvr1960');
+    if (fallbackLoaded && isGenuineVerses(fallbackLoaded)) {
+      return {
+        verses: fallbackLoaded,
+        isOfflineFallback: true,
+        notice: 'Mostrando versión canónica offline disponible (RVR1960).',
+        loadedTranslation: 'rvr1960',
+      };
+    }
   }
 
   return {
