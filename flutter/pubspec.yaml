@@ -2,8 +2,8 @@ name: biblia_inteligente
 description: "Biblia Inteligente (Santuario Digital) – Bible reader and personal sanctuary with clean architecture."
 publish_to: "none"
 
-# VersionName: 1.0.1 | VersionCode: 2 (Incremented for Google Play update compatibility)
-version: 1.0.1+2
+# Versión 1.0.0 (Build 1) - Primera versión oficial para despliegue y tiendas de aplicaciones
+version: 1.0.0+1
 
 environment:
   sdk: ">=3.3.0 <4.0.0"

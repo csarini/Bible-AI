@@ -5,17 +5,13 @@ plugins {
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file("key.properties")
+def hasValidKeystore = false
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
-
-def isReleaseBuild = gradle.startParameter.taskNames.any { taskName ->
-    taskName.toLowerCase(Locale.ROOT).contains("release")
-}
-if (isReleaseBuild && !keystorePropertiesFile.exists()) {
-    throw new GradleException(
-        "Missing android/key.properties. Configure the Play signing key before a release build."
-    )
+    def storeFileVal = keystoreProperties['storeFile']
+    if (storeFileVal && file(storeFileVal).exists()) {
+        hasValidKeystore = true
+    }
 }
 
 android {
@@ -34,10 +30,12 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
+            if (keystorePropertiesFile.exists()) {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+                storePassword keystoreProperties['storePassword']
+            }
         }
     }
 
@@ -51,9 +49,15 @@ android {
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.release
+            if (hasValidKeystore) {
+                signingConfig = signingConfigs.release
+            } else {
+                // Fallback para pruebas de compilación release antes de configurar key.properties
+                signingConfig = signingConfigs.debug
+            }
             minifyEnabled false
             shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
