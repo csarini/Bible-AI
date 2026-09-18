@@ -8,6 +8,7 @@
     "encoding": "UTF-8",
     "nr": 1,
     "name": "Génesis",
+    "totalVerses": 1533,
     "url": "rvr1960/book_1.json"
   },
   "2": {
@@ -19,6 +20,7 @@
     "encoding": "UTF-8",
     "nr": 2,
     "name": "Éxodo",
+    "totalVerses": 1213,
     "url": "rvr1960/book_2.json"
   },
   "3": {
@@ -30,6 +32,7 @@
     "encoding": "UTF-8",
     "nr": 3,
     "name": "Levítico",
+    "totalVerses": 859,
     "url": "rvr1960/book_3.json"
   },
   "4": {
@@ -41,6 +44,7 @@
     "encoding": "UTF-8",
     "nr": 4,
     "name": "Números",
+    "totalVerses": 1288,
     "url": "rvr1960/book_4.json"
   },
   "5": {
@@ -52,6 +56,7 @@
     "encoding": "UTF-8",
     "nr": 5,
     "name": "Deuteronomio",
+    "totalVerses": 959,
     "url": "rvr1960/book_5.json"
   },
   "6": {
@@ -63,6 +68,7 @@
     "encoding": "UTF-8",
     "nr": 6,
     "name": "Josué",
+    "totalVerses": 658,
     "url": "rvr1960/book_6.json"
   },
   "7": {
@@ -74,6 +80,7 @@
     "encoding": "UTF-8",
     "nr": 7,
     "name": "Jueces",
+    "totalVerses": 618,
     "url": "rvr1960/book_7.json"
   },
   "8": {
@@ -85,6 +92,7 @@
     "encoding": "UTF-8",
     "nr": 8,
     "name": "Rut",
+    "totalVerses": 85,
     "url": "rvr1960/book_8.json"
   },
   "9": {
@@ -96,6 +104,7 @@
     "encoding": "UTF-8",
     "nr": 9,
     "name": "1 Samuel",
+    "totalVerses": 810,
     "url": "rvr1960/book_9.json"
   },
   "10": {
@@ -107,6 +116,7 @@
     "encoding": "UTF-8",
     "nr": 10,
     "name": "2 Samuel",
+    "totalVerses": 695,
     "url": "rvr1960/book_10.json"
   },
   "11": {
@@ -118,6 +128,7 @@
     "encoding": "UTF-8",
     "nr": 11,
     "name": "1 Reyes",
+    "totalVerses": 816,
     "url": "rvr1960/book_11.json"
   },
   "12": {
@@ -129,6 +140,7 @@
     "encoding": "UTF-8",
     "nr": 12,
     "name": "2 Reyes",
+    "totalVerses": 719,
     "url": "rvr1960/book_12.json"
   },
   "13": {
@@ -140,6 +152,7 @@
     "encoding": "UTF-8",
     "nr": 13,
     "name": "1 Crónicas",
+    "totalVerses": 942,
     "url": "rvr1960/book_13.json"
   },
   "14": {
@@ -151,6 +164,7 @@
     "encoding": "UTF-8",
     "nr": 14,
     "name": "2 Crónicas",
+    "totalVerses": 822,
     "url": "rvr1960/book_14.json"
   },
   "15": {
@@ -162,6 +176,7 @@
     "encoding": "UTF-8",
     "nr": 15,
     "name": "Esdras",
+    "totalVerses": 280,
     "url": "rvr1960/book_15.json"
   },
   "16": {
@@ -173,6 +188,7 @@
     "encoding": "UTF-8",
     "nr": 16,
     "name": "Nehemías",
+    "totalVerses": 407,
     "url": "rvr1960/book_16.json"
   },
   "17": {
@@ -184,6 +200,7 @@
     "encoding": "UTF-8",
     "nr": 17,
     "name": "Ester",
+    "totalVerses": 167,
     "url": "rvr1960/book_17.json"
   },
   "18": {
@@ -195,6 +212,7 @@
     "encoding": "UTF-8",
     "nr": 18,
     "name": "Job",
+    "totalVerses": 1070,
     "url": "rvr1960/book_18.json"
   },
   "19": {
@@ -206,6 +224,7 @@
     "encoding": "UTF-8",
     "nr": 19,
     "name": "Salmos",
+    "totalVerses": 2463,
     "url": "rvr1960/book_19.json"
   },
   "20": {
@@ -217,6 +236,7 @@
     "encoding": "UTF-8",
     "nr": 20,
     "name": "Proverbios",
+    "totalVerses": 915,
     "url": "rvr1960/book_20.json"
   },
   "21": {
@@ -228,6 +248,7 @@
     "encoding": "UTF-8",
     "nr": 21,
     "name": "Eclesiastés",
+    "totalVerses": 222,
     "url": "rvr1960/book_21.json"
   },
   "22": {
@@ -239,6 +260,7 @@
     "encoding": "UTF-8",
     "nr": 22,
     "name": "Cantares",
+    "totalVerses": 117,
     "url": "rvr1960/book_22.json"
   },
   "23": {
@@ -250,6 +272,7 @@
     "encoding": "UTF-8",
     "nr": 23,
     "name": "Isaías",
+    "totalVerses": 1292,
     "url": "rvr1960/book_23.json"
   },
   "24": {
@@ -261,6 +284,7 @@
     "encoding": "UTF-8",
     "nr": 24,
     "name": "Jeremías",
+    "totalVerses": 1364,
     "url": "rvr1960/book_24.json"
   },
   "25": {
@@ -272,6 +296,7 @@
     "encoding": "UTF-8",
     "nr": 25,
     "name": "Lamentaciones",
+    "totalVerses": 154,
     "url": "rvr1960/book_25.json"
   },
   "26": {
@@ -283,6 +308,7 @@
     "encoding": "UTF-8",
     "nr": 26,
     "name": "Ezequiel",
+    "totalVerses": 1273,
     "url": "rvr1960/book_26.json"
   },
   "27": {
@@ -294,6 +320,7 @@
     "encoding": "UTF-8",
     "nr": 27,
     "name": "Daniel",
+    "totalVerses": 357,
     "url": "rvr1960/book_27.json"
   },
   "28": {
@@ -305,6 +332,7 @@
     "encoding": "UTF-8",
     "nr": 28,
     "name": "Oseas",
+    "totalVerses": 197,
     "url": "rvr1960/book_28.json"
   },
   "29": {
@@ -316,6 +344,7 @@
     "encoding": "UTF-8",
     "nr": 29,
     "name": "Joel",
+    "totalVerses": 73,
     "url": "rvr1960/book_29.json"
   },
   "30": {
@@ -327,6 +356,7 @@
     "encoding": "UTF-8",
     "nr": 30,
     "name": "Amós",
+    "totalVerses": 146,
     "url": "rvr1960/book_30.json"
   },
   "31": {
@@ -338,6 +368,7 @@
     "encoding": "UTF-8",
     "nr": 31,
     "name": "Abdías",
+    "totalVerses": 42,
     "url": "rvr1960/book_31.json"
   },
   "32": {
@@ -349,6 +380,7 @@
     "encoding": "UTF-8",
     "nr": 32,
     "name": "Jonás",
+    "totalVerses": 48,
     "url": "rvr1960/book_32.json"
   },
   "33": {
@@ -360,6 +392,7 @@
     "encoding": "UTF-8",
     "nr": 33,
     "name": "Miqueas",
+    "totalVerses": 105,
     "url": "rvr1960/book_33.json"
   },
   "34": {
@@ -371,6 +404,7 @@
     "encoding": "UTF-8",
     "nr": 34,
     "name": "Nahúm",
+    "totalVerses": 47,
     "url": "rvr1960/book_34.json"
   },
   "35": {
@@ -382,6 +416,7 @@
     "encoding": "UTF-8",
     "nr": 35,
     "name": "Habacuc",
+    "totalVerses": 58,
     "url": "rvr1960/book_35.json"
   },
   "36": {
@@ -393,6 +428,7 @@
     "encoding": "UTF-8",
     "nr": 36,
     "name": "Sofonías",
+    "totalVerses": 53,
     "url": "rvr1960/book_36.json"
   },
   "37": {
@@ -404,6 +440,7 @@
     "encoding": "UTF-8",
     "nr": 37,
     "name": "Hageo",
+    "totalVerses": 38,
     "url": "rvr1960/book_37.json"
   },
   "38": {
@@ -415,6 +452,7 @@
     "encoding": "UTF-8",
     "nr": 38,
     "name": "Zacarías",
+    "totalVerses": 211,
     "url": "rvr1960/book_38.json"
   },
   "39": {
@@ -426,6 +464,7 @@
     "encoding": "UTF-8",
     "nr": 39,
     "name": "Malaquías",
+    "totalVerses": 55,
     "url": "rvr1960/book_39.json"
   },
   "40": {
@@ -437,6 +476,7 @@
     "encoding": "UTF-8",
     "nr": 40,
     "name": "S. Mateo",
+    "totalVerses": 1071,
     "url": "rvr1960/book_40.json"
   },
   "41": {
@@ -448,6 +488,7 @@
     "encoding": "UTF-8",
     "nr": 41,
     "name": "S. Marcos",
+    "totalVerses": 678,
     "url": "rvr1960/book_41.json"
   },
   "42": {
@@ -459,6 +500,7 @@
     "encoding": "UTF-8",
     "nr": 42,
     "name": "S. Lucas",
+    "totalVerses": 1152,
     "url": "rvr1960/book_42.json"
   },
   "43": {
@@ -470,6 +512,7 @@
     "encoding": "UTF-8",
     "nr": 43,
     "name": "S. Juan",
+    "totalVerses": 881,
     "url": "rvr1960/book_43.json"
   },
   "44": {
@@ -481,6 +524,7 @@
     "encoding": "UTF-8",
     "nr": 44,
     "name": "Hechos",
+    "totalVerses": 1007,
     "url": "rvr1960/book_44.json"
   },
   "45": {
@@ -492,6 +536,7 @@
     "encoding": "UTF-8",
     "nr": 45,
     "name": "Romanos",
+    "totalVerses": 433,
     "url": "rvr1960/book_45.json"
   },
   "46": {
@@ -503,6 +548,7 @@
     "encoding": "UTF-8",
     "nr": 46,
     "name": "1 Corintios",
+    "totalVerses": 437,
     "url": "rvr1960/book_46.json"
   },
   "47": {
@@ -514,6 +560,7 @@
     "encoding": "UTF-8",
     "nr": 47,
     "name": "2 Corintios",
+    "totalVerses": 257,
     "url": "rvr1960/book_47.json"
   },
   "48": {
@@ -525,6 +572,7 @@
     "encoding": "UTF-8",
     "nr": 48,
     "name": "Gálatas",
+    "totalVerses": 149,
     "url": "rvr1960/book_48.json"
   },
   "49": {
@@ -536,6 +584,7 @@
     "encoding": "UTF-8",
     "nr": 49,
     "name": "Efesios",
+    "totalVerses": 155,
     "url": "rvr1960/book_49.json"
   },
   "50": {
@@ -547,6 +596,7 @@
     "encoding": "UTF-8",
     "nr": 50,
     "name": "Filipenses",
+    "totalVerses": 104,
     "url": "rvr1960/book_50.json"
   },
   "51": {
@@ -558,6 +608,7 @@
     "encoding": "UTF-8",
     "nr": 51,
     "name": "Colosenses",
+    "totalVerses": 95,
     "url": "rvr1960/book_51.json"
   },
   "52": {
@@ -569,6 +620,7 @@
     "encoding": "UTF-8",
     "nr": 52,
     "name": "1 Tesalonicenses",
+    "totalVerses": 89,
     "url": "rvr1960/book_52.json"
   },
   "53": {
@@ -580,6 +632,7 @@
     "encoding": "UTF-8",
     "nr": 53,
     "name": "2 Tesalonicenses",
+    "totalVerses": 47,
     "url": "rvr1960/book_53.json"
   },
   "54": {
@@ -591,6 +644,7 @@
     "encoding": "UTF-8",
     "nr": 54,
     "name": "1 Timoteo",
+    "totalVerses": 113,
     "url": "rvr1960/book_54.json"
   },
   "55": {
@@ -602,6 +656,7 @@
     "encoding": "UTF-8",
     "nr": 55,
     "name": "2 Timoteo",
+    "totalVerses": 83,
     "url": "rvr1960/book_55.json"
   },
   "56": {
@@ -613,6 +668,7 @@
     "encoding": "UTF-8",
     "nr": 56,
     "name": "Tito",
+    "totalVerses": 46,
     "url": "rvr1960/book_56.json"
   },
   "57": {
@@ -624,6 +680,7 @@
     "encoding": "UTF-8",
     "nr": 57,
     "name": "Filemón",
+    "totalVerses": 50,
     "url": "rvr1960/book_57.json"
   },
   "58": {
@@ -635,6 +692,7 @@
     "encoding": "UTF-8",
     "nr": 58,
     "name": "Hebreos",
+    "totalVerses": 303,
     "url": "rvr1960/book_58.json"
   },
   "59": {
@@ -646,6 +704,7 @@
     "encoding": "UTF-8",
     "nr": 59,
     "name": "Santiago",
+    "totalVerses": 108,
     "url": "rvr1960/book_59.json"
   },
   "60": {
@@ -657,6 +716,7 @@
     "encoding": "UTF-8",
     "nr": 60,
     "name": "1 Pedro",
+    "totalVerses": 105,
     "url": "rvr1960/book_60.json"
   },
   "61": {
@@ -668,6 +728,7 @@
     "encoding": "UTF-8",
     "nr": 61,
     "name": "2 Pedro",
+    "totalVerses": 61,
     "url": "rvr1960/book_61.json"
   },
   "62": {
@@ -679,6 +740,7 @@
     "encoding": "UTF-8",
     "nr": 62,
     "name": "1 Juan",
+    "totalVerses": 105,
     "url": "rvr1960/book_62.json"
   },
   "63": {
@@ -690,6 +752,7 @@
     "encoding": "UTF-8",
     "nr": 63,
     "name": "2 Juan",
+    "totalVerses": 26,
     "url": "rvr1960/book_63.json"
   },
   "64": {
@@ -701,6 +764,7 @@
     "encoding": "UTF-8",
     "nr": 64,
     "name": "3 Juan",
+    "totalVerses": 30,
     "url": "rvr1960/book_64.json"
   },
   "65": {
@@ -712,6 +776,7 @@
     "encoding": "UTF-8",
     "nr": 65,
     "name": "Judas",
+    "totalVerses": 50,
     "url": "rvr1960/book_65.json"
   },
   "66": {
@@ -723,6 +788,7 @@
     "encoding": "UTF-8",
     "nr": 66,
     "name": "Apocalipsis",
+    "totalVerses": 404,
     "url": "rvr1960/book_66.json"
   }
 }

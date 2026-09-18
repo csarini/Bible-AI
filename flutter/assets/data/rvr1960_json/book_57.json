@@ -7,6 +7,7 @@
   "encoding": "UTF-8",
   "nr": 57,
   "name": "Filemón",
+  "totalVerses": 50,
   "chapters": [
     {
       "chapter": 1,
@@ -160,6 +161,162 @@
           "chapter": 1,
           "verse": 25,
           "name": "Filemón 1:25",
+          "text": "La gracia de nuestro Señor Jesucristo sea con vuestro espíritu. Amén."
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "name": "Filemón 2",
+      "verses": [
+        {
+          "chapter": 2,
+          "verse": 1,
+          "name": "Filemón 2:1",
+          "text": "Pablo, prisionero de Jesucristo, y el hermano Timoteo, al amado Filemón, colaborador nuestro,"
+        },
+        {
+          "chapter": 2,
+          "verse": 2,
+          "name": "Filemón 2:2",
+          "text": "y a la amada hermana Apia, y a Arquipo nuestro compañero de milicia, y a la iglesia que está en tu casa:"
+        },
+        {
+          "chapter": 2,
+          "verse": 3,
+          "name": "Filemón 2:3",
+          "text": "Gracia y paz a vosotros, de Dios nuestro Padre y del Señor Jesucristo."
+        },
+        {
+          "chapter": 2,
+          "verse": 4,
+          "name": "Filemón 2:4",
+          "text": "Doy gracias a mi Dios, haciendo siempre memoria de ti en mis oraciones,"
+        },
+        {
+          "chapter": 2,
+          "verse": 5,
+          "name": "Filemón 2:5",
+          "text": "porque oigo del amor y de la fe que tienes hacia el Señor Jesús, y para con todos los santos;"
+        },
+        {
+          "chapter": 2,
+          "verse": 6,
+          "name": "Filemón 2:6",
+          "text": "para que la participación de tu fe sea eficaz en el conocimiento de todo el bien que está en vosotros por Cristo Jesús."
+        },
+        {
+          "chapter": 2,
+          "verse": 7,
+          "name": "Filemón 2:7",
+          "text": "Pues tenemos gran gozo y consolación en tu amor, porque por ti, oh hermano, han sido confortados los corazones de los santos."
+        },
+        {
+          "chapter": 2,
+          "verse": 8,
+          "name": "Filemón 2:8",
+          "text": "Por lo cual, aunque tengo mucha libertad en Cristo para mandarte lo que conviene,"
+        },
+        {
+          "chapter": 2,
+          "verse": 9,
+          "name": "Filemón 2:9",
+          "text": "más bien te ruego por amor, siendo como soy, Pablo ya anciano, y ahora, además, prisionero de Jesucristo;"
+        },
+        {
+          "chapter": 2,
+          "verse": 10,
+          "name": "Filemón 2:10",
+          "text": "te ruego por mi hijo Onésimo,, a quien engendré en mis prisiones,"
+        },
+        {
+          "chapter": 2,
+          "verse": 11,
+          "name": "Filemón 2:11",
+          "text": "el cual en otro tiempo te fue inútil, pero ahora a ti y a mí nos es útil,"
+        },
+        {
+          "chapter": 2,
+          "verse": 12,
+          "name": "Filemón 2:12",
+          "text": "el cual vuelvo a enviarte; tú, pues, recíbele como a mí mismo."
+        },
+        {
+          "chapter": 2,
+          "verse": 13,
+          "name": "Filemón 2:13",
+          "text": "Yo quisiera retenerle conmigo, para que en lugar tuyo me sirviese en mis prisiones por el evangelio;"
+        },
+        {
+          "chapter": 2,
+          "verse": 14,
+          "name": "Filemón 2:14",
+          "text": "pero nada quise hacer sin tu consentimiento, para que tu favor no fuese como de necesidad, sino voluntario."
+        },
+        {
+          "chapter": 2,
+          "verse": 15,
+          "name": "Filemón 2:15",
+          "text": "Porque quizá para esto se apartó de ti por algún tiempo, para que le recibieses para siempre;"
+        },
+        {
+          "chapter": 2,
+          "verse": 16,
+          "name": "Filemón 2:16",
+          "text": "no ya como esclavo, sino como más que esclavo, como hermano amado, mayormente para mí, pero cuánto más para ti, tanto en la carne como en el Señor."
+        },
+        {
+          "chapter": 2,
+          "verse": 17,
+          "name": "Filemón 2:17",
+          "text": "Así que, si me tienes por compañero, recíbele como a mí mismo."
+        },
+        {
+          "chapter": 2,
+          "verse": 18,
+          "name": "Filemón 2:18",
+          "text": "Y si en algo te dañó, o te debe, ponlo a mi cuenta."
+        },
+        {
+          "chapter": 2,
+          "verse": 19,
+          "name": "Filemón 2:19",
+          "text": "Yo Pablo lo escribo de mi mano, yo lo pagaré; por no decirte que aun tú mismo te me debes también."
+        },
+        {
+          "chapter": 2,
+          "verse": 20,
+          "name": "Filemón 2:20",
+          "text": "Sí, hermano, tenga yo algún provecho de ti en el Señor; conforta mi corazón en el Señor."
+        },
+        {
+          "chapter": 2,
+          "verse": 21,
+          "name": "Filemón 2:21",
+          "text": "Te he escrito confiando en tu obediencia, sabiendo que harás aun más de lo que te digo."
+        },
+        {
+          "chapter": 2,
+          "verse": 22,
+          "name": "Filemón 2:22",
+          "text": "Prepárame también alojamiento; porque espero que por vuestras oraciones os seré concedido."
+        },
+        {
+          "chapter": 2,
+          "verse": 23,
+          "name": "Filemón 2:23",
+          "text": "Te saludan Epafras, mi compañero de prisiones por Cristo Jesús,"
+        },
+        {
+          "chapter": 2,
+          "verse": 24,
+          "name": "Filemón 2:24",
+          "text": "Marcos, Aristarco, Demas y Lucas, mis colaboradores."
+        },
+        {
+          "chapter": 2,
+          "verse": 25,
+          "name": "Filemón 2:25",
           "text": "La gracia de nuestro Señor Jesucristo sea con vuestro espíritu. Amén."
         }
       ]

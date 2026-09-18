@@ -7,6 +7,7 @@
   "encoding": "UTF-8",
   "nr": 63,
   "name": "2 Juan",
+  "totalVerses": 26,
   "chapters": [
     {
       "chapter": 1,
@@ -88,6 +89,90 @@
           "chapter": 1,
           "verse": 13,
           "name": "2 Juan 1:13",
+          "text": "Los hijos de tu hermana, la elegida, te saludan. Amén."
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "name": "2 Juan 2",
+      "verses": [
+        {
+          "chapter": 2,
+          "verse": 1,
+          "name": "2 Juan 2:1",
+          "text": "El anciano a la señora elegida y a sus hijos, a quienes yo amo en la verdad; y no solo yo, sino también todos los que han conocido la verdad,"
+        },
+        {
+          "chapter": 2,
+          "verse": 2,
+          "name": "2 Juan 2:2",
+          "text": "a causa de la verdad que permanece en nosotros, y estará para siempre con nosotros:"
+        },
+        {
+          "chapter": 2,
+          "verse": 3,
+          "name": "2 Juan 2:3",
+          "text": "Sea con vosotros gracia, misericordia y paz, de Dios Padre y del Señor Jesucristo, Hijo del Padre, en verdad y en amor."
+        },
+        {
+          "chapter": 2,
+          "verse": 4,
+          "name": "2 Juan 2:4",
+          "text": "Mucho me regocijé porque he hallado a algunos de tus hijos andando en la verdad, conforme al mandamiento que recibimos del Padre."
+        },
+        {
+          "chapter": 2,
+          "verse": 5,
+          "name": "2 Juan 2:5",
+          "text": "Y ahora te ruego, señora, no como escribiéndote un nuevo mandamiento, sino el que hemos tenido desde el principio, que nos amemos unos a otros."
+        },
+        {
+          "chapter": 2,
+          "verse": 6,
+          "name": "2 Juan 2:6",
+          "text": "Y este es el amor, que andemos según sus mandamientos. Este es el mandamiento: que andéis en amor, como vosotros habéis oído desde el principio."
+        },
+        {
+          "chapter": 2,
+          "verse": 7,
+          "name": "2 Juan 2:7",
+          "text": "Porque muchos engañadores han salido por el mundo, que no confiesan que Jesucristo ha venido en carne. Quien esto hace es el engañador y el anticristo."
+        },
+        {
+          "chapter": 2,
+          "verse": 8,
+          "name": "2 Juan 2:8",
+          "text": "Mirad por vosotros mismos, para que no perdáis el fruto de vuestro trabajo, sino que recibáis galardón completo."
+        },
+        {
+          "chapter": 2,
+          "verse": 9,
+          "name": "2 Juan 2:9",
+          "text": "Cualquiera que se extravía, y no persevera en la doctrina de Cristo, no tiene a Dios; el que persevera en la doctrina de Cristo, ese sí tiene al Padre y al Hijo."
+        },
+        {
+          "chapter": 2,
+          "verse": 10,
+          "name": "2 Juan 2:10",
+          "text": "Si alguno viene a vosotros, y no trae esta doctrina, no lo recibáis en casa, ni le digáis: ¡Bienvenido!"
+        },
+        {
+          "chapter": 2,
+          "verse": 11,
+          "name": "2 Juan 2:11",
+          "text": "Porque el que le dice: ¡Bienvenido! participa en sus malas obras."
+        },
+        {
+          "chapter": 2,
+          "verse": 12,
+          "name": "2 Juan 2:12",
+          "text": "Tengo muchas cosas que escribiros, pero no he querido hacerlo por medio de papel y tinta, pues espero ir a vosotros y hablar cara a cara, para que nuestro gozo sea cumplido."
+        },
+        {
+          "chapter": 2,
+          "verse": 13,
+          "name": "2 Juan 2:13",
           "text": "Los hijos de tu hermana, la elegida, te saludan. Amén."
         }
       ]
