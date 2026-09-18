@@ -153,18 +153,24 @@ export const QuickSettingsModal: React.FC<QuickSettingsModalProps> = ({
                     }`}
                   >
                     <optgroup label="Nuevo Testamento">
-                      {currentBooks.filter((b) => b.testament === 'NT').map((b) => (
-                        <option key={b.id} value={b.id}>
-                          {b.name} ({b.chaptersCount} caps)
-                        </option>
-                      ))}
+                      {currentBooks
+                        .filter((b) => b.testament === 'NT')
+                        .filter((b, idx, arr) => arr.findIndex((x) => x.id === b.id) === idx)
+                        .map((b) => (
+                          <option key={`modal-nt-${b.id}`} value={b.id}>
+                            {b.name} ({b.chaptersCount} caps)
+                          </option>
+                        ))}
                     </optgroup>
                     <optgroup label="Antiguo Testamento">
-                      {currentBooks.filter((b) => b.testament === 'OT').map((b) => (
-                        <option key={b.id} value={b.id}>
-                          {b.name} ({b.chaptersCount} caps)
-                        </option>
-                      ))}
+                      {currentBooks
+                        .filter((b) => b.testament === 'OT')
+                        .filter((b, idx, arr) => arr.findIndex((x) => x.id === b.id) === idx)
+                        .map((b) => (
+                          <option key={`modal-ot-${b.id}`} value={b.id}>
+                            {b.name} ({b.chaptersCount} caps)
+                          </option>
+                        ))}
                     </optgroup>
                   </select>
                 </div>

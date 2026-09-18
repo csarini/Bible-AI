@@ -3,6 +3,8 @@
 // and queries books and genuine verses from the GetBible API and local DB.
 
 import booksValeraRaw from '../data/raw/books_valera.json';
+import booksRvr1960Raw from '../data/raw/books_rvr1960.json';
+import booksRva2015Raw from '../data/raw/books_rva2015.json';
 import translationsCatalogRaw from '../data/raw/translations_catalog.json';
 import { BibleVerse, BibleBook } from '../types';
 
@@ -76,13 +78,14 @@ let isDatabaseReady = false;
 export function isBuiltInOfflineTranslation(tr?: string): boolean {
   if (!tr) return true;
   const clean = tr.toLowerCase().replace(/[^a-z0-9]/g, '');
-  return clean === 'rvr1960' || clean.includes('1960') || clean === 'rva2015' || clean.includes('2015');
+  return clean === 'valera' || clean.includes('1909') || clean === 'rvr1960' || clean.includes('1960') || clean === 'rva2015' || clean.includes('2015');
 }
 
-// Normalize translation code (rvr1960, rva2015, etc.)
+// Normalize translation code (valera, rvr1960, rva2015, etc.)
 export function normalizeTranslationKey(tr?: string): string {
-  if (!tr) return 'rvr1960';
+  if (!tr) return 'valera';
   const clean = tr.toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (clean.includes('valera') || clean.includes('1909')) return 'valera';
   if (clean === 'rvr1960' || clean.includes('1960')) return 'rvr1960';
   if (clean === 'rva2015' || clean.includes('2015')) return 'rva2015';
   if (clean === 'nvi') return 'nvi';
@@ -91,8 +94,7 @@ export function normalizeTranslationKey(tr?: string): string {
   if (clean === 'vbl') return 'vbl';
   if (clean === 'pddpt') return 'pddpt';
   if (clean === 'bsb') return 'bsb';
-  if (clean.includes('valera') || clean.includes('1909')) return 'rvr1960';
-  return clean || 'rvr1960';
+  return clean || 'valera';
 }
 
 // Convert raw JSON entry from data/raw/ to full StoredBibleBook
@@ -119,11 +121,15 @@ function transformRawBook(raw: RawBookData | any, defaultAbbr: string): StoredBi
   };
 }
 
-// Build in-memory books list from the valera file for instant sync rendering
+// Build in-memory books list from the canonical files for instant sync rendering
 function buildMemoryBookLists(): Record<string, StoredBibleBook[]> {
+  const rvr1960List: StoredBibleBook[] = Object.values(booksRvr1960Raw).map(b => transformRawBook(b, 'rvr1960'));
+  const rva2015List: StoredBibleBook[] = Object.values(booksRva2015Raw).map(b => transformRawBook(b, 'rva2015'));
   const valeraList: StoredBibleBook[] = Object.values(booksValeraRaw).map(b => transformRawBook(b, 'valera'));
 
   return {
+    rvr1960: rvr1960List.sort((a, b) => a.number - b.number),
+    rva2015: rva2015List.sort((a, b) => a.number - b.number),
     valera: valeraList.sort((a, b) => a.number - b.number)
   };
 }
@@ -228,7 +234,7 @@ export async function initBibleDatabase(): Promise<void> {
     const isSeeded = await new Promise<boolean>((resolve) => {
       const tx = db.transaction([STORE_META, STORE_BOOKS], 'readonly');
       const metaStore = tx.objectStore(STORE_META);
-      const req = metaStore.get('books_seeded_v3');
+      const req = metaStore.get('books_seeded_v5');
       req.onsuccess = () => {
         if (req.result && req.result.value === true) {
           resolve(true);
@@ -251,21 +257,25 @@ export async function initBibleDatabase(): Promise<void> {
         transStore.put({ ...trans, abbreviation: abbr });
       }
 
-      // 2. Insert books from the built-in Valera file
+      // 2. Insert books from the canonical translation files
       const allBooks = [
-        ...cachedBooksByTranslation.valera
+        ...(cachedBooksByTranslation.rvr1960 || []),
+        ...(cachedBooksByTranslation.rva2015 || []),
+        ...(cachedBooksByTranslation.valera || [])
       ];
 
       for (const book of allBooks) {
+        const trKey = normalizeTranslationKey(book.translation);
         booksStore.put({
           ...book,
-          storeId: `${book.translation}_${book.id}`
+          translation: trKey,
+          storeId: `${trKey}_${book.id}`
         });
       }
 
       // 3. Mark seeded
       metaStore.put({
-        key: 'books_seeded_v3',
+        key: 'books_seeded_v5',
         value: true,
         seededAt: new Date().toISOString(),
         totalBooks: allBooks.length
@@ -299,14 +309,32 @@ async function refreshBooksCacheFromDB(): Promise<void> {
       req.onsuccess = () => {
         const rows: (StoredBibleBook & { storeId: string })[] = req.result || [];
         if (rows.length > 0) {
-          const valera: StoredBibleBook[] = [];
+          const byTranslation: Record<string, Map<string, StoredBibleBook>> = {
+            valera: new Map(),
+            rvr1960: new Map(),
+            rva2015: new Map()
+          };
 
           for (const row of rows) {
-            valera.push(row);
+            const tr = normalizeTranslationKey(row.translation || 'valera');
+            if (!byTranslation[tr]) {
+              byTranslation[tr] = new Map();
+            }
+            if (!byTranslation[tr].has(row.id)) {
+              byTranslation[tr].set(row.id, row);
+            }
+          }
+
+          const updated: Record<string, StoredBibleBook[]> = {};
+          for (const [tr, bookMap] of Object.entries(byTranslation)) {
+            if (bookMap.size > 0) {
+              updated[tr] = Array.from(bookMap.values()).sort((a, b) => a.number - b.number);
+            }
           }
 
           cachedBooksByTranslation = {
-            valera: valera.sort((a, b) => a.number - b.number)
+            ...cachedBooksByTranslation,
+            ...updated
           };
         }
         resolve();
@@ -332,22 +360,39 @@ export async function getBooksFromDB(translation: string = 'valera'): Promise<St
       req.onsuccess = () => {
         if (req.result && req.result.length > 0) {
           const list = req.result as StoredBibleBook[];
-          resolve(list.sort((a, b) => a.number - b.number));
+          const seen = new Set<string>();
+          const deduped: StoredBibleBook[] = [];
+          for (const b of list) {
+            if (b && b.id && !seen.has(b.id)) {
+              seen.add(b.id);
+              deduped.push(b);
+            }
+          }
+          resolve(deduped.sort((a, b) => a.number - b.number));
         } else {
-          resolve(cachedBooksByTranslation[tr] || cachedBooksByTranslation.valera);
+          resolve(getLocalBooksSync(tr));
         }
       };
-      req.onerror = () => resolve(cachedBooksByTranslation[tr] || cachedBooksByTranslation.valera);
+      req.onerror = () => resolve(getLocalBooksSync(tr));
     });
   } catch {
-    return cachedBooksByTranslation[tr] || cachedBooksByTranslation.valera;
+    return getLocalBooksSync(tr);
   }
 }
 
-// Synchronous helper to get books list (guarantees no UI flash)
+// Synchronous helper to get books list (guarantees no UI flash and deduplicated)
 export function getLocalBooksSync(translation: string = 'valera'): StoredBibleBook[] {
   const tr = normalizeTranslationKey(translation);
-  return cachedBooksByTranslation[tr] || cachedBooksByTranslation.valera;
+  const rawList = cachedBooksByTranslation[tr] || cachedBooksByTranslation.valera || cachedBooksByTranslation.rvr1960 || [];
+  const seen = new Set<string>();
+  const uniqueList: StoredBibleBook[] = [];
+  for (const b of rawList) {
+    if (b && b.id && !seen.has(b.id)) {
+      seen.add(b.id);
+      uniqueList.push(b);
+    }
+  }
+  return uniqueList;
 }
 
 // Find a single book by ID ("MAT") or number (40)
@@ -425,12 +470,55 @@ export async function saveChapterToDB(
   }
 }
 
-// Direct fetch from GetBible API (using book URL and chapter URL)
+// Direct fetch from GetBible API or local bundled translation JSON assets
 async function fetchFromGetBibleAPI(
   bookMeta: StoredBibleBook,
   chapter: number,
   tr: string
 ): Promise<BibleVerse[]> {
+  // Strategy 0: Fetch from local bundled static assets (100% offline support for rvr1960 and rva2015)
+  const localAssetPaths = [
+    `/${tr}/book_${bookMeta.number}.json`,
+    `/data/${tr}/book_${bookMeta.number}.json`,
+    `/rvr1960/book_${bookMeta.number}.json`
+  ];
+
+  for (const assetPath of localAssetPaths) {
+    try {
+      const localRes = await fetch(assetPath);
+      if (localRes.ok) {
+        const data = await localRes.json();
+        if (data && data.chapters && Array.isArray(data.chapters)) {
+          let requestedChapterVerses: BibleVerse[] = [];
+          for (const chObj of data.chapters) {
+            const chNum = Number(chObj.chapter);
+            if (chObj.verses && Array.isArray(chObj.verses)) {
+              const chVerses: BibleVerse[] = chObj.verses.map((v: any) => ({
+                bookId: bookMeta.id,
+                bookName: data.name || bookMeta.name,
+                chapter: chNum,
+                verse: Number(v.verse),
+                text: (v.text || '').replace(/[\r\n]+/g, ' ').trim()
+              }));
+
+              if (isGenuineVerses(chVerses)) {
+                await saveChapterToDB(bookMeta.id, chNum, chVerses, tr);
+                if (chNum === chapter) {
+                  requestedChapterVerses = chVerses;
+                }
+              }
+            }
+          }
+          if (requestedChapterVerses.length > 0) {
+            return requestedChapterVerses;
+          }
+        }
+      }
+    } catch {
+      // Continue to next strategy
+    }
+  }
+
   const apiSlug = 'valera';
 
   // Strategy 1: Fetch direct chapter JSON endpoint (e.g. https://api.getbible.net/v2/valera/40/1.json)

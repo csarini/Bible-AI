@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Book, Sparkles, BookOpen, ChevronRight, X, ArrowLeft, Check, Compass, Layers } from 'lucide-react';
 import { fetchBibleChapter } from '../data/bibleData';
 import { getLocalBooksSync } from '../services/bibleDatabaseService';
@@ -84,8 +84,25 @@ export const SearchView: React.FC<SearchViewProps> = ({
   const [chapterVerses, setChapterVerses] = useState<BibleVerse[]>([]);
   const [loadingVerses, setLoadingVerses] = useState<boolean>(false);
 
-  const oldTestament = allBooks.filter(b => b.testament === 'OT');
-  const newTestament = allBooks.filter(b => b.testament === 'NT');
+  const oldTestament = useMemo(() => {
+    const seen = new Set<string>();
+    return allBooks.filter(b => {
+      if (b.testament !== 'OT') return false;
+      if (seen.has(b.id)) return false;
+      seen.add(b.id);
+      return true;
+    });
+  }, [allBooks]);
+
+  const newTestament = useMemo(() => {
+    const seen = new Set<string>();
+    return allBooks.filter(b => {
+      if (b.testament !== 'NT') return false;
+      if (seen.has(b.id)) return false;
+      seen.add(b.id);
+      return true;
+    });
+  }, [allBooks]);
 
   const normalize = (input: string) => {
     return input
@@ -459,7 +476,7 @@ export const SearchView: React.FC<SearchViewProps> = ({
               const isSelected = selectedBook.id === book.id;
               return (
                 <button
-                  key={book.id}
+                  key={`ot-${book.id}`}
                   id={`book-card-${book.id}`}
                   onClick={() => handleBookClick(book)}
                   className={`border rounded-xl p-3.5 sm:p-4 text-left transition-all relative overflow-hidden group cursor-pointer shadow-xs ${
@@ -505,7 +522,7 @@ export const SearchView: React.FC<SearchViewProps> = ({
               const isSelected = selectedBook.id === book.id;
               return (
                 <button
-                  key={book.id}
+                  key={`nt-${book.id}`}
                   id={`book-card-${book.id}`}
                   onClick={() => handleBookClick(book)}
                   className={`border rounded-xl p-3.5 sm:p-4 text-left transition-all relative overflow-hidden group cursor-pointer shadow-xs ${

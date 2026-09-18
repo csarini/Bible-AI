@@ -1,4 +1,15 @@
 {
+   "valera": {
+    "translation": "Reina Valera (1909)",
+    "abbreviation": "valera",
+    "description": "Reina-Valera 1909 con números de Strong",
+    "lang": "es",
+    "language": "Spanish",
+    "direction": "LTR",
+    "encoding": "UTF-8",
+    "distribution_abbreviation": "valera",
+    "url": "https://api.getbible.net/v2/valera.json"
+  },
   "RVR1960": {
     "translation": "Biblia Reina Valera 1960",
     "abbreviation": "rvr1960",
