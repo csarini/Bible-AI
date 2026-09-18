@@ -36,14 +36,6 @@ class BibleTranslationsCatalog {
       badge: '100% Offline',
       isOffline: true,
     ),
-    BibleTranslationConfig(
-      id: 'valera',
-      abbreviation: 'valera',
-      name: 'Reina Valera 1909',
-      subtitle: 'Edición Histórica Valera 1909',
-      badge: '100% Offline',
-      isOffline: true,
-    ),
   ];
 
   static BibleTranslationConfig findById(String id) {
