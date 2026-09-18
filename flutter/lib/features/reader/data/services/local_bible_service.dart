@@ -161,7 +161,7 @@ class LocalBibleService {
     }
 
     // 2. Fallback to base canonical offline version ('rvr1960')
-    final notice = 'Mostrando versión canónica local Reina-Valera 1960.';
+    const notice = 'Mostrando versión canónica local Reina-Valera 1960.';
     onOfflineFallbackNotice?.call(notice);
 
     return _loadBaseOfflineFallback(
