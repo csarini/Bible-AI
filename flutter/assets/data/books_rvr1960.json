@@ -4898,17 +4898,12 @@
     "encoding": "UTF-8",
     "nr": 31,
     "name": "Abdías",
-    "totalChapters": 2,
-    "totalVerses": 42,
+    "totalChapters": 1,
+    "totalVerses": 21,
     "chapters": [
       {
         "chapter": 1,
         "name": "Abdías 1",
-        "totalVerses": 21
-      },
-      {
-        "chapter": 2,
-        "name": "Abdías 2",
         "totalVerses": 21
       }
     ],
@@ -6513,17 +6508,12 @@
     "encoding": "UTF-8",
     "nr": 57,
     "name": "Filemón",
-    "totalChapters": 2,
-    "totalVerses": 50,
+    "totalChapters": 1,
+    "totalVerses": 25,
     "chapters": [
       {
         "chapter": 1,
         "name": "Filemón 1",
-        "totalVerses": 25
-      },
-      {
-        "chapter": 2,
-        "name": "Filemón 2",
         "totalVerses": 25
       }
     ],
@@ -6768,17 +6758,12 @@
     "encoding": "UTF-8",
     "nr": 63,
     "name": "2 Juan",
-    "totalChapters": 2,
-    "totalVerses": 26,
+    "totalChapters": 1,
+    "totalVerses": 13,
     "chapters": [
       {
         "chapter": 1,
         "name": "2 Juan 1",
-        "totalVerses": 13
-      },
-      {
-        "chapter": 2,
-        "name": "2 Juan 2",
         "totalVerses": 13
       }
     ],
@@ -6793,17 +6778,12 @@
     "encoding": "UTF-8",
     "nr": 64,
     "name": "3 Juan",
-    "totalChapters": 2,
-    "totalVerses": 30,
+    "totalChapters": 1,
+    "totalVerses": 15,
     "chapters": [
       {
         "chapter": 1,
         "name": "3 Juan 1",
-        "totalVerses": 15
-      },
-      {
-        "chapter": 2,
-        "name": "3 Juan 2",
         "totalVerses": 15
       }
     ],
@@ -6818,17 +6798,12 @@
     "encoding": "UTF-8",
     "nr": 65,
     "name": "Judas",
-    "totalChapters": 2,
-    "totalVerses": 50,
+    "totalChapters": 1,
+    "totalVerses": 25,
     "chapters": [
       {
         "chapter": 1,
         "name": "Judas 1",
-        "totalVerses": 25
-      },
-      {
-        "chapter": 2,
-        "name": "Judas 2",
         "totalVerses": 25
       }
     ],
