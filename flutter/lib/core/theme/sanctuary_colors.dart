@@ -93,6 +93,7 @@ class SanctuaryColors {
   static const Color sunGold = ElShaddaiColors.sunGold;
   static const Color brandPurple = ElShaddaiColors.brandPurple;
   static const Color emeraldGreen = ElShaddaiColors.emeraldGreen;
+  static const Color pineGreen = ElShaddaiColors.emeraldGreen;
 
   // --- Light Theme (#FAF8F5, #FFFFFF, text #1B1C19) ---
   static const Color lightBackground = ElShaddaiColors.lightBackground;

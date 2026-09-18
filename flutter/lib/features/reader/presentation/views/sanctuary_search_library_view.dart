@@ -1363,6 +1363,8 @@ class _BookChapterVersePickerSheetState
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final tokens = context.sanctuaryTokens;
+    final totalVerses = _chapterVerseCounts[_selectedChapter] ??
+        getCanonicalVerseCount(widget.book.number, _selectedChapter);
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
@@ -1420,7 +1422,7 @@ class _BookChapterVersePickerSheetState
                           padding: const EdgeInsets.symmetric(
                               horizontal: 5, vertical: 1),
                           decoration: BoxDecoration(
-                            color: SanctuaryColors.pineGreen
+                            color: SanctuaryColors.emeraldGreen
                                 .withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(4),
                           ),
@@ -1429,7 +1431,7 @@ class _BookChapterVersePickerSheetState
                             style: GoogleFonts.inter(
                               fontSize: 9,
                               fontWeight: FontWeight.bold,
-                              color: SanctuaryColors.pineGreen,
+                              color: SanctuaryColors.emeraldGreen,
                             ),
                           ),
                         ),
@@ -1540,8 +1542,6 @@ class _BookChapterVersePickerSheetState
             ),
           ] else ...[
             // Step 2: Verses Grid
-            final totalVerses = _chapterVerseCounts[_selectedChapter] ??
-                getCanonicalVerseCount(widget.book.number, _selectedChapter);
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
