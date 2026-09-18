@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/bible_translations.dart';
 import '../../../../core/constants/daily_verses_pool.dart';
 import '../../../../core/providers/app_settings_providers.dart';
