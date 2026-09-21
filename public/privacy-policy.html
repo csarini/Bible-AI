@@ -3,59 +3,762 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Política de Privacidad - Biblia Inteligente</title>
+    <title>Política de Privacidad | Biblia Inteligente - Santuario Digital</title>
+    <meta name="description" content="Política de privacidad oficial y declaración de seguridad de datos de la aplicación Biblia Inteligente (com.elshaddai.biblia_inteligente) para Google Play Store.">
+    <meta name="robots" content="index, follow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #0B2B68;
+            --primary-light: #1A3E8A;
+            --primary-dark: #071E4A;
+            --accent: #D97706;
+            --accent-soft: #FEF3C7;
+            --emerald: #059669;
+            --emerald-soft: #D1FAE5;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --bg-page: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --border-color: #E2E8F0;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #002147;
-            background-color: #F9F6F0;
-            max-width: 800px;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.7;
+            color: var(--text-main);
+            background-color: var(--bg-page);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Header */
+        .site-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: #FFFFFF;
+            padding: 48px 24px 40px;
+            text-align: center;
+            border-bottom: 4px solid var(--accent);
+        }
+
+        .header-content {
+            max-width: 860px;
             margin: 0 auto;
-            padding: 20px;
         }
-        h1, h2 { color: #002147; }
+
+        .app-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(4px);
+        }
+
+        .app-badge span.dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10B981;
+        }
+
+        h1 {
+            font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+            font-size: 2.3rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            line-height: 1.25;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #CBD5E1;
+            max-width: 680px;
+            margin: 0 auto 16px;
+            font-weight: 400;
+        }
+
+        .meta-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            font-size: 0.85rem;
+            color: #94A3B8;
+        }
+
+        .meta-info strong {
+            color: #F1F5F9;
+        }
+
+        /* Main Container */
         .container {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 900px;
+            margin: -24px auto 60px;
+            padding: 0 20px;
         }
-        footer {
-            margin-top: 30px;
-            font-size: 0.9em;
-            color: #666;
+
+        .card-main {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-md);
+        }
+
+        @media (max-width: 640px) {
+            .card-main {
+                padding: 24px 18px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Quick Overview Highlights */
+        .highlight-banner {
+            background-color: var(--emerald-soft);
+            border: 1px solid #A7F3D0;
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .highlight-banner .icon {
+            font-size: 1.6rem;
+            line-height: 1;
+        }
+
+        .highlight-banner h3 {
+            font-size: 1.05rem;
+            color: #065F46;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .highlight-banner p {
+            font-size: 0.92rem;
+            color: #047857;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Table of Contents */
+        .toc-box {
+            background-color: #F8FAFC;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin-bottom: 40px;
+        }
+
+        .toc-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toc-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 8px 16px;
+        }
+
+        .toc-list a {
+            color: #334155;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-block;
+            transition: color 0.15s ease;
+        }
+
+        .toc-list a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        /* Content Sections */
+        section.policy-section {
+            margin-bottom: 36px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        section.policy-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        h2 {
+            font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+            font-size: 1.45rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            scroll-margin-top: 24px;
+        }
+
+        h2 .section-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: var(--primary);
+            color: #FFFFFF;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            color: #1E293B;
+            margin: 20px 0 10px;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 14px;
+            font-size: 0.98rem;
+            color: #334155;
+        }
+
+        ul, ol {
+            margin: 12px 0 18px 24px;
+            color: #334155;
+            font-size: 0.96rem;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: #0F172A;
+        }
+
+        code {
+            background-color: #F1F5F9;
+            color: #0F172A;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            border: 1px solid #E2E8F0;
+        }
+
+        /* Data Safety Table */
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table.safety-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            text-align: left;
+            background-color: #FFFFFF;
+        }
+
+        table.safety-table th {
+            background-color: #F1F5F9;
+            color: var(--primary-dark);
+            padding: 12px 16px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table.safety-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #F1F5F9;
+            color: #334155;
+            vertical-align: top;
+        }
+
+        table.safety-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge-no {
+            display: inline-block;
+            background-color: var(--emerald-soft);
+            color: #065F46;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .badge-local {
+            display: inline-block;
+            background-color: #E0E7FF;
+            color: #3730A3;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .badge-optional {
+            display: inline-block;
+            background-color: var(--accent-soft);
+            color: #92400E;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        /* Action Callout Box */
+        .callout-box {
+            background-color: #FEF9C3;
+            border-left: 4px solid var(--accent);
+            padding: 16px 20px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 20px 0;
+            font-size: 0.94rem;
+        }
+
+        .callout-box p {
+            margin: 0;
+            color: #713F12;
+        }
+
+        /* Step Guide for Deletion */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 16px 0 20px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            background-color: #F8FAFC;
+            border: 1px solid var(--border-color);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+        }
+
+        .step-badge {
+            background-color: var(--primary);
+            color: #FFFFFF;
+            font-weight: 700;
+            font-size: 0.85rem;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-text h4 {
+            font-size: 0.98rem;
+            margin-bottom: 2px;
+            color: #0F172A;
+        }
+
+        .step-text p {
+            font-size: 0.9rem;
+            margin: 0;
+            color: var(--text-muted);
+        }
+
+        /* Contact Box */
+        .contact-card {
+            background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+            border: 1px solid #BFDBFE;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-top: 16px;
+        }
+
+        .contact-card p {
+            margin-bottom: 8px;
+        }
+
+        .contact-card a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .contact-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* Print and Top Bar */
+        .util-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .print-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .print-btn:hover {
+            background-color: #F1F5F9;
+            border-color: #CBD5E1;
+        }
+
+        footer.site-footer {
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        footer.site-footer p {
+            margin-bottom: 6px;
+        }
+
+        @media print {
+            body {
+                background: #FFFFFF;
+                color: #000000;
+            }
+            .site-header {
+                background: none;
+                color: #000000;
+                padding: 10px 0;
+                border-bottom: 2px solid #000000;
+            }
+            .subtitle, .app-badge {
+                display: none;
+            }
+            .container {
+                margin: 0;
+                padding: 0;
+                max-width: 100%;
+            }
+            .card-main {
+                border: none;
+                box-shadow: none;
+                padding: 0;
+            }
+            .toc-box, .print-btn, .highlight-banner .icon {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-content">
+            <div class="app-badge">
+                <span class="dot"></span>
+                <span>Google Play Store Data Safety Certified</span>
+            </div>
+            <h1>Política de Privacidad</h1>
+            <p class="subtitle">Biblia Inteligente &bull; Santuario Digital para Estudio y Lectura Devocional</p>
+            <div class="meta-info">
+                <span><strong>Aplicación:</strong> Biblia Inteligente</span>
+                <span><strong>Identificador:</strong> <code>com.elshaddai.biblia_inteligente</code></span>
+                <span><strong>Entidad:</strong> El Shaddai / Digital Sanctuary</span>
+                <span><strong>Fecha de vigencia:</strong> 21 de septiembre de 2026</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
     <div class="container">
-        <h1>Política de Privacidad - Biblia Inteligente</h1>
-        <p><strong>Última actualización:</strong> 21 de septiembre de 2026</p>
-        
-        <p><strong>Biblia Inteligente</strong> (identificador de paquete: <code>com.elshaddai.biblia_inteligente</code>), desarrollada por <strong>El Shaddai / Digital Sanctuary</strong>, es una aplicación orientada al estudio bíblico personal y lectura devocional.</p>
+        <main class="card-main">
 
-        <h2>1. Almacenamiento y Tratamiento de Datos Locales</h2>
-        <p>Nuestra aplicación funciona bajo el principio de <strong>Privacidad por Diseño (Offline-First)</strong>:</p>
-        <ul>
-            <li>Todos sus marcadores, notas reflexivas, versículos destacados y configuraciones de lectura se almacenan <strong>exclusivamente en el dispositivo móvil del usuario</strong> mediante una base de datos local (SQLite/Drift).</li>
-            <li>No recopilamos, transmitimos ni vendemos información personal identificable.</li>
-        </ul>
+            <div class="util-bar">
+                <span>Documento oficial de privacidad conforme a las políticas para desarrolladores de Google Play.</span>
+                <button type="button" class="print-btn" onclick="window.print()">
+                    🖨️ Imprimir / Guardar PDF
+                </button>
+            </div>
 
-        <h2>2. Permisos Solicitados</h2>
-        <ul>
-            <li><strong>Internet / Estado de Red:</strong> Utilizado únicamente para consultar recursos públicos o anuncios.</li>
-            <li><strong>Notificaciones:</strong> Utilizado para el envío local del "Versículo del Día" en el teléfono.</li>
-        </ul>
+            <!-- Highlight Banner -->
+            <div class="highlight-banner">
+                <div class="icon">🛡️</div>
+                <div>
+                    <h3>Privacidad por Diseño (Offline-First)</h3>
+                    <p>En <strong>Biblia Inteligente</strong> respetamos profundamente su intimidad espiritual. La aplicación no requiere registro forzado, no recopila datos biométricos ni identificadores personales sensibles, y almacena sus notas y marcadores <strong>únicamente en la base de datos local de su dispositivo</strong>.</p>
+                </div>
+            </div>
 
-        <h2>3. Publicidad y Terceros</h2>
-        <p>La aplicación puede incluir servicios publicitarios (como Google AdMob) para mostrar anuncios no intrusivos. Estos proveedores pueden utilizar identificadores anónimos del dispositivo según las políticas de privacidad de Google.</p>
+            <!-- Table of Contents -->
+            <nav class="toc-box" aria-label="Índice de contenidos">
+                <div class="toc-title">
+                    <span>📑</span> Contenido de esta Política
+                </div>
+                <ul class="toc-list">
+                    <li><a href="#section-1">1. Información General y Alcance</a></li>
+                    <li><a href="#section-2">2. Resumen de Seguridad de Datos (Google Play)</a></li>
+                    <li><a href="#section-3">3. Datos Almacenados Localmente</a></li>
+                    <li><a href="#section-4">4. Asistente Teológico IA (Gemini)</a></li>
+                    <li><a href="#section-5">5. Permisos Solicitados en Android</a></li>
+                    <li><a href="#section-6">6. Proveedores y Servicios de Terceros</a></li>
+                    <li><a href="#section-7">7. Protección de Menores (COPPA)</a></li>
+                    <li><a href="#section-8">8. Procedimiento para Eliminación de Datos</a></li>
+                    <li><a href="#section-9">9. Seguridad de la Información</a></li>
+                    <li><a href="#section-10">10. Derechos del Usuario (GDPR / CCPA)</a></li>
+                    <li><a href="#section-11">11. Cambios a esta Política</a></li>
+                    <li><a href="#section-12">12. Información de Contacto</a></li>
+                </ul>
+            </nav>
 
-        <h2>4. Eliminación de Datos</h2>
-        <p>Dado que la información reside en su dispositivo, usted puede eliminar permanentemente todos sus datos desinstalando la aplicación o borrando el caché desde los ajustes de Android.</p>
+            <!-- Section 1 -->
+            <section id="section-1" class="policy-section">
+                <h2><span class="section-num">1</span> Información General y Alcance</h2>
+                <p>La presente Política de Privacidad regula el tratamiento de los datos en la aplicación móvil <strong>Biblia Inteligente</strong> (cuyo nombre de paquete en Android es <code>com.elshaddai.biblia_inteligente</code>), desarrollada y mantenida por <strong>El Shaddai / Digital Sanctuary</strong>.</p>
+                <p>Esta política se aplica a todas las versiones de la aplicación distribuidas a través de Google Play Store, tiendas oficiales de aplicaciones y su versión web asociada. Al instalar o utilizar la aplicación, usted acepta las prácticas descritas en este documento.</p>
+            </section>
 
-        <h2>5. Contacto</h2>
-        <p>Si tiene preguntas sobre esta política, puede escribirnos a: <strong>soporte@elshaddai.com</strong></p>
+            <!-- Section 2 -->
+            <section id="section-2" class="policy-section">
+                <h2><span class="section-num">2</span> Declaración de Seguridad de Datos (Google Play Data Safety)</h2>
+                <p>Para total transparencia frente a los usuarios y en cumplimiento estricto de la sección <em>Data Safety</em> de Google Play Console, detallamos qué tipo de información se procesa o no se procesa:</p>
+                
+                <div class="table-responsive">
+                    <table class="safety-table">
+                        <thead>
+                            <tr>
+                                <th>Tipo de Dato</th>
+                                <th>¿Se Recopila en Servidores?</th>
+                                <th>¿Se Comparte con Terceros?</th>
+                                <th>Propósito / Almacenamiento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Datos Personales</strong><br><small>(Nombre, email, teléfono, dirección)</small></td>
+                                <td><span class="badge-no">NO se recopila</span></td>
+                                <td><span class="badge-no">NO se comparte</span></td>
+                                <td>La aplicación no exige registro de cuenta obligatorio para su uso cotidiano.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ubicación Geográfica</strong><br><small>(GPS preciso o aproximado)</small></td>
+                                <td><span class="badge-no">NO se recopila</span></td>
+                                <td><span class="badge-no">NO se comparte</span></td>
+                                <td>Los mapas bíblicos (Viajes de Pablo, Éxodo) son representaciones cartográficas históricas estáticas/interactivas que no rastrean al usuario.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Marcadores, Notas y Reflexiones</strong></td>
+                                <td><span class="badge-no">NO (Solo Local)</span></td>
+                                <td><span class="badge-no">NO se comparte</span></td>
+                                <td><span class="badge-local">100% Local</span> Guardado exclusivamente en SQLite/Drift dentro del dispositivo.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Consultas al Mentor Teológico IA</strong></td>
+                                <td><span class="badge-optional">Tratamiento Efímero</span></td>
+                                <td><span class="badge-optional">Google Cloud / Gemini</span></td>
+                                <td>Envío voluntario del texto bíblico o consulta a la API de Google Gemini para generar respuestas exegéticas.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Identificadores de Dispositivo</strong><br><small>(Publicidad o Diagnóstico)</small></td>
+                                <td><span class="badge-optional">Anónimo (Opcional)</span></td>
+                                <td>Google AdMob / Play Services</td>
+                                <td>Para entrega de anuncios no personalizados o diagnóstico de estabilidad según las políticas de Google.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="section-3" class="policy-section">
+                <h2><span class="section-num">3</span> Datos Almacenados Localmente (Arquitectura Offline-First)</h2>
+                <p>Nuestra aplicación ha sido diseñada bajo una arquitectura <strong>100% Offline-First</strong>. La mayor parte de las funciones de estudio y devoción operan sin requerir conexión a Internet:</p>
+                <ul>
+                    <li><strong>Versículos destacados y resaltados de color:</strong> Almacenados en la base de datos relacional local del dispositivo móvil (Drift / SQLite).</li>
+                    <li><strong>Notas personales y reflexiones devocionales:</strong> Almacenadas en el almacenamiento privado (sandbox) de la aplicación en su teléfono. Nunca se transmiten a servidores externos sin su intervención.</li>
+                    <li><strong>Historial de lectura y preferencias de visualización:</strong> Tamaño de fuente tipográfica, modo visual (Claro, Sepia u Oscuro) y última posición de lectura.</li>
+                    <li><strong>Copias de Respaldo:</strong> Cuando el usuario decide utilizar la opción de exportar datos, se genera un archivo de formato estándar <code>.json</code> que se guarda en la carpeta local que el usuario elija; usted es el único dueño y custodio de dicho archivo.</li>
+                </ul>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="section-4" class="policy-section">
+                <h2><span class="section-num">4</span> Asistente Teológico e Inteligencia Artificial (Gemini API)</h2>
+                <p>La aplicación cuenta con una función opcional denominada <strong>"Mentor Teológico IA"</strong>, impulsada por los modelos de lenguaje de Google (Gemini) a través de la biblioteca <code>google_generative_ai</code>:</p>
+                <ul>
+                    <li><strong>Activación voluntaria:</strong> Esta función se activa únicamente cuando el usuario solicita un análisis teológico, aclaración histórica o exégesis de un pasaje bíblico.</li>
+                    <li><strong>Datos transmitidos:</strong> Se envía exclusivamente el texto de la consulta redactada por el usuario y los versículos bíblicos de contexto requeridos para responder la inquietud.</li>
+                    <li><strong>Sin datos identificativos:</strong> No se asocian nombres, correos electrónicos ni información privada a la petición enviada a la API.</li>
+                    <li><strong>Condiciones del servicio:</strong> El procesamiento de la IA está sujeto a los <a href="https://ai.google.dev/terms" target="_blank" rel="noopener noreferrer">Términos del Servicio de Google Generative AI</a> y la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Política de Privacidad de Google</a>. Las consultas no se utilizan para rastreo publicitario.</li>
+                </ul>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="section-5" class="policy-section">
+                <h2><span class="section-num">5</span> Permisos Solicitados en el Sistema Operativo Android</h2>
+                <p>Solicitamos únicamente los permisos mínimos e indispensables para el correcto funcionamiento de las características bíblicas:</p>
+                <ul>
+                    <li><code>android.permission.INTERNET</code>: Permite conectarse a servicios de red únicamente para descargar versiones bíblicas públicas adicionales, sincronizar anuncios autorizados o realizar consultas al Mentor Teológico IA.</li>
+                    <li><code>android.permission.ACCESS_NETWORK_STATE</code>: Permite comprobar si el dispositivo cuenta con conexión activa a fin de conmutar transparentemente al catálogo local offline y evitar consumo innecesario de datos celulares.</li>
+                    <li><code>android.permission.POST_NOTIFICATIONS</code> (Android 13+): Utilizado de manera exclusiva y previa autorización del usuario para programar localmente las notificaciones del <em>"Versículo del Día"</em> o recordatorios devocionales periódicos. El usuario puede revocar este permiso en cualquier momento desde los ajustes del sistema.</li>
+                    <li><code>android.permission.WAKE_LOCK</code>: Impide que el procesador entre en reposo profundo durante la reproducción continua de lectura de la Biblia por voz (Text-to-Speech / TTS), si dicha opción está en reproducción activa.</li>
+                </ul>
+                <div class="callout-box">
+                    <p><strong>Aviso importante:</strong> Esta aplicación <strong>NO</strong> solicita acceso a su cámara, micrófono, libreta de contactos, llamadas telefónicas, ubicación GPS precisa ni archivos multimedia externos.</p>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="section-6" class="policy-section">
+                <h2><span class="section-num">6</span> Proveedores y Servicios de Terceros</h2>
+                <p>Para sostener el desarrollo continuo y la estabilidad técnica de la aplicación, podemos interactuar con servicios confiables que cumplen con los estándares de la industria:</p>
+                <ul>
+                    <li><strong>Google Play Services:</strong> Infraestructura esencial para la distribución, actualizaciones y servicios del sistema Android. (<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Política de Google</a>).</li>
+                    <li><strong>Google AdMob (Red Publicitaria):</strong> La aplicación puede mostrar anuncios no intrusivos para financiar su mantenimiento. AdMob puede utilizar identificadores publicitarios seudónimos (AAID) para la medición y prevención de fraudes, respetando las preferencias de consentimiento del usuario en regiones como el Espacio Económico Europeo (GDPR/UMP). Puede optar por no recibir anuncios personalizados a través de <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">Configuración de Anuncios de Google</a>.</li>
+                    <li><strong>Google Generative AI (Gemini):</strong> Procesamiento de lenguaje natural para el análisis teológico.</li>
+                </ul>
+            </section>
+
+            <!-- Section 7 -->
+            <section id="section-7" class="policy-section">
+                <h2><span class="section-num">7</span> Protección de Menores (COPPA y Política de Familias)</h2>
+                <p>La aplicación <strong>Biblia Inteligente</strong> es una herramienta educativa y devocional apta para toda la familia. Declaramos formalmente que:</p>
+                <ul>
+                    <li>No recopilamos deliberadamente información personal de niños menores de 13 años (o menores de 16 años en la Unión Europea), en estricto apego a la <strong>Ley de Protección de la Privacidad Infantil en Línea (COPPA)</strong> y el Reglamento General de Protección de Datos (GDPR).</li>
+                    <li>Si un padre o tutor toma conocimiento de que su hijo ha facilitado alguna información involuntariamente a través de un canal de soporte, puede contactarnos de inmediato y procederemos a su eliminación expedita.</li>
+                </ul>
+            </section>
+
+            <!-- Section 8 -->
+            <section id="section-8" class="policy-section">
+                <h2><span class="section-num">8</span> Mecanismos de Control y Eliminación de Datos (Data Deletion)</h2>
+                <p>En cumplimiento de las directivas de Google Play sobre la eliminación de datos y cuentas, otorgamos al usuario control absoluto sobre su información:</p>
+                
+                <div class="steps-container">
+                    <div class="step-item">
+                        <div class="step-badge">1</div>
+                        <div class="step-text">
+                            <h4>Eliminación Directa desde la Aplicación</h4>
+                            <p>En la sección de <em>Ajustes / Configuración</em> de la app, puede utilizar el botón para limpiar el historial de lecturas, notas y marcadores locales en un solo toque.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-badge">2</div>
+                        <div class="step-text">
+                            <h4>Eliminación desde los Ajustes de Android</h4>
+                            <p>Vaya a <em>Ajustes del Sistema &gt; Aplicaciones &gt; Biblia Inteligente &gt; Almacenamiento y Caché &gt; "Borrar almacenamiento"</em>. Esto purgará permanentemente toda la base de datos local SQLite y preferencias.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-badge">3</div>
+                        <div class="step-text">
+                            <h4>Desinstalación Completa</h4>
+                            <p>Al desinstalar la aplicación de su dispositivo, el sistema Android elimina de forma automática, irreversible e inmediata la base de datos local y todos los datos asociados a la app.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p>Dado que no almacenamos sus notas ni marcadores en un servidor en la nube, no existe ninguna copia residual en servidores remotos tras el borrado local.</p>
+            </section>
+
+            <!-- Section 9 -->
+            <section id="section-9" class="policy-section">
+                <h2><span class="section-num">9</span> Seguridad de la Información</h2>
+                <p>Adoptamos medidas técnicas y organizativas para salvaguardar sus datos:</p>
+                <ul>
+                    <li>Todas las comunicaciones con la API de IA o recursos en línea se ejecutan mediante conexiones cifradas de alta seguridad bajo protocolo <strong>HTTPS con cifrado TLS 1.3</strong>.</li>
+                    <li>La base de datos SQLite se encuentra protegida dentro del entorno de aislamiento de procesos (sandbox) del sistema operativo móvil.</li>
+                </ul>
+            </section>
+
+            <!-- Section 10 -->
+            <section id="section-10" class="policy-section">
+                <h2><span class="section-num">10</span> Derechos del Usuario (GDPR, CCPA y Legislaciones Aplicables)</h2>
+                <p>Sin importar el país o territorio en el que se encuentre, usted goza de los siguientes derechos:</p>
+                <ul>
+                    <li><strong>Derecho de Acceso y Portabilidad:</strong> Puede visualizar todas sus notas y exportarlas en cualquier momento en formato JSON estandarizado.</li>
+                    <li><strong>Derecho de Rectificación y Supresión:</strong> Puede editar o borrar cualquier nota, cita o marcador individualmente.</li>
+                    <li><strong>Derecho a Revocar Consentimiento:</strong> Puede desactivar notificaciones o desautorizar anuncios personalizados desde los ajustes de su sistema.</li>
+                </ul>
+            </section>
+
+            <!-- Section 11 -->
+            <section id="section-11" class="policy-section">
+                <h2><span class="section-num">11</span> Modificaciones a esta Política de Privacidad</h2>
+                <p>Nos reservamos el derecho de actualizar esta política periódicamente para reflejar mejoras operativas, nuevas características o adecuaciones regulatorias. La fecha de la <em>"Última actualización"</em> en la parte superior reflejará cualquier revisión. Le recomendamos consultar este documento periódicamente.</p>
+            </section>
+
+            <!-- Section 12 -->
+            <section id="section-12" class="policy-section">
+                <h2><span class="section-num">12</span> Información de Contacto</h2>
+                <p>Para consultas, aclaraciones o inquietudes relacionadas con el tratamiento de datos y esta política de privacidad, puede ponerse en contacto con nuestro equipo de desarrollo:</p>
+                
+                <div class="contact-card">
+                    <p><strong>Desarrollador / Proyecto:</strong> El Shaddai &bull; Digital Sanctuary Team</p>
+                    <p><strong>Aplicación:</strong> Biblia Inteligente (<code>com.elshaddai.biblia_inteligente</code>)</p>
+                    <p><strong>Correo Electrónico de Soporte:</strong> <a href="mailto:soporte@elshaddai.com">soporte@elshaddai.com</a> / <a href="mailto:cmedinavera@gmail.com">cmedinavera@gmail.com</a></p>
+                    <p><strong>URL Pública Permanente:</strong> <a href="https://ais-pre-etjbuqelknmiuor4xsnlnn-588208510849.us-east1.run.app/privacy-policy.html" target="_blank">https://ais-pre-etjbuqelknmiuor4xsnlnn-588208510849.us-east1.run.app/privacy-policy.html</a></p>
+                </div>
+            </section>
+
+        </main>
     </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 El Shaddai / Digital Sanctuary. Todos los derechos reservados.</p>
+        <p>Biblia Inteligente &bull; Aplicación de estudio bíblico y santuario personal.</p>
+    </footer>
+
 </body>
 </html>
