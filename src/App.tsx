@@ -23,6 +23,9 @@ import { ShareContent } from './services/shareService';
 import { ActiveTab, BibleVerse, LocalBookmark, ReadingSettings, HighlightColor } from './types';
 import { initBibleDatabase, getLocalBooksSync, getBookByIdOrNumber } from './services/bibleDatabaseService';
 import { startFullDownload } from './services/offlineBibleService';
+import { AuthProvider } from './features/auth/context/AuthContext';
+import { AdminHubLayout, AdminSubTab } from './features/admin/AdminHubLayout';
+import { PulpitModeView } from './features/admin/PulpitModeView';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(() => {
@@ -34,6 +37,7 @@ export default function App() {
   });
   const [showCoachMark, setShowCoachMark] = useState(false);
   const [activeTab, setActiveTab] = useState<ActiveTab>('home');
+  const [adminSubTab, setAdminSubTab] = useState<AdminSubTab>('memberships');
   const [isDrawerOpenMobile, setIsDrawerOpenMobile] = useState(false);
   const [isQuickSettingsOpen, setIsQuickSettingsOpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
@@ -89,6 +93,33 @@ export default function App() {
     const bms = StorageService.getBookmarks();
     setBookmarks(bms);
     setRecentSearches(StorageService.getRecentSearches());
+  }, []);
+
+  // Hash-based routing for Admin Hub deep-links (e.g. #admin/sermons, #admin/events, #admin/memberships, #admin/food-court, #pulpit)
+  useEffect(() => {
+    const handleHash = () => {
+      const raw = window.location.hash.replace(/^#\/?/, '');
+      if (raw.startsWith('admin/')) {
+        const sub = raw.replace('admin/', '') as AdminSubTab;
+        setAdminSubTab(sub);
+        setActiveTab('admin-hub');
+      } else if (raw === 'admin' || raw === 'admin-hub') {
+        setActiveTab('admin-hub');
+      } else if (raw === 'pulpit-mode' || raw === 'pulpit') {
+        setAdminSubTab('pulpit');
+        setActiveTab('admin-hub');
+      } else if (raw === 'sermons' || raw === 'predicas') {
+        setAdminSubTab('sermons');
+        setActiveTab('admin-hub');
+      } else if (raw === 'events' || raw === 'eventos') {
+        setAdminSubTab('events');
+        setActiveTab('admin-hub');
+      }
+    };
+
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -260,27 +291,28 @@ export default function App() {
     : 'bg-[#FAF8F5] text-[#1B1C19]';
 
   return (
-    <div className={`${appBgClass} min-h-screen flex flex-col font-body-ui antialiased selection:bg-[#F25C05] selection:text-white transition-colors duration-200`}>
-      {/* El-Shaddai Animated Splash Screen */}
-      {showSplash && (
-        <SplashScreen
-          onComplete={handleSplashComplete}
-          currentTheme={settings.themeMode}
-        />
-      )}
+    <AuthProvider>
+      <div className={`${appBgClass} min-h-screen flex flex-col font-body-ui antialiased selection:bg-[#F25C05] selection:text-white transition-colors duration-200`}>
+          {/* El-Shaddai Animated Splash Screen */}
+          {showSplash && (
+            <SplashScreen
+              onComplete={handleSplashComplete}
+              currentTheme={settings.themeMode}
+            />
+          )}
 
-      {/* Top Application Bar */}
-      <TopAppBar
-        onToggleDrawer={() => setIsDrawerOpenMobile(!isDrawerOpenMobile)}
-        activeTab={activeTab}
-        onNavigateTab={(tab) => setActiveTab(tab)}
-        savedCount={bookmarks.length}
-        currentBookName={getBookByIdOrNumber(currentBookId, settings.translation).name}
-        currentChapter={currentChapter}
-        currentTheme={settings.themeMode}
-        onOpenSettings={() => setIsQuickSettingsOpen(true)}
-        isSettingsOpen={isQuickSettingsOpen}
-      />
+          {/* Top Application Bar */}
+          <TopAppBar
+            onToggleDrawer={() => setIsDrawerOpenMobile(!isDrawerOpenMobile)}
+            activeTab={activeTab}
+            onNavigateTab={(tab) => setActiveTab(tab)}
+            savedCount={bookmarks.length}
+            currentBookName={getBookByIdOrNumber(currentBookId, settings.translation).name}
+            currentChapter={currentChapter}
+            currentTheme={settings.themeMode}
+            onOpenSettings={() => setIsQuickSettingsOpen(true)}
+            isSettingsOpen={isQuickSettingsOpen}
+          />
 
       {/* Main Layout Area: Desktop Sidebar + Content Canvas */}
       <div className="flex flex-1 overflow-hidden relative">
@@ -389,32 +421,6 @@ export default function App() {
             />
           )}
 
-          {activeTab === 'events' && (
-            <EventsView
-              settings={settings}
-              onNavigateToScripture={(bookNameOrId, chapter, verse) => {
-                const currentBooks = getLocalBooksSync(settings.translation);
-                const matched = currentBooks.find(
-                  b => b.name.toLowerCase() === bookNameOrId.toLowerCase() || b.id.toLowerCase() === bookNameOrId.toLowerCase()
-                );
-                const effectiveBookId = matched ? matched.id : 'MAT';
-                handleSelectBookAndChapter(effectiveBookId, chapter, verse);
-                setActiveTab('scripture');
-              }}
-              onShareContent={(title, text, reference) => {
-                setShareModalContent({
-                  text: text,
-                  reference: reference || title,
-                  title: title,
-                  reflection: text,
-                  translation: 'RVR1909'
-                });
-                setIsShareModalOpen(true);
-              }}
-              onToast={showToast}
-            />
-          )}
-
           {(activeTab === 'devotional' || activeTab === 'widgets') && (
             <LockscreenWidgetView
               onNavigateToScripture={(bookId, chapter, verse) =>
@@ -438,6 +444,37 @@ export default function App() {
               }
               onOpenSaveModal={handleOpenSaveModalRaw}
               currentTheme={settings.themeMode}
+            />
+          )}
+
+          {(activeTab === 'admin-hub' ||
+            activeTab === 'events' ||
+            activeTab === 'pulpit-mode' ||
+            activeTab === 'admin-sermons' ||
+            activeTab === 'admin-events') && (
+            <AdminHubLayout
+              initialSubTab={
+                activeTab === 'events' || activeTab === 'admin-events'
+                  ? 'events'
+                  : activeTab === 'pulpit-mode'
+                  ? 'pulpit'
+                  : activeTab === 'admin-sermons'
+                  ? 'sermons'
+                  : adminSubTab
+              }
+              onNavigateSubTab={(tab) => {
+                setAdminSubTab(tab);
+                window.location.hash = `admin/${tab}`;
+              }}
+              onNavigateToScripture={(bookId, chapter, verse) =>
+                handleSelectBookAndChapter(bookId, chapter, verse)
+              }
+              onToast={showToast}
+              currentTheme={settings.themeMode}
+              onNavigateHome={() => {
+                window.location.hash = '';
+                setActiveTab('home');
+              }}
             />
           )}
         </main>
@@ -513,24 +550,25 @@ export default function App() {
         currentTranslation={settings.translation}
       />
 
-      {/* Global Toast Notification with auto & manual dismiss */}
-      {toastMessage && (
-        <div
-          id="global-app-toast"
-          className="fixed bottom-20 md:bottom-8 right-1/2 translate-x-1/2 md:translate-x-0 md:right-8 z-50 bg-[#0B2B68] text-white px-4 sm:px-5 py-2.5 sm:py-3 rounded-full shadow-2xl border border-[#F25C05]/60 font-body-ui text-xs sm:text-sm font-semibold flex items-center gap-2.5 animate-in fade-in slide-in-from-bottom-3 duration-200"
-        >
-          <span className="w-2 h-2 rounded-full bg-[#F25C05] animate-ping shrink-0" />
-          <span className="leading-snug">{toastMessage}</span>
-          <button
-            onClick={hideToast}
-            className="ml-1 p-1 rounded-full hover:bg-white/20 text-white/80 hover:text-white transition-colors cursor-pointer"
-            title="Cerrar notificación"
-            aria-label="Cerrar notificación"
-          >
-            <X className="w-3.5 h-3.5" />
-          </button>
+          {/* Global Toast Notification with auto & manual dismiss */}
+          {toastMessage && (
+            <div
+              id="global-app-toast"
+              className="fixed bottom-20 md:bottom-8 right-1/2 translate-x-1/2 md:translate-x-0 md:right-8 z-50 bg-[#0B2B68] text-white px-4 sm:px-5 py-2.5 sm:py-3 rounded-full shadow-2xl border border-[#F25C05]/60 font-body-ui text-xs sm:text-sm font-semibold flex items-center gap-2.5 animate-in fade-in slide-in-from-bottom-3 duration-200"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#F25C05] animate-ping shrink-0" />
+              <span className="leading-snug">{toastMessage}</span>
+              <button
+                onClick={hideToast}
+                className="ml-1 p-1 rounded-full hover:bg-white/20 text-white/80 hover:text-white transition-colors cursor-pointer"
+                title="Cerrar notificación"
+                aria-label="Cerrar notificación"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+    </AuthProvider>
   );
 }

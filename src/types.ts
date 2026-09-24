@@ -1,3 +1,5 @@
+import { UserRole } from './features/auth/types';
+
 export type HighlightColor = '#FFF2B2' | '#D2F5D7' | '#D3E7FF';
 
 export interface BibleBook {
@@ -87,7 +89,25 @@ export interface UserEvent {
   price?: string;
 }
 
-export type ActiveTab = 'home' | 'scripture' | 'library' | 'maps' | 'ai-mentor' | 'saved' | 'widgets' | 'devotional' | 'events';
+export type ActiveTab =
+  | 'home'
+  | 'scripture'
+  | 'library'
+  | 'maps'
+  | 'ai-mentor'
+  | 'saved'
+  | 'widgets'
+  | 'devotional'
+  | 'events'
+  | 'admin-hub'
+  | 'admin-sermons'
+  | 'admin-memberships'
+  | 'admin-food-court'
+  | 'admin-events'
+  | 'admin-announcements'
+  | 'admin-hierarchy'
+  | 'admin-security'
+  | 'pulpit-mode';
 
 export interface MapWaypoint {
   id: string;
@@ -124,7 +144,6 @@ export interface BiblicalItinerary {
   keyScriptures: { bookId: string; chapter: number; label: string }[];
   waypoints: MapWaypoint[];
 }
-
 
 export type BibleTranslationAbbr = 'rvr1960' | 'rva2015' | string;
 
@@ -179,3 +198,180 @@ export interface ReadingSettings {
   showVerseNumbers: boolean;
 }
 
+// ----------------------------------------------------
+// Admin Hub & Church Hierarchy Models (MVP 2)
+// ----------------------------------------------------
+
+export interface ChurchJoinRequest {
+  id: string;
+  churchId: string;
+  churchName: string;
+  annexId?: string;
+  annexName?: string;
+  fullName: string;
+  email: string;
+  phone?: string;
+  requestedRole: UserRole;
+  assignedRole?: UserRole;
+  status: 'pending' | 'approved' | 'rejected';
+  notes?: string;
+  createdAt: string;
+  reviewedAt?: string;
+  reviewedBy?: string;
+}
+
+export interface FoodCourtItem {
+  id: string;
+  churchId: string;
+  name: string;
+  description: string;
+  category: 'meals' | 'beverages' | 'snacks' | 'combos';
+  price: number;
+  shift: 'day' | 'night' | 'both';
+  isAvailable: boolean;
+  imageUrl?: string;
+  prepTimeMinutes?: number;
+  tags?: string[];
+}
+
+// ----------------------------------------------------
+// Church Hierarchy & Organization Models (Templo Principal, Sedes, Anexos, Células)
+// ----------------------------------------------------
+
+export type HierarchyScopeType = 'general' | 'sede' | 'anexo' | 'celula';
+
+export interface ChurchOrganizationConfig {
+  id: string;
+  name: string; // Templo Principal / Iglesia Central (ej. "Iglesia Cristiana El-Shaddai")
+  denomination?: string; // ej. "Evangélica Pentecostal / Alianza Misionera"
+  mainPastor: string; // ej. "Pastor David Ben-David & Pastora Sara Ben-David"
+  headquartersAddress: string; // ej. "Av. La Paz 1420, Sede Central"
+  headquartersCity?: string;
+  headquartersPhone?: string; // ej. "+51 987 654 321"
+  headquartersEmail?: string; // ej. "contacto@elshaddai.org"
+  visionStatement?: string;
+  logoUrl?: string;
+  foundedYear?: string;
+  updatedAt: string;
+}
+
+export interface ChurchSede {
+  id: string;
+  name: string; // ej. "Templo Principal - Sede Central", "Sede Norte - Campus Esperanza"
+  city: string;
+  address: string;
+  pastorInCharge: string;
+  phone?: string;
+  isMainCampus: boolean; // true si es la Sede / Templo Principal
+  activeMembersCount?: number;
+  notes?: string;
+}
+
+export interface ChurchAnexo {
+  id: string;
+  sedeId: string; // Sede a la que pertenece
+  sedeName?: string;
+  name: string; // ej. "Anexo Sector San Pedro", "Anexo Los Olivos de Paz"
+  address: string;
+  leaderInCharge: string;
+  phone?: string;
+  meetingDays?: string; // ej. "Jueves 19:30 & Domingos 09:30"
+  activeMembersCount?: number;
+}
+
+export interface ChurchCelula {
+  id: string;
+  sedeId: string;
+  anexoId?: string; // Opcional, si pertenece a un anexo
+  sedeName?: string;
+  anexoName?: string;
+  code: string; // ej. "CEL-C01", "CEL-N02"
+  name: string; // ej. "Célula Betel - Familias en Victoria"
+  leaderName: string; // Líder celular
+  hostName: string; // Anfitrión del hogar
+  address: string; // Dirección del hogar donde se reúnen
+  neighborhood?: string; // Barrio o sector
+  dayOfWeek: 'Lunes' | 'Martes' | 'Miércoles' | 'Jueves' | 'Viernes' | 'Sábado' | 'Domingo';
+  meetingTime: string; // ej. "19:30"
+  membersCount: number;
+  targetAudience: 'Familias' | 'Jóvenes' | 'Mujeres' | 'Varones' | 'Mixto';
+  status: 'active' | 'in_formation' | 'paused';
+}
+
+export interface HierarchyScopeOption {
+  id: string; // ej. "general", "sede:sede_norte", "anexo:anexo_01", "celula:cel_01"
+  scope: HierarchyScopeType;
+  targetId?: string;
+  label: string;
+  badge: string;
+  badgeColor: string;
+  details?: string;
+}
+
+export interface ChurchAdminEvent {
+  id: string;
+  churchId: string;
+  scope?: HierarchyScopeType; // 'general' | 'sede' | 'anexo' | 'celula'
+  scopeTargetId?: string;     // ID de la sede, anexo o célula asignada
+  scopeName?: string;         // Nombre legible: "Toda la Iglesia", "Sede Norte", "Célula Betel"
+  annexId?: string;
+  annexName?: string;
+  title: string;
+  description: string;
+  speaker: string;
+  eventDate: string; // YYYY-MM-DD
+  startTime: string; // HH:mm
+  endTime: string;
+  location: string;
+  hasFoodService: boolean; // 🍔 Servicio de Comida
+  hasChildcare: boolean;   // 👶 Cuidado Infantil
+  hasBookSales: boolean;   // 📚 Venta de Libros & Recursos
+  maxCapacity?: number;
+  registeredCount?: number;
+  status: 'draft' | 'published' | 'completed' | 'cancelled';
+  bannerUrl?: string;
+  linkedPassage?: string;
+}
+
+export interface AnnouncementBroadcast {
+  id: string;
+  churchId: string;
+  scope?: HierarchyScopeType;
+  scopeTargetId?: string;
+  scopeName?: string;
+  annexId?: string;
+  targetTopic: 'church_all' | string;
+  topicLabel: string;
+  title: string;
+  body: string;
+  priority: 'normal' | 'high';
+  deepLink?: string;
+  sentAt: string;
+  sentBy: string;
+  deliveredCount: number;
+  status: 'sent' | 'scheduled' | 'failed';
+}
+
+export interface SermonPoint {
+  id: string;
+  title: string;
+  notes: string;
+  scriptureRef?: string;
+  passageText?: string;
+}
+
+export interface SermonNote {
+  id: string;
+  churchId?: string;
+  scope?: HierarchyScopeType; // 'general' | 'sede' | 'anexo' | 'celula'
+  scopeTargetId?: string;
+  scopeName?: string;
+  title: string;
+  speaker: string;
+  mainScripture: string;
+  theme: string;
+  date: string;
+  targetDurationMinutes: number;
+  points: SermonPoint[];
+  conclusion: string;
+}

@@ -53,6 +53,311 @@ async function startServer() {
     res.json({ translations: BIBLE_CATALOG });
   });
 
+  // ----------------------------------------------------
+  // Admin Hub & Church API Endpoints (MVP 2 Gateway)
+  // ----------------------------------------------------
+  let inMemoryMemberships: any[] = [
+    {
+      id: 'req_flutter_001',
+      churchId: 'church_elshaddai_central',
+      churchName: 'Iglesia El-Shaddai Central',
+      annexId: 'annex_central',
+      annexName: 'Templo Principal',
+      fullName: 'Carlos Mendoza Ramos',
+      email: 'carlos.mendoza@email.com',
+      phone: '+56 9 8765 4321',
+      requestedRole: 'member',
+      status: 'pending',
+      notes: 'Miembro recién trasladado desde Valparaíso. Deseo participar en el ministerio de alabanza.',
+      createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
+    },
+    {
+      id: 'req_flutter_002',
+      churchId: 'church_elshaddai_central',
+      churchName: 'Iglesia El-Shaddai Central',
+      annexId: 'annex_norte',
+      annexName: 'Anexo Sector Norte',
+      fullName: 'Camila Andrea Véliz',
+      email: 'camila.veliz@email.com',
+      phone: '+56 9 7654 3210',
+      requestedRole: 'event_coordinator',
+      status: 'pending',
+      notes: 'Experiencia en logística de eventos de jóvenes y escuela dominical infantil.',
+      createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
+    },
+    {
+      id: 'req_flutter_003',
+      churchId: 'church_elshaddai_central',
+      churchName: 'Iglesia El-Shaddai Central',
+      annexId: 'annex_sur',
+      annexName: 'Anexo Cordillera',
+      fullName: 'Patricio Morales Vega',
+      email: 'patricio.m@email.com',
+      phone: '+56 9 9123 4567',
+      requestedRole: 'food_court_manager',
+      status: 'pending',
+      notes: 'Certificación de manipulación de alimentos. Apoyo para el comedor comunitario y cafetería.',
+      createdAt: new Date(Date.now() - 3600000 * 12).toISOString(),
+    },
+    {
+      id: 'req_flutter_004',
+      churchId: 'church_elshaddai_central',
+      churchName: 'Iglesia El-Shaddai Central',
+      annexId: 'annex_central',
+      annexName: 'Templo Principal',
+      fullName: 'Elena Fuentes Miranda',
+      email: 'elena.f@email.com',
+      phone: '+56 9 6543 2109',
+      requestedRole: 'member',
+      assignedRole: 'member',
+      status: 'approved',
+      notes: 'Bautizada en 2021. Solicitud confirmada presencialmente en el servicio dominical.',
+      createdAt: new Date(Date.now() - 3600000 * 48).toISOString(),
+      reviewedAt: new Date(Date.now() - 3600000 * 24).toISOString(),
+      reviewedBy: 'Pastor David Ben-David',
+    },
+  ];
+
+  let inMemoryFoodItems: any[] = [
+    {
+      id: 'food_001',
+      churchId: 'church_elshaddai_central',
+      name: 'Almuerzo Familiar: Pastel de Choclo Criollo',
+      description: 'Tradicional pastel horneado de choclo con pino de vacuno, huevo duro y aceituna.',
+      category: 'meals',
+      price: 4500,
+      shift: 'day',
+      isAvailable: true,
+      prepTimeMinutes: 15,
+      imageUrl: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&auto=format&fit=crop&q=80',
+      tags: ['Especial Domingo', 'Casero'],
+    },
+    {
+      id: 'food_002',
+      churchId: 'church_elshaddai_central',
+      name: 'Café de Grano & Medialuna Artesanal',
+      description: 'Café tostado recién pasado acompañado de medialuna tibia glaseada.',
+      category: 'combos',
+      price: 2200,
+      shift: 'both',
+      isAvailable: true,
+      prepTimeMinutes: 5,
+      imageUrl: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&auto=format&fit=crop&q=80',
+      tags: ['Refrigerio', 'Popular'],
+    },
+    {
+      id: 'food_003',
+      churchId: 'church_elshaddai_central',
+      name: 'Empanada de Horno Pino Especial',
+      description: 'Empanada horneada en masa de mantequilla con abundante carne picada a mano.',
+      category: 'snacks',
+      price: 2500,
+      shift: 'both',
+      isAvailable: true,
+      prepTimeMinutes: 5,
+      imageUrl: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=400&auto=format&fit=crop&q=80',
+      tags: ['Horneado'],
+    },
+    {
+      id: 'food_004',
+      churchId: 'church_elshaddai_central',
+      name: 'Sopaipillas Pasadas con Chancaca & Canela',
+      description: 'Porción de 3 sopaipillas bañadas en salsa tibia de chancaca, canela y cáscara de naranja.',
+      category: 'snacks',
+      price: 1800,
+      shift: 'night',
+      isAvailable: true,
+      prepTimeMinutes: 10,
+      imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&auto=format&fit=crop&q=80',
+      tags: ['Turno Noche', 'Reunión Jóvenes'],
+    },
+  ];
+
+  let inMemoryEvents: any[] = [
+    {
+      id: 'evt_001',
+      churchId: 'church_elshaddai_central',
+      annexId: 'annex_central',
+      annexName: 'Templo Central',
+      title: 'Culto de Adoración & Santa Cena Familiar',
+      description: 'Servicio general dominical con ordenanza de la Cena del Señor y predicación expositiva en Romanos 8.',
+      speaker: 'Pastor David Ben-David',
+      eventDate: new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
+      startTime: '10:30',
+      endTime: '12:45',
+      location: 'Santuario Principal, Av. La Paz 1420',
+      hasFoodService: true,
+      hasChildcare: true,
+      hasBookSales: true,
+      maxCapacity: 450,
+      registeredCount: 312,
+      status: 'published',
+      linkedPassage: 'Romanos 8:31-39',
+    },
+  ];
+
+  let inMemoryBroadcasts: any[] = [
+    {
+      id: 'fcm_001',
+      churchId: 'church_elshaddai_central',
+      targetTopic: 'church_all',
+      topicLabel: 'Toda la Congregación (General)',
+      title: '🕊️ Vigilia Unida de Oración: "El Shaddai es Fiel"',
+      body: 'Este viernes a las 20:00 hrs nos reunimos en el Templo Central. Habrá cafetería disponible.',
+      priority: 'high',
+      deepLink: 'biblia://events',
+      sentAt: new Date(Date.now() - 3600000 * 24).toISOString(),
+      sentBy: 'Pastor David Ben-David',
+      deliveredCount: 412,
+      status: 'sent',
+    },
+  ];
+
+  // Mobile join endpoint (Flutter mobile app uses POST /api/v1/churches/join)
+  app.post('/api/v1/churches/join', (req, res) => {
+    const { churchId, churchName, annexId, annexName, fullName, email, phone, requestedRole, notes } = req.body;
+    if (!churchId || !fullName || !email) {
+      return res.status(400).json({ error: 'Faltan campos obligatorios para unirse a la iglesia' });
+    }
+    const newReq = {
+      id: `req_${Date.now()}`,
+      churchId,
+      churchName: churchName || 'Iglesia El-Shaddai Central',
+      annexId: annexId || 'annex_central',
+      annexName: annexName || 'Templo Principal',
+      fullName,
+      email,
+      phone: phone || '',
+      requestedRole: requestedRole || 'member',
+      status: 'pending',
+      notes: notes || '',
+      createdAt: new Date().toISOString(),
+    };
+    inMemoryMemberships.unshift(newReq);
+    res.status(201).json({ success: true, request: newReq });
+  });
+
+  // Admin Memberships
+  app.get('/api/v1/admin/memberships', (req, res) => {
+    const { status, churchId } = req.query;
+    let list = [...inMemoryMemberships];
+    if (churchId) list = list.filter((r) => r.churchId === churchId);
+    if (status && status !== 'all') list = list.filter((r) => r.status === status);
+    res.json({ requests: list });
+  });
+
+  app.patch('/api/v1/admin/memberships/:id/approve', (req, res) => {
+    const { id } = req.params;
+    const { assignedRole, reviewerName } = req.body;
+    const item = inMemoryMemberships.find((r) => r.id === id);
+    if (!item) return res.status(404).json({ error: 'Solicitud no encontrada' });
+    item.status = 'approved';
+    item.assignedRole = assignedRole || item.requestedRole;
+    item.reviewedAt = new Date().toISOString();
+    item.reviewedBy = reviewerName || 'Pastor Admin';
+    res.json({ success: true, request: item });
+  });
+
+  app.patch('/api/v1/admin/memberships/:id/reject', (req, res) => {
+    const { id } = req.params;
+    const { reason, reviewerName } = req.body;
+    const item = inMemoryMemberships.find((r) => r.id === id);
+    if (!item) return res.status(404).json({ error: 'Solicitud no encontrada' });
+    item.status = 'rejected';
+    item.notes = reason ? `${item.notes ? `${item.notes} | ` : ''}Rechazo: ${reason}` : item.notes;
+    item.reviewedAt = new Date().toISOString();
+    item.reviewedBy = reviewerName || 'Pastor Admin';
+    res.json({ success: true, request: item });
+  });
+
+  // Food Court
+  app.get('/api/v1/admin/food-court', (req, res) => {
+    const { shift, category } = req.query;
+    let list = [...inMemoryFoodItems];
+    if (shift && shift !== 'all') list = list.filter((i) => i.shift === shift || i.shift === 'both');
+    if (category && category !== 'all') list = list.filter((i) => i.category === category);
+    res.json({ items: list });
+  });
+
+  app.post('/api/v1/admin/food-court', (req, res) => {
+    const newItem = { ...req.body, id: `food_${Date.now()}` };
+    inMemoryFoodItems.unshift(newItem);
+    res.status(201).json({ success: true, item: newItem });
+  });
+
+  app.put('/api/v1/admin/food-court/:id', (req, res) => {
+    const { id } = req.params;
+    const idx = inMemoryFoodItems.findIndex((i) => i.id === id);
+    if (idx === -1) return res.status(404).json({ error: 'Item no encontrado' });
+    inMemoryFoodItems[idx] = { ...inMemoryFoodItems[idx], ...req.body };
+    res.json({ success: true, item: inMemoryFoodItems[idx] });
+  });
+
+  app.patch('/api/v1/admin/food-court/:id/availability', (req, res) => {
+    const { id } = req.params;
+    const { isAvailable } = req.body;
+    const item = inMemoryFoodItems.find((i) => i.id === id);
+    if (!item) return res.status(404).json({ error: 'Item no encontrado' });
+    item.isAvailable = !!isAvailable;
+    res.json({ success: true, item });
+  });
+
+  app.delete('/api/v1/admin/food-court/:id', (req, res) => {
+    const { id } = req.params;
+    inMemoryFoodItems = inMemoryFoodItems.filter((i) => i.id !== id);
+    res.json({ success: true });
+  });
+
+  // Events
+  app.get('/api/v1/admin/events', (req, res) => {
+    res.json({ events: inMemoryEvents });
+  });
+
+  app.post('/api/v1/admin/events', (req, res) => {
+    const newEvt = { ...req.body, id: `evt_${Date.now()}` };
+    inMemoryEvents.unshift(newEvt);
+    res.status(201).json({ success: true, event: newEvt });
+  });
+
+  app.put('/api/v1/admin/events/:id', (req, res) => {
+    const { id } = req.params;
+    const idx = inMemoryEvents.findIndex((e) => e.id === id);
+    if (idx === -1) return res.status(404).json({ error: 'Evento no encontrado' });
+    inMemoryEvents[idx] = { ...inMemoryEvents[idx], ...req.body };
+    res.json({ success: true, event: inMemoryEvents[idx] });
+  });
+
+  app.delete('/api/v1/admin/events/:id', (req, res) => {
+    const { id } = req.params;
+    inMemoryEvents = inMemoryEvents.filter((e) => e.id !== id);
+    res.json({ success: true });
+  });
+
+  // Announcements / FCM Broadcast
+  app.get('/api/v1/admin/announcements/broadcast', (req, res) => {
+    res.json({ broadcasts: inMemoryBroadcasts });
+  });
+
+  app.post('/api/v1/admin/announcements/broadcast', (req, res) => {
+    const { targetTopic, topicLabel, title, body, priority, deepLink, sentBy } = req.body;
+    const newBroadcast = {
+      id: `fcm_${Date.now()}`,
+      churchId: 'church_elshaddai_central',
+      targetTopic: targetTopic || 'church_all',
+      topicLabel: topicLabel || 'General',
+      title,
+      body,
+      priority: priority || 'normal',
+      deepLink: deepLink || 'biblia://events',
+      sentAt: new Date().toISOString(),
+      sentBy: sentBy || 'Pastor David',
+      deliveredCount: 380,
+      status: 'sent',
+    };
+    inMemoryBroadcasts.unshift(newBroadcast);
+    res.status(201).json({ success: true, broadcast: newBroadcast });
+  });
+
   // AI Mentor endpoint with Multi-Provider Support (Gemini, ChatGPT, Qwen, Custom)
   const handleAiMentor = async (req: express.Request, res: express.Response) => {
     try {

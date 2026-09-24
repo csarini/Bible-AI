@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, BookOpen, SlidersHorizontal } from 'lucide-react';
+import { Menu, BookOpen, SlidersHorizontal, Shield } from 'lucide-react';
 import { ActiveTab } from '../types';
 import { ChurchLogo } from './ChurchLogo';
 
@@ -111,6 +111,20 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
 
       {/* Right Action Icons: Settings/Preferences */}
       <div className="flex items-center gap-1 sm:gap-2">
+        {/* Quick Admin Hub shortcut */}
+        <button
+          onClick={() => onNavigateTab('admin-hub')}
+          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
+            activeTab === 'admin-hub' || activeTab.startsWith('admin-')
+              ? 'bg-[#002147] text-white shadow-xs border-[#D4AF37]'
+              : 'border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
+          }`}
+          title="Panel de Administración Eclesiástica & Membresías (MVP 2)"
+        >
+          <Shield className="w-3.5 h-3.5 text-[#F47B20]" />
+          <span className="hidden sm:inline">Admin Hub</span>
+        </button>
+
         {/* Configuration / Reading Settings Icon Button */}
         {onOpenSettings && (
           <button
