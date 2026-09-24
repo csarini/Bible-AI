@@ -114,6 +114,21 @@ export default function App() {
       } else if (raw === 'events' || raw === 'eventos') {
         setAdminSubTab('events');
         setActiveTab('admin-hub');
+      } else if (raw === 'hierarchy' || raw === 'sedes' || raw === 'celulas') {
+        setAdminSubTab('hierarchy');
+        setActiveTab('admin-hub');
+      } else if (raw === 'security' || raw === 'roles' || raw === 'permisos') {
+        setAdminSubTab('security');
+        setActiveTab('admin-hub');
+      } else if (raw === 'memberships' || raw === 'membresias') {
+        setAdminSubTab('memberships');
+        setActiveTab('admin-hub');
+      } else if (raw === 'food-court' || raw === 'cafeteria' || raw === 'kiosko') {
+        setAdminSubTab('food-court');
+        setActiveTab('admin-hub');
+      } else if (raw === 'announcements' || raw === 'avisos') {
+        setAdminSubTab('announcements');
+        setActiveTab('admin-hub');
       }
     };
 
@@ -141,6 +156,54 @@ export default function App() {
       setToastMessage((curr) => (curr === message ? null : curr));
       toastTimerRef.current = null;
     }, durationMs);
+  };
+
+  // Unified tab & subtab navigation router
+  const handleNavigateTab = (tab: ActiveTab, subTab?: AdminSubTab) => {
+    if (subTab) {
+      setAdminSubTab(subTab);
+      setActiveTab('admin-hub');
+      window.location.hash = `admin/${subTab}`;
+    } else if (tab === 'admin-hierarchy') {
+      setAdminSubTab('hierarchy');
+      setActiveTab('admin-hub');
+      window.location.hash = 'admin/hierarchy';
+    } else if (tab === 'admin-security') {
+      setAdminSubTab('security');
+      setActiveTab('admin-hub');
+      window.location.hash = 'admin/security';
+    } else if (tab === 'admin-memberships') {
+      setAdminSubTab('memberships');
+      setActiveTab('admin-hub');
+      window.location.hash = 'admin/memberships';
+    } else if (tab === 'admin-food-court') {
+      setAdminSubTab('food-court');
+      setActiveTab('admin-hub');
+      window.location.hash = 'admin/food-court';
+    } else if (tab === 'admin-announcements') {
+      setAdminSubTab('announcements');
+      setActiveTab('admin-hub');
+      window.location.hash = 'admin/announcements';
+    } else if (tab === 'admin-sermons') {
+      setAdminSubTab('sermons');
+      setActiveTab('admin-hub');
+      window.location.hash = 'admin/sermons';
+    } else if (tab === 'admin-events' || tab === 'events') {
+      setAdminSubTab('events');
+      setActiveTab('admin-hub');
+      window.location.hash = 'admin/events';
+    } else if (tab === 'pulpit-mode') {
+      setAdminSubTab('pulpit');
+      setActiveTab('admin-hub');
+      window.location.hash = 'admin/pulpit';
+    } else if (tab === 'admin-hub') {
+      setActiveTab('admin-hub');
+    } else {
+      setActiveTab(tab);
+      if (tab === 'home') {
+        window.location.hash = '';
+      }
+    }
   };
 
   // Handle navigating directly to book & chapter
@@ -305,7 +368,7 @@ export default function App() {
           <TopAppBar
             onToggleDrawer={() => setIsDrawerOpenMobile(!isDrawerOpenMobile)}
             activeTab={activeTab}
-            onNavigateTab={(tab) => setActiveTab(tab)}
+            onNavigateTab={handleNavigateTab}
             savedCount={bookmarks.length}
             currentBookName={getBookByIdOrNumber(currentBookId, settings.translation).name}
             currentChapter={currentChapter}
@@ -321,13 +384,15 @@ export default function App() {
           isOpenMobile={isDrawerOpenMobile}
           onCloseMobile={() => setIsDrawerOpenMobile(false)}
           activeTab={activeTab}
-          onSelectTab={(tab) => setActiveTab(tab)}
+          adminSubTab={adminSubTab}
+          onSelectTab={handleNavigateTab}
           savedCount={bookmarks.length}
           onOpenCoachMark={() => setShowCoachMark(true)}
           onOpenFeedback={() => setIsFeedbackOpen(true)}
           onOpenSettings={() => setIsQuickSettingsOpen(true)}
           currentTheme={settings.themeMode}
           onThemeChange={(theme) => handleUpdateSettings({ themeMode: theme })}
+          onToast={showToast}
         />
 
         {/* Content Canvas based on Active Tab */}
@@ -337,7 +402,7 @@ export default function App() {
         >
           {activeTab === 'home' && (
             <HomeView
-              onNavigateTab={(tab) => setActiveTab(tab)}
+              onNavigateTab={handleNavigateTab}
               onNavigateScripture={(bookId, chapter, verseNum) =>
                 handleSelectBookAndChapter(bookId, chapter, verseNum)
               }
@@ -450,18 +515,9 @@ export default function App() {
           {(activeTab === 'admin-hub' ||
             activeTab === 'events' ||
             activeTab === 'pulpit-mode' ||
-            activeTab === 'admin-sermons' ||
-            activeTab === 'admin-events') && (
+            activeTab.startsWith('admin-')) && (
             <AdminHubLayout
-              initialSubTab={
-                activeTab === 'events' || activeTab === 'admin-events'
-                  ? 'events'
-                  : activeTab === 'pulpit-mode'
-                  ? 'pulpit'
-                  : activeTab === 'admin-sermons'
-                  ? 'sermons'
-                  : adminSubTab
-              }
+              initialSubTab={adminSubTab}
               onNavigateSubTab={(tab) => {
                 setAdminSubTab(tab);
                 window.location.hash = `admin/${tab}`;
@@ -473,7 +529,7 @@ export default function App() {
               currentTheme={settings.themeMode}
               onNavigateHome={() => {
                 window.location.hash = '';
-                setActiveTab('home');
+                handleNavigateTab('home');
               }}
             />
           )}
@@ -483,7 +539,7 @@ export default function App() {
       {/* Mobile Bottom Navigation Bar */}
       <BottomNavBar
         activeTab={activeTab}
-        onSelectTab={(tab) => setActiveTab(tab)}
+        onSelectTab={(tab) => handleNavigateTab(tab)}
         savedCount={bookmarks.length}
         currentTheme={settings.themeMode}
       />

@@ -185,10 +185,10 @@ export const AdminHubLayout: React.FC<AdminHubLayoutProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-sm text-[#002147] dark:text-white">
-                  Admin Hub &bull; {churchOrg.name}
+                  {churchOrg.name} &bull; {subNavItems.find((i) => i.id === activeSubTab)?.label || 'Panel de Gestión'}
                 </span>
                 <span className="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-[#F47B20]/10 text-[#F47B20] border border-[#F47B20]/30">
-                  Pastoral & Gestión
+                  {subNavItems.find((i) => i.id === activeSubTab)?.badge || 'Módulo'}
                 </span>
               </div>
               <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
@@ -259,39 +259,6 @@ export const AdminHubLayout: React.FC<AdminHubLayoutProps> = ({
               </div>
             )}
           </div>
-        </div>
-
-        {/* Sub-Navigation Tabs: Reorganized and Unified */}
-        <div className="max-w-7xl mx-auto px-4 flex items-center gap-1.5 overflow-x-auto border-t border-slate-100 dark:border-slate-800/60 py-1.5">
-          {subNavItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeSubTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => handleSelectTab(item.id)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-                  isActive
-                    ? 'bg-[#002147] text-white shadow-xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-[#002147] hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-[#FED65B]' : 'opacity-70'}`} />
-                <span>{item.label}</span>
-                {item.badge && (
-                  <span
-                    className={`text-[10px] px-1.5 py-0.2 rounded-md font-bold ${
-                      isActive
-                        ? 'bg-[#F47B20] text-white'
-                        : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
-                    }`}
-                  >
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
         </div>
       </div>
 
